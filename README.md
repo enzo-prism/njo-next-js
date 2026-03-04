@@ -10,7 +10,11 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - SEO parity implemented (metadata, JSON-LD, `robots.txt`, `sitemap.xml`, `llms.txt`).
 - Form backends preserved and validated (`contact`, `phillips-event`).
 - Vercel deployment pipeline connected to GitHub.
-- Production alias live: `https://njo-next-js.vercel.app`.
+- Production aliases live:
+  - `https://michaelnjodds.com`
+  - `https://www.michaelnjodds.com`
+  - `https://njo-next-js.vercel.app`
+- GitHub Actions CI now enforces parity checks on pushes and pull requests to `main`.
 
 ## Stack
 
@@ -135,4 +139,5 @@ See `docs/deployment-runbook.md` for full deployment/cutover workflow.
 
 - `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
 - `docs/forms-and-backends.md` - form backend wiring and validation details
+- `.github/workflows/ci.yml` - CI parity gate for PR/push
 - `docs/source-reference/*` - source snapshots from the original site (`robots`, `sitemap`)

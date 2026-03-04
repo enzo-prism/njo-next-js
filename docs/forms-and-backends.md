@@ -70,10 +70,16 @@ There are no internal API handlers for these forms in this project. The site sub
 
 ## Live Backend Verification (2026-03-04)
 
-Synthetic QA submissions were sent directly to both Formspree endpoints from CLI to validate backend availability and acceptance:
+Formspree endpoint health was verified from CLI without sending production inbox spam:
 
-- `POST https://formspree.io/f/manaywyw` -> `HTTP 200`, JSON response `{ "ok": true, "next": "/thanks" }`
-- `POST https://formspree.io/f/mdalbpae` -> `HTTP 200`, JSON response `{ "ok": true, "next": "/thanks" }`
+- Empty payload checks:
+  - `POST https://formspree.io/f/manaywyw` -> `HTTP 400` with `BAD_FORM_POST_REQUEST`
+  - `POST https://formspree.io/f/mdalbpae` -> `HTTP 400` with `BAD_FORM_POST_REQUEST`
+- Validation checks with intentionally invalid email:
+  - `POST https://formspree.io/f/manaywyw` -> `HTTP 422` with `TYPE_EMAIL`
+  - `POST https://formspree.io/f/mdalbpae` -> `HTTP 422` with `TYPE_EMAIL`
+
+Interpretation: both backend endpoints are active and enforcing expected schema validation.
 
 ## QA Checklist
 

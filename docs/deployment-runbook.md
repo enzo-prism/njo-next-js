@@ -87,6 +87,23 @@ If custom domain cutover has not been completed yet:
    - SEO endpoints
    - Analytics script load
 
+### Current DNS Baseline (Squarespace + Vercel)
+
+Current authoritative records that are valid:
+
+- `www` CNAME -> `397ac2fa17073cc9.vercel-dns-016.com`
+- `@` A -> `76.76.21.21`
+
+Vercel currently reports apex DNS as `optional-change` (not misconfigured). If you want to clear the "DNS Change Recommended" banner in Vercel Domains UI, update apex A records to Vercel's rank-1 pair:
+
+- `216.150.1.1`
+- `216.150.16.1`
+
+Important:
+
+- TTL is `4 hrs` on current Squarespace records, so resolver propagation can lag.
+- Keep one canonical host policy only (`www -> apex`) to avoid redirect loops.
+
 ## 6. Operational Commands
 
 Useful commands for ongoing operations:
@@ -107,4 +124,3 @@ vercel list --yes
 # Inspect one deploy deeply
 vercel inspect <deployment-url> --format=json
 ```
-

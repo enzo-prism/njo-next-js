@@ -8,9 +8,12 @@ Verified the Next.js rebuild is production-ready and behaviorally aligned with t
 
 Latest production deployment:
 
-- Alias: `https://njo-next-js.vercel.app`
-- Inspect URL: `https://vercel.com/enzo-design-prisms-projects/njo-next-js/4sS6qPSBXtNRMS966vJxQfdGePYW`
-- Git commit: `944ca42`
+- Alias set:
+  - `https://michaelnjodds.com`
+  - `https://www.michaelnjodds.com`
+  - `https://njo-next-js.vercel.app`
+- Inspect URL: `https://vercel.com/enzo-design-prisms-projects/njo-next-js/6r2QFZ9fWeBsXgBZgjwD47mF4nEp`
+- Git commit: `1846f219df1b4f52e2f6e9cbe4a3726865351f90`
 
 ## Completed Validation
 
@@ -35,7 +38,26 @@ Latest production deployment:
    - Core route status codes: expected `200` for public routes and `404` for unknown paths.
    - Legacy redirects: expected `308` + expected destination locations.
    - `robots.txt` sitemap line and `sitemap.xml` canonical URLs validated.
-   - Formspree backend endpoints validated with synthetic test submissions (`HTTP 200`).
+   - Formspree backend endpoints validated with schema-triggering submissions (`HTTP 400`/`422` expected for invalid payloads).
+
+## Infrastructure Hardening Updates (2026-03-04)
+
+1. Redirect-loop risk removed:
+   - Cleared Vercel apex-domain redirect to prevent apex <-> `www` conflict with app-level canonical redirect rules.
+2. Vercel project framework preset standardized:
+   - Project API setting updated to `framework: nextjs`.
+3. DNS posture verified:
+   - `www` CNAME correctly points to Vercel DNS target.
+   - Apex A record is valid and serving (`76.76.21.21`), but Vercel marks it as `optional-change` with a preferred pair available.
+4. CI protection added:
+   - Added `.github/workflows/ci.yml` to run `npm run check:parity` on push/PR to `main`.
+
+## Remaining Manual Optimization (Non-Blocking)
+
+1. Optional apex DNS upgrade in Squarespace:
+   - Replace apex A with Vercel rank-1 pair `216.150.1.1` and `216.150.16.1` to clear Vercel's "DNS Change Recommended".
+2. Optional GitHub governance:
+   - `main` branch is currently unprotected. Consider enabling branch protection + required CI checks for stricter release control.
 
 ## Fixes Applied During Final Readiness Pass
 
