@@ -16,7 +16,7 @@
     "check:parity": "npm run typecheck && npm run lint && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:robots && npm run check:redirects"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.10.0",
+    "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-dialog": "^1.1.7",
     "@radix-ui/react-label": "^2.1.3",
