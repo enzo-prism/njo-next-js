@@ -2,11 +2,8 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const PUBLIC_FILE = /\.(?:svg|png|jpg|jpeg|webp|gif|ico|txt|xml|json|js|css|map)$/i;
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://michaelnjodds.com").replace(/\/+$/, "");
-const DEFAULT_HOST = new URL(SITE_URL).hostname.toLowerCase();
-const DEFAULT_PROTOCOL = new URL(SITE_URL).protocol.replace(":", "").toLowerCase();
-const PREFERRED_HOSTNAME = (process.env.PREFERRED_HOSTNAME || DEFAULT_HOST).toLowerCase();
-const CANONICAL_PROTOCOL = (process.env.CANONICAL_PROTOCOL || DEFAULT_PROTOCOL).toLowerCase();
+const PREFERRED_HOSTNAME = "michaelnjodds.com";
+const CANONICAL_PROTOCOL = "https";
 
 function normalizePathname(pathname: string): string {
   if (!pathname.startsWith("/")) return "/";
