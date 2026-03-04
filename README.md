@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Michael Njo Website (Next.js)
 
-## Getting Started
+Next.js parity rebuild of the legacy Replit site (`enzo-prism/DrNjo`) for Vercel deployment.
 
-First, run the development server:
+This codebase preserves production route behavior, legacy redirects, SEO metadata/JSON-LD behavior, analytics integrations, and Formspree form handling from the original site.
+
+## Current Status
+
+- Route and content parity implemented.
+- SEO parity implemented (metadata, JSON-LD, `robots.txt`, `sitemap.xml`, `llms.txt`).
+- Form backends preserved and validated (`contact`, `phillips-event`).
+- Vercel deployment pipeline connected to GitHub.
+
+## Stack
+
+- Next.js App Router (TypeScript)
+- React 18
+- Tailwind CSS
+- shadcn/Radix UI
+- React Hook Form + Zod
+
+## Route Surface
+
+- `/`
+- `/michael-njo-dds`
+- `/dr-michael-njo-interview`
+- `/testimonials`
+- `/testimonials/[slug]` (generated from testimonial data)
+- `/resources`
+- `/dentalflix`
+- `/phillips-event`
+- `/contact`
+- `/contact/success`
+- custom 404
+
+### Legacy Redirects
+
+- `/dr-michael-neal-interview` -> `/dr-michael-njo-interview`
+- `/testimonials/dr-fat` -> `/testimonials/diana-fat-dds`
+- `/testimonials/richard-and-kimberly-crum` -> `/testimonials/kimberly-crum`
+- `/testimonials/team-member-2` -> `/testimonials/team-member`
+- `www.michaelnjodds.com/*` -> `https://michaelnjodds.com/*`
+
+Redirect config lives in `next.config.ts`.
+
+## Forms
+
+Two client-side forms submit to Formspree:
+
+- Contact form: `https://formspree.io/f/manaywyw`
+- Phillips event form: `https://formspree.io/f/mdalbpae`
+
+See `docs/forms-and-backends.md` for implementation and QA details.
+
+## SEO and Analytics
+
+- Route metadata generated through `src/seo/metadata.ts`
+- Route JSON-LD generated through `src/seo/route-structured-data.ts`
+- `robots.txt` via `src/app/robots.ts`
+- `sitemap.xml` via `src/app/sitemap.ts`
+- `llms.txt` served from `public/llms.txt`
+- Google Analytics + Hotjar injected in `src/app/layout.tsx`
+
+## Environment Variables
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical base URL for metadata/sitemap | `https://michaelnjodds.com` |
+| `PREFERRED_HOSTNAME` | Canonical host enforcement logic | `michaelnjodds.com` |
+| `CANONICAL_PROTOCOL` | Canonical protocol enforcement logic | `https` |
+| `NEXT_PUBLIC_GA_ID` | GA tracking ID | `G-6HWEE040EH` |
+| `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID | `6575522` |
+| `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version | `6` |
+
+## Local Development
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run dev server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev -- --hostname 127.0.0.1 --port 3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run production build locally:
 
-## Learn More
+```bash
+npm run build
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Verification and Quality Gates
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Full parity gate:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run check:parity
+```
 
-## Deploy on Vercel
+This runs:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Typecheck
+- Lint
+- Next build
+- Route metadata snapshots
+- Structured data assertions
+- Sitemap assertions
+- Robots assertions
+- Redirect assertions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+GitHub pushes to `main` trigger Vercel production deploys for the connected project.
+
+Manual preview deploy:
+
+```bash
+vercel deploy --yes
+```
+
+Manual production deploy:
+
+```bash
+vercel deploy --prod --yes
+```
+
+See `docs/deployment-runbook.md` for full deployment/cutover workflow.
+
+## Docs Index
+
+- `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
+- `docs/forms-and-backends.md` - form backend wiring and validation details
+- `docs/source-reference/*` - source snapshots from the original site (`robots`, `sitemap`)
