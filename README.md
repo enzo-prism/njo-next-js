@@ -11,6 +11,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - Form backends preserved and validated (`contact`, `phillips-event`).
 - Vercel deployment pipeline connected to GitHub.
 - Lint-clean image optimization using `next/image` on key routes/components.
+- Dependabot security updates enabled (plus weekly dependency update automation).
 - Production aliases live:
   - `https://michaelnjodds.com`
   - `https://www.michaelnjodds.com`
