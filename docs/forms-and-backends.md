@@ -66,6 +66,15 @@ Both Formspree endpoints respond with valid preflight behavior for browser-origi
 - Localhost development origin (for local QA)
 - Production domain origin (`https://michaelnjodds.com`)
 
+There are no internal API handlers for these forms in this project. The site submits directly from the browser to Formspree.
+
+## Live Backend Verification (2026-03-04)
+
+Synthetic QA submissions were sent directly to both Formspree endpoints from CLI to validate backend availability and acceptance:
+
+- `POST https://formspree.io/f/manaywyw` -> `HTTP 200`, JSON response `{ "ok": true, "next": "/thanks" }`
+- `POST https://formspree.io/f/mdalbpae` -> `HTTP 200`, JSON response `{ "ok": true, "next": "/thanks" }`
+
 ## QA Checklist
 
 For each form:
@@ -81,4 +90,3 @@ Endpoints in this Next.js migration match the original Replit app:
 
 - `manaywyw` for contact
 - `mdalbpae` for Phillips event
-

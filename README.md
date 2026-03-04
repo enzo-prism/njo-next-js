@@ -10,6 +10,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - SEO parity implemented (metadata, JSON-LD, `robots.txt`, `sitemap.xml`, `llms.txt`).
 - Form backends preserved and validated (`contact`, `phillips-event`).
 - Vercel deployment pipeline connected to GitHub.
+- Production alias live: `https://njo-next-js.vercel.app`.
 
 ## Stack
 
