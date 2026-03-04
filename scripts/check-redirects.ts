@@ -54,6 +54,23 @@ async function main() {
   const redirects = await nextConfig.redirects?.();
   assert.ok(redirects && redirects.length >= 4, "next.config redirects should include legacy mappings");
 
+  const hasHttpToHttpsRedirect = redirects?.some(
+    (redirect) =>
+      redirect.source === "/:path*" &&
+      redirect.destination === "https://michaelnjodds.com/:path*" &&
+      redirect.has?.some(
+        (condition) =>
+          condition.type === "header" &&
+          condition.key === "x-forwarded-proto" &&
+          condition.value === "http",
+      ),
+  );
+
+  assert.ok(
+    hasHttpToHttpsRedirect,
+    "Missing http-to-https canonical redirect for apex host in next.config.ts",
+  );
+
   console.log("Redirect assertions passed.");
 }
 

@@ -21,6 +21,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/:path*",
+        has: [
+          { type: "host", value: "michaelnjodds.com" },
+          { type: "header", key: "x-forwarded-proto", value: "http" },
+        ],
+        destination: "https://michaelnjodds.com/:path*",
+        permanent: true,
+      },
+      {
         source: "/dr-michael-neal-interview",
         destination: "/dr-michael-njo-interview",
         permanent: true,
