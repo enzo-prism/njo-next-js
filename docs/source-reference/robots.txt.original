@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/private
+Disallow: /_internal
+
+Sitemap: https://michaelnjodds.com/sitemap.xml

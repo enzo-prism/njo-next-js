@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>OG Image Generator</title>
+</head>
+<body>
+    <canvas id="canvas" width="1200" height="630" style="border: 1px solid #ccc;"></canvas>
+    <br>
+    <button onclick="downloadImage()">Download PNG</button>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Create rainbow gradient
+        const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+        gradient.addColorStop(0, 'rgba(255, 154, 158, 0.3)');
+        gradient.addColorStop(0.15, 'rgba(254, 207, 239, 0.3)');
+        gradient.addColorStop(0.30, 'rgba(254, 207, 239, 0.3)');
+        gradient.addColorStop(0.45, 'rgba(168, 237, 234, 0.3)');
+        gradient.addColorStop(0.60, 'rgba(254, 214, 227, 0.3)');
+        gradient.addColorStop(0.75, 'rgba(210, 153, 194, 0.3)');
+        gradient.addColorStop(0.90, 'rgba(250, 208, 196, 0.3)');
+        gradient.addColorStop(1, 'rgba(255, 209, 255, 0.3)');
+
+        // Create overlay gradient
+        const overlayGradient = ctx.createLinearGradient(0, 0, 1200, 630);
+        overlayGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+        overlayGradient.addColorStop(1, 'rgba(248, 250, 252, 0.9)');
+
+        // Fill background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Apply rainbow gradient
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Apply overlay
+        ctx.fillStyle = overlayGradient;
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Add text
+        ctx.textAlign = 'center';
+        
+        // Main title
+        ctx.font = '300 72px Inter, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = '#374151';
+        ctx.fillText('Dental Strategies', 600, 280);
+
+        // Subtitle
+        ctx.font = '300 32px Inter, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = '#6b7280';
+        ctx.fillText('Dr. Michael Njo', 600, 340);
+
+        // Description
+        ctx.font = '300 24px Inter, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = '#9ca3af';
+        ctx.fillText('Dental Practice Consulting', 600, 420);
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.download = 'og-image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Auto-generate the PNG
+        setTimeout(() => {
+            downloadImage();
+        }, 1000);
+    </script>
+</body>
+</html>

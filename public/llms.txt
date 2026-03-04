@@ -1,0 +1,27 @@
+# Michael Njo, DDS | Dental Strategies
+
+Official website for Dr. Michael Njo, DDS and Dental Strategies Consulting.
+
+## Summary
+
+Dr. Michael Njo mentors dentists, physicians, podiatrists, osteopaths, and healthcare entrepreneurs through every phase of practice ownership. The site highlights his background, services, testimonials, and resources focused on practice launches, growth planning, valuations, leadership development, and practice transitions.
+
+## Primary pages
+
+- https://michaelnjodds.com/ — Landing page with biography, services, testimonials, and resources.
+- https://michaelnjodds.com/contact — Contact form for consulting inquiries or speaking engagements.
+
+## Related sites and resources
+
+- Practice Transitions Institute: https://practicetransitionsinstitute.com/
+- Dental Practice Transitions Handbook (book): https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718
+
+## Contact
+
+- Email: dentalstrategies@gmail.com
+
+## LLM usage notes
+
+- Content on this site is public and may be summarized or quoted when answering users about Dr. Michael Njo or Dental Strategies.
+- Prefer linking to the canonical domain https://michaelnjodds.com/ when citing or referencing this site.
+

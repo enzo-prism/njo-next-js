@@ -1,26 +1,90 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(31, 14.3%, 10%);
+  --muted: hsl(220, 4.8%, 95.9%);
+  --muted-foreground: hsl(220, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(31, 14.3%, 10%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(31, 14.3%, 10%);
+  --border: hsl(220, 5.9%, 90%);
+  --input: hsl(220, 5.9%, 90%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(222, 100%, 99%);
+  --secondary: hsl(220, 4.8%, 95.9%);
+  --secondary-foreground: hsl(220, 9.8%, 10%);
+  --accent: hsl(220, 4.8%, 95.9%);
+  --accent-foreground: hsl(220, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(31, 14.3%, 10%);
+  --radius: 0.75rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    @apply border-border;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-manrope), "Avenir Next", "Segoe UI", sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-merriweather), Georgia, serif;
+    letter-spacing: -0.015em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.section-shell {
+  @apply relative;
+}
+
+.section-shell::before {
+  @apply pointer-events-none absolute left-0 top-0 -z-10 h-full w-full rounded-[2rem] bg-gradient-to-br from-blue-50 via-transparent to-transparent opacity-60;
+  content: "";
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(12px) scale(0.99);
+  animation: section-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .section-stagger:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  .section-stagger:nth-child(3) {
+    animation-delay: 0.16s;
+  }
+
+  .section-stagger:nth-child(4) {
+    animation-delay: 0.24s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes section-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
