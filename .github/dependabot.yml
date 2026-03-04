@@ -7,7 +7,16 @@ updates:
       day: "monday"
       time: "08:00"
       timezone: "America/Los_Angeles"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
     labels:
       - "dependencies"
       - "security"
@@ -19,7 +28,16 @@ updates:
       day: "monday"
       time: "08:30"
       timezone: "America/Los_Angeles"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
+    groups:
+      actions-minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
     labels:
       - "dependencies"
       - "ci"

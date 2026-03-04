@@ -6,6 +6,7 @@ This runbook covers preview validation, production deployment, and domain cutove
 
 - Vercel project linked (`vercel link` completed in repo).
 - GitHub repository connected in Vercel (`enzo-prism/njo-next-js`).
+- Local/CI runtime pinned to Node 20 (`.nvmrc`, `package.json#engines`).
 - Required environment variables present in both `Preview` and `Production`:
   - `NEXT_PUBLIC_SITE_URL`
   - `PREFERRED_HOSTNAME`
@@ -66,6 +67,12 @@ Verify deployment state:
 ```bash
 vercel list --yes
 vercel inspect <deployment-url> --format=json
+```
+
+Confirm aliases point to the new production deployment:
+
+```bash
+vercel inspect https://michaelnjodds.com
 ```
 
 ## 5. Domain Cutover Checklist
@@ -133,4 +140,8 @@ vercel list --yes
 
 # Inspect one deploy deeply
 vercel inspect <deployment-url> --format=json
+
+# Verify authoritative DNS and compare with local resolver
+dig +short A michaelnjodds.com @8.8.8.8
+dscacheutil -q host -a name michaelnjodds.com
 ```

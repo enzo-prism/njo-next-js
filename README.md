@@ -11,12 +11,15 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - Form backends preserved and validated (`contact`, `phillips-event`).
 - Vercel deployment pipeline connected to GitHub.
 - Lint-clean image optimization using `next/image` on key routes/components.
-- Dependabot security updates enabled (plus weekly dependency update automation).
+- Dependabot security updates enabled (plus weekly grouped minor/patch dependency automation).
+- Runtime pinned to Node.js 20.x (`package.json` engines + `.nvmrc`) for stable CI/Vercel behavior.
+- Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
+- `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:
   - `https://michaelnjodds.com`
   - `https://www.michaelnjodds.com`
   - `https://njo-next-js.vercel.app`
-- GitHub Actions CI now enforces parity checks on pushes and pull requests to `main`.
+- GitHub Actions CI enforces parity checks on pushes and pull requests to `main`.
 
 ## Stack
 
@@ -119,6 +122,13 @@ This runs:
 - Robots assertions
 - Redirect assertions
 
+Node version:
+
+```bash
+nvm use
+node -v
+```
+
 ## Deployment
 
 GitHub pushes to `main` trigger Vercel production deploys for the connected project.
@@ -145,6 +155,16 @@ Authoritative DNS currently uses:
 - `www` CNAME -> `397ac2fa17073cc9.vercel-dns-016.com`
 
 If your current network still resolves an older apex IP after DNS changes, verify against public/authoritative resolvers before making additional DNS edits.
+
+## Repo Governance
+
+- Branch protection on `main` requires:
+  - 1 approving PR review
+  - passing `Parity Checks` status check
+  - linear history
+  - conversation resolution
+- Force push and branch deletion are blocked on `main`.
+- Auto-merge is enabled and merged branches are auto-deleted.
 
 ## Docs Index
 

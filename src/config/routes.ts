@@ -13,7 +13,6 @@ export const LEGACY_TESTIMONIAL_SLUGS: Record<string, string> = {
 export const STATIC_SITE_PATHS = [
   "/",
   "/michael-njo-dds",
-  "/dr-michael-neal-interview",
   "/dr-michael-njo-interview",
   "/testimonials",
   "/resources",

@@ -56,13 +56,27 @@ Latest production deployment:
    - Lint now runs cleanly with no `@next/next/no-img-element` warnings.
 6. Production env hygiene improved:
    - Removed accidental trailing newline characters from Vercel Production env vars (`NEXT_PUBLIC_*`, canonical host/protocol vars).
+7. Branch governance enabled:
+   - `main` now protected with required status check (`Parity Checks`), required PR review (1), linear history, and conversation resolution.
+   - Force pushes and branch deletions are disallowed on `main`.
+8. Repository safety defaults tightened:
+   - Auto-merge enabled.
+   - Delete branch on merge enabled.
+   - Wiki disabled.
+9. Runtime stability pinned:
+   - Node.js pinned to `20.x` via `package.json` engines and `.nvmrc`.
+10. HTTP response hardening:
+   - Added security headers in Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
+11. SEO crawl optimization:
+   - Removed redirect-only path (`/dr-michael-neal-interview`) from sitemap static URL set.
 
 ## Remaining Manual Optimization (Non-Blocking)
 
 1. Optional apex DNS upgrade in Squarespace:
    - Replace apex A with Vercel rank-1 pair `216.150.1.1` and `216.150.16.1` to clear Vercel's "DNS Change Recommended".
-2. Optional GitHub governance:
-   - `main` branch is currently unprotected. Consider enabling branch protection + required CI checks for stricter release control.
+2. Network-local resolver cache drift:
+   - Some local networks can temporarily resolve stale apex IP (`34.111.179.208`) even when authoritative DNS correctly returns Vercel (`76.76.21.21`).
+   - Validate with public/authoritative resolvers before changing registrar records.
 
 ## Fixes Applied During Final Readiness Pass
 
@@ -78,4 +92,4 @@ Latest production deployment:
 ## Non-Blocking Items
 
 1. Some networks can temporarily resolve stale apex DNS after registrar changes due TTL (`4 hrs` currently).
-2. GitHub `main` branch is still unprotected; enabling branch protection with required CI remains recommended.
+2. Vercel still labels apex DNS as "DNS Change Recommended" despite working authoritative resolution; optional improvement is adopting the recommended A-record pair.
