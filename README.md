@@ -10,6 +10,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - SEO parity implemented (metadata, JSON-LD, `robots.txt`, `sitemap.xml`, `llms.txt`).
 - Form backends preserved and validated (`contact`, `phillips-event`).
 - Vercel deployment pipeline connected to GitHub.
+- Lint-clean image optimization using `next/image` on key routes/components.
 - Production aliases live:
   - `https://michaelnjodds.com`
   - `https://www.michaelnjodds.com`
@@ -134,6 +135,15 @@ vercel deploy --prod --yes
 ```
 
 See `docs/deployment-runbook.md` for full deployment/cutover workflow.
+
+## Domain Verification Notes
+
+Authoritative DNS currently uses:
+
+- `@` A -> `76.76.21.21`
+- `www` CNAME -> `397ac2fa17073cc9.vercel-dns-016.com`
+
+If your current network still resolves an older apex IP after DNS changes, verify against public/authoritative resolvers before making additional DNS edits.
 
 ## Docs Index
 

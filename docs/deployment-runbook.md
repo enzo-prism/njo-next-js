@@ -31,7 +31,7 @@ npm run check:parity
 Expected result:
 
 - All checks pass.
-- Lint may show non-blocking `@next/next/no-img-element` warnings.
+- Lint is clean (no warnings/errors).
 
 ## 3. Preview Deployment
 
@@ -89,20 +89,30 @@ If custom domain cutover has not been completed yet:
 
 ### Current DNS Baseline (Squarespace + Vercel)
 
-Current authoritative records that are valid:
+Current authoritative records:
 
 - `www` CNAME -> `397ac2fa17073cc9.vercel-dns-016.com`
 - `@` A -> `76.76.21.21`
-
-Vercel currently reports apex DNS as `optional-change` (not misconfigured). If you want to clear the "DNS Change Recommended" banner in Vercel Domains UI, update apex A records to Vercel's rank-1 pair:
-
-- `216.150.1.1`
-- `216.150.16.1`
 
 Important:
 
 - TTL is `4 hrs` on current Squarespace records, so resolver propagation can lag.
 - Keep one canonical host policy only (`www -> apex`) to avoid redirect loops.
+- If apex appears to serve a stale origin from your current network, compare local resolver output against public authoritative resolvers before changing DNS:
+
+```bash
+# Local resolver
+dscacheutil -q host -a name michaelnjodds.com
+
+# Public recursive resolvers
+dig +short A michaelnjodds.com @8.8.8.8
+dig +short A michaelnjodds.com @1.1.1.1
+
+# Authoritative nameserver
+dig +short A michaelnjodds.com @ns-cloud-e1.googledomains.com
+```
+
+If local and authoritative answers differ, wait for propagation or flush local DNS cache.
 
 ## 6. Operational Commands
 

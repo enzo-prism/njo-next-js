@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { CalendarDays, CheckCircle2, Clock3, Mail, MapPin, MessageSquareQuote, PhoneCall } from "lucide-react";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
@@ -82,15 +83,13 @@ export default function MichaelNjoDDS() {
                   <CardTitle>About Dr. Michael Njo</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <img
+                  <Image
                     src={dugoniCollaborationImage.src}
-                    srcSet={dugoniCollaborationImage.srcSet}
                     sizes={dugoniCollaborationImage.sizes}
                     alt={dugoniCollaborationImage.alt}
                     width={dugoniCollaborationImage.width}
                     height={dugoniCollaborationImage.height}
                     className="mx-auto h-64 w-64 rounded-2xl object-cover object-center"
-                    decoding="async"
                   />
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     A practitioner-turned-consultant with deep private practice experience, Dr. Njo helps healthcare owners design
@@ -148,14 +147,12 @@ export default function MichaelNjoDDS() {
                       aria-label={image.alt}
                       onClick={() => setSelectedImage(image)}
                     >
-                      <img
+                      <Image
                         src={image.src}
-                        srcSet={image.srcSet}
-                        sizes={image.sizes}
                         alt={image.alt}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                        loading="lazy"
-                        decoding="async"
+                        fill
+                        sizes={image.sizes}
+                        className="object-cover transition duration-300 group-hover:scale-105"
                       />
                       <span
                         className="pointer-events-none absolute inset-0 bg-black/0 transition duration-300 group-hover:bg-black/15"
@@ -185,14 +182,16 @@ export default function MichaelNjoDDS() {
                   <>
                     <DialogTitle className="sr-only">{selectedImage.alt}</DialogTitle>
                     <DialogDescription className="sr-only">{selectedImage.alt}</DialogDescription>
-                    <img
-                      src={selectedImage.src}
-                      srcSet={selectedImage.srcSet}
-                      sizes="100vw"
-                      alt={selectedImage.alt}
-                      className="h-auto w-full rounded-t-lg object-contain"
-                      loading="eager"
-                    />
+                    <div className="relative h-[80vh] w-full">
+                      <Image
+                        src={selectedImage.src}
+                        alt={selectedImage.alt}
+                        fill
+                        sizes="100vw"
+                        className="rounded-t-lg object-contain"
+                        priority
+                      />
+                    </div>
                   </>
                 ) : null}
               </DialogContent>

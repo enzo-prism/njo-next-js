@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, PlayCircle, Star, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { testimonialPages } from "@/data/testimonials";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
@@ -25,14 +26,13 @@ export default function Home() {
           <Card className="overflow-hidden">
             <div className="grid gap-0 md:grid-cols-[1.15fr_0.85fr]">
               <div className="relative min-h-[260px] bg-gradient-to-b from-slate-100 to-white p-8 md:p-12">
-                <img
+                <Image
                   src="/dr-njo-headshot.webp"
                   alt="Michael Njo, DDS - Professional headshot"
                   width={383}
                   height={460}
                   className="mx-auto h-56 w-56 rounded-full object-cover object-center shadow-2xl"
-                  loading="eager"
-                  decoding="async"
+                  priority
                 />
                 <div className="mt-6 flex flex-wrap gap-2 justify-center md:justify-start">
                   {coreOrganizations.map((org) => (
@@ -239,16 +239,13 @@ export default function Home() {
               </p>
             </CardHeader>
             <CardContent>
-              <img
+              <Image
                 src="https://res.cloudinary.com/dhqpqfw6w/image/upload/v1762786458/dugoni-business-club-donation-ceremony_plth4r.webp"
-                srcSet="https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_640,f_auto,q_auto/v1762786458/dugoni-business-club-donation-ceremony_plth4r.webp 640w, https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_960,f_auto,q_auto/v1762786458/dugoni-business-club-donation-ceremony_plth4r.webp 960w, https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1280,f_auto,q_auto/v1762786458/dugoni-business-club-donation-ceremony_plth4r.webp 1280w, https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1600,f_auto,q_auto/v1762786458/dugoni-business-club-donation-ceremony_plth4r.webp 1600w"
                 sizes="(max-width: 768px) 100vw, 768px"
                 width={1645}
                 height={1095}
                 alt="Dr. Michael Njo, DDS at the Dugoni Business Club donation ceremony"
                 className="w-full rounded-md border border-border object-cover"
-                loading="lazy"
-                decoding="async"
               />
             </CardContent>
           </Card>
@@ -259,16 +256,13 @@ export default function Home() {
               <p className="text-sm text-muted-foreground">Trusted peers and clinic teams in strategic workshops.</p>
             </CardHeader>
             <CardContent>
-              <img
+              <Image
                 src="/dr-njo-clients-1280.webp"
-                srcSet="/dr-njo-clients-640.webp 640w, /dr-njo-clients-960.webp 960w, /dr-njo-clients-1280.webp 1280w, /dr-njo-clients-1600.webp 1600w, /dr-njo-clients-1920.webp 1920w"
                 sizes="(max-width: 768px) 100vw, 1024px"
                 width={1920}
                 height={1279}
                 alt="Michael Njo, DDS with dental professionals at a consulting workshop"
                 className="w-full rounded-md border border-border object-cover"
-                loading="lazy"
-                decoding="async"
               />
             </CardContent>
           </Card>

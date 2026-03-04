@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, PhoneCall } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -35,12 +36,14 @@ export default function SiteHeader() {
     <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="group flex items-center gap-2">
-          <img
+          <Image
             src="/favicon.svg"
             alt="Dr. Michael Njo logo"
+            width={36}
+            height={36}
             className="h-9 w-9 shrink-0 object-contain"
-            loading="eager"
-            decoding="async"
+            priority
+            unoptimized
           />
           <span className="flex flex-col leading-tight">
             <span className="font-semibold tracking-tight text-foreground">Dr. Michael Njo</span>

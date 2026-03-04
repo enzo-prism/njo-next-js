@@ -51,6 +51,11 @@ Latest production deployment:
    - Apex A record is valid and serving (`76.76.21.21`), but Vercel marks it as `optional-change` with a preferred pair available.
 4. CI protection added:
    - Added `.github/workflows/ci.yml` to run `npm run check:parity` on push/PR to `main`.
+5. Image delivery optimization completed:
+   - Replaced all warning-triggering `<img>` usage with `next/image` in core pages/layout.
+   - Lint now runs cleanly with no `@next/next/no-img-element` warnings.
+6. Production env hygiene improved:
+   - Removed accidental trailing newline characters from Vercel Production env vars (`NEXT_PUBLIC_*`, canonical host/protocol vars).
 
 ## Remaining Manual Optimization (Non-Blocking)
 
@@ -72,4 +77,5 @@ Latest production deployment:
 
 ## Non-Blocking Items
 
-ESLint reports warnings for raw `<img>` usage (`@next/next/no-img-element`) on selected components. This is currently accepted for parity preservation and does not block build or deployment.
+1. Some networks can temporarily resolve stale apex DNS after registrar changes due TTL (`4 hrs` currently).
+2. GitHub `main` branch is still unprotected; enabling branch protection with required CI remains recommended.
