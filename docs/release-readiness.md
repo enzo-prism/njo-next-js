@@ -1,12 +1,13 @@
 # Release Readiness Report
 
-Date: 2026-03-04
+Date: 2026-03-04 (initial report)
+Updated: 2026-03-07 (Node 24 alignment and production rollout)
 
 ## Scope
 
 Verified the Next.js rebuild is production-ready and behaviorally aligned with the source site.
 
-Latest production deployment:
+Production deployment validated during initial readiness pass:
 
 - Alias set:
   - `https://michaelnjodds.com`
@@ -14,6 +15,35 @@ Latest production deployment:
   - `https://njo-next-js.vercel.app`
 - Inspect URL: `https://vercel.com/enzo-design-prisms-projects/njo-next-js/6r2QFZ9fWeBsXgBZgjwD47mF4nEp`
 - Git commit: `1846f219df1b4f52e2f6e9cbe4a3726865351f90`
+
+## Post-Readiness Update (2026-03-07)
+
+Node 24 runtime alignment was completed after the initial release-readiness pass and revalidated across local, preview, and production workflows.
+
+Current production deployment:
+
+- Deployment ID: `dpl_EEfuPVwZy1RmXD5q1KTpibjERNX2`
+- Deployment URL: `https://njo-next-qbqceym68-enzo-design-prisms-projects.vercel.app`
+- Aliases:
+  - `https://michaelnjodds.com`
+  - `https://www.michaelnjodds.com`
+  - `https://njo-next-js.vercel.app`
+- Merge commit now live in production: `c99674c5296086db6cbbc1348099582f9c1611cb`
+
+Additional validation completed during the rollout:
+
+1. Runtime alignment:
+   - Repo runtime updated to Node `24.x` in `package.json`, `.nvmrc`, and CI.
+   - Vercel project runtime confirmed as `Node.js Version 24.x`.
+2. Local verification under the target runtime:
+   - `npm run check:parity` passed under Node `24.14.0`.
+3. Protected preview verification:
+   - Preview deployment built successfully under Node 24.
+   - Authenticated `vercel curl` checks confirmed homepage `200`, SEO endpoints `200`, redirect behavior `308`, and custom `404` behavior behind Deployment Protection.
+4. Public production smoke checks:
+   - `https://michaelnjodds.com/` returned `200`.
+   - `https://michaelnjodds.com/robots.txt` returned `200`.
+   - `https://michaelnjodds.com/dr-michael-neal-interview` returned `308` to `/dr-michael-njo-interview`.
 
 ## Completed Validation
 

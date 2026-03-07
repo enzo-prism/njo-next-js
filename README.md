@@ -13,6 +13,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - Lint-clean image optimization using `next/image` on key routes/components.
 - Dependabot security updates enabled (plus weekly grouped minor/patch dependency automation).
 - Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
+- Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:
@@ -84,6 +85,25 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 
 ## Local Development
 
+Preferred local runtime workflow (if you use `fnm`):
+
+```bash
+fnm install
+fnm use
+node -v
+```
+
+Fallback workflow (if you use `nvm` instead):
+
+```bash
+nvm use
+node -v
+```
+
+Expected result:
+
+- `node -v` prints a `24.x` release.
+
 Install dependencies:
 
 ```bash
@@ -125,19 +145,34 @@ This runs:
 Node version:
 
 ```bash
-nvm use
+fnm use
+# or: nvm use
 node -v
 ```
 
+Expected result:
+
+- `node -v` prints a `24.x` release before running the parity suite.
+
 ## Deployment
 
-GitHub pushes to `main` trigger Vercel production deploys for the connected project.
+GitHub merges/pushes to `main` trigger Vercel production deploys for the connected project.
 
 Manual preview deploy:
 
 ```bash
 vercel deploy --yes
 ```
+
+Protected preview smoke check from CLI:
+
+```bash
+vercel curl / --deployment <preview-url>
+vercel curl /robots.txt --deployment <preview-url>
+vercel curl /dr-michael-neal-interview --deployment <preview-url> -- --include
+```
+
+Use `vercel curl` when a preview deployment is behind Vercel Deployment Protection and plain `curl` returns `Authentication Required`.
 
 Manual production deploy:
 
@@ -170,5 +205,6 @@ If your current network still resolves an older apex IP after DNS changes, verif
 
 - `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
 - `docs/forms-and-backends.md` - form backend wiring and validation details
+- `docs/release-readiness.md` - initial release-readiness report plus post-rollout operational addendum
 - `.github/workflows/ci.yml` - CI parity gate for PR/push
 - `docs/source-reference/*` - source snapshots from the original site (`robots`, `sitemap`)

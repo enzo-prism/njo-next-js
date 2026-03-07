@@ -7,6 +7,12 @@ This runbook covers preview validation, production deployment, and domain cutove
 - Vercel project linked (`vercel link` completed in repo).
 - GitHub repository connected in Vercel (`enzo-prism/njo-next-js`).
 - Local/CI runtime pinned to Node 24 (`.nvmrc`, `package.json#engines`) to match the Vercel project runtime.
+- Vercel project runtime confirms `Node.js Version 24.x`:
+
+```bash
+vercel project inspect njo-next-js
+```
+
 - Required environment variables present in both `Preview` and `Production`:
   - `NEXT_PUBLIC_SITE_URL`
   - `PREFERRED_HOSTNAME`
@@ -22,6 +28,18 @@ vercel env ls
 ```
 
 ## 2. Pre-Deploy Verification (Local)
+
+Confirm the local Node runtime before shipping:
+
+```bash
+fnm use
+# or: nvm use
+node -v
+```
+
+Expected result:
+
+- `node -v` prints a `24.x` release.
 
 Run full parity suite before shipping:
 
@@ -40,6 +58,15 @@ Create a preview deployment:
 
 ```bash
 vercel deploy --yes
+```
+
+If the preview is protected by Vercel Deployment Protection, use authenticated CLI requests for smoke tests instead of plain `curl`:
+
+```bash
+vercel curl / --deployment <preview-url>
+vercel curl /robots.txt --deployment <preview-url>
+vercel curl /sitemap.xml --deployment <preview-url>
+vercel curl /dr-michael-neal-interview --deployment <preview-url> -- --include
 ```
 
 Validate on preview URL:
@@ -65,8 +92,8 @@ vercel deploy --prod --yes
 Verify deployment state:
 
 ```bash
-vercel list --yes
-vercel inspect <deployment-url> --format=json
+vercel ls njo-next-js
+vercel inspect <deployment-url>
 ```
 
 Confirm aliases point to the new production deployment:
@@ -74,6 +101,10 @@ Confirm aliases point to the new production deployment:
 ```bash
 vercel inspect https://michaelnjodds.com
 ```
+
+Expected note when the runtime changes:
+
+- Vercel may skip the previous build cache after a Node major-version change. This is expected on the first deploy after the runtime bump.
 
 ## 5. Domain Cutover Checklist
 
@@ -129,17 +160,29 @@ Useful commands for ongoing operations:
 # Local verification
 npm run check:parity
 
+# Verify local runtime
+fnm use
+# or: nvm use
+node -v
+
 # Preview deploy
 vercel deploy --yes
+
+# Protected preview smoke checks
+vercel curl / --deployment <preview-url>
+vercel curl /robots.txt --deployment <preview-url>
 
 # Production deploy
 vercel deploy --prod --yes
 
 # Recent deploy list
-vercel list --yes
+vercel ls njo-next-js
 
 # Inspect one deploy deeply
-vercel inspect <deployment-url> --format=json
+vercel inspect <deployment-url>
+
+# Inspect current project runtime
+vercel project inspect njo-next-js
 
 # Verify authoritative DNS and compare with local resolver
 dig +short A michaelnjodds.com @8.8.8.8
