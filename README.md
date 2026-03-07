@@ -12,7 +12,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - Vercel deployment pipeline connected to GitHub.
 - Lint-clean image optimization using `next/image` on key routes/components.
 - Dependabot security updates enabled (plus weekly grouped minor/patch dependency automation).
-- Runtime pinned to Node.js 20.x (`package.json` engines + `.nvmrc`) for stable CI/Vercel behavior.
+- Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:

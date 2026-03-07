@@ -6,7 +6,7 @@ This runbook covers preview validation, production deployment, and domain cutove
 
 - Vercel project linked (`vercel link` completed in repo).
 - GitHub repository connected in Vercel (`enzo-prism/njo-next-js`).
-- Local/CI runtime pinned to Node 20 (`.nvmrc`, `package.json#engines`).
+- Local/CI runtime pinned to Node 24 (`.nvmrc`, `package.json#engines`) to match the Vercel project runtime.
 - Required environment variables present in both `Preview` and `Production`:
   - `NEXT_PUBLIC_SITE_URL`
   - `PREFERRED_HOSTNAME`

@@ -64,7 +64,7 @@ Latest production deployment:
    - Delete branch on merge enabled.
    - Wiki disabled.
 9. Runtime stability pinned:
-   - Node.js pinned to `20.x` via `package.json` engines and `.nvmrc`.
+   - Node.js was pinned to `20.x` via `package.json` engines and `.nvmrc` during this hardening pass; the current repo baseline has since moved to `24.x`.
 10. HTTP response hardening:
    - Added security headers in Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
 11. SEO crawl optimization:
