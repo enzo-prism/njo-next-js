@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import { Manrope, Merriweather } from "next/font/google";
 import SiteShell from "@/components/layout/site-shell";
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className={`${manrope.variable} ${merriweather.variable}`}>
         <SiteShell>{children}</SiteShell>
+        <Analytics />
         <Script id="ga-hotjar-bootstrap" strategy="afterInteractive">
           {analyticsScript}
         </Script>

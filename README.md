@@ -4,6 +4,8 @@ Next.js parity rebuild of the legacy Replit site (`enzo-prism/DrNjo`) for Vercel
 
 This codebase preserves production route behavior, legacy redirects, SEO metadata/JSON-LD behavior, analytics integrations, and Formspree form handling from the original site.
 
+For future Codex sessions, start with `AGENTS.md` for the repo operating map and `docs/analytics-and-observability.md` for analytics-specific guidance.
+
 ## Current Status
 
 - Route and content parity implemented.
@@ -15,6 +17,7 @@ This codebase preserves production route behavior, legacy redirects, SEO metadat
 - Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
 - Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
+- Vercel Analytics enabled at the root layout for deployed page-view and visitor tracking.
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:
   - `https://michaelnjodds.com`
@@ -70,6 +73,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 - `robots.txt` via `src/app/robots.ts`
 - `sitemap.xml` via `src/app/sitemap.ts`
 - `llms.txt` served from `public/llms.txt`
+- Vercel Analytics mounted once in `src/app/layout.tsx`
 - Google Analytics + Hotjar injected in `src/app/layout.tsx`
 
 ## Environment Variables
@@ -139,6 +143,7 @@ This runs:
 - Route metadata snapshots
 - Structured data assertions
 - Sitemap assertions
+- HTTP SEO smoke assertions
 - Robots assertions
 - Redirect assertions
 
@@ -203,6 +208,8 @@ If your current network still resolves an older apex IP after DNS changes, verif
 
 ## Docs Index
 
+- `AGENTS.md` - repo-specific operating guide for future Codex sessions
+- `docs/analytics-and-observability.md` - Vercel Analytics, GA, and Hotjar wiring plus validation workflow
 - `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
 - `docs/forms-and-backends.md` - form backend wiring and validation details
 - `docs/release-readiness.md` - initial release-readiness report plus post-rollout operational addendum

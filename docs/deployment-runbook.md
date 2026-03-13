@@ -20,6 +20,7 @@ vercel project inspect njo-next-js
   - `NEXT_PUBLIC_GA_ID`
   - `NEXT_PUBLIC_HOTJAR_ID`
   - `NEXT_PUBLIC_HOTJAR_SV`
+- Vercel Analytics is code-based in this repo and does not require a dedicated repo env var.
 
 Check envs:
 
@@ -77,6 +78,7 @@ Validate on preview URL:
 - `robots.txt`, `sitemap.xml`, and `llms.txt` are accessible.
 - Contact + event forms submit and show expected success/error states.
 - Canonical tags and JSON-LD are present.
+- If analytics changed, validate browser-side instrumentation using `docs/analytics-and-observability.md`.
 
 ## 4. Production Deployment
 
@@ -123,7 +125,7 @@ If custom domain cutover has not been completed yet:
    - Redirects
    - Forms
    - SEO endpoints
-   - Analytics script load
+   - Analytics script load and Vercel Analytics ingestion path
 
 ### Current DNS Baseline (Squarespace + Vercel)
 
@@ -188,3 +190,13 @@ vercel project inspect njo-next-js
 dig +short A michaelnjodds.com @8.8.8.8
 dscacheutil -q host -a name michaelnjodds.com
 ```
+
+## 7. Analytics Verification Notes
+
+- Vercel Analytics will not show useful data until the deployed site receives real visits.
+- After shipping analytics changes:
+  - visit the deployed site in a normal browser
+  - navigate across a few pages
+  - wait 30 to 60 seconds before judging dashboard freshness
+- If no data appears, check ad/content blockers before assuming the integration is broken.
+- See `docs/analytics-and-observability.md` for the full validation flow.

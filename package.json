@@ -14,9 +14,10 @@
     "check:route-head-snapshots": "tsx scripts/check-route-head-snapshots.ts",
     "check:schema": "tsx scripts/check-schema.ts",
     "check:sitemap": "tsx scripts/check-sitemap.ts",
+    "check:seo-http": "tsx scripts/check-seo-http.ts",
     "check:robots": "tsx scripts/check-robots.ts",
     "check:redirects": "tsx scripts/check-redirects.ts",
-    "check:parity": "npm run typecheck && npm run lint && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:robots && npm run check:redirects"
+    "check:parity": "npm run typecheck && npm run lint && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:seo-http && npm run check:robots && npm run check:redirects"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -26,6 +27,7 @@
     "@radix-ui/react-separator": "^1.1.3",
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-tabs": "^1.1.4",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
