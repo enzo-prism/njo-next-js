@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { STATIC_SITE_PATHS } from "@/config/routes";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildSitemapEntries } from "@/seo/sitemap-data";
@@ -18,9 +19,14 @@ for (const testimonial of testimonialPages) {
   assert.ok(urls.has(detailUrl), `Missing testimonial URL: ${detailUrl}`);
 }
 
+for (const article of resourceArticles) {
+  const detailUrl = buildCanonicalUrl(buildResourceArticlePath(article.slug));
+  assert.ok(urls.has(detailUrl), `Missing resource article URL: ${detailUrl}`);
+}
+
 assert.equal(
   entries.length,
-  STATIC_SITE_PATHS.length + testimonialPages.length,
+  STATIC_SITE_PATHS.length + testimonialPages.length + resourceArticles.length,
   "Unexpected sitemap entry count",
 );
 

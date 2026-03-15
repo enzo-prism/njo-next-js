@@ -41,6 +41,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo operating map and
 - `/testimonials`
 - `/testimonials/[slug]` (generated from testimonial data)
 - `/resources`
+- `/resources/[slug]` (generated from resource article data)
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`

@@ -1,7 +1,9 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
 import { resources, bookReviews } from "@/seo/structured-data";
 
 export default function ResourcesPage() {
@@ -56,6 +58,53 @@ export default function ResourcesPage() {
             </CardContent>
           </Card>
         )}
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold">Articles &amp; guidance</h2>
+            <p className="max-w-3xl text-sm text-muted-foreground">
+              Practical reads for dentists weighing ownership, transitions, and long-term strategy.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {resourceArticles.map((article) => (
+            <Card key={article.slug} className="overflow-hidden">
+              <CardHeader className="space-y-3">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                  <Badge variant="secondary" className="uppercase tracking-wide">
+                    Article
+                  </Badge>
+                  <span className="inline-flex items-center gap-1">
+                    <CalendarDays className="h-3.5 w-3.5" />
+                    {formatArticleDate(article.publishedAt)}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Clock3 className="h-3.5 w-3.5" />
+                    {article.readTimeMinutes} min read
+                  </span>
+                </div>
+                <CardTitle className="text-2xl leading-snug">
+                  <Link href={buildResourceArticlePath(article.slug)} className="transition-colors hover:text-primary">
+                    {article.title}
+                  </Link>
+                </CardTitle>
+                <CardDescription className="text-sm leading-relaxed max-w-lg">{article.excerpt}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild variant="outline" className="inline-flex w-full justify-center sm:w-auto">
+                  <Link href={buildResourceArticlePath(article.slug)}>
+                    Read article
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { buildResourceArticlePath } from "@/data/resource-articles";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildRouteMetadata } from "@/seo/metadata";
 
@@ -31,6 +32,18 @@ const cases = [
     path: "/testimonials/diana-fat-dds",
     title: "Testimonial from Diana Fat, DDS | Michael Njo DDS",
     descriptionIncludes: "Testimonial from",
+    ogType: "article",
+  },
+  {
+    path: "/resources",
+    title: "Resources | Michael Njo, DDS",
+    descriptionIncludes: "Access Dental Practice Transitions Handbook",
+    ogType: "website",
+  },
+  {
+    path: buildResourceArticlePath("are-you-ready-to-buy-your-first-dental-practice"),
+    title: "Are You Ready to Buy Your First Dental Practice? | Michael Njo, DDS",
+    descriptionIncludes: "first dental practice acquisition",
     ogType: "article",
   },
   {

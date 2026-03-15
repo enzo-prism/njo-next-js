@@ -3,6 +3,7 @@ import { once } from "node:events";
 import { createServer } from "node:net";
 import { spawn } from "node:child_process";
 import { STATIC_SITE_PATHS } from "@/config/routes";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 
@@ -116,6 +117,11 @@ async function main() {
     for (const testimonial of testimonialPages) {
       const detailUrl = buildCanonicalUrl(`/testimonials/${testimonial.slug}`);
       assert.ok(sitemapUrls.has(detailUrl), `Missing testimonial URL: ${detailUrl}`);
+    }
+
+    for (const article of resourceArticles) {
+      const detailUrl = buildCanonicalUrl(buildResourceArticlePath(article.slug));
+      assert.ok(sitemapUrls.has(detailUrl), `Missing resource article URL: ${detailUrl}`);
     }
 
     assert.match(

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getResourceArticleByPath } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
@@ -80,6 +81,11 @@ function buildTestimonialMetaDescription({
 
 export function buildPageTitle(pathname: string): string {
   const normalizedPath = normalizePathname(pathname);
+  const resourceArticle = getResourceArticleByPath(normalizedPath);
+
+  if (resourceArticle) {
+    return resourceArticle.metaTitle;
+  }
 
   if (normalizedPath.startsWith("/testimonials/")) {
     const context = getTestimonialContext(normalizedPath);
@@ -119,6 +125,11 @@ export function buildPageTitle(pathname: string): string {
 
 export function buildPageDescription(pathname: string): string {
   const normalizedPath = normalizePathname(pathname);
+  const resourceArticle = getResourceArticleByPath(normalizedPath);
+
+  if (resourceArticle) {
+    return resourceArticle.description;
+  }
 
   if (normalizedPath.startsWith("/testimonials/")) {
     const context = getTestimonialContext(normalizedPath);
@@ -163,18 +174,32 @@ export function buildPageDescription(pathname: string): string {
 export function buildOpenGraphType(pathname: string): "website" | "article" {
   const normalizedPath = normalizePathname(pathname);
   if (normalizedPath.startsWith("/testimonials/")) return "article";
+  if (getResourceArticleByPath(normalizedPath)) return "article";
   return "website";
 }
 
+export function buildPageKeywords(pathname: string): string[] | undefined {
+  const normalizedPath = normalizePathname(pathname);
+  const resourceArticle = getResourceArticleByPath(normalizedPath);
+
+  if (!resourceArticle) return undefined;
+  return [resourceArticle.primaryKeyword, ...resourceArticle.secondaryKeywords];
+}
+
 export function buildRouteMetadata(pathname: string): Metadata {
+  const normalizedPath = normalizePathname(pathname);
+  const resourceArticle = getResourceArticleByPath(normalizedPath);
   const title = buildPageTitle(pathname);
   const description = buildPageDescription(pathname);
   const canonical = buildCanonicalUrl(pathname);
   const ogType = buildOpenGraphType(pathname);
+  const keywords = buildPageKeywords(pathname);
 
   return {
     title,
     description,
+    keywords,
+    authors: resourceArticle ? [{ name: "Michael Njo, DDS" }] : undefined,
     alternates: {
       canonical,
     },
@@ -184,6 +209,11 @@ export function buildRouteMetadata(pathname: string): Metadata {
       description,
       url: canonical,
       images: [OG_IMAGE],
+      publishedTime: resourceArticle?.publishedAt,
+      modifiedTime: resourceArticle?.updatedAt || resourceArticle?.publishedAt,
+      authors: resourceArticle ? ["Michael Njo, DDS"] : undefined,
+      section: resourceArticle ? "Resources" : undefined,
+      tags: resourceArticle ? [resourceArticle.primaryKeyword, ...resourceArticle.secondaryKeywords] : undefined,
     },
     twitter: {
       card: "summary_large_image",

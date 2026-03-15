@@ -51,6 +51,14 @@ This file gives future Codex sessions a fast, repo-specific operating map for `m
   - static route inventory and redirect metadata used by checks
 - `src/seo/*`
   - metadata, robots, sitemap, structured data generation
+- `src/data/resource-articles.ts`
+  - source of truth for `/resources/[slug]` content, SEO fields, and article slugs
+- `src/components/pages/resources.tsx`
+  - Resources hub, including featured article links
+- `src/components/pages/resource-article-detail.tsx`
+  - Reusable long-form article layout for resource posts
+- `src/app/resources/[slug]/page.tsx`
+  - Static resource article route generation
 - `src/components/pages/contact.tsx`
   - Contact Formspree integration
 - `src/components/pages/phillips-event.tsx`
@@ -72,6 +80,7 @@ Check these hotspots first when your work touches:
   - `next.config.ts`
   - `src/config/routes.ts`
   - `src/config/site.ts`
+  - `src/data/resource-articles.ts`
 - SEO:
   - `src/seo/metadata.ts`
   - `src/seo/route-structured-data.ts`

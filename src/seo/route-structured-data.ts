@@ -1,3 +1,4 @@
+import { buildResourceArticlePath, getResourceArticleByPath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { CANONICAL_ORIGIN } from "@/config/site";
@@ -213,6 +214,176 @@ function buildTestimonialDetailStructuredData(pathname: string): SchemaNode | nu
   };
 }
 
+function buildResourcesCollectionStructuredData(): SchemaNode {
+  const pathname = "/resources";
+  const collectionUrl = buildCanonicalUrl(pathname);
+  const breadcrumbId = `${collectionUrl}#breadcrumb`;
+  const itemListId = `${collectionUrl}#item-list`;
+
+  const breadcrumb = buildBreadcrumb(
+    [
+      { name: "Home", item: buildCanonicalUrl("/") },
+      { name: "Resources", item: collectionUrl },
+    ],
+    breadcrumbId,
+  );
+
+  const itemList: SchemaNode = {
+    "@type": "ItemList",
+    "@id": itemListId,
+    name: "Resource articles and ownership guidance",
+    numberOfItems: resourceArticles.length,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    itemListElement: resourceArticles.map((article, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: buildCanonicalUrl(buildResourceArticlePath(article.slug)),
+      name: article.title,
+      description: article.excerpt,
+    })),
+  };
+
+  const page: SchemaNode = {
+    "@type": ["CollectionPage", "WebPage"],
+    "@id": `${collectionUrl}#webpage`,
+    url: collectionUrl,
+    name: buildPageTitle(pathname),
+    description: buildPageDescription(pathname),
+    inLanguage: "en",
+    isPartOf: {
+      "@id": WEBSITE_NODE_ID,
+    },
+    about: {
+      "@id": PERSON_NODE_ID,
+    },
+    breadcrumb: {
+      "@id": breadcrumbId,
+    },
+    mainEntity: {
+      "@id": itemListId,
+    },
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [page, breadcrumb, itemList],
+  };
+}
+
+function buildResourceArticleStructuredData(pathname: string): SchemaNode | null {
+  const article = getResourceArticleByPath(pathname);
+  if (!article) return null;
+
+  const detailUrl = buildCanonicalUrl(pathname);
+  const resourcesUrl = buildCanonicalUrl("/resources");
+  const breadcrumbId = `${detailUrl}#breadcrumb`;
+  const articleId = `${detailUrl}#article`;
+  const faqId = `${detailUrl}#faq`;
+  const imageId = `${detailUrl}#primaryimage`;
+
+  const breadcrumb = buildBreadcrumb(
+    [
+      { name: "Home", item: buildCanonicalUrl("/") },
+      { name: "Resources", item: resourcesUrl },
+      { name: article.title, item: detailUrl },
+    ],
+    breadcrumbId,
+  );
+
+  const imageNode: SchemaNode = {
+    "@type": "ImageObject",
+    "@id": imageId,
+    url: `${CANONICAL_ORIGIN}/og-image.svg`,
+    width: 1200,
+    height: 630,
+  };
+
+  const articleNode: SchemaNode = {
+    "@type": "BlogPosting",
+    "@id": articleId,
+    url: detailUrl,
+    headline: article.title,
+    description: article.description,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt || article.publishedAt,
+    inLanguage: "en",
+    articleSection: "Resources",
+    keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
+    image: {
+      "@id": imageId,
+    },
+    author: {
+      "@type": "Person",
+      "@id": PERSON_NODE_ID,
+      name: "Michael Njo, DDS",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Dental Strategies",
+      url: CANONICAL_ORIGIN,
+      logo: {
+        "@type": "ImageObject",
+        url: `${CANONICAL_ORIGIN}/og-image.svg`,
+      },
+    },
+    mainEntityOfPage: {
+      "@id": `${detailUrl}#webpage`,
+    },
+    about: {
+      "@id": PERSON_NODE_ID,
+    },
+  };
+
+  const faqNode: SchemaNode | null = article.faq.length
+    ? {
+        "@type": "FAQPage",
+        "@id": faqId,
+        mainEntity: article.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
+      }
+    : null;
+
+  const page: SchemaNode = {
+    "@type": ["WebPage", "Article"],
+    "@id": `${detailUrl}#webpage`,
+    url: detailUrl,
+    name: buildPageTitle(pathname),
+    description: buildPageDescription(pathname),
+    inLanguage: "en",
+    isPartOf: {
+      "@id": `${resourcesUrl}#webpage`,
+    },
+    breadcrumb: {
+      "@id": breadcrumbId,
+    },
+    about: {
+      "@id": PERSON_NODE_ID,
+    },
+    mainEntity: {
+      "@id": articleId,
+    },
+    primaryImageOfPage: {
+      "@id": imageId,
+    },
+    hasPart: faqNode
+      ? {
+          "@id": faqId,
+        }
+      : undefined,
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [page, breadcrumb, imageNode, articleNode, ...(faqNode ? [faqNode] : [])],
+  };
+}
+
 export function buildPageStructuredData(pathname: string): SchemaNode | null {
   const normalizedPath = normalizePathname(pathname);
 
@@ -226,6 +397,14 @@ export function buildPageStructuredData(pathname: string): SchemaNode | null {
 
   if (normalizedPath === "/dr-michael-njo-interview") {
     return getMichaelNjoInterviewStructuredData();
+  }
+
+  if (normalizedPath === "/resources") {
+    return buildResourcesCollectionStructuredData();
+  }
+
+  if (normalizedPath.startsWith("/resources/")) {
+    return buildResourceArticleStructuredData(normalizedPath);
   }
 
   if (normalizedPath === "/contact") {

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildPageStructuredData } from "@/seo/route-structured-data";
 
@@ -21,10 +22,12 @@ const paths = [
   "/",
   "/michael-njo-dds",
   "/dr-michael-njo-interview",
+  "/resources",
   "/contact",
   "/contact/success",
   "/testimonials",
   ...testimonialPages.slice(0, 12).map((item) => `/testimonials/${item.slug}`),
+  ...resourceArticles.slice(0, 12).map((item) => buildResourceArticlePath(item.slug)),
 ];
 
 for (const path of paths) {

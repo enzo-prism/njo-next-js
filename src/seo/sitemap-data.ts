@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { STATIC_SITE_PATHS } from "@/config/routes";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 
@@ -24,5 +25,12 @@ export function buildSitemapEntries(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...testimonialEntries];
+  const resourceArticleEntries: MetadataRoute.Sitemap = resourceArticles.map((article) => ({
+    url: buildCanonicalUrl(buildResourceArticlePath(article.slug)),
+    lastModified: parseLastModified(article.updatedAt || article.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.65,
+  }));
+
+  return [...staticEntries, ...testimonialEntries, ...resourceArticleEntries];
 }
