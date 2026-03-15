@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { buildResourceArticlePath } from "@/data/resource-articles";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildRouteMetadata } from "@/seo/metadata";
 
@@ -41,12 +41,6 @@ const cases = [
     ogType: "website",
   },
   {
-    path: buildResourceArticlePath("are-you-ready-to-buy-your-first-dental-practice"),
-    title: "Are You Ready to Buy Your First Dental Practice? | Michael Njo, DDS",
-    descriptionIncludes: "first dental practice acquisition",
-    ogType: "article",
-  },
-  {
     path: "/contact",
     title: "Contact Michael Njo, DDS | Dental Strategies",
     descriptionIncludes: "Contact Michael Njo",
@@ -58,6 +52,12 @@ const cases = [
     descriptionIncludes: "Confirmation",
     ogType: "website",
   },
+  ...resourceArticles.map((article) => ({
+    path: buildResourceArticlePath(article.slug),
+    title: article.metaTitle,
+    descriptionIncludes: article.description,
+    ogType: "article" as const,
+  })),
 ] as const;
 
 for (const item of cases) {

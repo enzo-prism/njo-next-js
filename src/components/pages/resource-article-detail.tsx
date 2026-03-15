@@ -11,6 +11,10 @@ type ResourceArticleDetailPageProps = {
   article: ResourceArticle;
 };
 
+function isExternalLink(href: string) {
+  return /^https?:\/\//.test(href);
+}
+
 export default function ResourceArticleDetailPage({ article }: ResourceArticleDetailPageProps) {
   const publishedLabel = formatArticleDate(article.publishedAt);
 
@@ -106,7 +110,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
             <CardHeader className="space-y-2">
               <CardTitle className="text-2xl">Frequently asked questions</CardTitle>
               <CardDescription>
-                Short answers to the questions first-time buyers ask most often.
+                Short answers to common questions dentists ask when weighing ownership and transition decisions.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -127,8 +131,9 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
             <CardHeader className="space-y-3">
               <CardTitle className="text-2xl">Want a clearer answer for your own situation?</CardTitle>
               <CardDescription className="max-w-2xl text-base leading-relaxed">
-                A strong acquisition plan starts with honest fit, not guesswork. If you want help sorting
-                through timing, readiness, and opportunity quality, the next step is a direct conversation.
+                A strong next move starts with honest fit, not guesswork. If you want help sorting through
+                readiness, timing, opportunity quality, and long-term alignment, the next step is a direct
+                conversation.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row">
@@ -139,7 +144,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/testimonials">See how others approached transitions</Link>
+                <Link href="/testimonials">See how other dentists navigated change</Link>
               </Button>
             </CardContent>
           </Card>
@@ -149,7 +154,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
           <Card className="border-border/80 bg-background">
             <CardHeader className="space-y-2">
               <CardTitle className="text-xl">On this page</CardTitle>
-              <CardDescription>Jump to the readiness signal or section you need.</CardDescription>
+              <CardDescription>Jump to the section you need.</CardDescription>
             </CardHeader>
             <CardContent>
               <nav aria-label="Article sections">
@@ -182,9 +187,20 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
             <CardContent className="space-y-4">
               {article.relatedLinks.map((link) => (
                 <div key={link.href} className="space-y-1">
-                  <Link href={link.href} className="font-medium text-slate-900 transition-colors hover:text-primary">
-                    {link.label}
-                  </Link>
+                  {isExternalLink(link.href) ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-slate-900 transition-colors hover:text-primary"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="font-medium text-slate-900 transition-colors hover:text-primary">
+                      {link.label}
+                    </Link>
+                  )}
                   <p className="text-sm leading-relaxed text-muted-foreground">{link.description}</p>
                 </div>
               ))}
