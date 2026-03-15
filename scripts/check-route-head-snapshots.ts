@@ -13,7 +13,7 @@ const cases = [
   {
     path: "/michael-njo-dds",
     title: "Michael Njo DDS | Practice Transitions Consultant",
-    descriptionIncludes: "Practice Transitions Institute",
+    descriptionIncludes: "residency speaker",
     ogType: "website",
   },
   {

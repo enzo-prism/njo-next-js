@@ -13,6 +13,22 @@ export const dugoniCollaborationImage = {
   caption: "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry.",
 };
 
+export const gprResidencyPresentationImage = {
+  src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp",
+  srcSet: [
+    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_640,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 640w",
+    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_960,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 960w",
+    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1280,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 1280w",
+    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1600,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 1600w",
+  ].join(", "),
+  sizes: "(max-width: 768px) 100vw, 720px",
+  width: 4032,
+  height: 3024,
+  alt: "Dr. Michael Njo, DDS presenting to General Practice Residency residents holding copies of Dental Practice Transitions Handbook",
+  caption:
+    "Dr. Michael Njo, DDS presenting to General Practice Residency residents while they hold copies of Dental Practice Transitions Handbook, highlighting his ongoing role in dental education, mentorship, and practice transition guidance.",
+};
+
 const galleryImageWidths = [640, 960, 1280, 1600];
 const galleryImageSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
 
@@ -46,6 +62,11 @@ const baseNjoLifeGalleryImages = [
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776307/Updated_cskep5.png",
     alt: "Dr. Michael Njo guiding dental professionals and mentoring future leaders.",
     caption: "Dr. Michael Njo in action guiding dental professionals.",
+  },
+  {
+    src: gprResidencyPresentationImage.src,
+    alt: gprResidencyPresentationImage.alt,
+    caption: gprResidencyPresentationImage.caption,
   },
   {
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",

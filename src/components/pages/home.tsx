@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
+import { gprResidencyPresentationImage } from "@/data/media";
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -127,6 +128,48 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
+        </section>
+
+        <section className="section-reveal section-stagger" aria-labelledby="residency-impact-title">
+          <Card className="overflow-hidden">
+            <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="bg-slate-100/70">
+                <Image
+                  src={gprResidencyPresentationImage.src}
+                  alt={gprResidencyPresentationImage.alt}
+                  sizes={gprResidencyPresentationImage.sizes}
+                  width={gprResidencyPresentationImage.width}
+                  height={gprResidencyPresentationImage.height}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+
+              <div className="space-y-4 p-8 md:p-10">
+                <p className="text-sm font-medium text-muted-foreground">Dental education and mentorship</p>
+                <h2 id="residency-impact-title" className="text-2xl font-semibold">
+                  Dr. Njo teaches the next generation of dental leaders
+                </h2>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Dr. Michael Njo, DDS recently presented to residents in a General Practice Residency (GPR) program, where
+                  attendees held copies of his book, <em>Dental Practice Transitions Handbook</em>, while discussing practice
+                  ownership, leadership, and transition planning.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  This kind of residency education reinforces Dr. Njo&apos;s real-world impact beyond consulting. He helps dentists
+                  connect clinical training with long-term decisions about acquisitions, partnerships, valuations, and building
+                  durable practices.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild variant="outline">
+                    <Link href="/michael-njo-dds">See full profile</Link>
+                  </Button>
+                  <Button asChild variant="ghost">
+                    <Link href="/resources">Explore resources</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
         </section>
 
         <section className="space-y-4 section-reveal section-stagger" aria-labelledby="faq-title">

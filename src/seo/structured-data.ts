@@ -53,7 +53,7 @@ export const personProfile = {
   alternateName: "Michael Njo DDS",
   jobTitle: "Founder & Strategy Consultant",
   description:
-    "Dr. Michael Njo leads Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute to mentor healthcare owners through practice launches, growth, and transitions.",
+    "Dr. Michael Njo leads Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute to mentor healthcare owners through practice launches, growth, transitions, and dental career development. He is also the author of Dental Practice Transitions Handbook and a guest lecturer for dental residency programs.",
 };
 
 export const organizationProfile = {
@@ -68,7 +68,7 @@ export const faqItems: FAQItem[] = [
   {
     question: "Who is Dr. Michael Njo?",
     answer:
-      "Dr. Michael Njo, also known as Michael Njo, DDS, is a University of the Pacific alum and the founder of Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute. He mentors dentists, physicians, and entrepreneurs through every phase of practice ownership.",
+      "Dr. Michael Njo, also known as Michael Njo, DDS, is a University of the Pacific alum, the founder of Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute, the author of Dental Practice Transitions Handbook, and a guest lecturer for dental residency programs. He mentors dentists, physicians, and entrepreneurs through every phase of practice ownership.",
   },
   {
     question: "What services does Michael Njo, DDS provide?",
@@ -325,6 +325,8 @@ const getCoreGraphNodes = (): SchemaNode[] => {
       "Business strategy",
       "Practice valuations",
       "Leadership development",
+      "Dental residency education",
+      "Dental career mentorship",
     ],
   };
 
@@ -498,7 +500,7 @@ export const getMichaelNjoStructuredData = () => {
       id: `${profileUrl}#webpage`,
       name: "Michael Njo DDS",
       description:
-        "Learn about Michael Njo DDS, founder of Dental Strategies Consulting and Practice Transitions Institute, specializing in dental practice transitions and growth strategy.",
+        "Learn about Michael Njo DDS, dental transitions consultant, author, and residency speaker helping dentists with growth, leadership, and ownership changes.",
       url: profileUrl,
       breadcrumbId: breadcrumb["@id"] as string,
     }),

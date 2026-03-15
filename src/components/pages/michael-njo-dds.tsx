@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { contactDetails, services } from "@/seo/structured-data";
 import { testimonialPages } from "@/data/testimonials";
-import { dugoniCollaborationImage, njoLifeGalleryImages } from "@/data/media";
+import { dugoniCollaborationImage, gprResidencyPresentationImage, njoLifeGalleryImages } from "@/data/media";
 import { eventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -130,6 +130,58 @@ export default function MichaelNjoDDS() {
                   </div>
                 ))}
               </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
+                <div className="bg-slate-100/70">
+                  <Image
+                    src={gprResidencyPresentationImage.src}
+                    alt={gprResidencyPresentationImage.alt}
+                    sizes={gprResidencyPresentationImage.sizes}
+                    width={gprResidencyPresentationImage.width}
+                    height={gprResidencyPresentationImage.height}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+
+                <div className="space-y-4 p-6 md:p-8">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">Residency education and speaking</p>
+                    <h2 className="text-2xl font-semibold">Guiding GPR residents through real-world transition strategy</h2>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Dr. Njo regularly brings practical ownership and transition insight into academic and residency settings. In this
+                    General Practice Residency (GPR) presentation, residents held copies of <em>Dental Practice Transitions
+                    Handbook</em> while discussing career pathways, partnership structures, and long-term practice planning.
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    That bridge between education and execution is central to his impact. Dr. Njo helps early-career dentists
+                    understand how leadership, valuation, operations, and exit planning shape the future of a practice long before a
+                    transition is on the calendar.
+                  </p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-sm font-semibold">Guest lecturer</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Dental residency and professional programs</p>
+                    </div>
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-sm font-semibold">Published author</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Dental Practice Transitions Handbook</p>
+                    </div>
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-sm font-semibold">Career mentor</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Ownership, growth, and transition guidance</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{gprResidencyPresentationImage.caption}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild variant="outline">
+                      <Link href="/resources">Explore resources</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </Card>
 
             <Card>
