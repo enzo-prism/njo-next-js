@@ -484,6 +484,228 @@ export const resourceArticles: ResourceArticle[] = [
       },
     ],
   },
+  {
+    slug: "what-to-review-before-joining-a-dental-partnership",
+    title: "What Should You Review Before Joining a Dental Partnership?",
+    metaTitle: "What to Review Before Joining a Dental Partnership | Michael Njo, DDS",
+    description:
+      "Thinking about buying into a dental partnership? Learn the financial, legal, leadership, and cultural issues dentists should review before saying yes.",
+    excerpt:
+      "A dental partnership can look like the safest route to ownership, but the real risk sits inside the financial terms, agreement structure, decision rules, cultural fit, and exit mechanics. This guide helps dentists review the details before a buy-in becomes a long-term problem.",
+    category: "Partnership due diligence",
+    publishedAt: "2026-03-19T00:00:00Z",
+    updatedAt: "2026-03-19T00:00:00Z",
+    readTimeMinutes: 7,
+    primaryKeyword: "what to review before joining a dental partnership",
+    secondaryKeywords: [
+      "dental partnership checklist",
+      "dental practice partnership agreement",
+      "dental ownership buy-in",
+      "partnership due diligence for dentists",
+      "dental transition consultant",
+    ],
+    keyTakeaways: [
+      "A partnership decision is both a business decision and a long-term relationship decision.",
+      "Strong diligence has to cover finances, buy-in method, governance, culture, and exit terms.",
+      "A fair buy-in price is not enough if the valuation logic and ownership rules are unclear.",
+      "Equal ownership on paper does not guarantee equal influence in the day-to-day practice.",
+      "Cultural mismatch can damage even a financially attractive partnership.",
+      "Healthy deals usually get stronger under scrutiny rather than weaker.",
+    ],
+    intro: [
+      "For many dentists, partnership sounds like the ideal middle ground. You get a path to ownership without taking on everything alone. You gain equity, influence, and upside while sharing responsibility with someone who already knows the practice.",
+      "On paper, that can look like the perfect next step.",
+      "In real life, partnerships succeed or fail based on details that are easy to underestimate at the beginning. A warm relationship with the senior doctor is not enough. A promising buy-in number is not enough. And verbal assurances about how things will work after the transaction are definitely not enough.",
+      "The real work is reviewing the finances, legal structure, decision-making rules, cultural fit, and exit mechanics before you commit. Due diligence in dental ownership is not just about whether the practice is profitable. It is about whether the partnership itself is built to survive pressure.",
+    ],
+    sections: [
+      {
+        id: "why-partnership-needs-different-diligence",
+        title: "Why partnership needs a different kind of diligence",
+        paragraphs: [
+          "Buying a full practice and joining a partnership are not identical decisions.",
+          "In a full acquisition, you are evaluating a business. In a partnership, you are evaluating both a business and a long-term working relationship. That second part changes everything.",
+          "You are not just asking whether the practice is healthy, the valuation is fair, or the buy-in is affordable. You are also asking how decisions get made when partners disagree, how compensation shifts after equity is split, and what happens if someone wants out.",
+          "Those questions are not pessimistic. They are the foundation of a durable partnership.",
+        ],
+      },
+      {
+        id: "review-the-real-financial-picture",
+        title: "1. Review the real financial picture",
+        paragraphs: [
+          "Start with the basics, but do not stop there.",
+          "A profitable practice can still be a poor partnership opportunity if the economics are unclear or unfairly structured. This is where many dentists get seduced by top-line revenue and miss what really matters: how money flows, how profit is allocated, and whether the business supports the future both partners are expecting.",
+        ],
+        bullets: [
+          "Collections and production trends",
+          "Provider-level production if more than one doctor is involved",
+          "Overhead structure",
+          "Compensation formulas",
+          "Debt obligations",
+          "Lease terms",
+          "Major upcoming capital expenses",
+          "Accounts receivable quality",
+        ],
+      },
+      {
+        id: "review-the-buy-in-method",
+        title: "2. Review the buy-in method, not just the buy-in price",
+        paragraphs: [
+          "A buy-in number means very little if you do not understand how it was calculated.",
+          "A fair process matters as much as a fair price. If the valuation logic feels vague at the beginning, the partnership will rarely feel clearer later.",
+        ],
+        bullets: [
+          "Was the valuation done independently?",
+          "What assets are included?",
+          "Is goodwill being valued reasonably?",
+          "Are accounts receivable included or excluded?",
+          "Is real estate separate?",
+          "Are there adjustments for owner perks or unusual expenses?",
+        ],
+      },
+      {
+        id: "review-the-partnership-agreement",
+        title: "3. Review the partnership agreement line by line",
+        paragraphs: [
+          "This is where idealism needs to give way to discipline.",
+          "Before joining, understand exactly how the documents allocate authority, economics, restrictions, and risk. Many partnership disasters do not start with clinical conflict. They start with poor documents and unspoken assumptions.",
+        ],
+        bullets: [
+          "Ownership percentages",
+          "Voting rights",
+          "Reserved powers",
+          "Compensation model",
+          "Profit distribution rules",
+          "Decision authority for hiring, firing, and major purchases",
+          "Noncompete and restrictive covenant language",
+          "Disability, death, and retirement provisions",
+          "Dispute resolution process",
+          "Buyout formula and trigger events",
+        ],
+      },
+      {
+        id: "review-how-decisions-are-made",
+        title: "4. Review how decisions are actually made inside the practice",
+        paragraphs: [
+          "Some partnerships look equal on paper but operate like one person still controls everything.",
+          "You need clarity on the practical rules of leadership before you trust the partnership language. If one partner expects shared leadership and the other expects deference, trouble starts early.",
+        ],
+        bullets: [
+          "Who sets schedules",
+          "Who approves technology purchases",
+          "Who manages staff problems",
+          "Who controls marketing and growth decisions",
+          "Who defines clinical standards",
+          "Who leads difficult conversations",
+        ],
+      },
+      {
+        id: "review-culture-not-just-strategy",
+        title: "5. Review culture, not just strategy",
+        paragraphs: [
+          "This part gets skipped too often because it feels subjective. It is not.",
+          "Cultural mismatch is one of the fastest ways to poison a partnership.",
+          "Throughout Michael Njo's advisory work, the emphasis on values-first healthcare practices, leadership bandwidth, family, and long-term sustainability is a useful filter. A partnership that makes money but destroys your life is not a good deal.",
+        ],
+        bullets: [
+          "Pace of practice and scheduling philosophy",
+          "Treatment planning style",
+          "Appetite for growth or expansion",
+          "Communication habits",
+          "Tolerance for conflict",
+          "Expectations around staff loyalty and accountability",
+          "Quality-of-life priorities outside work",
+        ],
+      },
+      {
+        id: "review-the-exit-before-the-entrance",
+        title: "6. Review the exit before the entrance",
+        paragraphs: [
+          "This is one of the smartest things a future partner can do.",
+          "A strong partnership agreement does not create mistrust. It protects trust by removing ambiguity when things get hard.",
+        ],
+        bullets: [
+          "One partner wants to retire early",
+          "One partner underproduces",
+          "One partner becomes disabled",
+          "One partner wants to sell to a third party",
+          "The relationship breaks down",
+          "The practice needs to be split or restructured",
+        ],
+      },
+      {
+        id: "review-fit-with-your-season-of-life",
+        title: "7. Review whether this path actually fits your season of life",
+        paragraphs: [
+          "Not every good opportunity is the right opportunity right now.",
+          "Partnership can be appealing because it feels safer than full ownership. But it still requires leadership appetite, emotional maturity, and financial readiness.",
+          "These are not soft questions. They are strategic ones.",
+        ],
+        bullets: [
+          "Do I actually want shared ownership, or am I just afraid to buy solo?",
+          "Am I comfortable having hard conversations about money and control?",
+          "Do I trust this doctor professionally and personally?",
+          "Am I prepared to lead, not just produce?",
+        ],
+      },
+      {
+        id: "a-simple-rule-that-saves-pain",
+        title: "A simple rule that saves people pain",
+        paragraphs: [
+          "If you feel rushed, slow down.",
+          "A healthy partnership opportunity can withstand real diligence. If someone pressures you to move quickly, avoid advisors, or accept vague answers because you should just trust them, treat that as a warning sign.",
+          "The right deal usually becomes stronger under scrutiny, not weaker.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is a partnership safer than buying a full practice?",
+        answer:
+          "Sometimes, but not automatically. Shared ownership can reduce some risks while creating others.",
+      },
+      {
+        question: "Should I use my own attorney and CPA?",
+        answer:
+          "Yes. Independent advice matters, especially when you are evaluating the agreement and buy-in terms.",
+      },
+      {
+        question: "What matters more, the financials or the relationship?",
+        answer:
+          "Both. A weak relationship can ruin good economics, and weak economics can ruin a good relationship.",
+      },
+      {
+        question: "Can a bad partnership be fixed later?",
+        answer:
+          "Sometimes, but it is far easier to structure it correctly from the beginning than to repair it after conflict starts.",
+      },
+    ],
+    closing: [
+      "If you are considering a dental partnership and want experienced guidance before you commit, Michael Njo can help you assess the fit, the structure, and the long-term implications with far more clarity than a handshake and optimism ever will.",
+    ],
+    relatedLinks: [
+      {
+        href: "/resources",
+        label: "Browse all resources",
+        description: "See the wider resource hub for more ownership, transition, and strategy guidance.",
+      },
+      {
+        href: "/dr-michael-njo-interview",
+        label: "Watch Dr. Njo's interview",
+        description: "Hear more of Michael Njo's perspective on practice transitions, growth, and long-term strategy.",
+      },
+      {
+        href: "/",
+        label: "Explore Michael Njo's advisory work",
+        description: "Get a fuller picture of the consulting work behind Dr. Njo's ownership and transition guidance.",
+      },
+      {
+        href: "/contact",
+        label: "Talk through a partnership decision",
+        description: "Start a conversation if you want help evaluating partnership fit, structure, or next steps.",
+      },
+    ],
+  },
 ].sort((left, right) => {
   const leftValue = new Date(left.publishedAt).getTime();
   const rightValue = new Date(right.publishedAt).getTime();
