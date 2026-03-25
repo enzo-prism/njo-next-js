@@ -1,5 +1,5 @@
 import { eventPrograms } from "@/data/events";
-import { SITE_URL } from "@/config/site";
+import { SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
   question: string;
@@ -40,7 +40,7 @@ export const siteMetadata = {
     "https://practicetransitionsinstitute.com/",
     "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
   ],
-  logo: "https://michaelnjodds.com/og-image.svg",
+  logo: SOCIAL_SHARE_IMAGE.url,
 };
 
 export const contactDetails = {
@@ -172,10 +172,10 @@ export const bookReviews: BookReview[] = [
 ];
 
 export const heroImage = {
-  url: `${siteMetadata.siteUrl}/og-image.svg`,
-  width: 1200,
-  height: 630,
-  type: "image/svg+xml",
+  url: SOCIAL_SHARE_IMAGE.url,
+  width: SOCIAL_SHARE_IMAGE.width,
+  height: SOCIAL_SHARE_IMAGE.height,
+  type: SOCIAL_SHARE_IMAGE.type,
 };
 
 export const bookEditorialReview = {

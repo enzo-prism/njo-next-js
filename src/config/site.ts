@@ -28,3 +28,11 @@ export const CANONICAL_PROTOCOL =
   readEnv("CANONICAL_PROTOCOL", new URL(SITE_URL).protocol.replace(":", "")).toLowerCase();
 
 export const CANONICAL_ORIGIN = `${CANONICAL_PROTOCOL}://${PREFERRED_HOSTNAME}`;
+
+export const SOCIAL_SHARE_IMAGE = {
+  url: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770777615/Opengraph_co7uhi.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: "Michael Njo, DDS | Dental Strategies",
+} as const;

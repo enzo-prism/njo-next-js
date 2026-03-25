@@ -1,7 +1,7 @@
 import { buildResourceArticlePath, getResourceArticleByPath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
-import { CANONICAL_ORIGIN } from "@/config/site";
+import { CANONICAL_ORIGIN, SOCIAL_SHARE_IMAGE } from "@/config/site";
 import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
 import {
   buildPageDescription,
@@ -293,9 +293,9 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   const imageNode: SchemaNode = {
     "@type": "ImageObject",
     "@id": imageId,
-    url: `${CANONICAL_ORIGIN}/og-image.svg`,
-    width: 1200,
-    height: 630,
+    url: SOCIAL_SHARE_IMAGE.url,
+    width: SOCIAL_SHARE_IMAGE.width,
+    height: SOCIAL_SHARE_IMAGE.height,
   };
 
   const articleNode: SchemaNode = {
@@ -323,7 +323,7 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
       url: CANONICAL_ORIGIN,
       logo: {
         "@type": "ImageObject",
-        url: `${CANONICAL_ORIGIN}/og-image.svg`,
+        url: SOCIAL_SHARE_IMAGE.url,
       },
     },
     mainEntityOfPage: {

@@ -203,6 +203,7 @@ Key functions:
 - `buildRouteMetadata(pathname)`
 
 Most route files should call `buildRouteMetadata()` rather than assembling metadata inline.
+The shared Open Graph and Twitter image is configured once in `src/config/site.ts` via `SOCIAL_SHARE_IMAGE`, then reused by both metadata and structured-data helpers.
 
 ### Canonical URLs
 

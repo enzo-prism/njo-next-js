@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
+import { SOCIAL_SHARE_IMAGE } from "@/config/site";
 import { getResourceArticleByPath } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
 
-const OG_IMAGE = {
-  url: "/og-image.svg",
-  width: 1200,
-  height: 630,
-  type: "image/svg+xml",
-  alt: "Michael Njo, DDS | Dental Strategies",
-} as const;
+const OG_IMAGE = SOCIAL_SHARE_IMAGE;
 
 const testimonialAuthorCounts = (() => {
   const counts = new Map<string, number>();
