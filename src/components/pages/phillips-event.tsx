@@ -25,14 +25,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
-
-const SERVICE_OPTIONS = [
-  "Practice launches & acquisitions",
-  "Growth planning & leadership",
-  "Practice valuations & transitions",
-  "Conflict resolution & compliance",
-  "General consultation",
-] as const;
+import { serviceInterestOptions } from "@/data/service-interest-options";
 
 const eventFormSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -237,7 +230,7 @@ export default function PhillipsEvent() {
                         Select the services that align with your priorities.
                       </FormDescription>
                       <div className="grid gap-2 sm:grid-cols-2 pt-1">
-                        {SERVICE_OPTIONS.map((svc) => {
+                        {serviceInterestOptions.map((svc) => {
                           const checked =
                             form.watch("services").includes(svc);
                           return (

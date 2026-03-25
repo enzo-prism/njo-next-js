@@ -20,7 +20,9 @@ Submission payload:
 - `name`
 - `email`
 - `phone`
-- `organization` (optional)
+- `practice_city`
+- `practice_website` (optional)
+- `services_interested` (comma-joined selected services)
 - `message`
 - `_subject` = `New inquiry for Michael Njo, DDS`
 - `_replyto` = submitted email
@@ -58,6 +60,8 @@ Both forms use client-side schema validation via React Hook Form + Zod:
 
 - Contact schema in `contact.tsx`
 - Event schema in `phillips-event.tsx`
+
+The contact and Phillips event forms now share the same service-interest option set so their intake categories stay aligned.
 
 ## Backend/CORS Notes
 

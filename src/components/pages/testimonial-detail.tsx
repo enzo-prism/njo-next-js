@@ -3,6 +3,7 @@ import { CalendarDays, ArrowLeft, ArrowRight, Home, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { type TestimonialPage, testimonialPages } from "@/data/testimonials";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
@@ -26,11 +27,6 @@ const StarCount = ({ count, total = 5 }: StarCountProps) => (
     ))}
   </div>
 );
-
-const LEGACY_TESTIMONIAL_SLUGS: Record<string, string> = {
-  "dr-fat": "diana-fat-dds",
-  "richard-and-kimberly-crum": "kimberly-crum",
-};
 
 export default function TestimonialDetailPage({ slug: requestedSlug }: TestimonialDetailProps) {
   const slug = LEGACY_TESTIMONIAL_SLUGS[requestedSlug] || requestedSlug;

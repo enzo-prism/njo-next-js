@@ -11,12 +11,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { serviceInterestOptions } from "@/data/service-interest-options";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
   email: z.string().email("Enter a valid email."),
   phone: z.string().min(7, "Include a valid phone number."),
-  organization: z.string().optional(),
+  practiceCity: z.string().min(2, "Please enter your practice city or location."),
+  practiceWebsite: z.string().optional(),
+  services: z.array(z.string()).min(1, "Please select at least one service of interest."),
   message: z.string().min(10, "Share details so Dr. Njo can respond personally."),
 });
 
@@ -26,7 +29,9 @@ const defaultValues: ContactFormValues = {
   name: "",
   email: "",
   phone: "",
-  organization: "",
+  practiceCity: "",
+  practiceWebsite: "",
+  services: [],
   message: "",
 };
 
@@ -41,11 +46,15 @@ export default function Contact() {
   const onSubmit = async (values: ContactFormValues) => {
     setSubmitError(null);
     const payload = new FormData();
-    Object.entries(values).forEach(([key, value]) => {
-      if (value) {
-        payload.append(key, value as string);
-      }
-    });
+    payload.append("name", values.name);
+    payload.append("email", values.email);
+    payload.append("phone", values.phone);
+    payload.append("practice_city", values.practiceCity);
+    if (values.practiceWebsite) {
+      payload.append("practice_website", values.practiceWebsite);
+    }
+    payload.append("services_interested", values.services.join(", "));
+    payload.append("message", values.message);
     payload.append("_subject", "New inquiry for Michael Njo, DDS");
     payload.append("_replyto", values.email);
 
@@ -134,13 +143,73 @@ export default function Contact() {
 
                 <FormField
                   control={form.control}
-                  name="organization"
+                  name="practiceCity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Practice / Organization (optional)</FormLabel>
+                      <FormLabel>Practice city or location</FormLabel>
                       <FormControl>
-                        <Input placeholder="Practice name" {...field} />
+                        <Input placeholder="e.g. Anaheim, CA" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="practiceWebsite"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Practice website (optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://yourpractice.com" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="services"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Services you&apos;re interested in</FormLabel>
+                      <FormDescription>Select the services that align with your priorities.</FormDescription>
+                      <div className="grid gap-2 pt-1 sm:grid-cols-2">
+                        {serviceInterestOptions.map((svc) => {
+                          const checked = form.watch("services").includes(svc);
+                          return (
+                            <label
+                              key={svc}
+                              className={`flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+                                checked
+                                  ? "border-primary bg-primary/5 text-foreground"
+                                  : "border-border bg-background text-muted-foreground hover:border-primary/40"
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4 rounded accent-primary"
+                                checked={checked}
+                                onChange={(event) => {
+                                  const current = form.getValues("services");
+                                  if (event.target.checked) {
+                                    form.setValue("services", [...current, svc]);
+                                  } else {
+                                    form.setValue(
+                                      "services",
+                                      current.filter((service) => service !== svc),
+                                    );
+                                  }
+                                  form.trigger("services");
+                                }}
+                              />
+                              {svc}
+                            </label>
+                          );
+                        })}
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -153,9 +222,13 @@ export default function Contact() {
                     <FormItem>
                       <FormLabel>Message</FormLabel>
                       <FormControl>
-                        <Textarea rows={6} placeholder="Share context, goals, or specific questions for Dr. Njo" {...field} />
+                        <Textarea
+                          rows={6}
+                          placeholder="Share context, goals, timeline, or specific questions for Dr. Njo"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormDescription>Describe your timeline, practice type, and immediate priorities.</FormDescription>
+                      <FormDescription>Describe your practice, priorities, and what kind of guidance you need.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

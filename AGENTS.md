@@ -2,6 +2,8 @@
 
 This file gives future Codex sessions a fast, repo-specific operating map for `michaelnjodds.com`.
 
+For implementation workflow details, also read `docs/implementation-map.md`. `AGENTS.md` is the high-level guardrail doc; `docs/implementation-map.md` is the “how this codebase is actually wired” doc.
+
 ## What This Project Is
 
 - Public marketing site for Michael Njo, DDS.
@@ -61,10 +63,13 @@ This file gives future Codex sessions a fast, repo-specific operating map for `m
   - Static resource article route generation
 - `src/components/pages/contact.tsx`
   - Contact Formspree integration
+  - Captures phone, practice city/location, practice website, service interest, and message
 - `src/components/pages/phillips-event.tsx`
   - Phillips event Formspree integration
 - `scripts/*`
   - parity and SEO validation scripts
+- `docs/implementation-map.md`
+  - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
   - deploy and smoke-test workflow
 - `docs/forms-and-backends.md`
@@ -98,10 +103,11 @@ Check these hotspots first when your work touches:
 ## Safe Working Pattern for Codex
 
 1. Confirm Node `24.x`.
-2. Read the relevant docs before touching SEO, routing, analytics, or forms.
-3. Prefer small, centralized changes over duplicating logic in individual routes.
-4. If changing analytics, keep the root-layout single-mount pattern.
-5. If changing canonical or route behavior, run the full parity suite before finishing.
+2. Read `docs/implementation-map.md` before touching routing, content, forms, or SEO behavior.
+3. Read the relevant specialized docs before touching SEO, routing, analytics, or forms.
+4. Prefer small, centralized changes over duplicating logic in individual routes.
+5. If changing analytics, keep the root-layout single-mount pattern.
+6. If changing canonical or route behavior, run the full parity suite before finishing.
 
 ## Verification Matrix
 
@@ -132,6 +138,8 @@ Check these hotspots first when your work touches:
 - Do not add redirect-only or thank-you pages to the sitemap.
 - Do not change canonical host/protocol logic casually; multiple docs and checks depend on it.
 - Do not switch package managers unless the repo is intentionally migrated end-to-end.
+- Do not change testimonial author names casually without checking whether the generated slug changes.
+- Do not add a new static public route without checking whether `src/config/routes.ts` should be updated too.
 
 ## If You Need To Update Docs
 
@@ -139,4 +147,5 @@ Update these together when behavior changes:
 
 - `README.md` for top-level developer context
 - `AGENTS.md` for future Codex sessions
+- `docs/implementation-map.md` for implementation workflow and change playbooks
 - the specific runbook in `docs/`

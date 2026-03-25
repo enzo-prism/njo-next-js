@@ -4,7 +4,7 @@ Next.js parity rebuild of the legacy Replit site (`enzo-prism/DrNjo`) for Vercel
 
 This codebase preserves production route behavior, legacy redirects, SEO metadata/JSON-LD behavior, analytics integrations, and Formspree form handling from the original site.
 
-For future Codex sessions, start with `AGENTS.md` for the repo operating map and `docs/analytics-and-observability.md` for analytics-specific guidance.
+For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `docs/implementation-map.md` for the codebase wiring and change playbooks.
 
 ## Current Status
 
@@ -32,6 +32,14 @@ For future Codex sessions, start with `AGENTS.md` for the repo operating map and
 - Tailwind CSS
 - shadcn/Radix UI
 - React Hook Form + Zod
+
+## Implementation Notes
+
+- Static-first App Router site. Most pages are server-rendered wrappers around page components.
+- Data-driven detail routes are prerendered with `dynamicParams = false`.
+- Long-form content lives in TypeScript data files, not a CMS.
+- SEO, canonical URL logic, and JSON-LD are centralized rather than assembled route-by-route.
+- Future implementation workflow is documented in `docs/implementation-map.md`.
 
 ## Route Surface
 
@@ -64,6 +72,8 @@ Two client-side forms submit to Formspree:
 
 - Contact form: `https://formspree.io/f/manaywyw`
 - Phillips event form: `https://formspree.io/f/mdalbpae`
+
+The contact form now captures practice city/location, practice website, and service-interest selections in addition to direct contact details.
 
 See `docs/forms-and-backends.md` for implementation and QA details.
 
@@ -210,6 +220,7 @@ If your current network still resolves an older apex IP after DNS changes, verif
 ## Docs Index
 
 - `AGENTS.md` - repo-specific operating guide for future Codex sessions
+- `docs/implementation-map.md` - rendering model, route wiring, content sources, form payloads, and safe change playbooks
 - `docs/analytics-and-observability.md` - Vercel Analytics, GA, and Hotjar wiring plus validation workflow
 - `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
 - `docs/forms-and-backends.md` - form backend wiring and validation details
