@@ -6,6 +6,7 @@ import { Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ExternalReviewGallery } from "@/components/testimonials/external-review-gallery";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { testimonialPages } from "@/data/testimonials";
 
@@ -35,6 +36,10 @@ export default function TestimonialsPage() {
           Real-world stories from dentists and healthcare professionals who partnered with Dr. Michael Njo for transitions,
           growth, and leadership support.
         </p>
+      </section>
+
+      <section>
+        <ExternalReviewGallery />
       </section>
 
       <section>
