@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
-import { gprResidencyPresentationImage } from "@/data/media";
+import { boardMeetingImages, gprResidencyPresentationImage } from "@/data/media";
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -75,6 +75,58 @@ export default function Home() {
                     <Link href="/michael-njo-dds">Read Full Profile</Link>
                   </Button>
                 </div>
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        <section className="section-reveal section-stagger" aria-labelledby="board-meetings-title">
+          <Card className="overflow-hidden">
+            <div className="grid gap-0 xl:grid-cols-[0.92fr_1.08fr]">
+              <div className="space-y-4 p-8 md:p-10">
+                <p className="text-sm font-medium text-muted-foreground">Board leadership and industry momentum</p>
+                <h2 id="board-meetings-title" className="text-2xl font-semibold">
+                  Recent board meetings shaping what&apos;s next in dentistry
+                </h2>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Dr. Njo and his peers are actively engaged in conversations about leadership, collaboration, and upcoming
+                  opportunities across the dental industry.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  These are the kinds of trusted relationships and strategy discussions that inform Michael&apos;s consulting work,
+                  especially when clients need a grounded perspective on growth, transition planning, and the bigger direction of
+                  the profession.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild>
+                    <Link href="/contact">Book a Consultation</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href="/michael-njo-dds">See Full Profile</Link>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid gap-3 bg-slate-100/70 p-4 md:p-6 lg:grid-cols-2">
+                {boardMeetingImages.map((image) => (
+                  <figure
+                    key={image.src}
+                    className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
+                  >
+                    <div className="relative aspect-[4/3]">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        sizes={image.sizes}
+                        className="object-cover"
+                      />
+                    </div>
+                    <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                      {image.caption}
+                    </figcaption>
+                  </figure>
+                ))}
               </div>
             </div>
           </Card>

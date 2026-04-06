@@ -31,6 +31,7 @@ export const gprResidencyPresentationImage = {
 
 const galleryImageWidths = [640, 960, 1280, 1600];
 const galleryImageSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
+const boardMeetingImageSizes = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 560px";
 
 const buildCloudinarySrcSet = (src: string) =>
   galleryImageWidths
@@ -43,7 +44,31 @@ const buildCloudinarySrcSet = (src: string) =>
     )
     .join(", ");
 
+export const boardMeetingImages = [
+  {
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1775498279/658e38a4-1106-4e70-962f-35fcf7d7804e_fdiyal.jpg",
+    alt: "Dr. Michael Njo with board colleagues during a daytime strategy meeting focused on leadership and the future of dentistry.",
+    caption: "Daytime board conversations centered on leadership, collaboration, and what is next for the dental industry.",
+    width: 4032,
+    height: 3024,
+    sizes: boardMeetingImageSizes,
+  },
+  {
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1775498279/81c0ff26-0e34-40d4-8c0c-b5b4bfe03fcb_llntcv.jpg",
+    alt: "Dr. Michael Njo with board colleagues at an evening strategy dinner discussing upcoming opportunities in dentistry.",
+    caption: "An evening board gathering reflecting the trusted relationships behind new ideas and upcoming industry work.",
+    width: 4032,
+    height: 3024,
+    sizes: boardMeetingImageSizes,
+  },
+] as const;
+
 const baseNjoLifeGalleryImages = [
+  ...boardMeetingImages.map(({ src, alt, caption }) => ({
+    src,
+    alt,
+    caption,
+  })),
   {
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776241/1_uiehhq.jpg",
     alt: "Interviewee thanking Dr. Michael Njo for inspiring insights and mentorship.",
