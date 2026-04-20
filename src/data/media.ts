@@ -1,193 +1,306 @@
-export const dugoniCollaborationImage = {
-  src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp",
-  srcSet: [
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_640,f_auto,q_auto/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp 640w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_960,f_auto,q_auto/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp 960w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1280,f_auto,q_auto/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp 1280w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1600,f_auto,q_auto/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp 1600w",
-  ].join(", "),
-  sizes: "(max-width: 768px) 100vw, 420px",
-  width: 2076,
-  height: 2170,
-  alt: "Dr. Michael Njo working with the University of the Pacific Arthur A Dugoni School of Dentistry",
-  caption: "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry.",
+import type { StaticImageData } from "next/image";
+import backstageQuoteCard from "@/assets/media/backstage-quote-card.png";
+import blueprintForSuccessFlyer from "@/assets/media/blueprint-for-success-flyer.jpg";
+import boardroomSession from "@/assets/media/boardroom-session.jpg";
+import dinnerStrategyGroup from "@/assets/media/dinner-strategy-group.jpg";
+import handbookCover from "@/assets/media/handbook-cover.jpg";
+import handbookInteriorSpread from "@/assets/media/handbook-interior-spread.jpg";
+import mayflowerPortrait from "@/assets/media/mayflower-portrait.jpg";
+import medalPortrait from "@/assets/media/medal-portrait.png";
+import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
+import seminarGroupPhoto from "@/assets/media/seminar-group-photo.jpg";
+import soloDinnerGalleryOnly from "@/assets/media/solo-dinner-gallery-only.jpg";
+import threePersonEvent from "@/assets/media/three-person-event.jpg";
+import wineDinnerPhoto from "@/assets/media/wine-dinner-photo.jpg";
+
+export type MediaLayoutVariant = "landscape" | "portrait" | "poster" | "square";
+
+export type MediaFeatureRoute =
+  | "home:leadership"
+  | "profile:relationships"
+  | "profile:news"
+  | "profile:gallery"
+  | "resources:book"
+  | "interview:quote";
+
+export type EditorialMediaAsset = {
+  id: string;
+  src: StaticImageData | string;
+  alt: string;
+  caption?: string;
+  width: number;
+  height: number;
+  sizes: string;
+  layoutVariant: MediaLayoutVariant;
+  featuredRoutes: MediaFeatureRoute[];
+  objectPosition?: string;
+  galleryOnly?: boolean;
+  priority?: boolean;
 };
 
-export const gprResidencyPresentationImage = {
+const defaultSizesByVariant: Record<MediaLayoutVariant, string> = {
+  landscape: "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 720px",
+  portrait: "(max-width: 768px) 100vw, (max-width: 1280px) 38vw, 420px",
+  poster: "(max-width: 768px) 72vw, (max-width: 1280px) 24vw, 280px",
+  square: "(max-width: 768px) 86vw, (max-width: 1280px) 28vw, 320px",
+};
+
+type LocalAssetOptions = Omit<EditorialMediaAsset, "src" | "width" | "height" | "sizes"> & {
+  src: StaticImageData;
+  sizes?: string;
+};
+
+type RemoteAssetOptions = Omit<EditorialMediaAsset, "sizes"> & {
+  sizes?: string;
+};
+
+const createLocalAsset = ({ src, sizes, ...asset }: LocalAssetOptions): EditorialMediaAsset => ({
+  ...asset,
+  src,
+  width: src.width,
+  height: src.height,
+  sizes: sizes ?? defaultSizesByVariant[asset.layoutVariant],
+});
+
+const createRemoteAsset = ({ sizes, ...asset }: RemoteAssetOptions): EditorialMediaAsset => ({
+  ...asset,
+  sizes: sizes ?? defaultSizesByVariant[asset.layoutVariant],
+});
+
+export const dugoniCollaborationImage = createRemoteAsset({
+  id: "dugoni-collaboration",
+  src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767551710/university-of-the-pacific-dr-njo_pkcbs4.webp",
+  width: 2076,
+  height: 2170,
+  layoutVariant: "portrait",
+  sizes: "(max-width: 768px) 100vw, 420px",
+  alt: "Dr. Michael Njo working with the University of the Pacific Arthur A Dugoni School of Dentistry",
+  caption: "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry.",
+  featuredRoutes: [],
+  objectPosition: "center top",
+});
+
+export const gprResidencyPresentationImage = createRemoteAsset({
+  id: "gpr-residency-presentation",
   src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp",
-  srcSet: [
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_640,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 640w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_960,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 960w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1280,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 1280w",
-    "https://res.cloudinary.com/dhqpqfw6w/image/upload/c_limit,w_1600,f_auto,q_auto/v1773587933/d85667bc-c2ea-4be4-9bfd-790829b947d3_wgoug0.webp 1600w",
-  ].join(", "),
-  sizes: "(max-width: 768px) 100vw, 720px",
   width: 4032,
   height: 3024,
+  layoutVariant: "landscape",
   alt: "Dr. Michael Njo, DDS presenting to General Practice Residency residents holding copies of Dental Practice Transitions Handbook",
   caption:
     "Dr. Michael Njo, DDS presenting to General Practice Residency residents while they hold copies of Dental Practice Transitions Handbook, highlighting his ongoing role in dental education, mentorship, and practice transition guidance.",
-};
+  featuredRoutes: ["profile:gallery"],
+  objectPosition: "center center",
+});
 
-const galleryImageWidths = [640, 960, 1280, 1600];
-const galleryImageSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
-const boardMeetingImageSizes = "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 560px";
-
-const buildCloudinarySrcSet = (src: string) =>
-  galleryImageWidths
-    .map(
-      (width) =>
-        `${src.replace(
-          "/image/upload/",
-          `/image/upload/c_limit,w_${width},f_auto,q_auto/`,
-        )} ${width}w`,
-    )
-    .join(", ");
-
-export const boardMeetingImages = [
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1775498279/658e38a4-1106-4e70-962f-35fcf7d7804e_fdiyal.jpg",
-    alt: "Dr. Michael Njo with board colleagues during a daytime strategy meeting focused on leadership and the future of dentistry.",
-    caption: "Daytime board conversations centered on leadership, collaboration, and what is next for the dental industry.",
-    width: 4032,
-    height: 3024,
-    sizes: boardMeetingImageSizes,
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1775498279/81c0ff26-0e34-40d4-8c0c-b5b4bfe03fcb_llntcv.jpg",
-    alt: "Dr. Michael Njo with board colleagues at an evening strategy dinner discussing upcoming opportunities in dentistry.",
-    caption: "An evening board gathering reflecting the trusted relationships behind new ideas and upcoming industry work.",
-    width: 4032,
-    height: 3024,
-    sizes: boardMeetingImageSizes,
-  },
-] as const;
-
-const baseNjoLifeGalleryImages = [
-  ...boardMeetingImages.map(({ src, alt, caption }) => ({
-    src,
-    alt,
-    caption,
-  })),
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776241/1_uiehhq.jpg",
-    alt: "Interviewee thanking Dr. Michael Njo for inspiring insights and mentorship.",
-    caption:
-      "Thank you for the interview and your inspiring insights. (Showing gratitude with kind gifts from Shuang’s country to Dr. Njo. From admissions interviewee to attendee as a senior at UOP’s IDS program in Sacramento.)",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776279/3_yt7juv.jpg",
-    alt: "From admissions interviewee to UOP IDS senior in Sacramento, showing gratitude to Dr. Njo.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776282/2_lxrfhn.jpg",
-    alt: "Kind gifts from Shuang's country shared with Dr. Michael Njo in gratitude for his kindness and mentorship.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776307/Updated_cskep5.png",
-    alt: "Dr. Michael Njo guiding dental professionals and mentoring future leaders.",
-    caption: "Dr. Michael Njo in action guiding dental professionals.",
-  },
-  {
-    src: gprResidencyPresentationImage.src,
-    alt: gprResidencyPresentationImage.alt,
-    caption: gprResidencyPresentationImage.caption,
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",
-    alt: "Leadership retreat with Dr. Njo and peers.",
-    caption: "Leadership retreat.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/UOP-board-dinner_vvxbkq.webp",
-    alt: "University of the Pacific board dinner with Dr. Njo.",
-    caption: "UOP board dinner.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_8543_ytkyrw.webp",
-    alt: "Dr. Njo with colleagues at a professional gathering.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/IMG_4931_wcu1du.webp",
-    alt: "Dr. Njo with a practice team.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_8025_dlnfeh.webp",
-    alt: "Dr. Njo at a career event.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_9744_guknem.webp",
-    alt: "Dr. Njo with community partners.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_5389_rwbt6a.webp",
-    alt: "Dr. Njo with dental leaders.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_6096_akbi25.webp",
-    alt: "Dr. Njo with colleagues during a community event.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_3288_dew2yn.webp",
-    alt: "Dr. Njo with attendees at a leadership gathering.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/IMG_1327_vaybin.webp",
-    alt: "Dr. Njo sharing a moment with peers.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/IMG_1227_xutdm7.webp",
-    alt: "Dr. Njo with a team at a professional gathering.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707724/IMG_2574_faaetd.webp",
-    alt: "Dr. Njo at a practice transitions gathering.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/7FB34B36-7A72-4CB3-962F-71281A882374IMG_3673_pirict.webp",
-    alt: "Dr. Njo with colleagues during a group session.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/IMG_0895_j7ujhg.webp",
-    alt: "Dr. Njo with partners celebrating a milestone.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/dugoni-business-club_iij4ls.webp",
-    alt: "Dugoni Business Club gathering with Dr. Njo.",
-    caption: "Dugoni Business Club.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707723/F733685D-6359-4338-B505-FDB3AC9688A2IMG_3701_xkgzsq.webp",
-    alt: "Dr. Njo with colleagues at a group celebration.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/50C5A5CD-D930-4BDD-9919-C1A4231650E2IMG_5210_cmlwzl.webp",
-    alt: "Dr. Njo at a leadership event.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/761F0EB7-69C4-46CA-8561-D76B91D764EEIMG_1013_fskm7x.webp",
-    alt: "Dr. Njo with mentors and peers.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/7E235CA3-59C9-49DB-A168-FA91E5C9409CIMG_3696_gzdlwq.webp",
-    alt: "Dr. Njo with a dental team.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/1E4E5A0B-5848-42F0-A5A4-A0395A1E48EDIMG_2533_nfhjv4.webp",
-    alt: "Dr. Njo at a professional networking event.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/B7354FA7-28CF-4411-8BA8-9599727C5951IMG_3684_rhzd37.webp",
-    alt: "Dr. Njo with attendees at a professional gathering.",
-  },
-  {
-    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707722/56673A17-EE90-40A6-AD07-E106BA886208image_1_auaolu.webp",
-    alt: "Dr. Njo with colleagues and community partners.",
-  },
+const suppliedMediaAssets: EditorialMediaAsset[] = [
+  createLocalAsset({
+    id: "boardroom-session",
+    src: boardroomSession,
+    layoutVariant: "landscape",
+    alt: "Dr. Michael Njo leading a boardroom-style strategy session with dental professionals.",
+    caption: "Boardroom strategy sessions that keep leadership, practice value, and execution connected.",
+    featuredRoutes: ["home:leadership", "profile:gallery"],
+    objectPosition: "center center",
+    priority: true,
+  }),
+  createLocalAsset({
+    id: "office-strategy-group",
+    src: officeStrategyGroup,
+    layoutVariant: "landscape",
+    alt: "Dr. Michael Njo with healthcare and dental leaders in an office strategy setting.",
+    caption: "Cross-functional strategy conversations that connect ownership, leadership, and operational clarity.",
+    featuredRoutes: ["home:leadership", "profile:gallery"],
+    objectPosition: "center center",
+  }),
+  createLocalAsset({
+    id: "dinner-strategy-group",
+    src: dinnerStrategyGroup,
+    layoutVariant: "landscape",
+    alt: "Dr. Michael Njo with peers at an evening strategy dinner.",
+    caption: "Peer dinner conversations that sharpen perspective on growth, partnerships, and what comes next in the profession.",
+    featuredRoutes: ["home:leadership", "profile:gallery"],
+    objectPosition: "center center",
+  }),
+  createLocalAsset({
+    id: "mayflower-portrait",
+    src: mayflowerPortrait,
+    layoutVariant: "square",
+    alt: "Dr. Michael Njo with peers at a Mayflower gathering.",
+    caption: "Trusted peer relationships that extend beyond transactions and into long-term advisory work.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectPosition: "center center",
+  }),
+  createLocalAsset({
+    id: "wine-dinner-photo",
+    src: wineDinnerPhoto,
+    layoutVariant: "landscape",
+    alt: "Dr. Michael Njo with a colleague at an evening industry dinner.",
+    caption: "Relationship capital built through years of trusted work, referrals, and shared leadership conversations.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectPosition: "center center",
+    priority: true,
+  }),
+  createLocalAsset({
+    id: "medal-portrait",
+    src: medalPortrait,
+    layoutVariant: "poster",
+    alt: "Dr. Michael Njo with a medal-recipient colleague at a formal professional event.",
+    caption: "Recognition, peer trust, and industry presence beyond the consulting room.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectPosition: "center top",
+  }),
+  createLocalAsset({
+    id: "three-person-event",
+    src: threePersonEvent,
+    layoutVariant: "portrait",
+    alt: "Dr. Michael Njo with fellow attendees at a professional event.",
+    caption: "A candid event moment underscoring the network around Dr. Njo's consulting and speaking work.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectPosition: "center top",
+  }),
+  createLocalAsset({
+    id: "handbook-cover",
+    src: handbookCover,
+    layoutVariant: "landscape",
+    alt: "Cover of Dental Practice Transitions Handbook by Michael A. Njo, DDS.",
+    caption: "Dr. Njo's handbook gives dentists a practical blueprint for buying, selling, and structuring transitions.",
+    featuredRoutes: ["resources:book", "profile:gallery"],
+    objectPosition: "center center",
+    priority: true,
+  }),
+  createLocalAsset({
+    id: "handbook-interior-spread",
+    src: handbookInteriorSpread,
+    layoutVariant: "landscape",
+    alt: "Interior spread from Dental Practice Transitions Handbook showing Dr. Michael Njo speaking with dental professionals.",
+    caption: "A quick look inside the handbook and the real-world transition guidance behind it.",
+    featuredRoutes: ["resources:book", "profile:gallery"],
+    objectPosition: "center center",
+  }),
+  createLocalAsset({
+    id: "seminar-group-photo",
+    src: seminarGroupPhoto,
+    layoutVariant: "landscape",
+    alt: "Attendees gathered after a Blueprint for Success educational event.",
+    caption: "One of the in-person education settings where Dr. Njo shares transition and practice-growth insight.",
+    featuredRoutes: ["profile:news", "profile:gallery"],
+    objectPosition: "center center",
+    priority: true,
+  }),
+  createLocalAsset({
+    id: "blueprint-for-success-flyer",
+    src: blueprintForSuccessFlyer,
+    layoutVariant: "square",
+    alt: "Blueprint for Success seminar flyer featuring Dr. Michael Njo.",
+    caption: "A quick event proof point from Dr. Njo's educational speaking and society programming.",
+    featuredRoutes: ["profile:news", "profile:gallery"],
+    objectPosition: "center top",
+  }),
+  createLocalAsset({
+    id: "backstage-quote-card",
+    src: backstageQuoteCard,
+    layoutVariant: "poster",
+    alt: "Backstage Mastermind feature card highlighting Dr. Michael Njo's practice support message.",
+    caption: "A shareable quote card positioning Dr. Njo as a trusted partner for everything beyond the operatory.",
+    featuredRoutes: ["interview:quote", "profile:gallery"],
+    objectPosition: "center top",
+  }),
+  createLocalAsset({
+    id: "solo-dinner-gallery-only",
+    src: soloDinnerGalleryOnly,
+    layoutVariant: "portrait",
+    alt: "Dinner portrait from a private celebration setting.",
+    caption: "A gallery-only moment kept secondary to the public business narrative.",
+    featuredRoutes: ["profile:gallery"],
+    objectPosition: "center top",
+    galleryOnly: true,
+  }),
 ];
 
-export const njoLifeGalleryImages = baseNjoLifeGalleryImages.map((image) => ({
-  ...image,
-  srcSet: buildCloudinarySrcSet(image.src),
-  sizes: galleryImageSizes,
-}));
+const legacyGalleryImages: EditorialMediaAsset[] = [
+  createRemoteAsset({
+    id: "student-gratitude-1",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776241/1_uiehhq.jpg",
+    width: 4032,
+    height: 3024,
+    layoutVariant: "landscape",
+    alt: "Interviewee thanking Dr. Michael Njo for inspiring insights and mentorship.",
+    caption:
+      "Thank you for the interview and your inspiring insights. From admissions interviewee to attendee as a senior at UOP's IDS program in Sacramento.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+  createRemoteAsset({
+    id: "student-gratitude-2",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776279/3_yt7juv.jpg",
+    width: 4032,
+    height: 3024,
+    layoutVariant: "landscape",
+    alt: "From admissions interviewee to UOP IDS senior in Sacramento, showing gratitude to Dr. Njo.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+  createRemoteAsset({
+    id: "student-gratitude-3",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776282/2_lxrfhn.jpg",
+    width: 4032,
+    height: 3024,
+    layoutVariant: "landscape",
+    alt: "Kind gifts from Shuang's country shared with Dr. Michael Njo in gratitude for his kindness and mentorship.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+  createRemoteAsset({
+    id: "mentorship-poster",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776307/Updated_cskep5.png",
+    width: 724,
+    height: 888,
+    layoutVariant: "poster",
+    alt: "Dr. Michael Njo guiding dental professionals and mentoring future leaders.",
+    caption: "Dr. Michael Njo in action guiding dental professionals.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+  gprResidencyPresentationImage,
+  createRemoteAsset({
+    id: "leadership-retreat",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",
+    width: 3024,
+    height: 4032,
+    layoutVariant: "portrait",
+    alt: "Leadership retreat with Dr. Njo and peers.",
+    caption: "Leadership retreat.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+  createRemoteAsset({
+    id: "uop-board-dinner",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/UOP-board-dinner_vvxbkq.webp",
+    width: 3024,
+    height: 4032,
+    layoutVariant: "portrait",
+    alt: "University of the Pacific board dinner with Dr. Njo.",
+    caption: "UOP board dinner.",
+    featuredRoutes: ["profile:gallery"],
+  }),
+];
+
+export const allEditorialImages: EditorialMediaAsset[] = [...suppliedMediaAssets, ...legacyGalleryImages];
+
+const getImagesForFeature = (featureRoute: MediaFeatureRoute) =>
+  allEditorialImages.filter((image) => image.featuredRoutes.includes(featureRoute));
+
+const getImageById = (id: string) => {
+  const image = allEditorialImages.find((asset) => asset.id === id);
+
+  if (!image) {
+    throw new Error(`Missing media asset: ${id}`);
+  }
+
+  return image;
+};
+
+export const homeLeadershipImages = getImagesForFeature("home:leadership");
+export const profileRelationshipImages = getImagesForFeature("profile:relationships");
+export const profileNewsImages = getImagesForFeature("profile:news");
+export const profileGalleryImages = getImagesForFeature("profile:gallery");
+export const resourceBookImages = getImagesForFeature("resources:book");
+export const resourceBookFeatureImage = getImageById("handbook-cover");
+export const resourceBookInsetImage = getImageById("handbook-interior-spread");
+export const interviewQuoteImage = getImageById("backstage-quote-card");

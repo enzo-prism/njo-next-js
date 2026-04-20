@@ -9,19 +9,25 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { contactDetails, services } from "@/seo/structured-data";
 import { testimonialPages } from "@/data/testimonials";
-import { dugoniCollaborationImage, gprResidencyPresentationImage, njoLifeGalleryImages } from "@/data/media";
+import {
+  dugoniCollaborationImage,
+  gprResidencyPresentationImage,
+  profileGalleryImages,
+  profileNewsImages,
+  profileRelationshipImages,
+  type EditorialMediaAsset,
+} from "@/data/media";
 import { eventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-type GalleryImage = (typeof njoLifeGalleryImages)[number];
+import { EditorialMosaic } from "@/components/media/editorial-mosaic";
 
 export default function MichaelNjoDDS() {
   const featuredTestimonials = testimonialPages.slice(0, 6);
   const [activeTab, setActiveTab] = useState("overview");
-  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const [selectedImage, setSelectedImage] = useState<EditorialMediaAsset | null>(null);
 
   useEffect(() => {
     const shouldShowNews = new URLSearchParams(window.location.search).get("tab") === "news";
@@ -184,39 +190,56 @@ export default function MichaelNjoDDS() {
               </div>
             </Card>
 
+            <Card className="overflow-hidden">
+              <div className="grid gap-0 xl:grid-cols-[0.88fr_1.12fr]">
+                <div className="space-y-4 p-6 md:p-8">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">Relationships, recognition, and leadership</p>
+                    <h2 className="text-2xl font-semibold">Trust that shows up in rooms where reputation matters</h2>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Dr. Njo&apos;s advisory work is not built on abstract positioning alone. It is reinforced by longstanding
+                    relationships with peers, collaborators, and healthcare leaders who continue to invite him into conversations
+                    about growth, transitions, and professional stewardship.
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    These moments are not presented as lifestyle filler. They show the caliber of network, trust, and industry
+                    presence that surrounds Michael&apos;s work when clients are looking for judgment as much as technical guidance.
+                  </p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-sm font-semibold">Peer trust</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Relationships that outlast single deals and one-time projects.</p>
+                    </div>
+                    <div className="rounded-lg border border-border p-3">
+                      <p className="text-sm font-semibold">Visible credibility</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Professional settings where reputation and discretion matter.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-100/70 p-4 md:p-6">
+                  <EditorialMosaic assets={profileRelationshipImages} captionMode="below" />
+                </div>
+              </div>
+            </Card>
+
             <Card>
               <CardHeader>
-                <CardTitle>Life & Leadership in Media</CardTitle>
-                <CardDescription>A visual timeline of speaking, mentoring, and leadership moments.</CardDescription>
+                <CardTitle>Expanded Leadership Gallery</CardTitle>
+                <CardDescription>
+                  A metadata-driven gallery of teaching, speaking, peer relationships, and professional event moments.
+                </CardDescription>
               </CardHeader>
               <CardContent className="px-0 pt-0">
-                <div className="grid gap-3 px-4 pb-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {njoLifeGalleryImages.slice(0, 9).map((image) => (
-                    <button
-                      key={image.src}
-                      type="button"
-                      className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card text-left"
-                      aria-label={image.alt}
-                      onClick={() => setSelectedImage(image)}
-                    >
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        sizes={image.sizes}
-                        className="object-cover transition duration-300 group-hover:scale-105"
-                      />
-                      <span
-                        className="pointer-events-none absolute inset-0 bg-black/0 transition duration-300 group-hover:bg-black/15"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className="pointer-events-none absolute right-2 bottom-2 rounded-full bg-black/60 px-2.5 py-1 text-xs font-medium text-white shadow-sm transition duration-300 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
-                      >
-                        Open
-                      </span>
-                    </button>
-                  ))}
+                <div className="px-4 pb-4">
+                  <EditorialMosaic
+                    assets={profileGalleryImages}
+                    captionMode="hidden"
+                    interactive
+                    layoutMode="columns"
+                    onSelect={(image) => setSelectedImage(image)}
+                  />
                 </div>
               </CardContent>
             </Card>
@@ -234,15 +257,21 @@ export default function MichaelNjoDDS() {
                   <>
                     <DialogTitle className="sr-only">{selectedImage.alt}</DialogTitle>
                     <DialogDescription className="sr-only">{selectedImage.alt}</DialogDescription>
-                    <div className="relative h-[80vh] w-full">
+                    <div className="relative h-[70vh] w-full">
                       <Image
                         src={selectedImage.src}
                         alt={selectedImage.alt}
                         fill
                         sizes="100vw"
                         className="rounded-t-lg object-contain"
-                        priority
+                        style={{ objectPosition: selectedImage.objectPosition ?? "center" }}
                       />
+                    </div>
+                    <div className="space-y-2 px-6 pb-6">
+                      <p className="text-base font-semibold">{selectedImage.alt}</p>
+                      {selectedImage.caption ? (
+                        <p className="text-sm leading-relaxed text-white/80">{selectedImage.caption}</p>
+                      ) : null}
                     </div>
                   </>
                 ) : null}
@@ -274,6 +303,30 @@ export default function MichaelNjoDDS() {
                   </Button>
                 </div>
               </CardHeader>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="grid gap-0 xl:grid-cols-[0.86fr_1.14fr]">
+                <div className="space-y-4 p-6 md:p-8">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">Speaking proof</p>
+                    <h2 className="text-2xl font-semibold">Educational events that keep transition strategy practical</h2>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Dr. Njo&apos;s event work spans society presentations, small-group seminars, and transition-focused educational
+                    programming. These materials show the public-facing side of the same advisory work clients hire him for
+                    privately.
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    The emphasis stays practical: helping dentists understand ownership timing, deal structure, practice value, and
+                    the people-side realities that sit underneath every transition.
+                  </p>
+                </div>
+
+                <div className="bg-slate-100/70 p-4 md:p-6">
+                  <EditorialMosaic assets={profileNewsImages} captionMode="below" />
+                </div>
+              </div>
             </Card>
 
             {eventPrograms.map((program) => (

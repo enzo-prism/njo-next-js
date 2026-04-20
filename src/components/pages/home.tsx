@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
-import { boardMeetingImages, gprResidencyPresentationImage } from "@/data/media";
+import { gprResidencyPresentationImage, homeLeadershipImages } from "@/data/media";
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -18,6 +18,8 @@ const coreOrganizations = [
 ];
 
 export default function Home() {
+  const [leadershipFeatureImage, ...supportingLeadershipImages] = homeLeadershipImages;
+
   return (
     <>
       <div className="space-y-10">
@@ -84,18 +86,17 @@ export default function Home() {
           <Card className="overflow-hidden">
             <div className="grid gap-0 xl:grid-cols-[0.92fr_1.08fr]">
               <div className="space-y-4 p-8 md:p-10">
-                <p className="text-sm font-medium text-muted-foreground">Board leadership and industry momentum</p>
+                <p className="text-sm font-medium text-muted-foreground">Leadership, board service, and trusted peer counsel</p>
                 <h2 id="board-meetings-title" className="text-2xl font-semibold">
-                  Recent board meetings shaping what&apos;s next in dentistry
+                  Real rooms where transition strategy meets industry perspective
                 </h2>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  Dr. Njo and his peers are actively engaged in conversations about leadership, collaboration, and upcoming
-                  opportunities across the dental industry.
+                  From structured boardroom sessions to smaller strategy dinners, Dr. Njo stays close to the kinds of conversations
+                  that shape ownership decisions, partnership dynamics, and the future direction of dentistry.
                 </p>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  These are the kinds of trusted relationships and strategy discussions that inform Michael&apos;s consulting work,
-                  especially when clients need a grounded perspective on growth, transition planning, and the bigger direction of
-                  the profession.
+                  That proximity matters. Clients get more than a consultant with operational know-how. They get perspective informed
+                  by live peer relationships, leadership discussions, and the practical realities facing healthcare owners right now.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild>
@@ -107,26 +108,48 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid gap-3 bg-slate-100/70 p-4 md:p-6 lg:grid-cols-2">
-                {boardMeetingImages.map((image) => (
-                  <figure
-                    key={image.src}
-                    className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
-                  >
-                    <div className="relative aspect-[4/3]">
+              <div className="grid gap-3 bg-slate-100/70 p-4 md:p-6 lg:grid-cols-[1.18fr_0.82fr]">
+                {leadershipFeatureImage ? (
+                  <figure className="overflow-hidden rounded-[1.75rem] border border-border bg-background shadow-sm">
+                    <div className="relative aspect-[4/3] xl:aspect-[5/4]">
                       <Image
-                        src={image.src}
-                        alt={image.alt}
+                        src={leadershipFeatureImage.src}
+                        alt={leadershipFeatureImage.alt}
                         fill
-                        sizes={image.sizes}
+                        sizes={leadershipFeatureImage.sizes}
                         className="object-cover"
+                        style={{ objectPosition: leadershipFeatureImage.objectPosition }}
+                        priority
                       />
                     </div>
                     <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-                      {image.caption}
+                      {leadershipFeatureImage.caption}
                     </figcaption>
                   </figure>
-                ))}
+                ) : null}
+
+                <div className="grid gap-3">
+                  {supportingLeadershipImages.map((image) => (
+                    <figure
+                      key={image.id}
+                      className="overflow-hidden rounded-[1.75rem] border border-border bg-background shadow-sm"
+                    >
+                      <div className="relative aspect-[4/3]">
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          fill
+                          sizes={image.sizes}
+                          className="object-cover"
+                          style={{ objectPosition: image.objectPosition }}
+                        />
+                      </div>
+                      <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                        {image.caption}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
               </div>
             </div>
           </Card>

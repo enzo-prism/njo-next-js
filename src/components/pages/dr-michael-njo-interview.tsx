@@ -2,10 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { ArrowRight, CalendarDays, Copy, Link2, Play } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { interviewQuoteImage } from "@/data/media";
 
 const videoUrl = "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4";
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
@@ -124,26 +126,55 @@ export default function DrMichaelNjoInterview() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Share this interview</CardTitle>
-              <CardDescription>Quick actions for your team and workflow</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button type="button" onClick={copyLink} variant="outline" className="inline-flex items-center gap-2">
-                <Copy className="h-4 w-4" />
-                {copied ? "Link copied" : "Copy interview link"}
-              </Button>
-              {shareLinks.map((share) => (
-                <Button key={share.label} asChild variant="secondary" size="sm">
-                  <a href={share.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                    <Link2 className="h-4 w-4" />
-                    {share.label}
-                  </a>
+          <div className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Share this interview</CardTitle>
+                <CardDescription>Quick actions for your team and workflow</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <Button type="button" onClick={copyLink} variant="outline" className="inline-flex items-center gap-2">
+                  <Copy className="h-4 w-4" />
+                  {copied ? "Link copied" : "Copy interview link"}
                 </Button>
-              ))}
-            </CardContent>
-          </Card>
+                {shareLinks.map((share) => (
+                  <Button key={share.label} asChild variant="secondary" size="sm">
+                    <a href={share.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                      <Link2 className="h-4 w-4" />
+                      {share.label}
+                    </a>
+                  </Button>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden">
+              <div className="grid gap-0 sm:grid-cols-[0.78fr_1.22fr] lg:grid-cols-1">
+                <div className="bg-slate-950/95 p-4">
+                  <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40">
+                    <Image
+                      src={interviewQuoteImage.src}
+                      alt={interviewQuoteImage.alt}
+                      width={interviewQuoteImage.width}
+                      height={interviewQuoteImage.height}
+                      sizes={interviewQuoteImage.sizes}
+                      className="h-auto w-full object-cover"
+                      priority
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Social Proof</p>
+                  <h2 className="text-xl font-semibold">A message already traveling well in Michael&apos;s orbit</h2>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    This feature card distills the same promise behind the interview: clinical leaders should not have to carry every
+                    operational, transition, and growth challenge alone.
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{interviewQuoteImage.caption}</p>
+                </div>
+              </div>
+            </Card>
+          </div>
         </section>
 
         <Card id="interview-video">

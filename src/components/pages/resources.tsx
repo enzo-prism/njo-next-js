@@ -1,9 +1,11 @@
 import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
+import { resourceBookFeatureImage, resourceBookInsetImage } from "@/data/media";
 import { resources, bookReviews } from "@/seo/structured-data";
 
 export default function ResourcesPage() {
@@ -23,18 +25,55 @@ export default function ResourcesPage() {
       <section className="grid gap-4 md:grid-cols-2">
         {book && (
           <Card className="overflow-hidden">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-2xl">{book.name}</CardTitle>
-              <CardDescription className="text-sm leading-relaxed max-w-lg">{book.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Button asChild className="inline-flex w-full justify-center sm:w-auto">
-                <a href={book.url} target="_blank" rel="noopener noreferrer">
-                  View on Amazon
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-            </CardContent>
+            <div className="grid gap-0 lg:grid-cols-[0.76fr_1.24fr]">
+              <div className="bg-slate-100/70 p-5">
+                <figure className="overflow-hidden rounded-[1.5rem] border border-border bg-background shadow-sm">
+                  <Image
+                    src={resourceBookFeatureImage.src}
+                    alt={resourceBookFeatureImage.alt}
+                    width={resourceBookFeatureImage.width}
+                    height={resourceBookFeatureImage.height}
+                    sizes={resourceBookFeatureImage.sizes}
+                    className="h-auto w-full object-cover"
+                    priority
+                  />
+                </figure>
+              </div>
+
+              <div className="space-y-5 p-6">
+                <CardHeader className="space-y-3 px-0 pt-0">
+                  <CardTitle className="text-2xl">{book.name}</CardTitle>
+                  <CardDescription className="max-w-lg text-sm leading-relaxed">{book.description}</CardDescription>
+                </CardHeader>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  A practical reference for dentists and healthcare owners navigating acquisitions, sales, partnerships, and
+                  transition timing across different market conditions.
+                </p>
+
+                <figure className="overflow-hidden rounded-[1.5rem] border border-border bg-slate-50 shadow-sm">
+                  <div className="relative aspect-[4/3]">
+                    <Image
+                      src={resourceBookInsetImage.src}
+                      alt={resourceBookInsetImage.alt}
+                      fill
+                      sizes={resourceBookInsetImage.sizes}
+                      className="object-contain p-3"
+                      style={{ objectPosition: resourceBookInsetImage.objectPosition }}
+                    />
+                  </div>
+                  <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                    {resourceBookInsetImage.caption}
+                  </figcaption>
+                </figure>
+
+                <Button asChild className="inline-flex w-full justify-center sm:w-auto">
+                  <a href={book.url} target="_blank" rel="noopener noreferrer">
+                    View on Amazon
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
           </Card>
         )}
 
