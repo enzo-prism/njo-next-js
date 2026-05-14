@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CalendarCheck2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -12,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceInterestOptions } from "@/data/service-interest-options";
+import { BOOKING_URL } from "@/config/site";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -87,6 +89,14 @@ export default function Contact() {
             Share a message directly with Dr. Michael Njo. Let him know about your practice, goals, or questions and he’ll
             personally reach out with next steps.
           </p>
+          <div className="flex justify-center">
+            <Button asChild>
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                <CalendarCheck2 className="h-4 w-4" />
+                Book a 30-minute meeting
+              </a>
+            </Button>
+          </div>
         </section>
 
         <Card className="border border-border/70 shadow-sm">

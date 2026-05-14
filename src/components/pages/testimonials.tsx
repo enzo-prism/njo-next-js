@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalReviewGallery } from "@/components/testimonials/external-review-gallery";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { BOOKING_URL } from "@/config/site";
 import { testimonialPages } from "@/data/testimonials";
 
 type SortMode = "newest" | "alpha";
@@ -96,7 +97,9 @@ export default function TestimonialsPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button asChild>
-          <Link href="/contact">Work with Michael Njo, DDS</Link>
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+            Work with Michael Njo, DDS
+          </a>
         </Button>
         <Button asChild variant="outline">
           <Link href="/">Back to home</Link>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
+import { BOOKING_URL } from "@/config/site";
 import { type TestimonialPage, testimonialPages } from "@/data/testimonials";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
@@ -125,10 +126,10 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
 
       <div className="flex flex-wrap justify-center gap-3">
         <Button asChild>
-          <Link href="/contact" className="inline-flex items-center gap-2">
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
             <ArrowRight className="h-4 w-4" />
             Start a consultation
-          </Link>
+          </a>
         </Button>
         <Button asChild variant="outline">
           <Link href="/testimonials" className="inline-flex items-center gap-2">

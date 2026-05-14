@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { BOOKING_URL } from "@/config/site";
 import { type ResourceArticle, formatArticleDate } from "@/data/resource-articles";
 
 type ResourceArticleDetailPageProps = {
@@ -138,10 +139,10 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
             </CardHeader>
             <CardContent className="flex flex-col gap-3 sm:flex-row">
               <Button asChild>
-                <Link href="/contact">
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
                   Start a conversation
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </a>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/testimonials">See how other dentists navigated change</Link>

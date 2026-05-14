@@ -94,6 +94,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 | `NEXT_PUBLIC_SITE_URL` | Canonical base URL for metadata/sitemap | `https://michaelnjodds.com` |
 | `PREFERRED_HOSTNAME` | Canonical host enforcement logic | `michaelnjodds.com` |
 | `CANONICAL_PROTOCOL` | Canonical protocol enforcement logic | `https` |
+| `NEXT_PUBLIC_BOOKING_URL` | Public scheduling URL for consultation CTAs | `https://calendly.com/dentalstrategies/30min` |
 | `NEXT_PUBLIC_GA_ID` | GA tracking ID | `G-6HWEE040EH` |
 | `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID | `6575522` |
 | `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version | `6` |

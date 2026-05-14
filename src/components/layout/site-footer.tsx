@@ -1,6 +1,7 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CalendarCheck2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BOOKING_URL } from "@/config/site";
 
 const footerLinks = [
   { href: "/michael-njo-dds", label: "Profile" },
@@ -22,10 +23,11 @@ export default function SiteFooter() {
             Dental consulting, transitions, and leadership support for healthcare and dental practices across the U.S.
           </p>
           <Button asChild size="sm" variant="secondary" className="mt-3">
-            <Link href="/contact" className="inline-flex items-center">
-              Start a consultation
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
+              <CalendarCheck2 className="mr-2 h-4 w-4" />
+              Book a consultation
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
+            </a>
           </Button>
         </div>
 

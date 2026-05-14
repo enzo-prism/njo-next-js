@@ -1,5 +1,5 @@
 import { eventPrograms } from "@/data/events";
-import { SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
+import { BOOKING_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
   question: string;
@@ -45,6 +45,7 @@ export const siteMetadata = {
 
 export const contactDetails = {
   email: "dentalstrategies@gmail.com",
+  bookingUrl: BOOKING_URL,
 };
 
 export const personProfile = {
@@ -77,8 +78,7 @@ export const faqItems: FAQItem[] = [
   },
   {
     question: "How can I work with Dr. Michael Njo?",
-    answer:
-      "You can email dentalstrategies@gmail.com to schedule a complimentary consultation with Dr. Michael Njo. He begins with an assessment of your goals, timeline, and financial targets before crafting a road map tailored to your practice.",
+    answer: `You can book a 30-minute consultation with Dr. Michael Njo at ${BOOKING_URL} or email dentalstrategies@gmail.com. He begins with an assessment of your goals, timeline, and financial targets before crafting a road map tailored to your practice.`,
   },
 ];
 

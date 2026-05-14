@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
 import { resourceBookFeatureImage, resourceBookInsetImage } from "@/data/media";
 import { resources, bookReviews } from "@/seo/structured-data";
+import { BOOKING_URL } from "@/config/site";
 
 export default function ResourcesPage() {
   const book = resources.find((resource) => resource.type === "Book");
@@ -172,7 +173,9 @@ export default function ResourcesPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button asChild>
-          <Link href="/contact">Start a strategy call</Link>
+          <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+            Start a strategy call
+          </a>
         </Button>
         <Button asChild variant="outline">
           <Link href="/michael-njo-dds">Back to profile</Link>

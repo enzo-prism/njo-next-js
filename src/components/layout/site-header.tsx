@@ -1,10 +1,11 @@
 "use client";
 
-import { Menu, PhoneCall } from "lucide-react";
+import { CalendarCheck2, Menu, PhoneCall } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { BOOKING_URL } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -71,14 +72,17 @@ export default function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           <a
             href="mailto:dentalstrategies@gmail.com"
-            className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground sm:flex"
+            className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground lg:flex"
             aria-label="Email contact"
           >
             <PhoneCall className="h-3.5 w-3.5" />
             dentalstrategies@gmail.com
           </a>
           <Button asChild size="sm">
-            <Link href="/contact">Contact</Link>
+            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+              <CalendarCheck2 className="h-4 w-4" />
+              Book
+            </a>
           </Button>
         </div>
 
@@ -109,7 +113,12 @@ export default function SiteHeader() {
             </nav>
             <div className="mt-7 space-y-3">
               <Button asChild className="w-full">
-                <Link href="/contact">Book Consultation</Link>
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  Book Consultation
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/contact">Send a message</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <a href="mailto:dentalstrategies@gmail.com">Email: dentalstrategies@gmail.com</a>
