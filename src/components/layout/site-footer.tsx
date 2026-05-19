@@ -1,7 +1,7 @@
-import { ArrowRight, CalendarCheck2, Mail } from "lucide-react";
+import { ArrowRight, Mail, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 
 const footerLinks = [
   { href: "/michael-njo-dds", label: "Profile" },
@@ -23,11 +23,11 @@ export default function SiteFooter() {
             Dental consulting, transitions, and leadership support for healthcare and dental practices across the U.S.
           </p>
           <Button asChild size="sm" variant="secondary" className="mt-3">
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-              <CalendarCheck2 className="mr-2 h-4 w-4" />
-              Book a consultation
+            <Link href={CONTACT_PATH} className="inline-flex items-center">
+              <MessageSquareText className="mr-2 h-4 w-4" />
+              Contact Dr. Njo
               <ArrowRight className="ml-2 h-4 w-4" />
-            </a>
+            </Link>
           </Button>
         </div>
 
@@ -52,8 +52,8 @@ export default function SiteFooter() {
             </a>
           </p>
           <p className="mt-2">
-            <a href="tel:+16504362939" className="hover:text-white">
-              (650) 436-2939
+            <a href={`tel:${CONTACT_PHONE}`} className="hover:text-white">
+              {CONTACT_PHONE_DISPLAY}
             </a>
           </p>
         </div>

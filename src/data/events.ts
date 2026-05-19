@@ -1,4 +1,4 @@
-import { CONTACT_EMAIL } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PHONE } from "@/config/site";
 
 export type EventOccurrence = {
   dateLabel: string;
@@ -74,7 +74,7 @@ export const eventPrograms: EventProgram[] = [
     ],
     completedEventsLabel: "View 2 completed events",
     callToAction: {
-      phone: "+16504362939",
+      phone: CONTACT_PHONE,
       email: CONTACT_EMAIL,
     },
   },

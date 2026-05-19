@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarCheck2, CheckCircle2, Mail, PlayCircle, Star, Users } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MessageSquareText, PlayCircle, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { testimonialPages } from "@/data/testimonials";
@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
 import { gprResidencyPresentationImage, homeLeadershipImages } from "@/data/media";
-import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -66,17 +66,17 @@ export default function Home() {
                     <Mail className="h-4 w-4" />
                     {CONTACT_EMAIL}
                   </a>
-                  <a href="tel:+16504362939" className="block font-medium text-foreground hover:underline">
-                    (650) 436-2939
+                  <a href={`tel:${CONTACT_PHONE}`} className="block font-medium text-foreground hover:underline">
+                    {CONTACT_PHONE_DISPLAY}
                   </a>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
                   <Button asChild>
-                    <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                      <CalendarCheck2 className="h-4 w-4" />
-                      Book a Consultation
-                    </a>
+                    <Link href={CONTACT_PATH}>
+                      <MessageSquareText className="h-4 w-4" />
+                      Contact Dr. Njo
+                    </Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href="/michael-njo-dds">Read Full Profile</Link>
@@ -105,10 +105,10 @@ export default function Home() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild>
-                    <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                      <CalendarCheck2 className="h-4 w-4" />
-                      Book a Consultation
-                    </a>
+                    <Link href={CONTACT_PATH}>
+                      <MessageSquareText className="h-4 w-4" />
+                      Contact Dr. Njo
+                    </Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link href="/michael-njo-dds">See Full Profile</Link>
@@ -349,10 +349,10 @@ export default function Home() {
               </div>
               <div className="flex flex-wrap gap-3">
                 <Button asChild>
-                  <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                    <CalendarCheck2 className="h-4 w-4" />
-                    Start a consultation
-                  </a>
+                  <Link href={CONTACT_PATH}>
+                    <MessageSquareText className="h-4 w-4" />
+                    Contact Dr. Njo
+                  </Link>
                 </Button>
               </div>
             </CardContent>

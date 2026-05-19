@@ -1,5 +1,5 @@
 import { eventPrograms } from "@/data/events";
-import { BOOKING_URL, CONTACT_EMAIL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
   question: string;
@@ -45,7 +45,9 @@ export const siteMetadata = {
 
 export const contactDetails = {
   email: CONTACT_EMAIL,
-  bookingUrl: BOOKING_URL,
+  phone: CONTACT_PHONE,
+  phoneDisplay: CONTACT_PHONE_DISPLAY,
+  contactUrl: CONTACT_URL,
 };
 
 export const personProfile = {
@@ -78,7 +80,7 @@ export const faqItems: FAQItem[] = [
   },
   {
     question: "How can I work with Dr. Michael Njo?",
-    answer: `You can book a 30-minute consultation with Dr. Michael Njo at ${BOOKING_URL} or email ${contactDetails.email}. He begins with an assessment of your goals, timeline, and financial targets before crafting a road map tailored to your practice.`,
+    answer: `You can contact Dr. Michael Njo through the form at ${contactDetails.contactUrl}, email ${contactDetails.email}, or call ${contactDetails.phoneDisplay}. He begins with an assessment of your goals, timeline, and financial targets before crafting a road map tailored to your practice.`,
   },
 ];
 
@@ -289,6 +291,7 @@ const getCoreGraphNodes = (): SchemaNode[] => {
     "@type": "ContactPoint",
     contactType: "Consultation",
     email: contactDetails.email,
+    telephone: contactDetails.phone,
     availableLanguage: ["English"],
   };
 

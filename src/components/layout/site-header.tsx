@@ -1,13 +1,13 @@
 "use client";
 
-import { CalendarCheck2, Mail, Menu } from "lucide-react";
+import { Mail, Menu, MessageSquareText, PhoneCall } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 type NavItem = {
   href: string;
@@ -79,10 +79,10 @@ export default function SiteHeader() {
             {CONTACT_EMAIL}
           </a>
           <Button asChild size="sm">
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-              <CalendarCheck2 className="h-4 w-4" />
-              Book
-            </a>
+            <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+              <MessageSquareText className="h-4 w-4" />
+              Contact
+            </Link>
           </Button>
         </div>
 
@@ -93,7 +93,12 @@ export default function SiteHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[85%] sm:max-w-sm">
-            <p className="mb-6 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Navigation</p>
+            <SheetTitle className="mb-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              Navigation
+            </SheetTitle>
+            <SheetDescription className="sr-only">
+              Site navigation and contact options for Dr. Michael Njo.
+            </SheetDescription>
             <nav className="grid gap-3" aria-label="Mobile primary">
               {navItems.map((item) => (
                 <SheetClose asChild key={item.href}>
@@ -113,17 +118,21 @@ export default function SiteHeader() {
             </nav>
             <div className="mt-7 space-y-3">
               <Button asChild className="w-full">
-                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                  Book Consultation
-                </a>
+                <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link href="/contact">Send a message</Link>
+                <Link href={CONTACT_PATH}>Use the contact form</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <a href={`mailto:${CONTACT_EMAIL}`}>
                   <Mail className="h-4 w-4" />
                   Email: {CONTACT_EMAIL}
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full">
+                <a href={`tel:${CONTACT_PHONE}`}>
+                  <PhoneCall className="h-4 w-4" />
+                  Call: {CONTACT_PHONE_DISPLAY}
                 </a>
               </Button>
             </div>

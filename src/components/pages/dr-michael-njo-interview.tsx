@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowRight, CalendarDays, Copy, Link2, Play } from "lucide-react";
+import { ArrowRight, Copy, Link2, MessageSquareText, Play } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
-import { BOOKING_URL } from "@/config/site";
+import { CONTACT_PATH } from "@/config/site";
 
 const videoUrl = "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4";
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
@@ -117,10 +118,10 @@ export default function DrMichaelNjoInterview() {
                   </a>
                 </Button>
                 <Button asChild variant="outline">
-                  <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                    <CalendarDays className="h-4 w-4" />
-                    Schedule consultation
-                  </a>
+                  <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+                    <MessageSquareText className="h-4 w-4" />
+                    Contact Dr. Njo
+                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -257,10 +258,10 @@ export default function DrMichaelNjoInterview() {
 
         <section className="text-center">
           <Button asChild>
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-              Final step: book a consultation
+            <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+              Contact Dr. Njo about your next step
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </Link>
           </Button>
         </section>
       </div>

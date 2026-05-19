@@ -1,8 +1,8 @@
-import { CheckCircle2, Mail } from "lucide-react";
+import { CheckCircle2, Mail, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CONTACT_EMAIL } from "@/config/site";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 
 export default function ContactSuccess() {
   return (
@@ -25,6 +25,11 @@ export default function ContactSuccess() {
               <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-1.5 font-medium text-foreground hover:underline">
                 <Mail className="h-3.5 w-3.5" />
                 {CONTACT_EMAIL}
+              </a>{" "}
+              or call{" "}
+              <a href={`tel:${CONTACT_PHONE}`} className="inline-flex items-center gap-1.5 font-medium text-foreground hover:underline">
+                <PhoneCall className="h-3.5 w-3.5" />
+                {CONTACT_PHONE_DISPLAY}
               </a>{" "}
               for urgent follow-up.
             </p>

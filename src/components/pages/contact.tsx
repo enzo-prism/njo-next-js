@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarCheck2 } from "lucide-react";
+import { Mail, MessageSquareText, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceInterestOptions } from "@/data/service-interest-options";
-import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
+import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
+import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -59,9 +61,10 @@ export default function Contact() {
     payload.append("message", values.message);
     payload.append("_subject", "New inquiry for Michael Njo, DDS");
     payload.append("_replyto", values.email);
+    appendFormspreeOpsMetadata(payload, "contact");
 
     try {
-      const res = await fetch("https://formspree.io/f/manaywyw", {
+      const res = await fetch(FORMSPREE_ENDPOINTS.contact, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -87,19 +90,31 @@ export default function Contact() {
           <h1 className="text-3xl font-semibold md:text-4xl">Send a message to Dr. Michael Njo</h1>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground">
             Share a message directly with Dr. Michael Njo. Let him know about your practice, goals, or questions and he’ll
-            personally reach out with next steps.
+            personally reach out with next steps. Use the form, email address, or phone number below.
           </p>
-          <div className="flex justify-center">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Button asChild>
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                <CalendarCheck2 className="h-4 w-4" />
-                Book a 30-minute meeting
+              <a href="#contact-form">
+                <MessageSquareText className="h-4 w-4" />
+                Use the contact form
+              </a>
+            </Button>
+            <Button asChild variant="outline">
+              <a href={`mailto:${CONTACT_EMAIL}`}>
+                <Mail className="h-4 w-4" />
+                {CONTACT_EMAIL}
+              </a>
+            </Button>
+            <Button asChild variant="outline">
+              <a href={`tel:${CONTACT_PHONE}`}>
+                <PhoneCall className="h-4 w-4" />
+                {CONTACT_PHONE_DISPLAY}
               </a>
             </Button>
           </div>
         </section>
 
-        <Card className="border border-border/70 shadow-sm">
+        <Card id="contact-form" className="scroll-mt-28 border border-border/70 shadow-sm">
           <CardHeader>
             <CardTitle className="text-2xl">Start a conversation</CardTitle>
           </CardHeader>
@@ -130,7 +145,7 @@ export default function Contact() {
                         <FormControl>
                           <Input type="email" placeholder="you@email.com" {...field} />
                         </FormControl>
-                        <FormDescription>Used for reply confirmation and scheduling.</FormDescription>
+                        <FormDescription>Used for reply confirmation and follow-up.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarCheck2, CalendarDays, CheckCircle2, Clock3, Mail, MapPin, MessageSquareQuote, PhoneCall } from "lucide-react";
+import { CalendarDays, CheckCircle2, Clock3, Mail, MapPin, MessageSquareQuote, PhoneCall } from "lucide-react";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { EditorialMosaic } from "@/components/media/editorial-mosaic";
-import { BOOKING_URL } from "@/config/site";
+import { CONTACT_PATH } from "@/config/site";
 
 export default function MichaelNjoDDS() {
   const featuredTestimonials = testimonialPages.slice(0, 6);
@@ -75,10 +75,10 @@ export default function MichaelNjoDDS() {
               </a>
             </Button>
             <Button asChild variant="outline">
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                <CalendarCheck2 className="h-4 w-4" />
-                Book a consultation
-              </a>
+              <Link href={CONTACT_PATH}>
+                <MessageSquareQuote className="h-4 w-4" />
+                Contact Dr. Njo
+              </Link>
             </Button>
           </div>
         </section>
@@ -431,10 +431,10 @@ export default function MichaelNjoDDS() {
                   <p className="mt-1">Dr. Njo is frequently asked to provide transition guidance for dental professionals.</p>
                   <Separator className="my-3" />
                   <Button asChild>
-                    <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                    <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
                       <MessageSquareQuote className="h-4 w-4" />
-                      Request booking details
-                    </a>
+                      Contact Dr. Njo
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

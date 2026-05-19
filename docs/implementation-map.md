@@ -342,6 +342,10 @@ Future changes should preserve the single-mount model.
   - catches TypeScript regressions
 - `lint`
   - catches ESLint and Next lint issues
+- `check:forms`
+  - validates that contact and event submissions still use the intended Formspree endpoints
+- `check:contact-ctas`
+  - validates that consultation CTAs route to `/contact` and do not reintroduce external booking URLs
 - `build`
   - catches App Router, prerender, and build-time failures
 - `check:route-head-snapshots`

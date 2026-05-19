@@ -3,12 +3,12 @@ import { ArrowRight, BadgePercent, CalendarCheck2, MessageCircle, Sparkles } fro
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BOOKING_URL } from "@/config/site";
+import { CONTACT_PATH } from "@/config/site";
 
 export default function DentalflixPage() {
   const redemptionPhrase = "I heard about Michael from the DentalFlix event.";
   const claimSteps = [
-    "Book a call using the scheduling link.",
+    "Contact Dr. Njo through the contact page, email address, or phone number.",
     `Mention this exact line: "${redemptionPhrase}"`,
     "Your $500 DentalFlix discount is applied to consultations and advisory services.",
   ];
@@ -57,10 +57,10 @@ export default function DentalflixPage() {
               </div>
             ))}
             <Button asChild className="mt-2">
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+              <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
                 Start this process now
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -92,15 +92,15 @@ export default function DentalflixPage() {
           <CardHeader>
             <CardTitle>Ready to move forward?</CardTitle>
             <CardDescription>
-              Secure your consultation and include the DentalFlix reference at first touch.
+              Contact Dr. Njo and include the DentalFlix reference at first touch.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap justify-center gap-3">
             <Button asChild className="inline-flex items-center gap-2">
-              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+              <Link href={CONTACT_PATH}>
                 <BadgePercent className="h-4 w-4" />
-                Claim $500 off now
-              </a>
+                Contact Dr. Njo
+              </Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/michael-njo-dds">Learn more about Dr. Njo</Link>

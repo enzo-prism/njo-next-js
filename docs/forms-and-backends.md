@@ -11,9 +11,12 @@ There are exactly two submission forms in this codebase.
 | `/contact` | `src/components/pages/contact.tsx` | `https://formspree.io/f/manaywyw` | Redirects to `/contact/success` | Inline error message shown on page |
 | `/phillips-event` | `src/components/pages/phillips-event.tsx` | `https://formspree.io/f/mdalbpae` | Shows in-page success state | Inline error message shown on page |
 
+Endpoint constants live in `src/config/form-backends.ts`. `npm run check:forms` guards these backend URLs and is included in `npm run check:parity`.
+
 ## Contact Form Details
 
 Component: `src/components/pages/contact.tsx`
+Endpoint source: `FORMSPREE_ENDPOINTS.contact`
 
 Submission payload:
 
@@ -36,6 +39,7 @@ Request:
 ## Phillips Event Form Details
 
 Component: `src/components/pages/phillips-event.tsx`
+Endpoint source: `FORMSPREE_ENDPOINTS.phillipsEvent`
 
 Submission payload:
 
@@ -84,6 +88,15 @@ Formspree endpoint health was verified from CLI without sending production inbox
   - `POST https://formspree.io/f/mdalbpae` -> `HTTP 422` with `TYPE_EMAIL`
 
 Interpretation: both backend endpoints are active and enforcing expected schema validation.
+
+## Latest Contact Backend Verification (2026-05-19)
+
+The contact endpoint was re-verified without sending a real lead:
+
+- Empty payload check:
+  - `POST https://formspree.io/f/manaywyw` -> `HTTP 400` with `BAD_FORM_POST_REQUEST`
+
+Interpretation: the `manaywyw` backend is reachable and recognizes the request path.
 
 ## QA Checklist
 

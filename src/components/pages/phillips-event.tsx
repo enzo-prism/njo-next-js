@@ -26,7 +26,9 @@ import {
 } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import { serviceInterestOptions } from "@/data/service-interest-options";
+import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL } from "@/config/site";
+import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
 
 const eventFormSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -78,9 +80,10 @@ export default function PhillipsEvent() {
       `Phillips Event - New contact from ${values.name}`
     );
     payload.append("_replyto", values.email);
+    appendFormspreeOpsMetadata(payload, "phillips_event");
 
     try {
-      const res = await fetch("https://formspree.io/f/mdalbpae", {
+      const res = await fetch(FORMSPREE_ENDPOINTS.phillipsEvent, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: payload,

@@ -2,8 +2,9 @@ const DEFAULT_SITE_URL = "https://michaelnjodds.com";
 const DEFAULT_GA_ID = "G-6HWEE040EH";
 const DEFAULT_HOTJAR_ID = "6575522";
 const DEFAULT_HOTJAR_SV = "6";
-const DEFAULT_BOOKING_URL = "https://calendly.com/dentalstrategies/30min";
 const DEFAULT_CONTACT_EMAIL = "michael@dental-strategies.com";
+const DEFAULT_CONTACT_PHONE = "+16504362939";
+const DEFAULT_CONTACT_PHONE_DISPLAY = "(650) 436-2939";
 
 function readEnv(key: string, fallback: string) {
   const raw = process.env[key];
@@ -16,8 +17,11 @@ function readEnv(key: string, fallback: string) {
 }
 
 export const SITE_URL = readEnv("NEXT_PUBLIC_SITE_URL", DEFAULT_SITE_URL).replace(/\/+$/, "");
-export const BOOKING_URL = process.env.NEXT_PUBLIC_BOOKING_URL?.trim() || DEFAULT_BOOKING_URL;
+export const CONTACT_PATH = "/contact";
+export const CONTACT_URL = `${SITE_URL}${CONTACT_PATH}`;
 export const CONTACT_EMAIL = DEFAULT_CONTACT_EMAIL;
+export const CONTACT_PHONE = DEFAULT_CONTACT_PHONE;
+export const CONTACT_PHONE_DISPLAY = DEFAULT_CONTACT_PHONE_DISPLAY;
 
 export const siteRuntime = {
   gaId: readEnv("NEXT_PUBLIC_GA_ID", DEFAULT_GA_ID),
