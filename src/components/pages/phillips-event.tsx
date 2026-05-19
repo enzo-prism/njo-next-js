@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import { serviceInterestOptions } from "@/data/service-interest-options";
+import { CONTACT_EMAIL } from "@/config/site";
 
 const eventFormSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -93,7 +94,7 @@ export default function PhillipsEvent() {
     } catch (err) {
       console.error(err);
       setSubmitError(
-        "We couldn't send your information. Please try again or email dentalstrategies@gmail.com."
+        `We couldn't send your information. Please try again or email ${CONTACT_EMAIL}.`
       );
     }
   };

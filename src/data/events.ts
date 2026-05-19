@@ -1,3 +1,5 @@
+import { CONTACT_EMAIL } from "@/config/site";
+
 export type EventOccurrence = {
   dateLabel: string;
   timeLabel: string;
@@ -73,7 +75,7 @@ export const eventPrograms: EventProgram[] = [
     completedEventsLabel: "View 2 completed events",
     callToAction: {
       phone: "+16504362939",
-      email: "dentalstrategies@gmail.com",
+      email: CONTACT_EMAIL,
     },
   },
   {

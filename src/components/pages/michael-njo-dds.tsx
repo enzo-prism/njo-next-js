@@ -69,7 +69,10 @@ export default function MichaelNjoDDS() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button asChild>
-              <a href={`mailto:${contactDetails.email}`}>Send an email</a>
+              <a href={`mailto:${contactDetails.email}`}>
+                <Mail className="h-4 w-4" />
+                Send an email
+              </a>
             </Button>
             <Button asChild variant="outline">
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">

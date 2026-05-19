@@ -1,7 +1,8 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Mail } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CONTACT_EMAIL } from "@/config/site";
 
 export default function ContactSuccess() {
   return (
@@ -20,8 +21,12 @@ export default function ContactSuccess() {
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             <p>
-              If this is a high-priority transition timing or legal matter, you can still email directly at
-              dentalstrategies@gmail.com for urgent follow-up.
+              If this is a high-priority transition timing or legal matter, you can still email directly at{" "}
+              <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-1.5 font-medium text-foreground hover:underline">
+                <Mail className="h-3.5 w-3.5" />
+                {CONTACT_EMAIL}
+              </a>{" "}
+              for urgent follow-up.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Button asChild className="sm:w-fit">

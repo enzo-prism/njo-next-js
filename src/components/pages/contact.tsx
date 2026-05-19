@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceInterestOptions } from "@/data/service-interest-options";
-import { BOOKING_URL } from "@/config/site";
+import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -75,7 +75,7 @@ export default function Contact() {
       router.push("/contact/success");
     } catch (err) {
       console.error(err);
-      setSubmitError("We couldn't send your message. Please try again or email dentalstrategies@gmail.com.");
+      setSubmitError(`We couldn't send your message. Please try again or email ${CONTACT_EMAIL}.`);
     }
   };
 

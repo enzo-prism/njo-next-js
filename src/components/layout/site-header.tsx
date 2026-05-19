@@ -1,11 +1,11 @@
 "use client";
 
-import { CalendarCheck2, Menu, PhoneCall } from "lucide-react";
+import { CalendarCheck2, Mail, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { BOOKING_URL } from "@/config/site";
+import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -71,12 +71,12 @@ export default function SiteHeader() {
 
         <div className="hidden items-center gap-2 md:flex">
           <a
-            href="mailto:dentalstrategies@gmail.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground lg:flex"
             aria-label="Email contact"
           >
-            <PhoneCall className="h-3.5 w-3.5" />
-            dentalstrategies@gmail.com
+            <Mail className="h-3.5 w-3.5" />
+            {CONTACT_EMAIL}
           </a>
           <Button asChild size="sm">
             <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
@@ -121,7 +121,10 @@ export default function SiteHeader() {
                 <Link href="/contact">Send a message</Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <a href="mailto:dentalstrategies@gmail.com">Email: dentalstrategies@gmail.com</a>
+                <a href={`mailto:${CONTACT_EMAIL}`}>
+                  <Mail className="h-4 w-4" />
+                  Email: {CONTACT_EMAIL}
+                </a>
               </Button>
             </div>
           </SheetContent>

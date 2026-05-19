@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarCheck2, CheckCircle2, PlayCircle, Star, Users } from "lucide-react";
+import { ArrowRight, CalendarCheck2, CheckCircle2, Mail, PlayCircle, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { testimonialPages } from "@/data/testimonials";
@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
 import { gprResidencyPresentationImage, homeLeadershipImages } from "@/data/media";
-import { BOOKING_URL } from "@/config/site";
+import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -62,8 +62,9 @@ export default function Home() {
                   <p>
                     Need a trusted partner for launch, growth, acquisition, valuation, or sale support? We can help.
                   </p>
-                  <a href="mailto:dentalstrategies@gmail.com" className="block font-medium text-foreground hover:underline">
-                    dentalstrategies@gmail.com
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 font-medium text-foreground hover:underline">
+                    <Mail className="h-4 w-4" />
+                    {CONTACT_EMAIL}
                   </a>
                   <a href="tel:+16504362939" className="block font-medium text-foreground hover:underline">
                     (650) 436-2939

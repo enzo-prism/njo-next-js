@@ -1,7 +1,7 @@
-import { ArrowRight, CalendarCheck2 } from "lucide-react";
+import { ArrowRight, CalendarCheck2, Mail } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BOOKING_URL } from "@/config/site";
+import { BOOKING_URL, CONTACT_EMAIL } from "@/config/site";
 
 const footerLinks = [
   { href: "/michael-njo-dds", label: "Profile" },
@@ -46,8 +46,9 @@ export default function SiteFooter() {
         <div className="text-sm text-slate-300">
           <p>Questions?</p>
           <p className="mt-2">
-            <a href="mailto:dentalstrategies@gmail.com" className="hover:text-white">
-              dentalstrategies@gmail.com
+            <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 hover:text-white">
+              <Mail className="h-4 w-4" />
+              {CONTACT_EMAIL}
             </a>
           </p>
           <p className="mt-2">
