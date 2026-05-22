@@ -1,8 +1,12 @@
+export type TestimonialSource = "alignable";
+
 export type Testimonial = {
   quote: string;
   author: string;
   stars: number;
   publishedAt?: string;
+  organization?: string;
+  source?: TestimonialSource;
 };
 
 export type TestimonialPage = Testimonial & {
@@ -151,6 +155,7 @@ As a broker, Dr. Njo demonstrates professionalism and transparency throughout th
 What truly sets Dr. Njo apart is his commitment to relationships. He builds trust, communicates clearly, and genuinely cares about the long-term success of the dentists and practices he serves. I highly recommend Dr. Njo to any dental professional seeking expert consulting guidance or a trusted partner in buying or selling a practice.`,
     author: "Kevin Valle",
     stars: 5,
+    source: "alignable",
   },
   {
     quote: `I have worked with Dr. Michael Njo for nearly twenty years serving as my pediatric dental practice consultant. Just as importantly, he has been a trusted mentor and close friend during this time. Michael sets himself apart as a consultant with the unique expertise he has in the field, his impeccable character, and the bold short- and long-term strategic vision he sees for his clients.
@@ -414,6 +419,57 @@ I firmly believe that without his guidance, the transition would have been far m
     quote: `We confidently recommend Dr. Michael Njo to our dental clients who are seeking thoughtful, results-driven coaching grounded in real-world ownership experience. Dr. Njo understands that a dental practice is both a clinical operation and a closely held business. His coaching helps dentists make smarter operational and strategic decisions that improve profitability, strengthen leadership, and build long-term practice value. What sets Dr. Njo apart ishis ability to meet clients where they are. From associates preparing for ownership to established practice owners planning for growth or transition, his guidance is clear, disciplined, and aligned with each doctor’s goals. For dentists who want to run stronger practices and create meaningful long-term value, Dr. Njo is a trusted and highly effective advisor.`,
     author: "The Phillips Group",
     stars: 5,
+    organization: "The Phillips Group",
+    source: "alignable",
+  },
+  {
+    quote: `Michael is one of the most knowledgeable, well-rounded, and integrous Consultants in the…`,
+    author: "Mary Lynn Wheaton",
+    organization: "MLW Customized Consulting",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `I highly recommend Dr. Njo for dental consulting services. He is bright and frank and his…`,
+    author: "Parisa Shahi",
+    organization: "San Mateo Prosthodontics",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `I recommend Dental Strategies. Michael was very insightful and helpful in a recent transaction.`,
+    author: "Michael Kowalski",
+    organization: "Michael Kowalski, D.D.S., J.D., A.P.C.",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `Works in a timely fashion. Clients appreciate his knowledge of dental practices.`,
+    author: "Linda Brown",
+    organization: "LDM Commercial",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `Highly recommend Michael's services. His expertise and superb service are unmatched.`,
+    author: "Osvaldo “Ozzie” Paz",
+    organization: "U.S. Bank",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `Highly recommend Michael for all things related to your dental practice's growth and success!`,
+    author: "Kristen Maude",
+    organization: "Gargle - Dental Marketing",
+    stars: 5,
+    source: "alignable",
+  },
+  {
+    quote: `I highly recommend Dr. Njo and his great team.`,
+    author: "David Alpan, DDS, MSD, Ltd.",
+    organization: "Alpan Orthodontics",
+    stars: 5,
+    source: "alignable",
   },
 ];
 
@@ -429,6 +485,8 @@ export const testimonialPages: TestimonialPage[] = (() => {
       author: entry.author,
       stars: entry.stars,
       publishedAt: entry.publishedAt,
+      organization: entry.organization,
+      source: entry.source,
     };
     const base = slugify(testimonial.author || "testimonial");
     const nextCount = (seen.get(base) || 0) + 1;

@@ -197,39 +197,41 @@ export default function MichaelNjoDDS() {
               </div>
             </Card>
 
-            <Card className="overflow-hidden">
-              <div className="grid gap-0 xl:grid-cols-[0.88fr_1.12fr]">
-                <div className="space-y-4 p-6 md:p-8">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-muted-foreground">Relationships, recognition, and leadership</p>
-                    <h2 className="text-2xl font-semibold">Trust that shows up in rooms where reputation matters</h2>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Dr. Njo&apos;s advisory work is not built on abstract positioning alone. It is reinforced by longstanding
-                    relationships with peers, collaborators, and healthcare leaders who continue to invite him into conversations
-                    about growth, transitions, and professional stewardship.
-                  </p>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    These moments are not presented as lifestyle filler. They show the caliber of network, trust, and industry
-                    presence that surrounds Michael&apos;s work when clients are looking for judgment as much as technical guidance.
-                  </p>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-lg border border-border p-3">
-                      <p className="text-sm font-semibold">Peer trust</p>
-                      <p className="mt-1 text-sm text-muted-foreground">Relationships that outlast single deals and one-time projects.</p>
+            {profileRelationshipImages.length > 0 ? (
+              <Card className="overflow-hidden">
+                <div className="grid gap-0 xl:grid-cols-[0.88fr_1.12fr]">
+                  <div className="space-y-4 p-6 md:p-8">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-muted-foreground">Relationships, recognition, and leadership</p>
+                      <h2 className="text-2xl font-semibold">Trust that shows up in rooms where reputation matters</h2>
                     </div>
-                    <div className="rounded-lg border border-border p-3">
-                      <p className="text-sm font-semibold">Visible credibility</p>
-                      <p className="mt-1 text-sm text-muted-foreground">Professional settings where reputation and discretion matter.</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Dr. Njo&apos;s advisory work is not built on abstract positioning alone. It is reinforced by longstanding
+                      relationships with peers, collaborators, and healthcare leaders who continue to invite him into conversations
+                      about growth, transitions, and professional stewardship.
+                    </p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      These moments are not presented as lifestyle filler. They show the caliber of network, trust, and industry
+                      presence that surrounds Michael&apos;s work when clients are looking for judgment as much as technical guidance.
+                    </p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-lg border border-border p-3">
+                        <p className="text-sm font-semibold">Peer trust</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Relationships that outlast single deals and one-time projects.</p>
+                      </div>
+                      <div className="rounded-lg border border-border p-3">
+                        <p className="text-sm font-semibold">Visible credibility</p>
+                        <p className="mt-1 text-sm text-muted-foreground">Professional settings where reputation and discretion matter.</p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="bg-slate-100/70 p-4 md:p-6">
-                  <EditorialMosaic assets={profileRelationshipImages} captionMode="below" />
+                  <div className="bg-slate-100/70 p-4 md:p-6">
+                    <EditorialMosaic assets={profileRelationshipImages} captionMode="below" />
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            ) : null}
 
             <Card>
               <CardHeader>
@@ -312,29 +314,31 @@ export default function MichaelNjoDDS() {
               </CardHeader>
             </Card>
 
-            <Card className="overflow-hidden">
-              <div className="grid gap-0 xl:grid-cols-[0.86fr_1.14fr]">
-                <div className="space-y-4 p-6 md:p-8">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-muted-foreground">Speaking proof</p>
-                    <h2 className="text-2xl font-semibold">Educational events that keep transition strategy practical</h2>
+            {profileNewsImages.length > 0 ? (
+              <Card className="overflow-hidden">
+                <div className="grid gap-0 xl:grid-cols-[0.86fr_1.14fr]">
+                  <div className="space-y-4 p-6 md:p-8">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-muted-foreground">Speaking proof</p>
+                      <h2 className="text-2xl font-semibold">Educational events that keep transition strategy practical</h2>
+                    </div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Dr. Njo&apos;s event work spans society presentations, small-group seminars, and transition-focused educational
+                      programming. These materials show the public-facing side of the same advisory work clients hire him for
+                      privately.
+                    </p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      The emphasis stays practical: helping dentists understand ownership timing, deal structure, practice value, and
+                      the people-side realities that sit underneath every transition.
+                    </p>
                   </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    Dr. Njo&apos;s event work spans society presentations, small-group seminars, and transition-focused educational
-                    programming. These materials show the public-facing side of the same advisory work clients hire him for
-                    privately.
-                  </p>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    The emphasis stays practical: helping dentists understand ownership timing, deal structure, practice value, and
-                    the people-side realities that sit underneath every transition.
-                  </p>
-                </div>
 
-                <div className="bg-slate-100/70 p-4 md:p-6">
-                  <EditorialMosaic assets={profileNewsImages} captionMode="below" />
+                  <div className="bg-slate-100/70 p-4 md:p-6">
+                    <EditorialMosaic assets={profileNewsImages} captionMode="below" />
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            ) : null}
 
             {eventPrograms.map((program) => (
               <Card key={program.slug}>

@@ -1,15 +1,70 @@
-import { ArrowRight, CheckCircle2, Mail, MessageSquareText, PlayCircle, Star, Users } from "lucide-react";
+import { ArrowRight, Mail, MessageSquareText, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import dinnerStrategyGroup from "@/assets/media/dinner-strategy-group.jpg";
+import handbookCover from "@/assets/media/handbook-cover.jpg";
+import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
 import { testimonialPages } from "@/data/testimonials";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { HeroSlideshow, type HeroSlide } from "@/components/media/hero-slideshow";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqItems, bookReviews } from "@/seo/structured-data";
-import { gprResidencyPresentationImage, homeLeadershipImages } from "@/data/media";
+import { dugoniCollaborationImage, gprResidencyPresentationImage } from "@/data/media";
 import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
+
+const heroSlides: HeroSlide[] = [
+  {
+    id: "office-strategy",
+    src: officeStrategyGroup,
+    alt: "Dr. Michael Njo with healthcare and dental leaders in an office strategy setting.",
+    eyebrow: "Strategy in the room",
+    caption: "Cross-functional strategy conversations connecting ownership, leadership, and operational clarity.",
+    objectPosition: "center center",
+  },
+  {
+    id: "residency-teaching",
+    src: gprResidencyPresentationImage.src,
+    alt: gprResidencyPresentationImage.alt,
+    eyebrow: "Teaching the next generation",
+    caption: "Presenting to General Practice Residents holding copies of the Dental Practice Transitions Handbook.",
+    objectPosition: "center center",
+  },
+  {
+    id: "handbook-author",
+    src: handbookCover,
+    alt: "Cover of Dental Practice Transitions Handbook by Michael A. Njo, DDS.",
+    eyebrow: "Published author",
+    caption: "Author of the Dental Practice Transitions Handbook — the practical playbook for buying, selling, and structuring transitions.",
+    objectPosition: "center center",
+  },
+  {
+    id: "university-collaboration",
+    src: dugoniCollaborationImage.src,
+    alt: dugoniCollaborationImage.alt,
+    eyebrow: "University collaboration",
+    caption: "Working closely with the University of the Pacific Arthur A. Dugoni School of Dentistry.",
+    objectPosition: "center top",
+  },
+  {
+    id: "peer-dinner",
+    src: dinnerStrategyGroup,
+    alt: "Dr. Michael Njo with peers at an evening strategy dinner.",
+    eyebrow: "Peer dinner conversations",
+    caption: "Decades of trusted peer relationships — the network behind every recommendation.",
+    objectPosition: "center center",
+  },
+  {
+    id: "leadership-retreat",
+    src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",
+    alt: "Leadership retreat with Dr. Njo and peers.",
+    eyebrow: "Leadership retreat",
+    caption: "On the ground with peers from across the profession — the leadership side of the consulting work.",
+    objectPosition: "center center",
+  },
+];
 
 const coreOrganizations = [
   "Dental Strategies",
@@ -19,8 +74,6 @@ const coreOrganizations = [
 ];
 
 export default function Home() {
-  const [leadershipFeatureImage, ...supportingLeadershipImages] = homeLeadershipImages;
-
   return (
     <>
       <div className="space-y-10">
@@ -28,26 +81,29 @@ export default function Home() {
         <section className="section-shell section-reveal">
           <p className="sr-only">Founder of Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute.</p>
           <Card className="overflow-hidden">
-            <div className="grid gap-0 md:grid-cols-[1.15fr_0.85fr]">
-              <div className="relative min-h-[260px] bg-gradient-to-b from-slate-100 to-white p-8 md:p-12">
-                <Image
-                  src="/dr-njo-headshot.webp"
-                  alt="Michael Njo, DDS - Professional headshot"
-                  width={383}
-                  height={460}
-                  className="mx-auto h-56 w-56 rounded-full object-cover object-center shadow-2xl"
-                  priority
-                />
-                <div className="mt-6 flex flex-wrap gap-2 justify-center md:justify-start">
-                  {coreOrganizations.map((org) => (
-                    <Badge key={org} variant="secondary">
-                      {org}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
+            <div className="grid gap-0 lg:grid-cols-[1.2fr_0.8fr]">
+              <HeroSlideshow slides={heroSlides} />
 
-              <div className="space-y-5 p-8 md:p-12">
+              <div className="flex flex-col gap-6 p-7 sm:p-10 md:p-12">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-border shadow-sm">
+                    <Image
+                      src="/dr-njo-headshot.webp"
+                      alt="Michael Njo, DDS - Professional headshot"
+                      fill
+                      sizes="64px"
+                      className="object-cover object-center"
+                      priority
+                    />
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                      Founder · Advisor · Educator
+                    </p>
+                    <p className="text-sm font-medium text-foreground">Michael Njo, DDS</p>
+                  </div>
+                </div>
+
                 <CardHeader className="px-0 pt-0">
                   <CardTitle className="text-3xl sm:text-4xl">Dr. Michael Njo</CardTitle>
                   <CardDescription className="max-w-xl">
@@ -55,10 +111,19 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
 
-                <div className="space-y-3 text-sm text-muted-foreground">
-                  <p>
-                    More than two decades of hands-on experience shaping sustainable, values-first healthcare practices.
-                  </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  More than two decades of hands-on experience shaping sustainable, values-first healthcare practices.
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {coreOrganizations.map((org) => (
+                    <Badge key={org} variant="secondary">
+                      {org}
+                    </Badge>
+                  ))}
+                </div>
+
+                <div className="space-y-2 text-sm text-muted-foreground">
                   <p>
                     Need a trusted partner for launch, growth, acquisition, valuation, or sale support? We can help.
                   </p>
@@ -87,129 +152,31 @@ export default function Home() {
           </Card>
         </section>
 
-        <section className="section-reveal section-stagger" aria-labelledby="board-meetings-title">
-          <Card className="overflow-hidden">
-            <div className="grid gap-0 xl:grid-cols-[0.92fr_1.08fr]">
-              <div className="space-y-4 p-8 md:p-10">
-                <p className="text-sm font-medium text-muted-foreground">Leadership, board service, and trusted peer counsel</p>
-                <h2 id="board-meetings-title" className="text-2xl font-semibold">
-                  Real rooms where transition strategy meets industry perspective
-                </h2>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  From structured boardroom sessions to smaller strategy dinners, Dr. Njo stays close to the kinds of conversations
-                  that shape ownership decisions, partnership dynamics, and the future direction of dentistry.
-                </p>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  That proximity matters. Clients get more than a consultant with operational know-how. They get perspective informed
-                  by live peer relationships, leadership discussions, and the practical realities facing healthcare owners right now.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild>
-                    <Link href={CONTACT_PATH}>
-                      <MessageSquareText className="h-4 w-4" />
-                      Contact Dr. Njo
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <Link href="/michael-njo-dds">See Full Profile</Link>
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid gap-3 bg-slate-100/70 p-4 md:p-6 lg:grid-cols-[1.18fr_0.82fr]">
-                {leadershipFeatureImage ? (
-                  <figure className="overflow-hidden rounded-[1.75rem] border border-border bg-background shadow-sm">
-                    <div className="relative aspect-[4/3] xl:aspect-[5/4]">
-                      <Image
-                        src={leadershipFeatureImage.src}
-                        alt={leadershipFeatureImage.alt}
-                        fill
-                        sizes={leadershipFeatureImage.sizes}
-                        className="object-cover"
-                        style={{ objectPosition: leadershipFeatureImage.objectPosition }}
-                        priority
-                      />
-                    </div>
-                    <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-                      {leadershipFeatureImage.caption}
-                    </figcaption>
-                  </figure>
-                ) : null}
-
-                <div className="grid gap-3">
-                  {supportingLeadershipImages.map((image) => (
-                    <figure
-                      key={image.id}
-                      className="overflow-hidden rounded-[1.75rem] border border-border bg-background shadow-sm"
-                    >
-                      <div className="relative aspect-[4/3]">
-                        <Image
-                          src={image.src}
-                          alt={image.alt}
-                          fill
-                          sizes={image.sizes}
-                          className="object-cover"
-                          style={{ objectPosition: image.objectPosition }}
-                        />
-                      </div>
-                      <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-                        {image.caption}
-                      </figcaption>
-                    </figure>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card>
-        </section>
-
         <section className="space-y-4 section-reveal section-stagger">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between gap-2">
-                  Featured Conversation
-                  <PlayCircle className="h-4 w-4 text-blue-600" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-sm text-muted-foreground">
-                  Follow Dr. Njo’s transition journey and the practical framework used across dental and healthcare ownership
-                  decisions.
-                </p>
-                <Button asChild>
-                  <Link href="/dr-michael-njo-interview" className="inline-flex items-center gap-2">
-                    <PlayCircle className="h-4 w-4" />
-                    Watch interview
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm text-muted-foreground">Client outcomes</p>
+              <h2 className="text-2xl font-semibold">Testimonials ({testimonialPages.length})</h2>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/testimonials" className="inline-flex items-center gap-2">
+                View full archive
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between gap-2">
-                  What you can expect
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <ArrowRight className="mt-0.5 h-4 w-4 text-foreground" />
-                    Strategic transitions that protect patient care and team continuity.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <ArrowRight className="mt-0.5 h-4 w-4 text-foreground" />
-                    Leadership coaching for long-term growth and operations.
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <ArrowRight className="mt-0.5 h-4 w-4 text-foreground" />
-                    Personalized advisory from launch planning through execution.
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {testimonialPages.slice(0, 6).map((testimonial) => (
+              <TestimonialListCard key={testimonial.slug} testimonial={testimonial} />
+            ))}
+          </div>
+
+          <div className="rounded-3xl border border-border bg-gradient-to-r from-slate-100 via-transparent to-transparent p-6 text-center">
+            <p className="text-lg font-semibold">Trusted by dentists and healthcare leaders.</p>
+            <p className="text-sm text-muted-foreground">
+              Read more full stories in the testimonials section to see what has worked in real transitions.
+            </p>
           </div>
         </section>
 
@@ -284,50 +251,64 @@ export default function Home() {
           </Card>
         </section>
 
-        <section className="space-y-4 section-reveal section-stagger">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Client outcomes</p>
-              <h2 className="text-2xl font-semibold">Testimonials ({testimonialPages.length})</h2>
-            </div>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/testimonials" className="inline-flex items-center gap-2">
-                View full archive
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {testimonialPages.slice(0, 6).map((testimonial) => (
-              <TestimonialListCard key={testimonial.slug} testimonial={testimonial} />
-            ))}
-          </div>
-
-          <div className="rounded-3xl border border-border bg-gradient-to-r from-slate-100 via-transparent to-transparent p-6 text-center">
-            <p className="text-lg font-semibold">Trusted by dentists and healthcare leaders.</p>
-            <p className="text-sm text-muted-foreground">
-              Read more full stories in the testimonials section to see what has worked in real transitions.
-            </p>
-          </div>
-        </section>
-
         <section className="grid gap-4 md:grid-cols-2 section-reveal section-stagger">
           <Card>
-            <CardHeader>
-              <CardTitle>Latest Client Reviews</CardTitle>
+            <CardHeader className="space-y-1">
+              <CardTitle>Book Reviews</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Independent reviews of <em>Dental Practice Transitions Handbook</em>.
+              </p>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {bookReviews.slice(0, 2).map((review) => (
-                <article
-                  key={`${review.author}-${review.datePublished}`}
-                  className="rounded-lg border border-border bg-background px-4 py-3"
-                >
-                  <p className="text-sm text-muted-foreground">{review.title}</p>
-                  <h3 className="mt-1 text-sm font-medium">{review.author}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{review.body}</p>
-                </article>
-              ))}
+            <CardContent className="pt-0">
+              <Accordion type="single" collapsible className="w-full">
+                {bookReviews.slice(0, 2).map((review, index) => (
+                  <AccordionItem
+                    key={`${review.author}-${review.datePublished}`}
+                    value={`book-review-${index}`}
+                    className="border-b last:border-b-0"
+                  >
+                    <AccordionTrigger className="py-4 hover:no-underline">
+                      <div className="flex flex-1 flex-col items-start gap-1.5 pr-3 text-left">
+                        <div
+                          className="flex items-center gap-1 text-amber-500"
+                          aria-label={`${review.rating} out of 5 stars`}
+                        >
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-3.5 w-3.5 ${
+                                i < review.rating ? "fill-current" : "text-slate-300"
+                              }`}
+                              aria-hidden="true"
+                            />
+                          ))}
+                        </div>
+                        <p className="text-sm font-semibold text-foreground">{review.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {review.author}
+                          {review.context ? <span> · {review.context}</span> : null}
+                        </p>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+                        {review.body
+                          .split(/\n+/)
+                          .map((paragraph) => paragraph.trim())
+                          .filter(Boolean)
+                          .map((paragraph, i) => (
+                            <p key={i}>{paragraph}</p>
+                          ))}
+                        {review.meta ? (
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground/80">
+                            {review.meta}
+                          </p>
+                        ) : null}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </CardContent>
           </Card>
 
