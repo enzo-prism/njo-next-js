@@ -1,6 +1,7 @@
 import { ArrowRight, Mail, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 
 const footerLinks = [
@@ -22,13 +23,16 @@ export default function SiteFooter() {
           <p className="text-sm text-slate-300">
             Dental consulting, transitions, and leadership support for healthcare and dental practices across the U.S.
           </p>
-          <Button asChild size="sm" variant="secondary" className="mt-3">
-            <Link href={CONTACT_PATH} className="inline-flex items-center">
-              <MessageSquareText className="mr-2 h-4 w-4" />
-              Contact Dr. Njo
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+            <BookingButton size="sm" label="Book a call" />
+            <Button asChild size="sm" variant="secondary">
+              <Link href={CONTACT_PATH} className="inline-flex items-center">
+                <MessageSquareText className="mr-2 h-4 w-4" />
+                Contact Dr. Njo
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         <nav aria-label="Footer" className="grid gap-2 sm:grid-cols-2">

@@ -44,7 +44,13 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
     - Hotjar bootstrap script
 - `src/config/site.ts`
   - Canonical site URL and runtime analytics IDs
+  - `BOOKING_URL`: single source of truth for the general Calendly intro-call link
+  - `DSO_PRICING_BOOKING_URL`: single source of truth for the DSO pricing-call link
   - Environment variable parsing trims whitespace, which is intentional
+- `src/components/booking-button.tsx`
+  - Reusable primary "Book a call" CTA used site-wide; opens `BOOKING_URL` (or a passed `href`) in a new tab
+- `src/components/dso-pricing-callout.tsx`
+  - Scoped DSO pricing CTA card (home, contact, and `/michael-njo-dds` only); opens `DSO_PRICING_BOOKING_URL`
 - `next.config.ts`
   - canonical redirects
   - legacy redirects
@@ -133,6 +139,7 @@ Check these hotspots first when your work touches:
 
 ## Common Pitfalls
 
+- Do not hardcode Calendly booking links. Import `BOOKING_URL` / `DSO_PRICING_BOOKING_URL` and use `BookingButton`; `check:contact-ctas` blocks hardcoded booking links and missing booking CTAs in the header, footer, and contact page.
 - Do not add per-page analytics mounts.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
 - Do not add redirect-only or thank-you pages to the sitemap.

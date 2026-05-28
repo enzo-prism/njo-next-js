@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import {
   Card,
   CardContent,
@@ -116,12 +117,13 @@ export default function PhillipsEvent() {
             Dr. Njo has received your information and will follow up with you
             personally. Thank you for attending today&apos;s presentation.
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-col flex-wrap justify-center gap-3 sm:flex-row">
+            <BookingButton />
             <Button asChild variant="outline">
-              <Link href="/">Visit michaelnjodds.com</Link>
-            </Button>
-            <Button asChild>
               <Link href="/contact">Send a direct message</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link href="/">Visit michaelnjodds.com</Link>
             </Button>
           </div>
         </section>
@@ -134,13 +136,19 @@ export default function PhillipsEvent() {
       {/* Contact form */}
       <div className="mx-auto w-full max-w-3xl">
         <Card className="border border-border/70 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Connect with Dr. Njo</CardTitle>
-            <CardDescription>
-              Interested in learning more after today&apos;s presentation? Share
-              your details and Dr. Njo will follow up personally with tailored
-              next steps.
-            </CardDescription>
+          <CardHeader className="space-y-4">
+            <div className="space-y-1.5">
+              <CardTitle className="text-2xl">Connect with Dr. Njo</CardTitle>
+              <CardDescription>
+                Interested in learning more after today&apos;s presentation? Share
+                your details and Dr. Njo will follow up personally with tailored
+                next steps.
+              </CardDescription>
+            </div>
+            <div className="flex flex-col gap-2 rounded-lg border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">Prefer to talk live? Grab a time on Dr. Njo&apos;s calendar.</p>
+              <BookingButton size="sm" label="Book a 30-min call" />
+            </div>
           </CardHeader>
           <CardContent>
             <Form {...form}>

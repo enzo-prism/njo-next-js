@@ -11,6 +11,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
+import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { serviceInterestOptions } from "@/data/service-interest-options";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
@@ -90,10 +92,11 @@ export default function Contact() {
           <h1 className="text-3xl font-semibold md:text-4xl">Send a message to Dr. Michael Njo</h1>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground">
             Share a message directly with Dr. Michael Njo. Let him know about your practice, goals, or questions and he’ll
-            personally reach out with next steps. Use the form, email address, or phone number below.
+            personally reach out with next steps. Book a 30-minute call, or use the form, email address, or phone number below.
           </p>
-          <div className="flex flex-col justify-center gap-3 sm:flex-row">
-            <Button asChild>
+          <div className="flex flex-col flex-wrap justify-center gap-3 sm:flex-row">
+            <BookingButton />
+            <Button asChild variant="outline">
               <a href="#contact-form">
                 <MessageSquareText className="h-4 w-4" />
                 Use the contact form
@@ -113,6 +116,8 @@ export default function Contact() {
             </Button>
           </div>
         </section>
+
+        <DsoPricingCallout />
 
         <Card id="contact-form" className="scroll-mt-28 border border-border/70 shadow-sm">
           <CardHeader>

@@ -5,6 +5,7 @@ import { ArrowRight, Copy, Link2, MessageSquareText, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
@@ -111,7 +112,8 @@ export default function DrMichaelNjoInterview() {
                 to building a high-trust consulting practice.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button asChild>
+                <BookingButton />
+                <Button asChild variant="outline">
                   <a href="#interview-video" className="inline-flex items-center gap-2">
                     <Play className="h-4 w-4" />
                     Watch interview
@@ -256,8 +258,9 @@ export default function DrMichaelNjoInterview() {
           </CardContent>
         </Card>
 
-        <section className="text-center">
-          <Button asChild>
+        <section className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row">
+          <BookingButton label="Book a 30-min call with Dr. Njo" />
+          <Button asChild variant="outline">
             <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
               Contact Dr. Njo about your next step
               <ArrowRight className="h-4 w-4" />

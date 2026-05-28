@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -276,13 +277,14 @@ export default function SiteHeader() {
         <div className="hidden items-center gap-2 md:flex">
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground lg:flex"
+            className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground xl:flex"
             aria-label="Email contact"
           >
             <Mail className="h-3.5 w-3.5" />
             {CONTACT_EMAIL}
           </a>
-          <Button asChild size="sm">
+          <BookingButton label="Book a call" size="sm" />
+          <Button asChild size="sm" variant="outline">
             <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
               <MessageSquareText className="h-4 w-4" />
               Contact
@@ -354,11 +356,12 @@ export default function SiteHeader() {
               ))}
             </nav>
             <div className="mt-7 space-y-3">
-              <Button asChild className="w-full">
-                <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
-              </Button>
+              <BookingButton className="w-full" />
               <Button asChild variant="outline" className="w-full">
-                <Link href={CONTACT_PATH}>Use the contact form</Link>
+                <Link href={CONTACT_PATH}>
+                  <MessageSquareText className="h-4 w-4" />
+                  Contact Dr. Njo
+                </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <a href={`mailto:${CONTACT_EMAIL}`}>

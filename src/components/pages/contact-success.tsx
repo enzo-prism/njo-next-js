@@ -1,6 +1,7 @@
 import { CheckCircle2, Mail, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 
@@ -20,6 +21,9 @@ export default function ContactSuccess() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
+            <p className="text-center text-foreground">
+              Prefer to talk it through sooner? Book a 30-minute call and skip the wait.
+            </p>
             <p>
               If this is a high-priority transition timing or legal matter, you can still email directly at{" "}
               <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-1.5 font-medium text-foreground hover:underline">
@@ -33,14 +37,12 @@ export default function ContactSuccess() {
               </a>{" "}
               for urgent follow-up.
             </p>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Button asChild className="sm:w-fit">
+            <div className="flex flex-col flex-wrap gap-2 sm:flex-row">
+              <BookingButton />
+              <Button asChild variant="outline" className="sm:w-fit">
                 <Link href="/">Back to home</Link>
               </Button>
-              <Button asChild variant="outline" className="sm:w-fit">
-                <Link href="/contact">Send another message</Link>
-              </Button>
-              <Button asChild variant="secondary" className="sm:w-fit">
+              <Button asChild variant="ghost" className="sm:w-fit">
                 <Link href="/resources">Browse resources</Link>
               </Button>
             </div>

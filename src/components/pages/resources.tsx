@@ -2,6 +2,7 @@ import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
@@ -172,10 +173,11 @@ export default function ResourcesPage() {
       </section>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <Button asChild>
+        <BookingButton />
+        <Button asChild variant="outline">
           <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
         </Button>
-        <Button asChild variant="outline">
+        <Button asChild variant="ghost">
           <Link href="/michael-njo-dds">Back to profile</Link>
         </Button>
       </div>

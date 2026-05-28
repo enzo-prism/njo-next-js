@@ -1,6 +1,7 @@
 import { AlertTriangle, Home, Search } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function NotFound() {
@@ -27,6 +28,7 @@ export default function NotFound() {
                 Back to home
               </Link>
             </Button>
+            <BookingButton variant="outline" label="Book a call" />
             <Button asChild variant="outline">
               <Link href="/resources" className="inline-flex items-center gap-2">
                 <Search className="h-4 w-4" />

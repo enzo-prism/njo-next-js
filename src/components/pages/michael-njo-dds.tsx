@@ -23,6 +23,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { EditorialMosaic } from "@/components/media/editorial-mosaic";
+import { BookingButton } from "@/components/booking-button";
+import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { CONTACT_PATH } from "@/config/site";
 
 export default function MichaelNjoDDS() {
@@ -68,17 +70,18 @@ export default function MichaelNjoDDS() {
             healthcare owners through ownership, growth, and transitions.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Button asChild>
-              <a href={`mailto:${contactDetails.email}`}>
-                <Mail className="h-4 w-4" />
-                Send an email
-              </a>
-            </Button>
+            <BookingButton />
             <Button asChild variant="outline">
               <Link href={CONTACT_PATH}>
                 <MessageSquareQuote className="h-4 w-4" />
                 Contact Dr. Njo
               </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <a href={`mailto:${contactDetails.email}`}>
+                <Mail className="h-4 w-4" />
+                Send an email
+              </a>
             </Button>
           </div>
         </section>
@@ -144,6 +147,8 @@ export default function MichaelNjoDDS() {
                 ))}
               </CardContent>
             </Card>
+
+            <DsoPricingCallout />
 
             <Card className="overflow-hidden">
               <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
@@ -434,12 +439,15 @@ export default function MichaelNjoDDS() {
                   <p className="text-sm text-muted-foreground">Media & Speaking</p>
                   <p className="mt-1">Dr. Njo is frequently asked to provide transition guidance for dental professionals.</p>
                   <Separator className="my-3" />
-                  <Button asChild>
-                    <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
-                      <MessageSquareQuote className="h-4 w-4" />
-                      Contact Dr. Njo
-                    </Link>
-                  </Button>
+                  <div className="flex flex-wrap gap-3">
+                    <BookingButton />
+                    <Button asChild variant="outline">
+                      <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+                        <MessageSquareQuote className="h-4 w-4" />
+                        Contact Dr. Njo
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

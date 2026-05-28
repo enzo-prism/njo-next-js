@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CONTACT_PATH } from "@/config/site";
@@ -137,14 +138,15 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
                 conversation.
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild>
+            <CardContent className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <BookingButton />
+              <Button asChild variant="outline">
                 <Link href={CONTACT_PATH}>
                   Contact Dr. Njo
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="outline">
+              <Button asChild variant="ghost">
                 <Link href="/testimonials">See how other dentists navigated change</Link>
               </Button>
             </CardContent>

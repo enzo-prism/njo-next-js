@@ -7,6 +7,8 @@ import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
 import { testimonialPages } from "@/data/testimonials";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { HeroSlideshow, type HeroSlide } from "@/components/media/hero-slideshow";
+import { BookingButton } from "@/components/booking-button";
+import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -137,13 +139,14 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  <Button asChild>
+                  <BookingButton />
+                  <Button asChild variant="outline">
                     <Link href={CONTACT_PATH}>
                       <MessageSquareText className="h-4 w-4" />
                       Contact Dr. Njo
                     </Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="ghost">
                     <Link href="/michael-njo-dds">Read Full Profile</Link>
                   </Button>
                 </div>
@@ -178,6 +181,10 @@ export default function Home() {
               Read more full stories in the testimonials section to see what has worked in real transitions.
             </p>
           </div>
+        </section>
+
+        <section className="section-reveal section-stagger">
+          <DsoPricingCallout />
         </section>
 
         <section className="section-reveal section-stagger" aria-labelledby="residency-impact-title">
@@ -329,7 +336,8 @@ export default function Home() {
                 <p>Learn from direct client experiences and transition stories across dentistry and healthcare.</p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <Button asChild>
+                <BookingButton />
+                <Button asChild variant="outline">
                   <Link href={CONTACT_PATH}>
                     <MessageSquareText className="h-4 w-4" />
                     Contact Dr. Njo
