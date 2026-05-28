@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import {
   Card,
   CardContent,
@@ -29,6 +30,7 @@ import { serviceInterestOptions } from "@/data/service-interest-options";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
+import { Container } from "@/components/layout/container";
 
 const eventFormSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -104,7 +106,7 @@ export default function PhillipsEvent() {
 
   if (submitted) {
     return (
-      <div className="space-y-8">
+      <Container className="space-y-8 py-10 sm:py-14">
         <section className="mx-auto max-w-2xl space-y-6 text-center py-16">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
             <CheckCircle2 className="h-8 w-8 text-emerald-600" />
@@ -116,31 +118,38 @@ export default function PhillipsEvent() {
             Dr. Njo has received your information and will follow up with you
             personally. Thank you for attending today&apos;s presentation.
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-col flex-wrap justify-center gap-3 sm:flex-row">
+            <BookingButton />
             <Button asChild variant="outline">
-              <Link href="/">Visit michaelnjodds.com</Link>
-            </Button>
-            <Button asChild>
               <Link href="/contact">Send a direct message</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link href="/">Visit michaelnjodds.com</Link>
             </Button>
           </div>
         </section>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       {/* Contact form */}
       <div className="mx-auto w-full max-w-3xl">
         <Card className="border border-border/70 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Connect with Dr. Njo</CardTitle>
-            <CardDescription>
-              Interested in learning more after today&apos;s presentation? Share
-              your details and Dr. Njo will follow up personally with tailored
-              next steps.
-            </CardDescription>
+          <CardHeader className="space-y-4">
+            <div className="space-y-1.5">
+              <CardTitle className="text-2xl">Connect with Dr. Njo</CardTitle>
+              <CardDescription>
+                Interested in learning more after today&apos;s presentation? Share
+                your details and Dr. Njo will follow up personally with tailored
+                next steps.
+              </CardDescription>
+            </div>
+            <div className="flex flex-col gap-2 rounded-lg border border-border bg-muted/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">Prefer to talk live? Grab a time on Dr. Njo&apos;s calendar.</p>
+              <BookingButton size="sm" label="Book a 30-min call" />
+            </div>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -320,6 +329,6 @@ export default function PhillipsEvent() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </Container>
   );
 }

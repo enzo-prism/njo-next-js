@@ -23,6 +23,15 @@ export const CONTACT_EMAIL = DEFAULT_CONTACT_EMAIL;
 export const CONTACT_PHONE = DEFAULT_CONTACT_PHONE;
 export const CONTACT_PHONE_DISPLAY = DEFAULT_CONTACT_PHONE_DISPLAY;
 
+// Single source of truth for the Calendly scheduling links. Every booking CTA
+// must reference these constants rather than hardcoding a URL (enforced by
+// scripts/check-contact-ctas.ts).
+// - BOOKING_URL: general 30-minute intro call (primary CTA site-wide).
+// - DSO_PRICING_BOOKING_URL: focused DSO pricing discussion call.
+export const BOOKING_URL = "https://calendly.com/michael-dental-strategies/30min";
+export const DSO_PRICING_BOOKING_URL =
+  "https://calendly.com/michael-dental-strategies/dso-pricing-dental-strategies-intro-call";
+
 export const siteRuntime = {
   gaId: readEnv("NEXT_PUBLIC_GA_ID", DEFAULT_GA_ID),
   hotjarId: readEnv("NEXT_PUBLIC_HOTJAR_ID", DEFAULT_HOTJAR_ID),

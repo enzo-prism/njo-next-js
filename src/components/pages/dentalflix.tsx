@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { ArrowRight, BadgePercent, CalendarCheck2, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CONTACT_PATH } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 export default function DentalflixPage() {
   const redemptionPhrase = "I heard about Michael from the DentalFlix event.";
   const claimSteps = [
-    "Contact Dr. Njo through the contact page, email address, or phone number.",
+    "Book a 30-minute call with Dr. Njo, or reach out through the contact page, email, or phone.",
     `Mention this exact line: "${redemptionPhrase}"`,
     "Your $500 DentalFlix discount is applied to consultations and advisory services.",
   ];
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       <section>
         <Card>
           <CardHeader>
@@ -56,12 +58,15 @@ export default function DentalflixPage() {
                 <p className="text-sm text-muted-foreground">{step}</p>
               </div>
             ))}
-            <Button asChild className="mt-2">
-              <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
-                Start this process now
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <BookingButton label="Book your call" />
+              <Button asChild variant="outline">
+                <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+                  Use the contact page
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -96,18 +101,19 @@ export default function DentalflixPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap justify-center gap-3">
-            <Button asChild className="inline-flex items-center gap-2">
+            <BookingButton />
+            <Button asChild variant="outline" className="inline-flex items-center gap-2">
               <Link href={CONTACT_PATH}>
                 <BadgePercent className="h-4 w-4" />
                 Contact Dr. Njo
               </Link>
             </Button>
-            <Button asChild variant="outline">
+            <Button asChild variant="ghost">
               <Link href="/michael-njo-dds">Learn more about Dr. Njo</Link>
             </Button>
           </CardContent>
         </Card>
       </section>
-    </div>
+    </Container>
   );
 }

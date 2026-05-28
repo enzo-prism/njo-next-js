@@ -1,11 +1,13 @@
 import { AlertTriangle, Home, Search } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/layout/container";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-[55vh] items-center">
+    <Container className="flex min-h-[55vh] items-center py-12">
       <Card className="mx-auto w-full max-w-xl border border-border/80">
         <CardHeader className="text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-rose-100 text-rose-600">
@@ -27,6 +29,7 @@ export default function NotFound() {
                 Back to home
               </Link>
             </Button>
+            <BookingButton variant="outline" label="Book a call" />
             <Button asChild variant="outline">
               <Link href="/resources" className="inline-flex items-center gap-2">
                 <Search className="h-4 w-4" />
@@ -39,6 +42,6 @@ export default function NotFound() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </Container>
   );
 }

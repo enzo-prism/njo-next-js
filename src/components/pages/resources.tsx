@@ -2,19 +2,21 @@ import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
 import { resourceBookFeatureImage, resourceBookInsetImage } from "@/data/media";
 import { resources, bookReviews } from "@/seo/structured-data";
 import { CONTACT_PATH } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 export default function ResourcesPage() {
   const book = resources.find((resource) => resource.type === "Book");
   const institute = resources.find((resource) => resource.type === "EducationalOrganization");
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       <section className="space-y-3 text-center">
         <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Resources</p>
         <h1 className="text-4xl font-semibold">Education &amp; growth resources</h1>
@@ -172,13 +174,14 @@ export default function ResourcesPage() {
       </section>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <Button asChild>
+        <BookingButton />
+        <Button asChild variant="outline">
           <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
         </Button>
-        <Button asChild variant="outline">
+        <Button asChild variant="ghost">
           <Link href="/michael-njo-dds">Back to profile</Link>
         </Button>
       </div>
-    </div>
+    </Container>
   );
 }

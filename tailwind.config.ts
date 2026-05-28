@@ -7,6 +7,10 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx,mdx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-manrope)", "Avenir Next", "Segoe UI", "sans-serif"],
+        serif: ["var(--font-merriweather)", "Georgia", "serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -15,6 +19,12 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        ink: "var(--ink)",
+        surface: "var(--surface)",
+        brand: {
+          DEFAULT: "var(--brand)",
+          foreground: "var(--brand-foreground)",
+        },
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",

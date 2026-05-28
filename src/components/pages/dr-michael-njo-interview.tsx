@@ -5,10 +5,12 @@ import { ArrowRight, Copy, Link2, MessageSquareText, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
 import { CONTACT_PATH } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 const videoUrl = "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4";
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
@@ -92,9 +94,8 @@ export default function DrMichaelNjoInterview() {
   };
 
   return (
-    <>
-      <div className="space-y-10">
-        <h1 className="sr-only">Dr. Michael Njo Interview | Dental Practice Transitions &amp; Consulting</h1>
+    <Container className="space-y-10 py-10 sm:py-14">
+      <h1 className="sr-only">Dr. Michael Njo Interview | Dental Practice Transitions &amp; Consulting</h1>
         <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <Card>
             <CardHeader>
@@ -111,7 +112,8 @@ export default function DrMichaelNjoInterview() {
                 to building a high-trust consulting practice.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Button asChild>
+                <BookingButton />
+                <Button asChild variant="outline">
                   <a href="#interview-video" className="inline-flex items-center gap-2">
                     <Play className="h-4 w-4" />
                     Watch interview
@@ -256,15 +258,15 @@ export default function DrMichaelNjoInterview() {
           </CardContent>
         </Card>
 
-        <section className="text-center">
-          <Button asChild>
+        <section className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row">
+          <BookingButton label="Book a 30-min call with Dr. Njo" />
+          <Button asChild variant="outline">
             <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
               Contact Dr. Njo about your next step
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </section>
-      </div>
-    </>
+    </Container>
   );
 }

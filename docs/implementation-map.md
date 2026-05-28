@@ -252,6 +252,27 @@ These are generated code paths, not static files:
 
 If you add an indexable static route, update `STATIC_SITE_PATHS` so sitemap and checks stay aligned.
 
+## Primary CTAs (Contact and Booking)
+
+The site drives two main actions: booking a call and contacting Dr. Njo.
+
+- Booking is the lead (primary, filled) action site-wide. It is a `BookingButton`
+  (`src/components/booking-button.tsx`) that opens a Calendly scheduling link in a new tab. The
+  button defaults to the general intro call but accepts an `href` for other booking links.
+- Calendly URLs live only in `src/config/site.ts`. Every CTA imports a shared constant — never
+  hardcode the link. `check:contact-ctas` enforces this. Two links exist today:
+  - `BOOKING_URL`: general 30-minute intro call (default for `BookingButton`).
+  - `DSO_PRICING_BOOKING_URL`: focused DSO pricing discussion call.
+- The DSO pricing CTA is a dedicated `DsoPricingCallout` (`src/components/dso-pricing-callout.tsx`).
+  It is intentionally scoped to selling/valuation contexts — the home page, the contact page, and
+  the `/michael-njo-dds` overview — rather than placed site-wide like the intro-call button.
+- Contact (`/contact`) remains a first-class secondary (outline) action next to booking.
+- The 404 page keeps "Back to home" as its primary recovery action, with booking offered alongside.
+
+If you add a new page with CTAs, lead with `<BookingButton />` and place the contact action as an
+outline button next to it to stay consistent. Add `<DsoPricingCallout />` only where a DSO sale is
+contextually relevant.
+
 ## Forms And Payloads
 
 There are exactly two submission forms:
@@ -345,7 +366,7 @@ Future changes should preserve the single-mount model.
 - `check:forms`
   - validates that contact and event submissions still use the intended Formspree endpoints
 - `check:contact-ctas`
-  - validates that consultation CTAs route to `/contact` and do not reintroduce external booking URLs
+  - validates that consultation CTAs route to `/contact`, that the public email/phone stay aligned, that both Calendly links (`BOOKING_URL` and `DSO_PRICING_BOOKING_URL`) are pinned and referenced only through `src/config/site.ts` (never hardcoded elsewhere). Also asserts the header, footer, and contact page each surface the `BookingButton`.
 - `build`
   - catches App Router, prerender, and build-time failures
 - `check:route-head-snapshots`
