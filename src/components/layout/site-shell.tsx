@@ -8,11 +8,9 @@ type SiteShellProps = {
 
 export default function SiteShell({ children }: SiteShellProps) {
   return (
-    <div className="min-h-screen bg-slate-50/70 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 py-6 md:py-10 lg:py-12">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
       <SiteFooter />
     </div>
   );

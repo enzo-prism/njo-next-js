@@ -7,6 +7,7 @@ import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { CONTACT_PATH } from "@/config/site";
 import { type TestimonialPage, testimonialPages } from "@/data/testimonials";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Container } from "@/components/layout/container";
 
 type TestimonialDetailProps = {
   slug: string;
@@ -49,7 +50,7 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
 
   if (!testimonial) {
     return (
-      <div className="space-y-6">
+      <Container className="space-y-6 py-10 sm:py-14">
         <Card>
           <CardHeader>
             <CardTitle>Testimonial not found</CardTitle>
@@ -61,12 +62,12 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
             </Button>
           </CardContent>
         </Card>
-      </div>
+      </Container>
     );
   }
 
     return (
-      <div className="space-y-8">
+      <Container className="space-y-8 py-10 sm:py-14">
         <h1 className="sr-only">Testimonial from {testimonial.author}</h1>
         <Card>
         <CardHeader>
@@ -150,6 +151,6 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
           </Link>
         </Button>
       </div>
-    </div>
+    </Container>
   );
 }

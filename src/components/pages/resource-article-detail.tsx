@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CONTACT_PATH } from "@/config/site";
 import { type ResourceArticle, formatArticleDate } from "@/data/resource-articles";
+import { Container } from "@/components/layout/container";
 
 type ResourceArticleDetailPageProps = {
   article: ResourceArticle;
@@ -21,7 +22,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
   const publishedLabel = formatArticleDate(article.publishedAt);
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       <Card className="overflow-hidden border-border/80 bg-background">
         <CardHeader className="space-y-6">
           <Breadcrumb>
@@ -129,7 +130,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-blue-50 via-background to-background">
+          <Card className="overflow-hidden border-brand/20 bg-surface">
             <CardHeader className="space-y-3">
               <CardTitle className="text-2xl">Want a clearer answer for your own situation?</CardTitle>
               <CardDescription className="max-w-2xl text-base leading-relaxed">
@@ -211,6 +212,6 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
           </Card>
         </aside>
       </div>
-    </div>
+    </Container>
   );
 }

@@ -5,6 +5,7 @@ import { BookingButton } from "@/components/booking-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CONTACT_PATH } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 export default function DentalflixPage() {
   const redemptionPhrase = "I heard about Michael from the DentalFlix event.";
@@ -15,7 +16,7 @@ export default function DentalflixPage() {
   ];
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       <section>
         <Card>
           <CardHeader>
@@ -113,6 +114,6 @@ export default function DentalflixPage() {
           </CardContent>
         </Card>
       </section>
-    </div>
+    </Container>
   );
 }

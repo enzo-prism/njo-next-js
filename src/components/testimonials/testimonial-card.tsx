@@ -1,20 +1,20 @@
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight, Quote, Star } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import type { TestimonialPage, TestimonialSource } from "@/data/testimonials";
+import { cn } from "@/lib/utils";
 
 type TestimonialListCardProps = {
   testimonial: TestimonialPage;
   withLink?: boolean;
+  className?: string;
 };
 
 const Rating = ({ value, max = 5 }: { value: number; max?: number }) => (
-  <div className="flex items-center gap-1 text-amber-500" aria-label={`${value} out of ${max} stars`}>
+  <div className="flex items-center gap-0.5 text-amber-500" aria-label={`${value} out of ${max} stars`}>
     {Array.from({ length: max }).map((_, index) => (
       <Star
         key={index}
-        className={`h-4 w-4 ${index < value ? "fill-current" : "text-slate-300"}`}
+        className={cn("h-4 w-4", index < value ? "fill-current" : "text-slate-300")}
         aria-hidden="true"
       />
     ))}
@@ -33,30 +33,41 @@ export function SourceBadge({ source }: { source: TestimonialSource }) {
   );
 }
 
-export function TestimonialListCard({ testimonial, withLink = true }: TestimonialListCardProps) {
+export function TestimonialListCard({ testimonial, withLink = true, className }: TestimonialListCardProps) {
   return (
-    <Card className="h-full border border-border/60 bg-white/95 shadow-sm">
-      <CardContent className="flex h-full flex-col gap-4 p-6">
-        <div className="flex items-center justify-between gap-2">
-          <Rating value={testimonial.stars} />
-          {testimonial.source ? <SourceBadge source={testimonial.source} /> : null}
-        </div>
-        <p className="text-sm leading-relaxed text-muted-foreground">{testimonial.excerpt}</p>
-        <div className="mt-auto space-y-0.5">
-          <p className="text-sm font-medium text-foreground">{testimonial.author}</p>
-          {testimonial.organization ? (
-            <p className="text-xs text-muted-foreground">{testimonial.organization}</p>
-          ) : null}
-        </div>
-        {withLink ? (
-          <Button asChild variant="outline" size="sm" className="w-fit">
-            <Link href={`/testimonials/${testimonial.slug}`}>
-              Read full story
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
+    <figure
+      className={cn(
+        "group relative flex h-full break-inside-avoid flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md",
+        className,
+      )}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <Rating value={testimonial.stars} />
+        {testimonial.source ? <SourceBadge source={testimonial.source} /> : null}
+      </div>
+
+      <Quote className="h-6 w-6 text-brand/25" aria-hidden="true" />
+
+      <blockquote className="font-serif text-[15px] leading-relaxed text-foreground/90">
+        {testimonial.excerpt}
+      </blockquote>
+
+      <figcaption className="mt-auto space-y-0.5 border-t border-border/60 pt-4">
+        <p className="text-sm font-semibold text-foreground">{testimonial.author}</p>
+        {testimonial.organization ? (
+          <p className="text-xs text-muted-foreground">{testimonial.organization}</p>
         ) : null}
-      </CardContent>
-    </Card>
+      </figcaption>
+
+      {withLink ? (
+        <Link
+          href={`/testimonials/${testimonial.slug}`}
+          className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand/70"
+        >
+          Read full story
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      ) : null}
+    </figure>
   );
 }

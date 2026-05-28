@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
 import { CONTACT_PATH } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 const videoUrl = "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4";
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
@@ -93,9 +94,8 @@ export default function DrMichaelNjoInterview() {
   };
 
   return (
-    <>
-      <div className="space-y-10">
-        <h1 className="sr-only">Dr. Michael Njo Interview | Dental Practice Transitions &amp; Consulting</h1>
+    <Container className="space-y-10 py-10 sm:py-14">
+      <h1 className="sr-only">Dr. Michael Njo Interview | Dental Practice Transitions &amp; Consulting</h1>
         <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
           <Card>
             <CardHeader>
@@ -267,7 +267,6 @@ export default function DrMichaelNjoInterview() {
             </Link>
           </Button>
         </section>
-      </div>
-    </>
+    </Container>
   );
 }

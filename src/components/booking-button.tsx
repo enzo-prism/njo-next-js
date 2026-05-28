@@ -13,7 +13,7 @@ type BookingButtonProps = {
 
 export function BookingButton({
   href = BOOKING_URL,
-  label = "Book a 30-min call",
+  label = "Book a call",
   variant = "default",
   size,
   className,

@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
+import { Container } from "@/components/layout/container";
 
 export default function ContactSuccess() {
   return (
-    <>
+    <Container className="py-12">
       <div className="mx-auto flex min-h-[55vh] max-w-3xl items-center">
         <Card className="w-full border border-border/80 shadow-sm">
           <CardHeader className="text-center">
@@ -49,6 +50,6 @@ export default function ContactSuccess() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </Container>
   );
 }

@@ -30,6 +30,7 @@ import { serviceInterestOptions } from "@/data/service-interest-options";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
+import { Container } from "@/components/layout/container";
 
 const eventFormSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -105,7 +106,7 @@ export default function PhillipsEvent() {
 
   if (submitted) {
     return (
-      <div className="space-y-8">
+      <Container className="space-y-8 py-10 sm:py-14">
         <section className="mx-auto max-w-2xl space-y-6 text-center py-16">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
             <CheckCircle2 className="h-8 w-8 text-emerald-600" />
@@ -127,12 +128,12 @@ export default function PhillipsEvent() {
             </Button>
           </div>
         </section>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <Container className="space-y-8 py-10 sm:py-14">
       {/* Contact form */}
       <div className="mx-auto w-full max-w-3xl">
         <Card className="border border-border/70 shadow-sm">
@@ -328,6 +329,6 @@ export default function PhillipsEvent() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </Container>
   );
 }

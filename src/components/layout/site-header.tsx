@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { type KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
+import { Container } from "@/components/layout/container";
 import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -238,9 +239,9 @@ export default function SiteHeader() {
   const pathname = usePathname() || "/";
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border/80 bg-background/95 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <Link href="/" className="group flex items-center gap-2">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
+      <Container className="flex items-center justify-between gap-3 py-3">
+        <Link href="/" className="group flex items-center gap-2.5">
           <Image
             src="/favicon.svg"
             alt="Dr. Michael Njo logo"
@@ -251,8 +252,12 @@ export default function SiteHeader() {
             unoptimized
           />
           <span className="flex flex-col leading-tight">
-            <span className="font-semibold tracking-tight text-foreground">Dr. Michael Njo</span>
-            <span className="text-xs text-muted-foreground">Dental Strategies</span>
+            <span className="font-serif text-[15px] font-semibold tracking-tight text-foreground">
+              Dr. Michael Njo
+            </span>
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              Dental Strategies
+            </span>
           </span>
         </Link>
 
@@ -275,21 +280,13 @@ export default function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="hidden items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground xl:flex"
-            aria-label="Email contact"
-          >
-            <Mail className="h-3.5 w-3.5" />
-            {CONTACT_EMAIL}
-          </a>
-          <BookingButton label="Book a call" size="sm" />
-          <Button asChild size="sm" variant="outline">
+          <Button asChild size="sm" variant="ghost">
             <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
               <MessageSquareText className="h-4 w-4" />
               Contact
             </Link>
           </Button>
+          <BookingButton label="Book a call" size="sm" />
         </div>
 
         <Sheet>
@@ -378,7 +375,7 @@ export default function SiteHeader() {
             </div>
           </SheetContent>
         </Sheet>
-      </div>
+      </Container>
     </header>
   );
 }
