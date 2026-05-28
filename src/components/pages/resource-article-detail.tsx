@@ -76,7 +76,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
         </CardContent>
       </Card>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-8">
           <Card className="border-border/80 bg-background">
             <CardContent className="p-6 md:p-8">
