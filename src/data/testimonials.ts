@@ -44,6 +44,32 @@ const sortByNewest = (
 
 export const testimonials: Testimonial[] = [
   {
+    quote: `I was recommended to attend one of Dr. Michael Njo's transition courses through his educational company, Practice Transitions Institute. Although I am still more than five years away from selling my practice, I felt it would be wise to begin learning about what the future may hold. A close colleague of mine, who had successfully sold his practice, strongly encouraged me to attend the course.
+
+Wow — I learned an incredible amount.
+
+Dr. Njo packed a tremendous amount of valuable information into the program. The time flew by because he has a unique ability to make what could otherwise be very dry and technical material engaging, interesting, and highly practical.
+
+During the course, I also learned that Dr. Njo owns a practice management company called Dental Strategies. I had never heard of it before, likely because his business is built almost entirely through direct referrals and reputation.
+
+After attending the course, I decided I wanted to hire Dr. Njo as my practice management consultant, primarily to help prepare my practice for the next generation and position it for long-term success.
+
+Ironically, the very Monday after returning to my office, I received a letter from Delta Dental informing me that my office had been selected for an audit. At that moment, I truly felt like my world was crashing down. The audit request contained a long list of items they wanted reviewed and prepared. As I began researching and evaluating my systems, I quickly realized there were several areas that needed correction and that there were things I had unknowingly been doing incorrectly. As the saying goes, "You don't know what you don't know."
+
+When I spoke with Dr. Njo during our scheduled call that Monday, I shared the audit letter and my concerns about the areas Delta might challenge. With calm reassurance, professionalism, and experience, Dr. Njo immediately guided me through the implementation of the systems and processes we needed, while also educating me extensively on compliance protocols and best practices.
+
+When the Delta auditor arrived, we were fully prepared. Together, we successfully presented and defended our office systems and processes, and we passed the audit with flying colors.
+
+Based on the experiences and stories shared by many of my colleagues, I know this situation could have easily had a very different outcome had it not been for Dr. Njo's guidance and expertise.
+
+Dr. Njo and I have now worked together for several years, and I am excited to eventually transition and sell my practice with his support and leadership.
+
+Thank you, Dr. Njo, for always being there. Your guidance has been invaluable, and your calm, kind, and thoughtful approach in everything you do has made an enormous difference in both my practice and my professional life.`,
+    author: "Chris P",
+    stars: 5,
+    publishedAt: "2026-06-02",
+  },
+  {
     quote: `I started with Michael in 2018 and have had an outstanding experience! He brings a wealth of knowledge and a truly professional, friendly approach to my dental practice. His advice is not only practical but also easy to implement, and I've seen improvements in patient satisfaction and office efficiency. Most recently, Michael and his team helped facilitate a chart sale that was fair to both seller and buyer (myself). He expertly guided us through the process and continues to monitor our progress, ensuring a smooth and successful transfer of patients. I highly recommend Michael to any dental team looking to level up their game!`,
     author: "G. Allen Herrera, DDS",
     stars: 5,
@@ -500,3 +526,13 @@ export const testimonialPages: TestimonialPage[] = (() => {
     };
   });
 })();
+
+/**
+ * Most recent 5-star client review. `testimonialPages` is already sorted
+ * newest-first, so the first dated 5-star entry is the latest one. Used by the
+ * homepage hero to surface fresh social proof.
+ */
+export const getLatestFiveStarTestimonial = (): TestimonialPage | undefined =>
+  testimonialPages.find(
+    (testimonial) => testimonial.stars === 5 && Boolean(testimonial.publishedAt),
+  );

@@ -15,8 +15,9 @@ import Link from "next/link";
 import dinnerStrategyGroup from "@/assets/media/dinner-strategy-group.jpg";
 import handbookCover from "@/assets/media/handbook-cover.jpg";
 import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
-import { testimonialPages } from "@/data/testimonials";
+import { getLatestFiveStarTestimonial, testimonialPages } from "@/data/testimonials";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { LatestReviewCard } from "@/components/testimonials/latest-review-card";
 import { HeroSlideshow, type HeroSlide } from "@/components/media/hero-slideshow";
 import { BookingButton } from "@/components/booking-button";
 import { DsoPricingCallout } from "@/components/dso-pricing-callout";
@@ -114,7 +115,11 @@ const processSteps = [
 ];
 
 export default function Home() {
-  const featuredTestimonials = testimonialPages.slice(0, 3);
+  const latestReview = getLatestFiveStarTestimonial();
+  // Skip the hero's latest review so the same quote does not appear twice.
+  const featuredTestimonials = testimonialPages
+    .filter((testimonial) => testimonial.slug !== latestReview?.slug)
+    .slice(0, 3);
   const book = resources.find((resource) => resource.type === "Book");
   const shortReview = bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
 
@@ -160,6 +165,8 @@ export default function Home() {
               Author of the <span className="font-medium text-foreground">Dental Practice Transitions Handbook</span> ·
               University of the Pacific Dugoni faculty · Founder, Practice Transitions Institute
             </p>
+
+            {latestReview ? <LatestReviewCard testimonial={latestReview} /> : null}
           </div>
 
           <div className="overflow-hidden rounded-3xl border border-border/70 shadow-2xl shadow-ink/10">
