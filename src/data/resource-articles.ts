@@ -61,6 +61,171 @@ export function formatArticleDate(value: string) {
 
 export const resourceArticles: ResourceArticle[] = [
   {
+    slug: "questions-before-hiring-dental-consultant",
+    title: "The 7 Questions Every Dentist Should Ask Before Hiring a Dental Consultant",
+    metaTitle: "7 Questions to Ask Before Hiring a Dental Consultant | Dental Strategies",
+    description:
+      "Before hiring a dental consultant, ask these seven questions about experience, results, practice assessment, philosophy, accountability, and references.",
+    excerpt:
+      "Hiring a consultant can shape practice growth, profitability, leadership, team strength, and transition planning. These seven questions help dentists slow the decision down and choose an advisor with the right process, judgment, and fit.",
+    category: "Consulting due diligence",
+    publishedAt: "2026-06-09T00:00:00Z",
+    updatedAt: "2026-06-09T00:00:00Z",
+    readTimeMinutes: 6,
+    primaryKeyword: "hiring a dental consultant",
+    secondaryKeywords: [
+      "dental consultant",
+      "dental practice consultant",
+      "dental consulting questions",
+      "dental practice growth consultant",
+      "dental transition consultant",
+    ],
+    keyTakeaways: [
+      "Consulting fit depends on process, context, accountability, and judgment, not credentials alone.",
+      "Dentists should ask whether the consultant has worked with similar practices and goals.",
+      "Measurable results matter, but they should be grounded and specific rather than overpromised.",
+      "A strong consultant assesses the practice before prescribing solutions.",
+      "Doctors should know who will actually do the work and how communication will be handled.",
+      "References help reveal how the consultant supports implementation after the sales conversation.",
+    ],
+    intro: [
+      "Hiring a consultant is one of the most important business decisions a dentist can make.",
+      "The right advisor can help a practice grow, improve profitability, strengthen leadership, build a stronger team, or prepare for a transition. The wrong fit can cost time, money, and momentum.",
+      "Before you sign an agreement, slow the process down and ask better questions. A strong consultant should be able to explain how they work, what they measure, who they have helped, and how they will adapt their guidance to your practice instead of forcing you into a generic system.",
+      "Here are seven questions every dentist should ask before hiring a dental consultant.",
+    ],
+    sections: [
+      {
+        id: "worked-with-practices-like-mine",
+        title: "1. Have you worked with practices like mine?",
+        paragraphs: [
+          "Dental practices are not all the same. A solo general practice, a multi-location group, a cosmetic office, a specialty practice, and a transition-stage practice all have different pressures.",
+          "Ask whether the consultant has experience with practices that look like yours in size, specialty, market, team structure, and goals. If you are preparing for a sale, bringing on an associate, improving case acceptance, or rebuilding systems, you want someone who understands that specific situation.",
+          "Relevant experience matters because the best recommendations are grounded in context.",
+        ],
+      },
+      {
+        id: "measurable-results",
+        title: "2. What measurable results have you helped clients achieve?",
+        paragraphs: [
+          "Good consulting should lead to visible progress. That progress may show up as increased collections, improved profitability, stronger scheduling systems, better case acceptance, cleaner leadership rhythms, a more accountable team, or a smoother transition process.",
+          "Ask for examples of measurable results. The consultant should be able to talk about outcomes without overpromising. Look for specific patterns, not vague claims.",
+          "The goal is not to find a magic formula. The goal is to understand whether the consultant can turn advice into practical results.",
+        ],
+        bullets: [
+          "What changed for the practice?",
+          "How long did it take?",
+          "What did the doctor and team have to do?",
+          "How did you measure success?",
+        ],
+      },
+      {
+        id: "assessment-before-recommendations",
+        title: "3. How do you assess a practice before making recommendations?",
+        paragraphs: [
+          "Be cautious with anyone who gives answers before understanding the practice.",
+          "A strong consultant should start with assessment. That may include reviewing financials, production, collections, scheduling, patient flow, treatment acceptance, team structure, leadership habits, marketing, and the doctor's goals.",
+          "The assessment process tells you how carefully the consultant listens. It also shows whether their recommendations will be based on your actual practice or on a preset playbook.",
+          "Before hiring someone, ask what they need to learn first and how they turn that information into a plan.",
+        ],
+      },
+      {
+        id: "consulting-philosophy",
+        title: "4. What is your consulting philosophy?",
+        paragraphs: [
+          "Every consultant has a philosophy, even if they do not name it directly.",
+          "Some focus heavily on systems. Others focus on leadership, culture, marketing, transitions, finance, or team development. Some are prescriptive. Others coach the doctor and leadership team toward better decisions.",
+          "Ask how the consultant thinks change happens inside a dental practice. Do they believe in scripts and strict systems? Do they focus on doctor leadership? Do they help the team understand the why behind changes? Do they customize the work?",
+          "The right fit should match the kind of practice you want to build.",
+        ],
+      },
+      {
+        id: "who-will-work-with-my-practice",
+        title: "5. Who will actually work with my practice?",
+        paragraphs: [
+          "In some firms, the person who sells the engagement is not the person who does the work.",
+          "Before signing, ask who will be involved day to day. Will you work directly with the founder, a senior consultant, a coach, or a larger team? How often will you meet? Will the consultant work with the doctor only, the leadership team, or the full staff?",
+          "Clarity matters. You should know who is accountable, how communication works, and what support is included.",
+        ],
+      },
+      {
+        id: "success-and-accountability",
+        title: "6. How will we measure success and accountability?",
+        paragraphs: [
+          "Consulting should not become a collection of good ideas with no follow-through.",
+          "Ask how the consultant tracks progress. Will there be defined goals, action items, metrics, meeting rhythms, or accountability checkpoints? How will both sides know whether the engagement is working?",
+          "The best consultant-client relationships are collaborative. The consultant brings perspective, structure, and guidance. The doctor and team bring commitment, execution, and honest feedback.",
+          "Clear accountability keeps the work from drifting.",
+        ],
+      },
+      {
+        id: "client-references",
+        title: "7. Can you provide client references?",
+        paragraphs: [
+          "References help you understand what the consultant is like after the sales conversation ends.",
+          "Ask to speak with current or past clients when appropriate. Listen for how the consultant communicates, how they handle resistance, whether recommendations were practical, and whether the practice felt supported through implementation.",
+          "A reference does not need to match your practice perfectly, but it should give you confidence in the consultant's character, process, and follow-through.",
+        ],
+      },
+      {
+        id: "the-right-consultant-should-listen-first",
+        title: "The right consultant should listen first",
+        paragraphs: [
+          "A dental consultant can be a powerful partner, but only when the fit is right.",
+          "The right advisor should listen first, recommend second, and help you build a stronger practice through leadership, culture, communication, systems, and accountability. They should understand the business of dentistry, respect the doctor's vision, and help the team make meaningful changes that last.",
+          "If you are evaluating a consultant for growth, profitability, leadership, or transition planning, Dental Strategies can help you ask the right questions before you commit.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "What should I ask before hiring a dental consultant?",
+        answer:
+          "Ask about similar client experience, measurable results, assessment process, consulting philosophy, who will do the work, how success is measured, and whether references are available.",
+      },
+      {
+        question: "Why does practice fit matter when choosing a consultant?",
+        answer:
+          "A consultant who understands your practice type, goals, market, and stage can give advice that fits your actual situation instead of forcing generic systems onto the business.",
+      },
+      {
+        question: "Should a dental consultant assess the practice before giving advice?",
+        answer:
+          "Yes. Strong recommendations usually come after reviewing the practice's numbers, systems, team structure, patient flow, leadership habits, and goals.",
+      },
+      {
+        question: "How should a consulting engagement measure progress?",
+        answer:
+          "Progress should be tracked through clear goals, action items, metrics, meeting rhythms, and accountability checkpoints that both the consultant and practice understand.",
+      },
+    ],
+    closing: [
+      "By Dr. Michael A. Njo, DDS",
+    ],
+    relatedLinks: [
+      {
+        href: "/resources",
+        label: "Browse all resources",
+        description: "See the broader resource hub for more ownership, transition, and strategy guidance.",
+      },
+      {
+        href: "/",
+        label: "Explore Dental Strategies",
+        description: "Get a fuller picture of Dr. Njo's consulting and advisory work for dentists and healthcare owners.",
+      },
+      {
+        href: "/testimonials",
+        label: "Read client testimonials",
+        description: "See how dentists describe the guidance, calm, and clarity they received during transition decisions.",
+      },
+      {
+        href: "/contact",
+        label: "Talk through your next decision",
+        description: "Start a conversation if you want help evaluating growth, leadership, profitability, or transition planning.",
+      },
+    ],
+  },
+  {
     slug: "associateship-vs-ownership-for-dentists",
     title: "Associateship vs Ownership: How Dentists Can Tell Which Path Fits Their Next Decade",
     metaTitle: "Associateship vs Ownership for Dentists | Michael Njo, DDS",
