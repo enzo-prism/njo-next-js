@@ -363,6 +363,8 @@ Future changes should preserve the single-mount model.
   - catches TypeScript regressions
 - `lint`
   - catches ESLint and Next lint issues
+- `check:testimonials`
+  - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:forms`
   - validates that contact and event submissions still use the intended Formspree endpoints
 - `check:contact-ctas`

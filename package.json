@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "check:testimonials": "tsx scripts/check-testimonials.ts",
     "check:forms": "tsx scripts/check-forms.ts",
     "check:contact-ctas": "tsx scripts/check-contact-ctas.ts",
     "check:route-head-snapshots": "tsx scripts/check-route-head-snapshots.ts",
@@ -19,7 +20,7 @@
     "check:seo-http": "tsx scripts/check-seo-http.ts",
     "check:robots": "tsx scripts/check-robots.ts",
     "check:redirects": "tsx scripts/check-redirects.ts",
-    "check:parity": "npm run typecheck && npm run lint && npm run check:forms && npm run check:contact-ctas && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:seo-http && npm run check:robots && npm run check:redirects"
+    "check:parity": "npm run typecheck && npm run lint && npm run check:testimonials && npm run check:forms && npm run check:contact-ctas && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:seo-http && npm run check:robots && npm run check:redirects"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

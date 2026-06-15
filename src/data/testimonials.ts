@@ -144,7 +144,7 @@ Thank you, Dr. Njo, for always being there. Your guidance has been invaluable, a
     publishedAt: "2025-08-12",
   },
   {
-    quote: `I have known Dr. Michael Nio since 2016, and over the years he has played an important role in some of the biggest professional decisions of my career.
+    quote: `I have known Dr. Michael Njo since 2016, and over the years he has played an important role in some of the biggest professional decisions of my career.
 
 When Michael sold our practice in 2020, he delivered exactly what he said he would. His valuation proved accurate, the process was smooth, and his guidance gave us confidence every step of the way. In an environment where uncertainty can be overwhelming, Michael brought clarity, honesty, and calm leadership.
 
@@ -267,12 +267,6 @@ I began working with Michael after struggling through the Great Recession of 200
     publishedAt: "2024-03-11",
   },
   {
-    quote: `I had the pleasure of meeting Fred & Liz. Fred's insight is a goldmine for anyone looking to purchase or sell a dental practice. Fred's expertise in valuations and legalities is impressive. The resources provided seem comprehensive and well-crafted, a testament to their experience. If you're a dentist considering a practice transaction, I recommend tapping into their knowledge and experience.`,
-    author: "Alexander Zaykov",
-    stars: 5,
-    publishedAt: "2024-03-09",
-  },
-  {
     quote: `Thank you so much for all of your help in all of my transitions. It is quite safe to say that I would not have been able to do it without you. Your experience and knowledge always helps to keep things in perspective and allows me to hone my energy and attention. Your industry connections are also invaluable and your training allows me to speak to industry professionals as if I too am a seasoned expert. I have nothing but great appreciation and respect for you, and I will see you the next time around.`,
     author: "Jason Cellars",
     stars: 5,
@@ -323,23 +317,8 @@ I began working with Michael after struggling through the Great Recession of 200
     stars: 5,
   },
   {
-    quote: `I feel extremely fortunate to have found and chosen Fred Heppner to help me through the process of selling my practice. I enjoyed Fred's straightforward demeanor, and his ability to simplify for me what would have been an overly complex endeavor. The sale happened very quickly and efficiently, and I couldn't be more pleased with the outcome!`,
-    author: "Jeff Lewis, DDS, FACP",
-    stars: 5,
-  },
-  {
-    quote: `As a dental practice owner for 20 years, there comes a time when you transition from active ownership. In the fall of 2016, I made the decision to sell my successful dental practice and transition to managing as a clinical director and lead dentist. I contacted Fred for a practice appraisal and engaged his services for the sale. In March 2017, we closed the sale and I successfully transitioned. Fred was an ethical and responsive broker who found the perfect match, allowing my remaining career years to be some of the most fulfilling. I highly recommend Fred if you're considering selling or buying a practice.`,
-    author: "Paul, D.M.D.",
-    stars: 5,
-  },
-  {
     quote: `Hi Michael!! For what's worth… I just wanted to say I personally felt today's workshop was the best. The energy was so good and I am so excited about the new team members. Thank you for always keeping things real with a positive note!!`,
     author: "Karrie",
-    stars: 5,
-  },
-  {
-    quote: `I have worked with Fred in many different formats over the past six to eight years. Fred is the consummate professional. I have attended his lectures, had one-on-one meetings, and most recently worked with him on the sale of my orthodontic practice. When it comes to practice transitions, Fred is the best choice. He is thorough, knowledgeable, accessible, connected, and capable. He will gather the necessary data, work tirelessly with your team members, and create a win-win scenario for all parties involved. I highly recommend his services.`,
-    author: "Blair Feldman, DMD, MS, MSEd",
     stars: 5,
   },
   {
@@ -358,18 +337,8 @@ I began working with Michael after struggling through the Great Recession of 200
     stars: 5,
   },
   {
-    quote: `Fred was wonderful to work with. I was buying my partner out and he was instrumental in being a non biased 3rd party to facilitate the sale and make sure each party understood the other side and each piece of the sale. He really took his time in speaking to us together and individually and was able to communicate all questions and concerns seamlessly. He also made himself available just about whenever necessary day or night. I would absolutely work with Fred again on future transactions given my great experience. He truly cared about both parties involved, not just a commission.`,
-    author: "Jeff G., D.D.S.",
-    stars: 5,
-  },
-  {
     quote: `Thank you Michael for everything you did for me but even more my family. My dad is in a much better place, the local dental society is pretty shook up because some think he was still working so there are a lot of scared dentists. But you and I know my dad checked every box for preexisting conditions but if his death encourages people to wear masks that is helpful.`,
     author: "Lee",
-    stars: 5,
-  },
-  {
-    quote: `I have dealt with brokers of all sorts in my life. Many were little more than listers, relying on others to do the 'heavy' work of actually making a sale happen. I wanted an individual who was not just a lister. I received that with Fred. His prospectus of my practice was bank ready. I followed his recommendations for my discussions with a buyer. Though not an accountant, his review of my recent tax returns showed an accounting error that provided me a large refund after submitting an amended return. Also not an attorney, he explained points in the contract that I should consider. He communicated well with the buyer and the lender right up until funds were wired to me from the lender. He was WELL worth his fee and I'm most happy I had his help working through what can be a very difficult process with unexpected roadblocks. THANK YOU FRED!!`,
-    author: "R. Branstrator, D.D.S.",
     stars: 5,
   },
   {
@@ -388,8 +357,113 @@ I began working with Michael after struggling through the Great Recession of 200
     stars: 5,
   },
   {
-    quote: `Fred Heppner was a true asset in the sale of my practice. In a short time, Fred gleaned huge amounts of information from my office computer and put together a reader-friendly prospectus. At that point, the sale of the practice was put online in a discreet listing. Fred kept me informed and updated throughout as to any bites. I really appreciated his prompt email responses to my questions and depended a lot on his knowledge of management as well as tax information. His business and computer skills and his outreach to the state dental association made my transition perfect. I was completely satisfied with the negotiations and closure of my practice sale. He has splendid contacts with banks, attorneys, and management companies in the Southwest region. I can confidently recommend Fred Heppner for his accessibility and expertise in the business of dental transitions. He has a pleasant demeanor and is very approachable.`,
-    author: "B. Holbrook, DMD",
+    quote: `This past week we had our first full team workshop with Michael. What a fantastic experience! Michael was able to articulate the practice vision in such a way that the whole team left the meeting energized and motivated to work with and for each other to achieve our goals. If you are looking for a consultant to help take your practice to the next level, I highly recommend you reach out to Michael.`,
+    author: "Peter Igler",
+    stars: 5,
+  },
+  {
+    quote: `After your presentation, our spirits were high! Michael, you have a really nice way of getting down to business with such finesse. You made so many really good points in such an entertaining way. Thank you for coming and hanging out with us. I look forward to implementing your ideas into our SOPs next week. Your input will take us to the next level.`,
+    author: "Christina",
+    stars: 5,
+  },
+  {
+    quote: `I want to thank you from the bottom of my heart for everything you've done for me. Without you, I would not have bought this practice and become an owner so quickly. You taught me how to purchase and manage a dental practice, and more importantly, how to think as a business owner. These are valuable lessons that will stick with me forever.`,
+    author: "Nelson Wong",
+    stars: 5,
+  },
+  {
+    quote: `Thank you so much for your time you gave us tonight as well as the expertise you shared. You have been such a big help with the Dugoni Business Club and I really appreciate everything you have done for me and us. I have already received great feedback and know your event was a success!`,
+    author: "Merlin",
+    stars: 5,
+  },
+  {
+    quote: `First I would like to say thank you for taking the time to get the team together. I think the meeting went great, and we all left with a positive mindset. The energy was uplifting. Thank you, Michael!`,
+    author: "Michelle",
+    stars: 5,
+  },
+  {
+    quote: `Hi Michael, this is Jenn, Stephanie's associate. It was great finally meeting you today! What you did for the team is amazing and I can feel the positive energy flowing. I just wanted to say thank you and to touch base. I like asking questions, so you might hear from me every so often!`,
+    author: "Jenn",
+    stars: 5,
+  },
+  {
+    quote: `I can't even find the words. I am truly grateful for you! Of all of the things to come out of opening my own office this was such a blessing. I appreciate all of your help and guidance. I hope that through the course of our relationship I can give back to you what you have given to me.`,
+    author: "Dominique",
+    stars: 5,
+  },
+  {
+    quote: `Thank you so much for all your help with our transition. Heartbreaking circumstances, but we couldn't be more thankful that the outcome is good for both our family and our dear friend. I will pass your information along to my brother and encourage him to reach out to you. We wish you the best as well. God bless!`,
+    author: "Sandy and Shelby",
+    stars: 5,
+  },
+  {
+    quote: `I just want to circle back to the last night conversation and say from the bottom of my heart thank you again. Thank you for teaching me how to deal with personnel and how to hold my ground without being mean or offensive. You are amazing. Thank you for being here for me, holding my hand, and showing me the way. I admire and appreciate you.`,
+    author: "Val",
+    stars: 5,
+  },
+  {
+    quote: `I always intended on selling the practice before I lost my skills, but not before I lost my fire. I am not sure if I succeeded, but if the answer is yes, then you had a lot to do with it. I know that you were my coach through this process, but perhaps even more than that, you were my cheerleader. You believed in me and never let me settle for anything less than what you knew was possible. I am very thankful that you were in my corner through this journey.`,
+    author: "Jason",
+    stars: 5,
+  },
+  {
+    quote: `Dear Michael, I just want to write to thank you for all you have done for me and the office. Since your arrival, my office has been in such a great order that everyone knows their responsibilities and how to be accountable. The practice is running smoothly right now with the associate doctors doing very well. Our revenue has gone from being on track to hit $3M to now on track to hit $4.4M for the year. Thank you for helping me look for a second practice to purchase and for helping with collections. Without you, none of this is possible. I am grateful you have come to our office and our lives.`,
+    author: "Arthur",
+    stars: 5,
+  },
+  {
+    quote: `The residents shared with me how informative and invaluable your presentation was. I would definitely like you back next year. You can spend half or the whole day with us. Whatever you need.`,
+    author: "Howard Chi",
+    stars: 5,
+  },
+  {
+    quote: `Everything has gone real smoothly with the whole transaction up to this point. I think the whole thing is a real blessing to our family. It is all because of you! Thanks. Keep in touch! I know I will need some advice about various management issues in the future.`,
+    author: "Monte Smith DDS",
+    stars: 5,
+  },
+  {
+    quote: `Thank you so much for helping us develop as a team. We could not have come this far without your help.`,
+    author: "Lynn",
+    stars: 5,
+  },
+  {
+    quote: `Wednesday's meeting was great. The team is really coming together. It has been a journey and one not possible without your patience and sincerity. Your ability to transmit your passion and belief in the profession and teaching people to walk that walk has made all the difference in the office. Thank you also for holding my hand as the practice transferred and helping me work through the financial problems associated with that transfer. I know that the office has a long way to go, and I can see the path and a time coming when I can just do dentistry. Thank you again.`,
+    author: "Lois",
+    stars: 5,
+  },
+  {
+    quote: `Hi Michael, just wanted to thank you again for a job well done. You made what could have been a long and difficult process relatively painless. I look forward to Jack's continuing success with the practice and will do everything I can to expedite that.`,
+    author: "Al",
+    stars: 5,
+  },
+  {
+    quote: `It's my final day here with Dr. Carkeet, and I just wanted to take a moment to say thank you. I've learned a lot from you this past year, and I really appreciate your time and valuable knowledge.`,
+    author: "Dana",
+    stars: 5,
+  },
+  {
+    quote: `Just wanted to say it was great seeing you today and thank you for our meeting. You are the only person I know who can make a two hour meeting very entertaining! You are very motivating and have a great sense as to how an office should run.`,
+    author: "Krissy",
+    stars: 5,
+  },
+  {
+    quote: `All great teams have good players, coaches, and management. That's why we've brought Michael aboard. He's helping us to become better leaders and managers first, and his guidance is helping us build the team we want to be.`,
+    author: "Steve",
+    stars: 5,
+  },
+  {
+    quote: `We are looking forward to working with Michael Njo to help change the culture of the MPDG. Our retreat was the most productive in my 30 years here, and I am excited to do the hard work that will make a difference for all of us. The change needs to start with the partners, and communication between us all needs to be open, constructive, and effective. Although this will be a work in progress, I am confident that we should see some immediate results.`,
+    author: "Mic",
+    stars: 5,
+  },
+  {
+    quote: `I have been meaning to email you and tell you how much the bonus system is appreciated. It has been a great motivator for the team, and we appreciate the structure and support you helped us put in place.`,
+    author: "Kim C",
+    stars: 5,
+  },
+  {
+    quote: `Michael, what you did was incredible, gracious, professional, and a win-win in every way. I poured my heart into the new office, and your help made an enormous difference.`,
+    author: "Lee",
     stars: 5,
   },
   {
@@ -413,7 +487,7 @@ I began working with Michael after struggling through the Great Recession of 200
     stars: 5,
   },
   {
-    quote: `I began working with Dr. Michale Njo in 2006 during the purchase of a highly respected prosthodontic practice. While the practice was already well established, transitioning ownership at that level required thoughtful leadership and experienced guidance.
+    quote: `I began working with Dr. Michael Njo in 2006 during the purchase of a highly respected prosthodontic practice. While the practice was already well established, transitioning ownership at that level required thoughtful leadership and experienced guidance.
 
 Dr. Njo was instrumental in making that transition seamless. He helped me establish credibility as the new owner, maintain patient confidence, and guide an established team through change with clarity and professionalism. His business and team coaching strengthened systems, workflows, and accountability, and his ability to coach people through change while maintaining morale was invaluable.
 
@@ -442,7 +516,7 @@ I firmly believe that without his guidance, the transition would have been far m
     publishedAt: "2025-12-11",
   },
   {
-    quote: `We confidently recommend Dr. Michael Njo to our dental clients who are seeking thoughtful, results-driven coaching grounded in real-world ownership experience. Dr. Njo understands that a dental practice is both a clinical operation and a closely held business. His coaching helps dentists make smarter operational and strategic decisions that improve profitability, strengthen leadership, and build long-term practice value. What sets Dr. Njo apart ishis ability to meet clients where they are. From associates preparing for ownership to established practice owners planning for growth or transition, his guidance is clear, disciplined, and aligned with each doctor’s goals. For dentists who want to run stronger practices and create meaningful long-term value, Dr. Njo is a trusted and highly effective advisor.`,
+    quote: `We confidently recommend Dr. Michael Njo to our dental clients who are seeking thoughtful, results-driven coaching grounded in real-world ownership experience. Dr. Njo understands that a dental practice is both a clinical operation and a closely held business. His coaching helps dentists make smarter operational and strategic decisions that improve profitability, strengthen leadership, and build long-term practice value. What sets Dr. Njo apart is his ability to meet clients where they are. From associates preparing for ownership to established practice owners planning for growth or transition, his guidance is clear, disciplined, and aligned with each doctor’s goals. For dentists who want to run stronger practices and create meaningful long-term value, Dr. Njo is a trusted and highly effective advisor.`,
     author: "The Phillips Group",
     stars: 5,
     organization: "The Phillips Group",

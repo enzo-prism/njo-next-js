@@ -154,6 +154,7 @@ This runs:
 
 - Typecheck
 - Lint
+- Testimonial content guard
 - Next build
 - Route metadata snapshots
 - Structured data assertions
