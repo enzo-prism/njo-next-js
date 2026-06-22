@@ -44,6 +44,18 @@ const sortByNewest = (
 
 export const testimonials: Testimonial[] = [
   {
+    quote: `I've had the privilege of knowing Michael for the past five years. We first met in dental school when he was mentoring our business club, and since then he's been there through every major milestone.
+
+He helped me land my first associate position, where I learned so much about the business side of dentistry, and more recently he helped guide me through becoming a practice owner. Throughout it all, he's been a trusted mentor, advisor, and friend.
+
+What I appreciate most about Michael is his honesty and integrity. He's straightforward, tells you what you need to hear, and always backs his advice with actionable recommendations. His experience, insight, and ability to identify opportunities for growth and efficiency have been incredibly valuable.
+
+I'm grateful for the impact he's had on both my professional journey and personal growth. I highly recommend him to any dentist looking for a practice acquisition or consultant for their office!`,
+    author: "Madison Brown, DDS",
+    stars: 5,
+    publishedAt: "2026-06-16",
+  },
+  {
     quote: `I was recommended to attend one of Dr. Michael Njo's transition courses through his educational company, Practice Transitions Institute. Although I am still more than five years away from selling my practice, I felt it would be wise to begin learning about what the future may hold. A close colleague of mine, who had successfully sold his practice, strongly encouraged me to attend the course.
 
 Wow — I learned an incredible amount.
