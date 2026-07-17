@@ -3,6 +3,18 @@
 Date: 2026-03-04 (initial report)
 Updated: 2026-03-07 (Node 24 alignment and production rollout)
 
+## Book Launch Update (2026-07-17)
+
+Prepared the production release for *The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value*.
+
+- Added a dedicated static resource at `/resources/dental-exit-blueprint`.
+- Added the author-supplied cover and a 1200x630 social image.
+- Featured the launch on the home page and resources index without replacing Dr. Njo's solo-authored *Dental Practice Transitions Handbook*.
+- Identified Dr. Michael A. Njo as a contributing author and Elijah Desmond as lead author; no unverified bestseller, ISBN, publisher, rating, review, or pricing claims were added.
+- Added route-specific metadata plus `Book` and `NewsArticle` structured data.
+- Added schema guardrails for the launch-specific facts and unsupported-claim exclusions.
+- Ran the full Node 24 parity suite successfully, including the production build, metadata/schema, sitemap, HTTP SEO, robots, and redirects checks.
+
 ## Scope
 
 Verified the Next.js rebuild is production-ready and behaviorally aligned with the source site.

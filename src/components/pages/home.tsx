@@ -20,6 +20,7 @@ import { TestimonialListCard } from "@/components/testimonials/testimonial-card"
 import { LatestReviewCard } from "@/components/testimonials/latest-review-card";
 import { HeroSlideshow, type HeroSlide } from "@/components/media/hero-slideshow";
 import { BookingButton } from "@/components/booking-button";
+import { BookLaunchFeature } from "@/components/book-launch-feature";
 import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ import { SectionHeading } from "@/components/layout/section-heading";
 import { faqItems, bookReviews, services, resources } from "@/seo/structured-data";
 import { dugoniCollaborationImage, gprResidencyPresentationImage } from "@/data/media";
 import { eventPrograms } from "@/data/events";
+import { resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
 
 const heroSlides: HeroSlide[] = [
@@ -121,6 +123,7 @@ export default function Home() {
     .filter((testimonial) => testimonial.slug !== latestReview?.slug)
     .slice(0, 3);
   const book = resources.find((resource) => resource.type === "Book");
+  const bookLaunchArticle = resourceArticles.find((article) => article.bookLaunch);
   const shortReview = bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
 
   return (
@@ -191,6 +194,13 @@ export default function Home() {
           ))}
         </dl>
       </Section>
+
+      {/* New book launch */}
+      {bookLaunchArticle ? (
+        <Section>
+          <BookLaunchFeature article={bookLaunchArticle} priority />
+        </Section>
+      ) : null}
 
       {/* Services */}
       <Section tone="surface">

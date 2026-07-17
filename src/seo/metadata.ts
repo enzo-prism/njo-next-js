@@ -7,6 +7,18 @@ import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
 
 const OG_IMAGE = SOCIAL_SHARE_IMAGE;
 
+function getRouteOpenGraphImage(resourceArticle: ReturnType<typeof getResourceArticleByPath>) {
+  if (!resourceArticle?.bookLaunch) return OG_IMAGE;
+
+  return {
+    url: resourceArticle.bookLaunch.socialImagePath,
+    width: 1200,
+    height: 630,
+    type: "image/jpeg",
+    alt: `${resourceArticle.bookLaunch.title}: ${resourceArticle.bookLaunch.subtitle}`,
+  } as const;
+}
+
 const testimonialAuthorCounts = (() => {
   const counts = new Map<string, number>();
   for (const testimonial of testimonialPages) {
@@ -189,6 +201,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
   const canonical = buildCanonicalUrl(pathname);
   const ogType = buildOpenGraphType(pathname);
   const keywords = buildPageKeywords(pathname);
+  const ogImage = getRouteOpenGraphImage(resourceArticle);
 
   return {
     title,
@@ -203,10 +216,12 @@ export function buildRouteMetadata(pathname: string): Metadata {
       title,
       description,
       url: canonical,
-      images: [OG_IMAGE],
+      images: [ogImage],
       publishedTime: resourceArticle?.publishedAt,
       modifiedTime: resourceArticle?.updatedAt || resourceArticle?.publishedAt,
-      authors: resourceArticle ? ["Michael Njo, DDS"] : undefined,
+      authors: resourceArticle
+        ? [resourceArticle.bookLaunch?.leadAuthor || "Michael Njo, DDS"]
+        : undefined,
       section: resourceArticle ? "Resources" : undefined,
       tags: resourceArticle ? [resourceArticle.primaryKeyword, ...resourceArticle.secondaryKeywords] : undefined,
     },
@@ -214,7 +229,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [ogImage.url],
     },
   };
 }

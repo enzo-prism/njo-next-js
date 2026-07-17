@@ -16,6 +16,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Dependabot security updates enabled (plus weekly grouped minor/patch dependency automation).
 - Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
 - Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
+- Dental Exit Blueprint launch coverage added across the home page, resources index, and a dedicated resource page, using the author-supplied cover and launch-specific metadata/schema.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
 - Vercel Analytics enabled at the root layout for deployed page-view and visitor tracking.
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
@@ -52,6 +53,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/testimonials/[slug]` (generated from testimonial data)
 - `/resources`
 - `/resources/[slug]` (generated from resource article data)
+  - `/resources/dental-exit-blueprint` (featured book-launch resource)
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`
@@ -85,6 +87,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 
 - Route metadata generated through `src/seo/metadata.ts`
 - Route JSON-LD generated through `src/seo/route-structured-data.ts`
+- Book-launch resources can provide route-specific Open Graph imagery plus `Book` and `NewsArticle` JSON-LD.
 - `robots.txt` via `src/app/robots.ts`
 - `sitemap.xml` via `src/app/sitemap.ts`
 - `llms.txt` served from `public/llms.txt`

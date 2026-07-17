@@ -16,6 +16,19 @@ export type ResourceArticleLink = {
   description: string;
 };
 
+export type ResourceArticleBookLaunch = {
+  title: string;
+  subtitle: string;
+  releasedAt: string;
+  leadAuthor: string;
+  contributingAuthors: string[];
+  amazonUrl: string;
+  officialUrl: string;
+  syndicatedPressReleaseUrl: string;
+  coverImagePath: string;
+  socialImagePath: string;
+};
+
 export type ResourceArticle = {
   slug: string;
   title: string;
@@ -34,6 +47,7 @@ export type ResourceArticle = {
   faq: ResourceArticleFaq[];
   closing: string[];
   relatedLinks: ResourceArticleLink[];
+  bookLaunch?: ResourceArticleBookLaunch;
 };
 
 const RESOURCE_ARTICLES_BASE_PATH = "/resources";
@@ -60,6 +74,118 @@ export function formatArticleDate(value: string) {
 }
 
 export const resourceArticles: ResourceArticle[] = [
+  {
+    slug: "dental-exit-blueprint",
+    title: "The Dental Exit Blueprint",
+    metaTitle: "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value | Michael A. Njo, DDS",
+    description:
+      "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value is a new guide led by Elijah Desmond, with Dr. Michael A. Njo as a contributing author.",
+    excerpt:
+      "A new multi-author guide for dental owners who want to understand the operational, financial, and strategic factors that shape practice value well before an eventual sale.",
+    category: "Book launch",
+    publishedAt: "2026-07-15T00:00:00Z",
+    updatedAt: "2026-07-15T00:00:00Z",
+    readTimeMinutes: 4,
+    primaryKeyword: "dental exit blueprint",
+    secondaryKeywords: [
+      "dental practice exit planning",
+      "dental practice value",
+      "dental EBITDA",
+      "dental practice sale preparation",
+      "dental practice transition guide",
+    ],
+    keyTakeaways: [
+      "The book focuses on the business decisions that can affect how a practice is evaluated before a sale.",
+      "Elijah Desmond leads the 29-author project, with Dr. Michael A. Njo contributing to the guide.",
+      "The 13 EBITDA levers provide a framework for owners to examine value drivers before they are in an active transaction.",
+    ],
+    intro: [
+      "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value was released on July 15, 2026.",
+      "Led by Elijah Desmond, the 29-author guide brings together perspectives on the financial, operational, and strategic choices that can influence how a dental practice is evaluated in a future transaction. Dr. Michael A. Njo is a contributing author.",
+      "The book is designed for practice owners who want to understand the value drivers a buyer may examine before they begin preparing for a sale.",
+    ],
+    sections: [
+      {
+        id: "what-the-book-covers",
+        title: "What the book covers",
+        paragraphs: [
+          "The book is organized around 13 EBITDA levers: practical areas of a practice that can affect the quality, predictability, and risk profile of its earnings.",
+          "Rather than treating an exit as a last-minute transaction, the guide frames value creation as work that happens through the operating choices owners make over time.",
+        ],
+      },
+      {
+        id: "why-exit-planning-starts-early",
+        title: "Why exit planning starts early",
+        paragraphs: [
+          "A practice sale usually involves more than a revenue number. Buyers may look at earnings, systems, team stability, collections, expenses, and the degree to which the practice can perform without depending on one owner.",
+          "Owners can use the guide as a starting point for better questions about their own readiness, then work with qualified legal, tax, valuation, and transaction professionals for advice specific to their situation.",
+        ],
+      },
+      {
+        id: "about-michael-njos-contribution",
+        title: "About Dr. Michael A. Njo's contribution",
+        paragraphs: [
+          "Dr. Michael A. Njo contributes to a broader group of practitioners who address different parts of the dental ownership and transition journey.",
+          "His work with Dental Strategies focuses on helping dentists think through practice growth, valuations, partnerships, and transition decisions with greater clarity.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Who is The Dental Exit Blueprint for?",
+        answer:
+          "It is written for dental practice owners, multi-location and group owners, and dentists who want to understand the factors that may influence practice value before a future transition.",
+      },
+      {
+        question: "Is Dr. Michael A. Njo the lead author?",
+        answer:
+          "No. Elijah Desmond is the lead author. Dr. Michael A. Njo is a contributing author.",
+      },
+      {
+        question: "Does the book replace professional transaction advice?",
+        answer:
+          "No. It is an educational resource. A specific sale, valuation, legal structure, or tax decision should be reviewed with the appropriate qualified professionals.",
+      },
+    ],
+    closing: [
+      "If you are beginning to think about a future exit, The Dental Exit Blueprint can help you identify the questions worth exploring before the timing becomes urgent.",
+    ],
+    relatedLinks: [
+      {
+        href: "https://www.amazon.com/dp/B0H8WL3F6H",
+        label: "Find The Dental Exit Blueprint on Amazon",
+        description: "View the book's Amazon listing.",
+      },
+      {
+        href: "https://dentalexitblueprint.com",
+        label: "Visit the official Dental Exit Blueprint site",
+        description: "Learn more about the book and its 13-lever framework.",
+      },
+      {
+        href: "https://dental.einnews.com/pr_news/926794522/dental-pitch-advisory-brokerage-launches-29-author-exit-guide-at-the-dykema-dso-conference-2026",
+        label: "Read the launch announcement",
+        description: "Read Dental Pitch Advisory & Brokerage's syndicated launch announcement.",
+      },
+      {
+        href: "/contact",
+        label: "Talk through your transition planning",
+        description: "Start a conversation with Dr. Njo about growth, valuation, partnership, or transition planning.",
+      },
+    ],
+    bookLaunch: {
+      title: "The Dental Exit Blueprint",
+      subtitle: "The 13 EBITDA Levers That Drive Maximum Value",
+      releasedAt: "2026-07-15T00:00:00Z",
+      leadAuthor: "Elijah Desmond",
+      contributingAuthors: ["Michael A. Njo"],
+      amazonUrl: "https://www.amazon.com/dp/B0H8WL3F6H",
+      officialUrl: "https://dentalexitblueprint.com",
+      syndicatedPressReleaseUrl:
+        "https://dental.einnews.com/pr_news/926794522/dental-pitch-advisory-brokerage-launches-29-author-exit-guide-at-the-dykema-dso-conference-2026",
+      coverImagePath: "/dental-exit-blueprint-cover.jpg",
+      socialImagePath: "/dental-exit-blueprint-social.jpg",
+    },
+  },
   {
     slug: "questions-before-hiring-dental-consultant",
     title: "The 7 Questions Every Dentist Should Ask Before Hiring a Dental Consultant",

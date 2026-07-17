@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
+import { BookLaunchFeature } from "@/components/book-launch-feature";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
@@ -14,6 +15,8 @@ import { Container } from "@/components/layout/container";
 export default function ResourcesPage() {
   const book = resources.find((resource) => resource.type === "Book");
   const institute = resources.find((resource) => resource.type === "EducationalOrganization");
+  const bookLaunchArticle = resourceArticles.find((article) => article.bookLaunch);
+  const guidanceArticles = resourceArticles.filter((article) => !article.bookLaunch);
 
   return (
     <Container className="space-y-8 py-10 sm:py-14">
@@ -24,6 +27,8 @@ export default function ResourcesPage() {
           Practical materials and learning pathways curated to support healthcare ownership, transitions, and operations leadership.
         </p>
       </section>
+
+      {bookLaunchArticle ? <BookLaunchFeature article={bookLaunchArticle} priority /> : null}
 
       <section className="grid gap-4 md:grid-cols-2">
         {book && (
@@ -113,7 +118,7 @@ export default function ResourcesPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          {resourceArticles.map((article) => (
+          {guidanceArticles.map((article) => (
             <Card key={article.slug} className="overflow-hidden">
               <CardHeader className="space-y-3">
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">

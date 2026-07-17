@@ -135,6 +135,7 @@ If you rename a testimonial author and the generated slug changes, you may need 
 - FAQ content
 - related links
 - resource article ordering
+- optional book-launch data, including authorship roles, release date, purchase/announcement links, and social/cover assets
 
 The file also exports helpers used elsewhere:
 
@@ -148,6 +149,16 @@ Changing a resource article here automatically affects:
 - route metadata
 - JSON-LD for resource articles
 - sitemap entries for resource articles
+
+The Dental Exit Blueprint is the current featured book-launch resource:
+
+- slug: `dental-exit-blueprint`
+- route: `/resources/dental-exit-blueprint`
+- reusable launch UI: `src/components/book-launch-feature.tsx`
+- cover asset: `public/dental-exit-blueprint-cover.jpg`
+- social asset: `public/dental-exit-blueprint-social.jpg`
+
+Book-launch resources are intentionally distinct from standard guidance articles. The home page and resources index feature the launch separately, while the older solo-authored `Dental Practice Transitions Handbook` resource remains visible.
 
 If you change a resource slug, add a redirect if the old URL has ever been public.
 
@@ -235,6 +246,8 @@ Current route categories with JSON-LD:
 - testimonial detail pages
 - contact
 - contact success
+
+Resource articles normally emit `BlogPosting`. A resource with `bookLaunch` data instead emits launch-specific `NewsArticle` plus `Book` nodes. The `Book` node keeps lead-author and contributor roles separate and must not add unverified ISBN, publisher, rating, pricing, or bestseller claims.
 
 Current metadata-only routes:
 
@@ -405,6 +418,13 @@ If your change touches routing, SEO, forms, analytics, or config, run the full p
 3. Run `npm run check:parity`
 
 No route file changes are needed if the article follows the existing schema.
+
+For a featured book launch, also:
+
+1. Add a complete `bookLaunch` payload and verified cover/social assets
+2. Keep lead-author and contributor roles explicit in copy and schema
+3. Add assertions to `scripts/check-schema.ts` for the launch-specific `Book` and `NewsArticle` nodes
+4. Confirm the home/resources feature does not replace an existing book resource
 
 ### Add or rename a testimonial
 

@@ -59,8 +59,11 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - static route inventory and redirect metadata used by checks
 - `src/seo/*`
   - metadata, robots, sitemap, structured data generation
+  - Book-launch resources use route-specific social images plus separate `Book` and `NewsArticle` schema nodes
 - `src/data/resource-articles.ts`
-  - source of truth for `/resources/[slug]` content, SEO fields, and article slugs
+  - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
+- `src/components/book-launch-feature.tsx`
+  - Reusable featured-book UI for the home page, resources hub, and book-launch detail pages
 - `src/components/pages/resources.tsx`
   - Resources hub, including featured article links
 - `src/components/pages/resource-article-detail.tsx`

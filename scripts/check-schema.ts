@@ -42,4 +42,53 @@ for (const path of paths) {
   });
 }
 
+const dentalExitBlueprintPath = buildResourceArticlePath("dental-exit-blueprint");
+const dentalExitBlueprintSchema = buildPageStructuredData(dentalExitBlueprintPath);
+assert.ok(dentalExitBlueprintSchema, "Expected structured data for the Dental Exit Blueprint launch");
+
+const dentalExitBlueprintGraph = dentalExitBlueprintSchema["@graph"] as Array<Record<string, unknown>>;
+const dentalExitBlueprintBook = dentalExitBlueprintGraph.find((node) => node["@type"] === "Book");
+const dentalExitBlueprintNews = dentalExitBlueprintGraph.find((node) => node["@type"] === "NewsArticle");
+
+assert.deepEqual(
+  dentalExitBlueprintBook,
+  {
+    "@type": "Book",
+    "@id": "https://michaelnjodds.com/resources/dental-exit-blueprint#book",
+    name: "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value",
+    description:
+      "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value is a new guide led by Elijah Desmond, with Dr. Michael A. Njo as a contributing author.",
+    url: "https://dentalexitblueprint.com",
+    sameAs: ["https://dentalexitblueprint.com", "https://www.amazon.com/dp/B0H8WL3F6H"],
+    image: {
+      "@id": "https://michaelnjodds.com/resources/dental-exit-blueprint#primaryimage",
+    },
+    datePublished: "2026-07-15T00:00:00Z",
+    author: {
+      "@type": "Person",
+      name: "Elijah Desmond",
+    },
+    contributor: [
+      {
+        "@type": "Person",
+        name: "Michael A. Njo",
+      },
+    ],
+    subjectOf: {
+      "@id": "https://michaelnjodds.com/resources/dental-exit-blueprint#launch-announcement",
+    },
+  },
+  "Dental Exit Blueprint book schema changed unexpectedly",
+);
+
+assert.ok(dentalExitBlueprintNews, "Dental Exit Blueprint launch must emit NewsArticle schema");
+assert.equal(dentalExitBlueprintNews?.datePublished, "2026-07-15T00:00:00Z");
+assert.equal(
+  dentalExitBlueprintNews?.isBasedOn,
+  "https://dental.einnews.com/pr_news/926794522/dental-pitch-advisory-brokerage-launches-29-author-exit-guide-at-the-dykema-dso-conference-2026",
+);
+assert.ok(!("isbn" in (dentalExitBlueprintBook || {})), "Do not add an unverified Dental Exit Blueprint ISBN");
+assert.ok(!("publisher" in (dentalExitBlueprintBook || {})), "Do not add an unverified Dental Exit Blueprint publisher");
+assert.ok(!JSON.stringify(dentalExitBlueprintSchema).includes("#1"), "Do not add an unverified #1 claim");
+
 console.log(`Validated structured data for ${paths.length} routes.`);

@@ -280,6 +280,11 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   const articleId = `${detailUrl}#article`;
   const faqId = `${detailUrl}#faq`;
   const imageId = `${detailUrl}#primaryimage`;
+  const launch = article.bookLaunch;
+  const bookId = `${detailUrl}#book`;
+  const newsArticleId = `${detailUrl}#launch-announcement`;
+  const imageUrl = launch ? buildCanonicalUrl(launch.socialImagePath) : SOCIAL_SHARE_IMAGE.url;
+  const fullBookTitle = launch ? `${launch.title}: ${launch.subtitle}` : null;
 
   const breadcrumb = buildBreadcrumb(
     [
@@ -293,21 +298,21 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   const imageNode: SchemaNode = {
     "@type": "ImageObject",
     "@id": imageId,
-    url: SOCIAL_SHARE_IMAGE.url,
-    width: SOCIAL_SHARE_IMAGE.width,
-    height: SOCIAL_SHARE_IMAGE.height,
+    url: imageUrl,
+    width: launch ? 1200 : SOCIAL_SHARE_IMAGE.width,
+    height: launch ? 630 : SOCIAL_SHARE_IMAGE.height,
   };
 
   const articleNode: SchemaNode = {
-    "@type": "BlogPosting",
-    "@id": articleId,
+    "@type": launch ? "NewsArticle" : "BlogPosting",
+    "@id": launch ? newsArticleId : articleId,
     url: detailUrl,
     headline: article.title,
     description: article.description,
     datePublished: article.publishedAt,
     dateModified: article.updatedAt || article.publishedAt,
     inLanguage: "en",
-    articleSection: "Resources",
+    articleSection: launch ? "Book launch" : "Resources",
     keywords: [article.primaryKeyword, ...article.secondaryKeywords].join(", "),
     image: {
       "@id": imageId,
@@ -329,10 +334,44 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
     mainEntityOfPage: {
       "@id": `${detailUrl}#webpage`,
     },
-    about: {
-      "@id": PERSON_NODE_ID,
-    },
+    about: launch
+      ? {
+          "@id": bookId,
+        }
+      : {
+          "@id": PERSON_NODE_ID,
+        },
   };
+
+  if (launch) {
+    articleNode.isBasedOn = launch.syndicatedPressReleaseUrl;
+  }
+
+  const bookNode: SchemaNode | null = launch
+    ? {
+        "@type": "Book",
+        "@id": bookId,
+        name: fullBookTitle,
+        description: article.description,
+        url: launch.officialUrl,
+        sameAs: [launch.officialUrl, launch.amazonUrl],
+        image: {
+          "@id": imageId,
+        },
+        datePublished: launch.releasedAt,
+        author: {
+          "@type": "Person",
+          name: launch.leadAuthor,
+        },
+        contributor: launch.contributingAuthors.map((name) => ({
+          "@type": "Person",
+          name,
+        })),
+        subjectOf: {
+          "@id": newsArticleId,
+        },
+      }
+    : null;
 
   const faqNode: SchemaNode | null = article.faq.length
     ? {
@@ -366,7 +405,7 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
       "@id": PERSON_NODE_ID,
     },
     mainEntity: {
-      "@id": articleId,
+      "@id": launch ? bookId : articleId,
     },
     primaryImageOfPage: {
       "@id": imageId,
@@ -380,7 +419,14 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
 
   return {
     "@context": "https://schema.org",
-    "@graph": [page, breadcrumb, imageNode, articleNode, ...(faqNode ? [faqNode] : [])],
+    "@graph": [
+      page,
+      breadcrumb,
+      imageNode,
+      articleNode,
+      ...(bookNode ? [bookNode] : []),
+      ...(faqNode ? [faqNode] : []),
+    ],
   };
 }
 

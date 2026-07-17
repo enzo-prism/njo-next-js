@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
+import { BookLaunchFeature } from "@/components/book-launch-feature";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CONTACT_PATH } from "@/config/site";
@@ -23,59 +24,82 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
 
   return (
     <Container className="space-y-8 py-10 sm:py-14">
-      <Card className="overflow-hidden border-border/80 bg-background">
-        <CardHeader className="space-y-6">
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/resources">Resources</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{article.title}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/resources">Resources</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{article.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
-          <div className="space-y-3">
-            <Badge variant="secondary" className="w-fit uppercase tracking-wide">
-              {article.category}
-            </Badge>
-            <CardTitle className="max-w-4xl text-3xl leading-tight md:text-4xl">{article.title}</CardTitle>
-            <CardDescription className="max-w-3xl text-base leading-relaxed">
-              {article.description}
-            </CardDescription>
-          </div>
+      {article.bookLaunch ? (
+        <BookLaunchFeature article={article} detail priority />
+      ) : (
+        <Card className="overflow-hidden border-border/80 bg-background">
+          <CardHeader className="space-y-6">
+            <div className="space-y-3">
+              <Badge variant="secondary" className="w-fit uppercase tracking-wide">
+                {article.category}
+              </Badge>
+              <h1 className="max-w-4xl text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+                {article.title}
+              </h1>
+              <CardDescription className="max-w-3xl text-base leading-relaxed">
+                {article.description}
+              </CardDescription>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-2">
-              <CalendarDays className="h-4 w-4" />
-              Published {publishedLabel}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Clock3 className="h-4 w-4" />
-              {article.readTimeMinutes} min read
-            </span>
-          </div>
-        </CardHeader>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <span className="inline-flex items-center gap-2">
+                <CalendarDays className="h-4 w-4" />
+                Published {publishedLabel}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Clock3 className="h-4 w-4" />
+                {article.readTimeMinutes} min read
+              </span>
+            </div>
+          </CardHeader>
 
-        <CardContent>
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {article.keyTakeaways.map((takeaway) => (
-              <div
-                key={takeaway}
-                className="rounded-xl border border-border/80 bg-slate-50 px-4 py-3 text-sm text-slate-700"
-              >
-                {takeaway}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+          <CardContent>
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {article.keyTakeaways.map((takeaway) => (
+                <div
+                  key={takeaway}
+                  className="rounded-xl border border-border/80 bg-slate-50 px-4 py-3 text-sm text-slate-700"
+                >
+                  {takeaway}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {article.bookLaunch ? (
+        <Card className="border-amber-200/70 bg-amber-50/50">
+          <CardContent className="p-6">
+            <div className="grid gap-3 md:grid-cols-3">
+              {article.keyTakeaways.map((takeaway) => (
+                <div
+                  key={takeaway}
+                  className="rounded-xl border border-amber-200/70 bg-background px-4 py-3 text-sm leading-relaxed text-slate-700"
+                >
+                  {takeaway}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-8">
