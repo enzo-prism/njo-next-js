@@ -535,7 +535,7 @@ I firmly believe that without his guidance, the transition would have been far m
     source: "alignable",
   },
   {
-    quote: `Michael is one of the most knowledgeable, well-rounded, and integrous Consultants in the…`,
+    quote: `Michael is one of the most knowledgeable, well-rounded, and integrous Consultants in the business. He is very supportive of others in the industry and is diligent in his recommendations and is a tremendous communicator. He has helped navigate numerous transitions with both buyers and sellers of dental practices with his clarity and engagement.`,
     author: "Mary Lynn Wheaton",
     organization: "MLW Customized Consulting",
     stars: 5,

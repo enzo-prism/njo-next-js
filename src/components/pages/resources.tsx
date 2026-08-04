@@ -33,8 +33,8 @@ export default function ResourcesPage() {
       <section className="grid gap-4 md:grid-cols-2">
         {book && (
           <Card className="overflow-hidden">
-            <div className="grid gap-0 lg:grid-cols-[0.76fr_1.24fr]">
-              <div className="bg-slate-100/70 p-5">
+            <div className="grid gap-0 lg:grid-cols-[1fr_1.1fr]">
+              <div className="bg-slate-100/70 p-4">
                 <figure className="overflow-hidden rounded-[1.5rem] border border-border bg-background shadow-sm">
                   <Image
                     src={resourceBookFeatureImage.src}

@@ -69,7 +69,8 @@ export function BookLaunchFeature({ article, detail = false, priority = false, c
 
           <p className="max-w-xl text-pretty leading-relaxed text-white/75">
             Dr. Michael A. Njo is a contributing author to this 29-author guide led by Elijah Desmond, created for
-            dental owners who want to understand the decisions that shape practice value before an exit.
+            dental owners who want to understand the decisions that shape practice value before an exit. He wrote two
+            chapters: &ldquo;Know Your Exit Options&rdquo; and &ldquo;Plan What Comes Next.&rdquo;
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">

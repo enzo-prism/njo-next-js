@@ -96,12 +96,12 @@ export const resourceArticles: ResourceArticle[] = [
     ],
     keyTakeaways: [
       "The book focuses on the business decisions that can affect how a practice is evaluated before a sale.",
-      "Elijah Desmond leads the 29-author project, with Dr. Michael A. Njo contributing to the guide.",
+      "Elijah Desmond leads the 29-author project, with Dr. Michael A. Njo contributing two chapters: “Know Your Exit Options” and “Plan What Comes Next.”",
       "The 13 EBITDA levers provide a framework for owners to examine value drivers before they are in an active transaction.",
     ],
     intro: [
       "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value was released on July 15, 2026.",
-      "Led by Elijah Desmond, the 29-author guide brings together perspectives on the financial, operational, and strategic choices that can influence how a dental practice is evaluated in a future transaction. Dr. Michael A. Njo is a contributing author.",
+      "Led by Elijah Desmond, the 29-author guide brings together perspectives on the financial, operational, and strategic choices that can influence how a dental practice is evaluated in a future transaction. Dr. Michael A. Njo is a contributing author and wrote two of the book’s chapters, “Know Your Exit Options” and “Plan What Comes Next.”",
       "The book is designed for practice owners who want to understand the value drivers a buyer may examine before they begin preparing for a sale.",
     ],
     sections: [
@@ -139,7 +139,7 @@ export const resourceArticles: ResourceArticle[] = [
       {
         question: "Is Dr. Michael A. Njo the lead author?",
         answer:
-          "No. Elijah Desmond is the lead author. Dr. Michael A. Njo is a contributing author.",
+          "No. Elijah Desmond is the lead author. Dr. Michael A. Njo is a contributing author and wrote two chapters, “Know Your Exit Options” and “Plan What Comes Next.”",
       },
       {
         question: "Does the book replace professional transaction advice?",
@@ -185,6 +185,207 @@ export const resourceArticles: ResourceArticle[] = [
       coverImagePath: "/dental-exit-blueprint-cover.jpg",
       socialImagePath: "/dental-exit-blueprint-social.jpg",
     },
+  },
+  {
+    slug: "building-a-practice-that-gives-you-options",
+    title: "Expert Insights: Building a Practice That Gives You Options",
+    metaTitle: "Building a Practice That Gives You Options | Michael A. Njo, DDS",
+    description:
+      "Dr. Michael Njo on the loss of control that quietly builds inside a dental practice, the warning signs owners miss, and how to build a practice that is always sale-ready.",
+    excerpt:
+      "An in-depth interview with Dr. Michael Njo on why practices start controlling their owners, the mistakes dentists make trying to fix it, and what it means to build a practice that is profitable, transferable, and always sale-ready.",
+    category: "Interview",
+    publishedAt: "2026-08-04T00:00:00Z",
+    updatedAt: "2026-08-04T00:00:00Z",
+    readTimeMinutes: 9,
+    primaryKeyword: "dental practice consulting",
+    secondaryKeywords: [
+      "dental practice transition planning",
+      "sale-ready dental practice",
+      "dental practice profitability",
+      "dental practice value",
+      "dental practice owner burnout",
+    ],
+    keyTakeaways: [
+      "The core problem is loss of control: the practice starts running the owner instead of the other way around.",
+      "The earliest warning sign is usually frustration, not a financial crisis.",
+      "Time does not correct weak systems. Time exposes them.",
+      "Build the practice as though you may sell it someday, even if you never do.",
+    ],
+    intro: [
+      "I am Dr. Michael Njo. I have been a dentist, practice owner, practice-management consultant, transition specialist, educator, and author. That combination gives me a unique perspective because I understand what happens in the operatory, what happens behind the numbers, and what happens emotionally when a dentist begins thinking about the next chapter.",
+      "My philosophy is built around three principles: I am pro quality of life, pro work-life balance, and pro family. A successful practice should support your life, not consume it.",
+    ],
+    sections: [
+      {
+        id: "biggest-problem",
+        title: "What is the biggest problem you solve for dental practices?",
+        paragraphs: [
+          "The biggest problem I solve is the loss of control.",
+          "Many dentists reach a point where the practice begins controlling them. The owner is working harder, carrying more responsibility, managing more people, and taking home less than expected. Decisions are made reactively. The team depends too heavily on the doctor. The numbers may look good on the surface, but the practice is not predictable, transferable, or positioned to give the owner choices.",
+          "In simple terms, I help dentists stop owning a stressful job and start building a valuable business.",
+          "I know a practice needs help when the doctor cannot clearly answer questions such as:",
+        ],
+        bullets: [
+          "Where is the practice going?",
+          "What is the practice truly worth?",
+          "What is driving, or reducing, profitability?",
+          "Could the practice function successfully without the owner for several weeks?",
+          "Is the team aligned with the doctor's vision?",
+          "Does the owner have a realistic growth or transition plan?",
+        ],
+      },
+      {
+        id: "warning-signs",
+        title: "What warning signs tell a dentist it is time to address this?",
+        paragraphs: [
+          "The earliest warning sign is usually not a dramatic financial crisis. It is frustration.",
+          "The dentist starts saying, “I’m working harder, but I don’t feel like I’m getting ahead.” They may feel trapped by the schedule, team problems, insurance pressures, rising overhead, inconsistent collections, or an inability to take time away from the office.",
+          "Other warning signs include:",
+        ],
+        bullets: [
+          "Production is increasing, but profitability is not.",
+          "Overhead continues to rise without a clear explanation.",
+          "Cash flow feels unpredictable.",
+          "The schedule has frequent openings or fluctuates dramatically.",
+          "Continuing-care systems and unscheduled treatment are not being managed.",
+          "Team turnover is increasing.",
+          "The owner repeatedly handles problems that should be handled by the team.",
+          "Decisions are based on feelings rather than reliable data.",
+          "The practice is overly dependent on one provider, one employee, one referral source, or one insurance plan.",
+          "The doctor wants to slow down or retire but has no written transition plan.",
+          "The doctor does not know the current value of the practice.",
+        ],
+      },
+      {
+        id: "why-it-does-not-fix-itself",
+        title: "Why doesn't this problem usually fix itself?",
+        paragraphs: [
+          "Because time does not correct weak systems. Time exposes them.",
+          "A practice without clear leadership, measurements, accountability, and documented processes will not naturally become more organized. In most cases, the opposite happens. The owner compensates by working harder, making more decisions personally, or tolerating problems longer than they should.",
+          "That creates greater dependence on the doctor, which leads to burnout and decreases the transferability of the practice.",
+          "Waiting is particularly dangerous when a dentist is approaching a transition. I have seen doctors postpone planning because they assume they will address everything when they are ready to sell. Unfortunately, illness, injury, family circumstances, partnership conflicts, economic changes, or simple exhaustion can suddenly accelerate the timeline.",
+          "The best practice transitions do not begin when you are ready to sell. They begin years earlier by building a practice that is always sale-ready.",
+        ],
+      },
+      {
+        id: "biggest-mistakes",
+        title: "What are the biggest mistakes practices make when trying to solve this?",
+        paragraphs: [
+          "The first mistake is trying to outrun the problem with more production. More production does not automatically create more profitability. If the practice has poor scheduling, weak collections, excessive overhead, low case acceptance, ineffective leadership, or inadequate systems, more production can create more stress without creating more value.",
+          "The second mistake is treating every problem as a staffing problem. Sometimes the practice does need another employee. However, adding people to an unclear or inefficient system can simply add expense and confusion.",
+          "The third mistake is buying technology before fixing the process. Technology and artificial intelligence can amplify an effective system, but they can also amplify a dysfunctional one.",
+          "The fourth mistake is relying on rules of thumb. For example, two practices with identical collections can have dramatically different profitability, risk, equipment, team stability, payer mix, and value. A practice cannot be evaluated properly based on gross revenue alone.",
+          "Finally, many dentists wait too long to ask for help. They try to manage a major transition, partnership, acquisition, or sale with advisors who may be excellent professionals but do not specialize in dentistry. Dentistry has unique operational, financial, legal, and emotional considerations. The wrong advice can be extremely expensive.",
+        ],
+      },
+      {
+        id: "different-approach",
+        title: "How do you approach solving this differently?",
+        paragraphs: [
+          "What distinguishes my approach is that I look at the entire life cycle of the practice, and the life of the owner.",
+          "I have sat in the dentist's chair. I have owned and managed a practice. I have worked through team, financial, legal, growth, and transition challenges. I understand that a dental practice is not simply a collection of financial statements. It represents the doctor's career, identity, team, patients, family, and legacy.",
+          "My process begins with the owner, not with a spreadsheet:",
+        ],
+        bullets: [
+          "Clarify the vision. What does the dentist want professionally, financially, and personally? What does quality of life look like?",
+          "Establish the facts. We evaluate financial performance, cash flow, overhead, productivity, patient base, payer mix, team structure, systems, risk, and current value.",
+          "Identify the gaps. We determine what is preventing the practice from reaching its potential or giving the owner the desired options.",
+          "Strengthen leadership, culture, and systems. The team must understand the vision, performance standards, responsibilities, and measures of success.",
+          "Build enterprise value. We make the practice more profitable, predictable, resilient, transferable, and less dependent on the owner.",
+          "Create options. The doctor may choose to grow, add an associate, develop a partner, sell a percentage, sell and remain as an associate, or transition completely.",
+        ],
+      },
+      {
+        id: "realistic-results",
+        title: "What results should a practice realistically expect?",
+        paragraphs: [
+          "The first result is clarity. The owner understands what is happening in the practice, why it is happening, and what needs to be addressed first. That alone can reduce an enormous amount of anxiety.",
+          "Next comes accountability. The team begins working toward common objectives. Expectations become clearer, communication improves, and decisions become more data-driven.",
+          "Over time, the practice should experience improvements in areas such as:",
+        ],
+        bullets: [
+          "Cash-flow predictability",
+          "Overhead control",
+          "Team performance and retention",
+          "Scheduling and patient flow",
+          "Treatment acceptance",
+          "Continuing-care compliance",
+          "Leadership development",
+          "Profitability",
+          "Owner quality of life",
+          "Practice value and transition readiness",
+        ],
+      },
+      {
+        id: "advice-for-dentists",
+        title: "What advice would you give a dentist wondering whether they need help?",
+        paragraphs: [
+          "Do not wait for a crisis to give yourself permission to ask for help. Ask yourself:",
+        ],
+        bullets: [
+          "Am I enjoying the practice I have created?",
+          "Is the practice supporting my life, or is my life supporting the practice?",
+          "Do I know my true profitability and practice value?",
+          "Can my team execute without my constant involvement?",
+          "Are our systems documented, measured, and consistently followed?",
+          "Could I step away for several weeks without the practice losing momentum?",
+          "Am I preparing for my future, or simply hoping everything works out?",
+          "If an unexpected health or family event occurred, would I have options?",
+          "Do I know what I want my life after dentistry to look like?",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Who is your ideal client?",
+        answer:
+          "A dentist who is clinically committed, open-minded, and willing to look honestly at the practice. They may be purchasing their first office, growing an established practice, developing a partner, experiencing operational challenges, or preparing for retirement. The stage of the career is less important than the willingness to learn, make decisions, and implement change.",
+      },
+      {
+        question: "Who is not a good fit?",
+        answer:
+          "Someone looking for a quick fix without being willing to change. Consulting is collaborative. I can provide experience, structure, accountability, and an outside perspective, but the owner must be willing to communicate honestly, examine the data, lead the team, and follow through. I will also tell a client the truth, even when it is not what they hoped to hear.",
+      },
+      {
+        question: "What is the biggest misconception about your service?",
+        answer:
+          "That practice consulting or transition planning is only for practices that are struggling or doctors who are ready to retire. The best time to bring in an advisor is often when the practice is doing well. That is when we can be proactive, protect momentum, reduce risk, and build additional value without the pressure of a crisis. Transition planning is not about choosing a retirement date. It is about creating choices.",
+      },
+      {
+        question: "What is the cost of ignoring this issue for another year?",
+        answer:
+          "Much greater than one year of lost profit. It can include continued burnout, unnecessary overhead, missed treatment opportunities, staff turnover, declining culture, increased insurance dependence, delayed leadership development, and reduced practice value. More importantly, another year can mean one less year of enjoying the practice and life you worked so hard to create. You can usually recover lost revenue. It is much harder to recover lost time.",
+      },
+      {
+        question: "What small change could a practice make today that would have the biggest impact?",
+        answer:
+          "Begin measuring what matters, and review it consistently. Choose a small set of meaningful indicators, such as collections, overhead, provider productivity, new patients, continuing-care compliance, unscheduled treatment, case acceptance, accounts receivable, and cash flow. Then meet with your team and ask three questions: Where are we now? Where do we want to go? Who is accountable for the next action?",
+      },
+    ],
+    closing: [
+      "You do not need to be ready to sell to begin transition planning. You simply need to want greater clarity and control. My advice is to build your practice as though you may sell it someday, even if you never do. A sale-ready practice is usually also a well-run, profitable practice that provides a better quality of life today.",
+      "That is what I mean by “retire as you go.” Do not postpone your family, health, relationships, and happiness until some future retirement date. Build a practice that allows you to enjoy the journey.",
+      "Dentists spend decades building their practices, but too many wait until the end of their careers to ask what those practices have truly built for them. My goal is to help dentists create practices that are profitable, resilient, transferable, and aligned with the lives they want to lead.",
+      "Build the practice to be always sale-ready. Retire as you go. And never forget that the real measure of success is not simply what the practice produces. It is the life the practice allows you to live.",
+    ],
+    relatedLinks: [
+      {
+        href: "/resources",
+        label: "Browse all resources",
+        description: "See the broader resource hub for more ownership, transition, and strategy guidance.",
+      },
+      {
+        href: "/resources/questions-before-hiring-dental-consultant",
+        label: "7 questions to ask before hiring a dental consultant",
+        description: "A practical checklist for evaluating whether an advisor is the right fit for your practice.",
+      },
+      {
+        href: "/contact",
+        label: "Talk through your practice and your options",
+        description: "Start a conversation with Dr. Njo about growth, valuation, partnership, or transition planning.",
+      },
+    ],
   },
   {
     slug: "questions-before-hiring-dental-consultant",
