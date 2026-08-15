@@ -1,4 +1,4 @@
-use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -337,6 +337,28 @@ export default function MichaelNjoDDS() {
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
                 Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
               </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <figure className="space-y-2">
+                  <Image
+                    src="/IMG_4918.jpeg"
+                    alt="Panel of Experts dinner with dentists and referral partners"
+                    width={1600}
+                    height={1200}
+                    className="h-auto w-full rounded-xl object-cover"
+                  />
+                  <figcaption className="text-xs text-muted-foreground">Panel of Experts dinner</figcaption>
+                </figure>
+                <figure className="space-y-2">
+                  <Image
+                    src="/IMG_4923.jpeg"
+                    alt="Dr. Njo autographing Practice Transitions Handbook at the Panel of Experts dinner"
+                    width={1600}
+                    height={1200}
+                    className="h-auto w-full rounded-xl object-cover"
+                  />
+                  <figcaption className="text-xs text-muted-foreground">Autographing Practice Transitions Handbook</figcaption>
+                </figure>
+              </div>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
                 It is a honor to autograph my book at the Panel of Experts dinner- Practice Transitions Handbook. Stay tuned for my release of my second book this Month!!!
               </p>
