@@ -61,6 +61,16 @@ export default function MichaelNjoDDS() {
     }
   }, []);
 
+  useEffect(() => {
+    if (activeTab !== "news") return;
+    const id = window.location.hash.replace("#", "");
+    if (!id) return;
+    const timer = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [activeTab]);
+
   return (
     <>
       <Container className="space-y-12 py-10 sm:py-14">
@@ -300,6 +310,44 @@ export default function MichaelNjoDDS() {
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="panel-of-experts-dinner" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 14, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">Panel of Experts dinner</h2>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                It is an honor to autograph my book at the Panel of Experts dinner — Practice Transitions Handbook. Stay tuned for my release of my second book this month!!!
+              </p>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <Image
+                  src="/media/IMG_4918.webp"
+                  alt="Dr. Michael Njo with dentists and referral partners at the Panel of Experts dinner"
+                  width={1600}
+                  height={2133}
+                  className="h-full w-full rounded-xl object-cover"
+                  sizes="(min-width: 768px) 240px, 100vw"
+                  priority
+                />
+                <Image
+                  src="/media/IMG_4923.webp"
+                  alt="Dr. Michael Njo autographing Dental Practice Transitions Handbook at the Panel of Experts dinner"
+                  width={1600}
+                  height={2133}
+                  className="h-full w-full rounded-xl object-cover"
+                  sizes="(min-width: 768px) 240px, 100vw"
+                />
+                <Image
+                  src="/media/IMG_3346.webp"
+                  alt="Panel of Experts dinner table with dentists and referral partners"
+                  width={1600}
+                  height={2133}
+                  className="h-full w-full rounded-xl object-cover"
+                  sizes="(min-width: 768px) 240px, 100vw"
+                />
+              </div>
+            </article>
+
             <article id="industry-leaders" className={`${panel} space-y-4`}>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 13, 2026</p>
               <h2 className="font-serif text-xl font-semibold">An Amazing 4 days with Industry leaders!!!</h2>
@@ -329,34 +377,6 @@ export default function MichaelNjoDDS() {
                 </a>{" "}
                 on Instagram.
               </p>
-            </article>
-
-            <article id="panel-of-experts-dinner" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 14, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">Panel of Experts dinner</h2>
-              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
-              </p>
-              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                It is a honor to autograph my book at the Panel of Experts dinner- Practice Transitions Handbook. Stay tuned for my release of my second book this Month!!!
-              </p>
-              <div className="grid gap-3">
-                <img
-                  src="/media/IMG_4918.svg"
-                  alt="Dr. Michael Njo with dentists and referral partners at the Panel of Experts dinner"
-                  className="w-full rounded-xl"
-                />
-                <img
-                  src="/media/IMG_4923.svg"
-                  alt="Dr. Michael Njo autographing Dental Practice Transitions Handbook at the Panel of Experts dinner"
-                  className="w-full rounded-xl"
-                />
-                <img
-                  src="/media/IMG_3346.svg"
-                  alt="Panel of Experts dinner table with dentists and referral partners"
-                  className="w-full rounded-xl"
-                />
-              </div>
             </article>
 
             <div className={`${panel}`}>
