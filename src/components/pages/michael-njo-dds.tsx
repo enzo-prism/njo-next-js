@@ -1,4 +1,4 @@
-"use client";
+use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -300,6 +300,48 @@ export default function MichaelNjoDDS() {
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="industry-leaders" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 13, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">An Amazing 4 days with Industry leaders!!!</h2>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                An Amazing 4 days with Industry leaders!!!
+              </p>
+              <div className="mx-auto w-full max-w-[540px] overflow-hidden rounded-xl border border-border/70 bg-surface">
+                <iframe
+                  src="https://www.instagram.com/reel/Db9NKdHJAk2/embed"
+                  title="Instagram reel: An Amazing 4 days with Industry leaders"
+                  width="100%"
+                  height="720"
+                  allow="encrypted-media; clipboard-write"
+                  loading="lazy"
+                  className="w-full"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Video credit:{" "}
+                <a
+                  href="https://www.instagram.com/reel/Db9NKdHJAk2/"
+                  className="underline underline-offset-2"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  @backstagedentistry
+                </a>{" "}
+                on Instagram.
+              </p>
+            </article>
+
+            <article id="panel-of-experts-dinner" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 14, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">Panel of Experts dinner</h2>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                It is a honor to autograph my book at the Panel of Experts dinner- Practice Transitions Handbook. Stay tuned for my release of my second book this Month!!!
+              </p>
+            </article>
+
             <div className={`${panel}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
