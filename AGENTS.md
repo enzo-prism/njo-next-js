@@ -62,6 +62,12 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Book-launch resources use route-specific social images plus separate `Book` and `NewsArticle` schema nodes
 - `src/data/resource-articles.ts`
   - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
+- `src/data/media.ts`
+  - editorial photo inventory, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
+- `src/data/interview-video.ts`
+  - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
+- `src/components/pages/michael-njo-dds.tsx`
+  - News tab copy and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
 - `src/components/book-launch-feature.tsx`
   - Reusable featured-book UI for the home page, resources hub, and book-launch detail pages
 - `src/components/pages/resources.tsx`

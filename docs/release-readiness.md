@@ -3,6 +3,14 @@
 Date: 2026-03-04 (initial report)
 Updated: 2026-03-07 (Node 24 alignment and production rollout)
 
+## Media Display Update (2026-08-15)
+
+Fixed remaining image and video display bugs after the Panel of Experts dinner photos shipped:
+
+- Leadership retreat and UOP board dinner Cloudinary assets are landscape 4032×3024; mosaic metadata now matches so they are not cropped as portraits.
+- Interview playback uses a Cloudinary transformed 1280px MP4 plus poster instead of the ~100 MB source file.
+- News-tab dinner photographs render above the article copy so `#panel-of-experts-dinner` lands on the photos.
+
 ## Book Launch Update (2026-07-17)
 
 Prepared the production release for *The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value*.

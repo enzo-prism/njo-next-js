@@ -9,10 +9,10 @@ import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
+import { interviewVideo } from "@/data/interview-video";
 import { CONTACT_PATH } from "@/config/site";
 import { Container } from "@/components/layout/container";
 
-const videoUrl = "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4";
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
 const shareHeadline = "Helping Dentists Thrive Through Every Stage of Their Career";
 const shareText = `Watch this featured conversation with Dr. Michael Njo on practice transitions, management, and legal guidance for dentists.`;
@@ -186,8 +186,14 @@ export default function DrMichaelNjoInterview() {
           </CardHeader>
           <CardContent>
             <div className="overflow-hidden rounded-xl border border-border bg-black">
-              <video controls className="h-auto w-full bg-black" preload="metadata" playsInline>
-                <source src={videoUrl} type="video/mp4" />
+              <video
+                controls
+                className="h-auto w-full bg-black"
+                preload="metadata"
+                playsInline
+                poster={interviewVideo.posterUrl}
+              >
+                <source src={interviewVideo.playbackUrl} type="video/mp4" />
                 Your browser does not support embedded video.
               </video>
             </div>

@@ -1,4 +1,5 @@
 import { eventPrograms } from "@/data/events";
+import { interviewVideo as interviewVideoAssets } from "@/data/interview-video";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
@@ -414,8 +415,9 @@ export const getMichaelNjoInterviewStructuredData = () => {
     name: "Dr. Michael Njo Interview | Michael Njo, DDS",
     description:
       "An in-depth conversation on career transitions, management consulting, and legal guidance for dentists, hosted on Dr. Michael Njo, DDS and interviewed by Dr. Farokh Jiveh.",
-    contentUrl: "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4",
-    embedUrl: "https://res.cloudinary.com/dhqpqfw6w/video/upload/v1771798426/drnjo_avytsr.mp4",
+    contentUrl: interviewVideoAssets.playbackUrl,
+    embedUrl: interviewVideoAssets.playbackUrl,
+    thumbnailUrl: interviewVideoAssets.posterUrl,
     url: interviewUrl,
     inLanguage: "en",
     creator: {
