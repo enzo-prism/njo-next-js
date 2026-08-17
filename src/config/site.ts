@@ -32,6 +32,13 @@ export const BOOKING_URL = "https://calendly.com/michael-dental-strategies/30min
 export const DSO_PRICING_BOOKING_URL =
   "https://calendly.com/michael-dental-strategies/dso-pricing-dental-strategies-intro-call";
 
+// Official popup-widget assets and postMessage origins. Keep every booking-host
+// substring here so scripts/check-contact-ctas.ts can keep scanning the rest of
+// the repo. Import these constants instead of hardcoding the host elsewhere.
+export const CALENDLY_WIDGET_JS = "https://assets.calendly.com/assets/external/widget.js";
+export const CALENDLY_WIDGET_CSS = "https://assets.calendly.com/assets/external/widget.css";
+export const CALENDLY_MESSAGE_ORIGINS = ["https://calendly.com", "https://www.calendly.com"] as const;
+
 export const siteRuntime = {
   gaId: readEnv("NEXT_PUBLIC_GA_ID", DEFAULT_GA_ID),
   hotjarId: readEnv("NEXT_PUBLIC_HOTJAR_ID", DEFAULT_HOTJAR_ID),

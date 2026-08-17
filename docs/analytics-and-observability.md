@@ -71,6 +71,26 @@ The script intentionally skips execution when:
 
 This prevents local/dev and automated audit noise from polluting analytics.
 
+The bootstrap IIFE also assigns `window.gtag = gtag` so later helpers can find the same function. Do not add a second `gtag('config')` or a second measurement ID.
+
+### `generate_lead` conversion events
+
+Allowlisted lead events live in `src/lib/ga4.ts`. They send only sanitized params (`form_id`, `form_name`, `lead_source`, `location`, `method`, `contact_method`) that match `^[A-Za-z0-9._-]{1,80}$`. Names, emails, phones, message bodies, and other PII are never sent.
+
+`recordFormLead` dedupes in `sessionStorage` for about 10 minutes per `form_id`, so submit-success plus the thank-you page do not double-count.
+
+| Source | When it fires | Params |
+| --- | --- | --- |
+| Contact Formspree form | After `res.ok` in `src/components/pages/contact.tsx`, before the `/contact/success` redirect | `form_id=contact`, `form_name=contact`, `lead_source=website_contact_form`, `location=contact`, `method=form`, `contact_method=form` |
+| `/contact/success` safety net | Once per dedupe window via `ContactSuccessLeadTracker` | Same `form_id=contact` params as the form |
+| Calendly popup | Only on `calendly.event_scheduled` postMessage, never on "Book a call" click | `form_id=calendly`, `form_name=calendly`, `lead_source=website_calendly`, `location` from the current pathname slug, `method=calendly`, `contact_method=calendly` |
+
+Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) intercepts primary clicks and opens the official popup widget. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`. If the widget fails to load, the click falls back to a new tab. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page.
+
+If `window.gtag` is missing, the helper bridges to `window.dataLayer.push(arguments)` so events can queue before `gtag.js` finishes loading.
+
+Phillips event form, click-to-call, and email links do not fire `generate_lead`.
+
 ### Environment variables
 
 These values come from `src/config/site.ts`:

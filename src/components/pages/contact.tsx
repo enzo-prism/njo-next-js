@@ -19,6 +19,7 @@ import { serviceInterestOptions } from "@/data/service-interest-options";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
+import { CONTACT_FORM_LEAD_PARAMS, recordFormLead } from "@/lib/ga4";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
@@ -78,6 +79,7 @@ export default function Contact() {
       if (!res.ok) {
         throw new Error(`Failed with status ${res.status}`);
       }
+      recordFormLead(CONTACT_FORM_LEAD_PARAMS);
       router.push("/contact/success");
     } catch (err) {
       console.error(err);

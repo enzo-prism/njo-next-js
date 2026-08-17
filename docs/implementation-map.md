@@ -74,7 +74,9 @@ These are the main interactive islands and why they are client-side:
 | File | Why it is client-side |
 | --- | --- |
 | `src/components/layout/site-header.tsx` | `usePathname()` active nav state and mobile sheet menu |
-| `src/components/pages/contact.tsx` | React Hook Form, validation, Formspree submission |
+| `src/components/pages/contact.tsx` | React Hook Form, validation, Formspree submission, `generate_lead` on success |
+| `src/components/analytics/contact-success-lead-tracker.tsx` | Thank-you-page `generate_lead` safety net with form-id dedupe |
+| `src/components/analytics/calendly-lead-tracker.tsx` | Booking popup intercept and `event_scheduled` `generate_lead` |
 | `src/components/pages/phillips-event.tsx` | React Hook Form, checkbox state, Formspree submission |
 | `src/components/pages/testimonials.tsx` | client-side search and sort |
 | `src/components/pages/dr-michael-njo-interview.tsx` | share/copy interactions |
@@ -278,8 +280,9 @@ If you add an indexable static route, update `STATIC_SITE_PATHS` so sitemap and 
 The site drives two main actions: booking a call and contacting Dr. Njo.
 
 - Booking is the lead (primary, filled) action site-wide. It is a `BookingButton`
-  (`src/components/booking-button.tsx`) that opens a Calendly scheduling link in a new tab. The
-  button defaults to the general intro call but accepts an `href` for other booking links.
+  (`src/components/booking-button.tsx`) that renders an `<a href={BOOKING_URL}>` (or a passed
+  `href`) for no-JS and CTA checks. `CalendlyLeadTracker` intercepts primary clicks and opens the
+  official popup widget; modifier-clicks and widget-load failures still open a new tab.
 - Calendly URLs live only in `src/config/site.ts`. Every CTA imports a shared constant — never
   hardcode the link. `check:contact-ctas` enforces this. Two links exist today:
   - `BOOKING_URL`: general 30-minute intro call (default for `BookingButton`).
@@ -371,10 +374,15 @@ The env helper intentionally trims whitespace. Do not remove that behavior witho
 - `metadataBase`
 - favicon metadata
 - Vercel Analytics mount
-- GA bootstrap
+- GA bootstrap (assigns `window.gtag`; still a single `gtag('config')`)
 - Hotjar bootstrap
+- `CalendlyLeadTracker` (booking popup + `event_scheduled` lead events)
 
-Future changes should preserve the single-mount model.
+`src/lib/ga4.ts` owns allowlisted `generate_lead` params, the gtag/dataLayer bridge, and
+sessionStorage dedupe. Contact Formspree success and the `/contact/success` safety net share
+`form_id=contact`. Calendly fires only on `event_scheduled`.
+
+Future changes should preserve the single-mount model. Do not add a second measurement ID.
 
 ## Verification And What Each Check Catches
 
