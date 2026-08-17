@@ -1,5 +1,6 @@
 import { CheckCircle2, Mail, PhoneCall } from "lucide-react";
 import Link from "next/link";
+import { ContactSuccessLeadTracker } from "@/components/analytics/contact-success-lead-tracker";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Container } from "@/components/layout/container";
 export default function ContactSuccess() {
   return (
     <Container className="py-12">
+      <ContactSuccessLeadTracker />
       <div className="mx-auto flex min-h-[55vh] max-w-3xl items-center">
         <Card className="w-full border border-border/80 shadow-sm">
           <CardHeader className="text-center">

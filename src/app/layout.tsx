@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 import { Manrope, Merriweather } from "next/font/google";
+import { CalendlyLeadTracker } from "@/components/analytics/calendly-lead-tracker";
 import SiteShell from "@/components/layout/site-shell";
 import { siteRuntime, SITE_URL } from "@/config/site";
 import { buildRouteMetadata } from "@/seo/metadata";
@@ -60,6 +61,7 @@ const analyticsScript = `(function () {
 
     window.dataLayer = window.dataLayer || [];
     function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
     gtag("js", new Date());
     gtag("config", gaId);
   }
@@ -84,6 +86,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className={`${manrope.variable} ${merriweather.variable}`}>
         <SiteShell>{children}</SiteShell>
+        <CalendlyLeadTracker />
         <Analytics />
         <Script id="ga-hotjar-bootstrap" strategy="afterInteractive">
           {analyticsScript}

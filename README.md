@@ -94,6 +94,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 - `llms.txt` served from `public/llms.txt`
 - Vercel Analytics mounted once in `src/app/layout.tsx`
 - Google Analytics + Hotjar injected in `src/app/layout.tsx`
+- GA4 `generate_lead` on contact Formspree success (plus `/contact/success` safety net) and Calendly `event_scheduled`
 
 ## Environment Variables
 

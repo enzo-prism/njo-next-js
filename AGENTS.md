@@ -46,9 +46,16 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Canonical site URL and runtime analytics IDs
   - `BOOKING_URL`: single source of truth for the general Calendly intro-call link
   - `DSO_PRICING_BOOKING_URL`: single source of truth for the DSO pricing-call link
+  - Calendly popup widget URLs and postMessage origins (the only files allowed to contain `calendly.com`)
   - Environment variable parsing trims whitespace, which is intentional
+- `src/lib/ga4.ts`
+  - Allowlisted `generate_lead` helper, gtag/dataLayer bridge, and sessionStorage dedupe
 - `src/components/booking-button.tsx`
-  - Reusable primary "Book a call" CTA used site-wide; opens `BOOKING_URL` (or a passed `href`) in a new tab
+  - Reusable primary "Book a call" CTA used site-wide; renders `<a href={BOOKING_URL}>` (or a passed `href`)
+- `src/components/analytics/calendly-lead-tracker.tsx`
+  - Root-layout client island: opens the official popup when the widget is already loaded, otherwise leaves the new-tab link alone; records `generate_lead` only on `event_scheduled`
+- `src/components/analytics/contact-success-lead-tracker.tsx`
+  - Thank-you-page safety net for the contact-form `generate_lead` (same `form_id=contact` dedupe key)
 - `src/components/dso-pricing-callout.tsx`
   - Scoped DSO pricing CTA card (home, contact, and `/michael-njo-dds` only); opens `DSO_PRICING_BOOKING_URL`
 - `next.config.ts`
@@ -145,11 +152,16 @@ Check these hotspots first when your work touches:
   - configured through `src/config/site.ts`
   - bootstrapped by inline script in `src/app/layout.tsx`
   - guarded to avoid localhost/headless noise
+  - bootstrap assigns `window.gtag` so `src/lib/ga4.ts` can emit `generate_lead`
+- `generate_lead`:
+  - contact Formspree success (`form_id=contact`) plus a `/contact/success` safety net
+  - Calendly popup `event_scheduled` only (`form_id=calendly`); opening the widget does not count
+  - never send names, emails, phones, or message bodies
 
 ## Common Pitfalls
 
 - Do not hardcode Calendly booking links. Import `BOOKING_URL` / `DSO_PRICING_BOOKING_URL` and use `BookingButton`; `check:contact-ctas` blocks hardcoded booking links and missing booking CTAs in the header, footer, and contact page.
-- Do not add per-page analytics mounts.
+- Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
 - Do not add redirect-only or thank-you pages to the sitemap.
 - Do not change canonical host/protocol logic casually; multiple docs and checks depend on it.
