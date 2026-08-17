@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, CheckCircle2, Clock3, Mail, MapPin, MessageSquareQuote, PhoneCall } from "lucide-react";
+import { CalendarDays, CheckCircle2, Clock3, MapPin, MessageSquareQuote } from "lucide-react";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,7 +17,7 @@ import {
   profileRelationshipImages,
   type EditorialMediaAsset,
 } from "@/data/media";
-import { eventPrograms } from "@/data/events";
+import { getUpcomingEventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
@@ -27,6 +27,7 @@ import { EditorialMosaic } from "@/components/media/editorial-mosaic";
 import { BookingButton } from "@/components/booking-button";
 import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { CONTACT_PATH } from "@/config/site";
+import { buildProfileTabPath, resolveProfileTab, type ProfileTab } from "@/lib/profile-tabs";
 
 const panel = "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
@@ -49,17 +50,41 @@ const organizations = [
   },
 ];
 
-export default function MichaelNjoDDS() {
+function getTabFromLocation() {
+  return resolveProfileTab(window.location.search, window.location.hash);
+}
+
+export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: string }) {
   const featuredTestimonials = testimonialPages.slice(0, 6);
-  const [activeTab, setActiveTab] = useState("overview");
+  const upcomingEventPrograms = getUpcomingEventPrograms(new Date(referenceDateIso));
+  const [activeTab, setActiveTab] = useState<ProfileTab>("overview");
   const [selectedImage, setSelectedImage] = useState<EditorialMediaAsset | null>(null);
 
   useEffect(() => {
-    const shouldShowNews = new URLSearchParams(window.location.search).get("tab") === "news";
-    if (shouldShowNews) {
-      setActiveTab("news");
-    }
+    const syncTabFromLocation = () => setActiveTab(getTabFromLocation());
+    syncTabFromLocation();
+    window.addEventListener("popstate", syncTabFromLocation);
+    window.addEventListener("hashchange", syncTabFromLocation);
+    return () => {
+      window.removeEventListener("popstate", syncTabFromLocation);
+      window.removeEventListener("hashchange", syncTabFromLocation);
+    };
   }, []);
+
+  const handleTabChange = (nextTab: string) => {
+    const tab: ProfileTab = nextTab === "news" ? "news" : "overview";
+    setActiveTab(tab);
+    window.history.pushState(
+      {},
+      "",
+      buildProfileTabPath({
+        pathname: window.location.pathname,
+        search: window.location.search,
+        hash: window.location.hash,
+        tab,
+      }),
+    );
+  };
 
   useEffect(() => {
     if (activeTab !== "news") return;
@@ -93,7 +118,7 @@ export default function MichaelNjoDDS() {
           </div>
         </section>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
           <TabsList className="mx-auto grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="news">News</TabsTrigger>
@@ -344,7 +369,7 @@ export default function MichaelNjoDDS() {
                 Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                It is an honor to autograph my book at the Panel of Experts dinner — Practice Transitions Handbook. Stay tuned for my release of my second book this month!!!
+                It was also an honor to autograph the <em>Dental Practice Transitions Handbook</em> at the dinner. Dr. Njo&apos;s newest publishing collaboration, <em>The Dental Exit Blueprint</em>, was released July 15, 2026.
               </p>
             </article>
 
@@ -379,14 +404,20 @@ export default function MichaelNjoDDS() {
               </p>
             </article>
 
-            <div className={`${panel}`}>
+            <div id="upcoming-events" className={`${panel}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Upcoming events</p>
                   <h2 className="font-serif text-xl font-semibold">Don&apos;t miss our latest educational opportunities</h2>
                 </div>
                 <Button asChild variant="outline" size="sm">
-                  <a href="#past-events">View past events</a>
+                  <a
+                    href="https://practicetransitionsinstitute.com/events"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Full schedule at PTI
+                  </a>
                 </Button>
               </div>
             </div>
@@ -416,7 +447,7 @@ export default function MichaelNjoDDS() {
               </div>
             ) : null}
 
-            {eventPrograms.map((program) => (
+            {upcomingEventPrograms.map((program) => (
               <div key={program.slug} className={`${panel} space-y-4`}>
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="secondary" className="capitalize">
@@ -470,31 +501,36 @@ export default function MichaelNjoDDS() {
                       ))}
                     </div>
                     {program.completedEventsLabel ? (
-                      <p id="past-events" className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {program.completedEventsLabel}
                       </p>
                     ) : null}
                   </div>
                 ) : null}
 
-                {program.callToAction ? (
-                  <div className="flex flex-wrap gap-2">
-                    <Button asChild size="sm">
-                      <a href={`tel:${program.callToAction.phone}`} className="inline-flex items-center gap-2">
-                        <PhoneCall className="h-4 w-4" />
-                        Call or text to register
-                      </a>
-                    </Button>
-                    <Button asChild variant="outline" size="sm">
-                      <a href={`mailto:${program.callToAction.email}`} className="inline-flex items-center gap-2">
-                        <Mail className="h-4 w-4" />
-                        Email us to register
-                      </a>
-                    </Button>
-                  </div>
+                {program.registrationUrl ? (
+                  <Button asChild size="sm">
+                    <a href={program.registrationUrl} target="_blank" rel="noopener noreferrer">
+                      View current event details at PTI
+                    </a>
+                  </Button>
                 ) : null}
               </div>
             ))}
+
+            {upcomingEventPrograms.length === 0 ? (
+              <div className={`${panel} space-y-3`}>
+                <h3 className="font-serif text-lg font-semibold">No upcoming dates are currently published</h3>
+                <p className="text-sm text-muted-foreground">
+                  Visit Practice Transitions Institute for the latest seminar and education schedule.
+                </p>
+                <Button asChild variant="outline">
+                  <a href="https://practicetransitionsinstitute.com/events" target="_blank" rel="noopener noreferrer">
+                    View PTI events
+                  </a>
+                </Button>
+              </div>
+            ) : null}
 
             <div className={`${panel} space-y-3`}>
               <h3 className="font-serif text-lg font-semibold">Media &amp; speaking</h3>

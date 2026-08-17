@@ -1,4 +1,4 @@
-import { eventPrograms } from "@/data/events";
+import { getUpcomingEventPrograms } from "@/data/events";
 import { interviewVideo as interviewVideoAssets } from "@/data/interview-video";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
@@ -221,8 +221,8 @@ const getFAQEntity = (): SchemaNode => ({
   })),
 });
 
-const getUpcomingEventNodes = (): SchemaNode[] =>
-  eventPrograms.flatMap((program) => {
+export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[] =>
+  getUpcomingEventPrograms(referenceDate).flatMap((program) => {
     const eventType = program.category === "conference" ? "Event" : "EducationEvent";
     const pageUrl = `${siteMetadata.siteUrl}/michael-njo-dds?tab=news`;
     const occurrences = program.upcomingDates?.length
@@ -519,7 +519,7 @@ export const getMichaelNjoStructuredData = () => {
     ...getCoreGraphNodes(),
     ...getServiceNodes(),
     ...getResourceNodes(),
-    ...getUpcomingEventNodes(),
+    ...buildUpcomingEventNodes(),
     profilePage,
     breadcrumb,
   ];

@@ -17,6 +17,7 @@ function readEnv(key: string, fallback: string) {
 }
 
 export const SITE_URL = readEnv("NEXT_PUBLIC_SITE_URL", DEFAULT_SITE_URL).replace(/\/+$/, "");
+export const PRODUCTION_HOSTNAME = new URL(DEFAULT_SITE_URL).hostname;
 export const CONTACT_PATH = "/contact";
 export const CONTACT_URL = `${SITE_URL}${CONTACT_PATH}`;
 export const CONTACT_EMAIL = DEFAULT_CONTACT_EMAIL;

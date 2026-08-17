@@ -24,8 +24,9 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - forms submit directly to Formspree
   - there are no internal API routes for form submission
 - Preserve analytics behavior:
-  - Google Analytics and Hotjar are bootstrapped in the root layout
-  - Vercel Analytics is mounted once in the root layout
+  - one consent manager is mounted in the root layout
+  - Google Analytics, Hotjar, and Vercel Analytics load only after consent on the canonical production host
+  - conversion events must never include submitted form values or other personal data
 
 ## Runtime and Tooling
 
@@ -38,10 +39,11 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 
 - `src/app/layout.tsx`
   - Root layout
-  - Global analytics wiring lives here:
-    - `@vercel/analytics/next`
-    - Google Analytics bootstrap script
-    - Hotjar bootstrap script
+  - Mounts the single global analytics consent manager
+- `src/components/analytics-consent.tsx`
+  - Consent-gated, production-host-only Vercel Analytics, Google Analytics, and Hotjar loading
+- `src/lib/analytics-events.ts`
+  - Shared non-sensitive conversion-event interface
 - `src/config/site.ts`
   - Canonical site URL and runtime analytics IDs
   - `BOOKING_URL`: single source of truth for the general Calendly intro-call link
@@ -49,11 +51,11 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Calendly popup widget URLs and postMessage origins (the only files allowed to contain `calendly.com`)
   - Environment variable parsing trims whitespace, which is intentional
 - `src/lib/ga4.ts`
-  - Allowlisted `generate_lead` helper, gtag/dataLayer bridge, and sessionStorage dedupe
+  - Allowlisted, consent-gated `generate_lead` helper and sessionStorage dedupe
 - `src/components/booking-button.tsx`
   - Reusable primary "Book a call" CTA used site-wide; renders `<a href={BOOKING_URL}>` (or a passed `href`)
 - `src/components/analytics/calendly-lead-tracker.tsx`
-  - Root-layout client island: opens the official popup when the widget is already loaded, otherwise leaves the new-tab link alone; records `generate_lead` only on `event_scheduled`
+  - Root-layout client island: warms the official widget only on booking intent, opens the popup when ready, otherwise leaves the new-tab link alone, and records `generate_lead` only on `event_scheduled`
 - `src/components/analytics/contact-success-lead-tracker.tsx`
   - Thank-you-page safety net for the contact-form `generate_lead` (same `form_id=contact` dedupe key)
 - `src/components/dso-pricing-callout.tsx`
@@ -75,6 +77,11 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
 - `src/components/pages/michael-njo-dds.tsx`
   - News tab copy and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
+- `src/data/events.ts`
+  - Editorial event records plus date-aware upcoming/current derivation
+  - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
+- `src/lib/profile-tabs.ts`
+  - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
   - Reusable featured-book UI for the home page, resources hub, and book-launch detail pages
 - `src/components/pages/resources.tsx`
@@ -88,6 +95,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Captures phone, practice city/location, practice website, service interest, and message
 - `src/components/pages/phillips-event.tsx`
   - Phillips event Formspree integration
+- `src/lib/lead-form-validation.ts`
+  - Shared trimming, maximum lengths, HTTP(S) URL normalization, privacy acknowledgment, honeypot, and repeat-submit safeguards
 - `scripts/*`
   - parity and SEO validation scripts
 - `docs/implementation-map.md`
@@ -115,6 +124,8 @@ Check these hotspots first when your work touches:
   - `src/app/sitemap.ts`
 - Analytics:
   - `src/app/layout.tsx`
+  - `src/components/analytics-consent.tsx`
+  - `src/lib/analytics-events.ts`
   - `src/config/site.ts`
   - `docs/analytics-and-observability.md`
 - Forms:
@@ -145,17 +156,17 @@ Check these hotspots first when your work touches:
 
 - Vercel Analytics:
   - package: `@vercel/analytics`
-  - component: `Analytics` from `@vercel/analytics/next`
-  - mounted once in `src/app/layout.tsx`
+  - component: `Analytics` from `@vercel/analytics/react`
+  - consent-gated by the manager mounted once in `src/app/layout.tsx`
   - no project env variable is required in this repo
 - Google Analytics and Hotjar:
   - configured through `src/config/site.ts`
-  - bootstrapped by inline script in `src/app/layout.tsx`
-  - guarded to avoid localhost/headless noise
-  - bootstrap assigns `window.gtag` so `src/lib/ga4.ts` can emit `generate_lead`
+  - loaded by `src/components/analytics-consent.tsx`
+  - guarded by explicit visitor consent and the canonical production hostname
 - `generate_lead`:
   - contact Formspree success (`form_id=contact`) plus a `/contact/success` safety net
   - Calendly popup `event_scheduled` only (`form_id=calendly`); opening the widget does not count
+  - dispatched through the same consent-gated analytics event path
   - never send names, emails, phones, or message bodies
 
 ## Common Pitfalls

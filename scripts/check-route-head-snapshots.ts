@@ -52,6 +52,18 @@ const cases = [
     descriptionIncludes: "Confirmation",
     ogType: "website",
   },
+  {
+    path: "/privacy",
+    title: "Privacy Policy | Michael Njo, DDS",
+    descriptionIncludes: "collects, uses, protects",
+    ogType: "website",
+  },
+  {
+    path: "/terms",
+    title: "Terms of Use | Michael Njo, DDS",
+    descriptionIncludes: "terms governing use",
+    ogType: "website",
+  },
   ...resourceArticles.map((article) => ({
     path: buildResourceArticlePath(article.slug),
     title: article.metaTitle,
@@ -80,6 +92,12 @@ for (const item of cases) {
   const openGraph = metadata.openGraph as { type?: string; url?: string } | undefined;
   assert.equal(openGraph?.type, item.ogType);
   assert.equal(openGraph?.url, buildCanonicalUrl(item.path));
+}
+
+for (const path of ["/dentalflix", "/phillips-event", "/testimonials/diana-fat-dds"]) {
+  const robots = buildRouteMetadata(path).robots as { index?: boolean; follow?: boolean } | undefined;
+  assert.equal(robots?.index, false, `${path} should be noindex`);
+  assert.equal(robots?.follow, true, `${path} should remain followable`);
 }
 
 console.log(`Checked ${cases.length} route metadata snapshots.`);

@@ -2,7 +2,7 @@
 
 This document explains how traffic and behavior instrumentation is wired in `michaelnjodds.com`, where it lives in the codebase, and how to validate it safely.
 
-## Current Analytics Stack
+## Current Analytics Stack And Consent
 
 The site currently uses three analytics/behavior tools:
 
@@ -10,17 +10,25 @@ The site currently uses three analytics/behavior tools:
 - Google Analytics for broader traffic reporting
 - Hotjar for behavior/session insight
 
+All three are optional and consent-gated. No analytics provider is mounted or downloaded until a
+visitor selects **Allow analytics**. Declining does not remove site functionality. **Privacy choices**
+in the footer clears the saved choice and reloads the page so previously loaded analytics are removed
+before the visitor chooses again.
+
 ## Source of Truth in Code
 
 ### Root integration point
 
-All analytics wiring is centralized in `src/app/layout.tsx`.
+All analytics wiring is centralized through `AnalyticsConsentManager`, mounted once in
+`src/app/layout.tsx`.
 
 Current responsibilities:
 
-- Mount `<Analytics />` from `@vercel/analytics/next`
-- Inject Google Analytics bootstrap code
-- Inject Hotjar bootstrap code
+- Read and update the versioned browser consent preference
+- Mount Vercel Analytics only after consent
+- Load Google Analytics and Hotjar only after consent
+- Keep all providers disabled outside the canonical production hostname
+- Forward approved conversion events to Vercel Analytics and Google Analytics
 
 This is intentional. Future changes should keep analytics mounted once at the root layout instead of duplicating instrumentation across routes.
 
@@ -43,8 +51,8 @@ Important details:
 ### Implementation
 
 - Package: `@vercel/analytics`
-- Import: `@vercel/analytics/next`
-- Mount point: `src/app/layout.tsx`
+- Import: `@vercel/analytics/react`
+- Mount point: `src/components/analytics-consent.tsx`, rendered once by `src/app/layout.tsx`
 
 ### Operational behavior
 
@@ -62,16 +70,29 @@ Important details:
 
 ### Implementation
 
-GA and Hotjar are bootstrapped via an inline script in `src/app/layout.tsx`.
+GA and Hotjar are loaded from `src/components/analytics-consent.tsx` after consent.
 
-The script intentionally skips execution when:
+The manager intentionally skips provider loading when:
 
-- hostname is localhost-style
-- browser looks headless (`HeadlessChrome` or Lighthouse-style user agents)
+- the visitor has not allowed analytics
+- the hostname is not exactly `michaelnjodds.com`
 
-This prevents local/dev and automated audit noise from polluting analytics.
+This prevents local, preview, and automated audit traffic from polluting production analytics.
 
-The bootstrap IIFE also assigns `window.gtag = gtag` so later helpers can find the same function. Do not add a second `gtag('config')` or a second measurement ID.
+## Conversion Events
+
+`src/lib/analytics-events.ts` is the shared client event interface. Current events are:
+
+- `booking_click`
+- `contact_click`
+- `form_start`
+- `form_submit`
+- `form_success`
+- `form_error`
+- `form_validation_error`
+
+Events are discarded unless the visitor allowed analytics. Never include names, emails, phone
+numbers, message text, or other submitted form values in event properties.
 
 ### `generate_lead` conversion events
 
@@ -85,9 +106,9 @@ Allowlisted lead events live in `src/lib/ga4.ts`. They send only sanitized param
 | `/contact/success` safety net | Once per dedupe window via `ContactSuccessLeadTracker` | Same `form_id=contact` params as the form |
 | Calendly popup | Only on `calendly.event_scheduled` postMessage, never on "Book a call" click | `form_id=calendly`, `form_name=calendly`, `lead_source=website_calendly`, `location` from the current pathname slug, `method=calendly`, `contact_method=calendly` |
 
-Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) preloads the official popup widget and intercepts a primary click only when `window.Calendly` is already available. If the widget is missing or blocked, the native new-tab link proceeds. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`.
+Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) warms the official popup widget only after pointer, keyboard, or touch intent on a booking link, and intercepts a primary click only when `window.Calendly` is already available. If the widget is missing or blocked, the native new-tab link proceeds. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`.
 
-If `window.gtag` is missing, the helper bridges to `window.dataLayer.push(arguments)` so events can queue before `gtag.js` finishes loading.
+`recordFormLead` checks canonical production host and accepted analytics consent before setting its dedupe marker or dispatching. The event then uses the same consent-gated event path as other analytics events, so a pre-consent form submission cannot queue a lead for later transmission.
 
 Phillips event form, click-to-call, and email links do not fire `generate_lead`.
 
@@ -120,13 +141,11 @@ npm run check:parity
 
 ### Preview validation
 
-1. Deploy a preview.
-2. Open the preview in a normal browser session.
-3. Navigate across multiple pages.
-4. Confirm requests/load behavior:
-   - Vercel Analytics component is mounted
-   - GA script loads when enabled
-   - Hotjar script loads when enabled
+1. Deploy a preview and confirm no analytics-provider requests load; previews are intentionally disabled.
+2. On production, clear the saved privacy choice and confirm no provider requests load before a choice.
+3. Select **Decline** and confirm provider requests remain absent.
+4. Reset through the footer, select **Allow analytics**, and confirm all enabled providers load.
+5. Trigger a booking click and a non-submitting form interaction, then confirm only non-sensitive event properties are emitted.
 
 If the preview is protected, use the workflow in `docs/deployment-runbook.md` for CLI smoke checks, then validate browser-side analytics manually.
 

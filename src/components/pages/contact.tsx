@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Mail, MessageSquareText, PhoneCall } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,15 +21,27 @@ import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
 import { CONTACT_FORM_LEAD_PARAMS, recordFormLead } from "@/lib/ga4";
+import {
+  isLeadFormRateLimited,
+  LEAD_FORM_LIMITS,
+  markLeadFormSubmitted,
+  sharedLeadFormFields,
+} from "@/lib/lead-form-validation";
+import { trackAnalyticsEvent } from "@/lib/analytics-events";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "Please enter your full name."),
-  email: z.string().email("Enter a valid email."),
-  phone: z.string().min(7, "Include a valid phone number."),
-  practiceCity: z.string().min(2, "Please enter your practice city or location."),
-  practiceWebsite: z.string().optional(),
-  services: z.array(z.string()).min(1, "Please select at least one service of interest."),
-  message: z.string().min(10, "Share details so Dr. Njo can respond personally."),
+  ...sharedLeadFormFields,
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Include a valid phone number.")
+    .max(LEAD_FORM_LIMITS.phone, "Keep the phone number under 40 characters.")
+    .regex(/^[+().\s\d-]+$/, "Use only numbers and standard phone punctuation."),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Share details so Dr. Njo can respond personally.")
+    .max(LEAD_FORM_LIMITS.message, "Keep your message under 5,000 characters."),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -41,11 +54,15 @@ const defaultValues: ContactFormValues = {
   practiceWebsite: "",
   services: [],
   message: "",
+  privacyAcknowledged: false,
+  companyWebsite: "",
 };
 
 export default function Contact() {
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const startedAtRef = useRef(Date.now());
+  const hasTrackedStartRef = useRef(false);
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues,
@@ -53,6 +70,11 @@ export default function Contact() {
 
   const onSubmit = async (values: ContactFormValues) => {
     setSubmitError(null);
+    if (isLeadFormRateLimited("contact")) {
+      setSubmitError("Your message was already sent. Please wait a moment before submitting again.");
+      return;
+    }
+
     const payload = new FormData();
     payload.append("name", values.name);
     payload.append("email", values.email);
@@ -65,7 +87,10 @@ export default function Contact() {
     payload.append("message", values.message);
     payload.append("_subject", "New inquiry for Michael Njo, DDS");
     payload.append("_replyto", values.email);
-    appendFormspreeOpsMetadata(payload, "contact");
+    payload.append("privacy_acknowledged", values.privacyAcknowledged ? "yes" : "no");
+    payload.append("_gotcha", values.companyWebsite);
+    appendFormspreeOpsMetadata(payload, "contact", startedAtRef.current);
+    trackAnalyticsEvent("form_submit", { form: "contact", path: window.location.pathname });
 
     try {
       const res = await fetch(FORMSPREE_ENDPOINTS.contact, {
@@ -79,12 +104,21 @@ export default function Contact() {
       if (!res.ok) {
         throw new Error(`Failed with status ${res.status}`);
       }
+      markLeadFormSubmitted("contact");
+      trackAnalyticsEvent("form_success", { form: "contact", path: window.location.pathname });
       recordFormLead(CONTACT_FORM_LEAD_PARAMS);
       router.push("/contact/success");
     } catch (err) {
       console.error(err);
+      trackAnalyticsEvent("form_error", { form: "contact", path: window.location.pathname });
       setSubmitError(`We couldn't send your message. Please try again or email ${CONTACT_EMAIL}.`);
     }
+  };
+
+  const trackFormStart = () => {
+    if (hasTrackedStartRef.current) return;
+    hasTrackedStartRef.current = true;
+    trackAnalyticsEvent("form_start", { form: "contact", path: window.location.pathname });
   };
 
   return (
@@ -153,7 +187,24 @@ export default function Contact() {
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit, () => {
+                    trackAnalyticsEvent("form_validation_error", { form: "contact", path: window.location.pathname });
+                  })}
+                  onFocusCapture={trackFormStart}
+                  className="space-y-6"
+                  noValidate
+                >
+                  <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                    <label htmlFor="contact-company-website">Company website</label>
+                    <input
+                      id="contact-company-website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      {...form.register("companyWebsite")}
+                    />
+                  </div>
                   <FormField
                     control={form.control}
                     name="name"
@@ -161,8 +212,9 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Full name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your full name" {...field} />
+                          <Input autoComplete="name" maxLength={LEAD_FORM_LIMITS.name} placeholder="Your full name" {...field} />
                         </FormControl>
+                        <FormDescription className="sr-only">Enter your first and last name.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -176,7 +228,7 @@ export default function Contact() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="you@email.com" {...field} />
+                            <Input type="email" inputMode="email" autoComplete="email" maxLength={LEAD_FORM_LIMITS.email} placeholder="you@email.com" {...field} />
                           </FormControl>
                           <FormDescription>Used for reply confirmation and follow-up.</FormDescription>
                           <FormMessage />
@@ -190,7 +242,7 @@ export default function Contact() {
                         <FormItem>
                           <FormLabel>Phone</FormLabel>
                           <FormControl>
-                            <Input type="tel" placeholder="Phone number" {...field} />
+                            <Input type="tel" inputMode="tel" autoComplete="tel" maxLength={LEAD_FORM_LIMITS.phone} placeholder="Phone number" {...field} />
                           </FormControl>
                           <FormDescription>Mobile preferred. Include country code if outside the US.</FormDescription>
                           <FormMessage />
@@ -206,8 +258,9 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Practice city or location</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Anaheim, CA" {...field} />
+                          <Input autoComplete="address-level2" maxLength={LEAD_FORM_LIMITS.practiceCity} placeholder="e.g. Anaheim, CA" {...field} />
                         </FormControl>
+                        <FormDescription className="sr-only">Enter the city and state or region where your practice is located.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -220,8 +273,9 @@ export default function Contact() {
                       <FormItem>
                         <FormLabel>Practice website (optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="https://yourpractice.com" {...field} />
+                          <Input type="url" inputMode="url" autoComplete="url" maxLength={LEAD_FORM_LIMITS.practiceWebsite} placeholder="https://yourpractice.com" {...field} />
                         </FormControl>
+                        <FormDescription>Enter a full domain or URL. We will add https:// if needed.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -232,8 +286,9 @@ export default function Contact() {
                     name="services"
                     render={() => (
                       <FormItem>
-                        <FormLabel>Services you&apos;re interested in</FormLabel>
-                        <FormDescription>Select the services that align with your priorities.</FormDescription>
+                        <fieldset aria-describedby="contact-services-description contact-services-error">
+                        <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Services you&apos;re interested in</legend>
+                        <FormDescription id="contact-services-description">Select the services that align with your priorities.</FormDescription>
                         <div className="grid gap-2 pt-1 sm:grid-cols-2">
                           {serviceInterestOptions.map((svc) => {
                             const checked = form.watch("services").includes(svc);
@@ -268,7 +323,8 @@ export default function Contact() {
                             );
                           })}
                         </div>
-                        <FormMessage />
+                        <FormMessage id="contact-services-error" />
+                        </fieldset>
                       </FormItem>
                     )}
                   />
@@ -282,11 +338,41 @@ export default function Contact() {
                         <FormControl>
                           <Textarea
                             rows={6}
+                            maxLength={LEAD_FORM_LIMITS.message}
                             placeholder="Share context, goals, timeline, or specific questions for Dr. Njo"
                             {...field}
                           />
                         </FormControl>
                         <FormDescription>Describe your practice, priorities, and what kind of guidance you need.</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="privacyAcknowledged"
+                    render={({ field }) => (
+                      <FormItem className="rounded-xl border border-border bg-surface p-4">
+                        <div className="flex items-start gap-3">
+                          <FormControl>
+                            <input
+                              type="checkbox"
+                              aria-label="I acknowledge the Privacy Policy and agree that Dental Strategies may use my information to respond to this inquiry."
+                              className="mt-0.5 h-5 w-5 shrink-0 rounded accent-primary"
+                              checked={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
+                              ref={field.ref}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal leading-relaxed">
+                            I understand that Dental Strategies will use my information to respond to this inquiry, as described in the{" "}
+                            <Link href="/privacy" className="font-medium text-brand underline underline-offset-4">Privacy Policy</Link>.
+                          </FormLabel>
+                        </div>
+                        <FormDescription className="sr-only">Required acknowledgment for processing this inquiry.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}

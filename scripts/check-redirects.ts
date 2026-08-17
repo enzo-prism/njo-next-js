@@ -5,6 +5,8 @@ import { CANONICAL_PROTOCOL, PREFERRED_HOSTNAME } from "@/config/site";
 import { getCanonicalRedirectLocation } from "@/seo/canonical";
 
 const requiredLegacyRedirects = [
+  "/about",
+  "/events",
   "/dr-michael-neal-interview",
   "/testimonials/dr-fat",
   "/testimonials/richard-and-kimberly-crum",
@@ -51,8 +53,38 @@ assert.equal(
 );
 
 async function main() {
+  const headerRules = await nextConfig.headers?.();
+  const globalHeaders = headerRules?.find((rule) => rule.source === "/:path*")?.headers ?? [];
+  const headerMap = new Map(globalHeaders.map((header) => [header.key.toLowerCase(), header.value]));
+  for (const requiredHeader of [
+    "content-security-policy",
+    "strict-transport-security",
+    "x-content-type-options",
+    "x-frame-options",
+    "referrer-policy",
+    "permissions-policy",
+  ]) {
+    assert.ok(headerMap.has(requiredHeader), `Missing global security header: ${requiredHeader}`);
+  }
+  assert.ok(
+    headerMap.get("content-security-policy")?.includes("frame-ancestors 'none'"),
+    "Content Security Policy must prevent framing.",
+  );
+
   const redirects = await nextConfig.redirects?.();
   assert.ok(redirects && redirects.length >= 4, "next.config redirects should include legacy mappings");
+
+  for (const [source, destination] of Object.entries(LEGACY_REDIRECTS)) {
+    assert.ok(
+      redirects?.some(
+        (redirect) =>
+          redirect.source === source &&
+          redirect.destination === destination &&
+          redirect.permanent === true,
+      ),
+      `next.config.ts is missing permanent legacy redirect ${source} -> ${destination}`,
+    );
+  }
 
   const hasHttpToHttpsRedirect = redirects?.some(
     (redirect) =>

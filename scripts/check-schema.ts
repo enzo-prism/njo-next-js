@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildPageStructuredData } from "@/seo/route-structured-data";
+import { buildUpcomingEventNodes } from "@/seo/structured-data";
 
 const forbiddenTypes = new Set(["Review", "AggregateRating", "Rating"]);
 
@@ -90,5 +91,12 @@ assert.equal(
 assert.ok(!("isbn" in (dentalExitBlueprintBook || {})), "Do not add an unverified Dental Exit Blueprint ISBN");
 assert.ok(!("publisher" in (dentalExitBlueprintBook || {})), "Do not add an unverified Dental Exit Blueprint publisher");
 assert.ok(!JSON.stringify(dentalExitBlueprintSchema).includes("#1"), "Do not add an unverified #1 claim");
+
+const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
+assert.equal(augustEventNodes.length, 1, "Only the October seminar occurrence should be upcoming in August");
+assert.equal(augustEventNodes[0].startDate, "2026-10-02T08:00:00-07:00");
+assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April event must not remain in schema");
+assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
+assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
 
 console.log(`Validated structured data for ${paths.length} routes.`);

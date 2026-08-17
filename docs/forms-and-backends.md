@@ -29,6 +29,9 @@ Submission payload:
 - `message`
 - `_subject` = `New inquiry for Michael Njo, DDS`
 - `_replyto` = submitted email
+- `privacy_acknowledged` = `yes` after the required acknowledgment
+- `_gotcha` = invisible honeypot value (normally empty)
+- operational metadata for path, referrer, campaign parameters, and completion time
 
 Request:
 
@@ -51,6 +54,9 @@ Submission payload:
 - `additional_notes` (optional)
 - `_subject` = `Phillips Event - New contact from <name>`
 - `_replyto` = submitted email
+- `privacy_acknowledged` = `yes` after the required acknowledgment
+- `_gotcha` = invisible honeypot value (normally empty)
+- operational metadata for path, referrer, campaign parameters, and completion time
 
 Request:
 
@@ -66,6 +72,16 @@ Both forms use client-side schema validation via React Hook Form + Zod:
 - Event schema in `phillips-event.tsx`
 
 The contact and Phillips event forms now share the same service-interest option set so their intake categories stay aligned.
+
+Shared safeguards live in `src/lib/lead-form-validation.ts`: trimmed input, maximum lengths,
+HTTP(S) website validation and normalization, a required privacy acknowledgment, a honeypot, and
+a short browser-side cooldown after a successful submission. These improve normal-user feedback
+and prevent accidental duplicates. They do not replace Formspree's provider-side validation,
+abuse controls, and rate limiting; direct Formspree submission remains an intentional architecture
+invariant.
+
+The forms warn users not to submit patient records or other highly sensitive information and link
+to `/privacy` before submission.
 
 ## Backend/CORS Notes
 

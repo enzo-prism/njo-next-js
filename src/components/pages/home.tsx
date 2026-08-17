@@ -29,7 +29,7 @@ import { Section } from "@/components/layout/section";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { faqItems, bookReviews, services, resources } from "@/seo/structured-data";
 import { dugoniCollaborationImage, gprResidencyPresentationImage } from "@/data/media";
-import { eventPrograms } from "@/data/events";
+import { getUpcomingEventPrograms } from "@/data/events";
 import { resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
 
@@ -116,7 +116,7 @@ const processSteps = [
   },
 ];
 
-export default function Home() {
+export default function Home({ referenceDate = new Date() }: { referenceDate?: Date }) {
   const latestReview = getLatestFiveStarTestimonial();
   // Skip the hero's latest review so the same quote does not appear twice.
   const featuredTestimonials = testimonialPages
@@ -125,11 +125,12 @@ export default function Home() {
   const book = resources.find((resource) => resource.type === "Book");
   const bookLaunchArticle = resourceArticles.find((article) => article.bookLaunch);
   const shortReview = bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
+  const upcomingEventPrograms = getUpcomingEventPrograms(referenceDate);
 
   return (
     <>
       {/* Hero */}
-      <Section spacing="none" className="section-reveal pt-10 pb-14 sm:pt-14 sm:pb-20">
+      <Section spacing="none" className="pt-10 pb-14 sm:pt-14 sm:pb-20">
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="space-y-7">
             <div className="flex items-center gap-3">
@@ -290,7 +291,7 @@ export default function Home() {
               </div>
               <h2 className="text-balance font-serif text-3xl font-semibold text-foreground">{book.name}</h2>
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-0.5 text-amber-500" aria-label="Rated 5 out of 5 stars">
+                <span className="flex items-center gap-0.5 text-amber-500" role="img" aria-label="Rated 5 out of 5 stars">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <Star key={index} className="h-4 w-4 fill-current" aria-hidden="true" />
                   ))}
@@ -357,7 +358,7 @@ export default function Home() {
       </Section>
 
       {/* Upcoming events */}
-      {eventPrograms.length > 0 ? (
+      {upcomingEventPrograms.length > 0 ? (
         <Section>
           <SectionHeading
             eyebrow="Speaking & events"
@@ -370,7 +371,7 @@ export default function Home() {
             }
           />
           <div className="mt-10 flex flex-wrap gap-5">
-            {eventPrograms.map((program) => (
+            {upcomingEventPrograms.map((program) => (
               <div
                 key={program.slug}
                 className="flex min-w-[280px] flex-1 flex-col gap-3 rounded-2xl border border-border/70 bg-card p-6 shadow-sm"
@@ -394,13 +395,15 @@ export default function Home() {
                     {program.locationLabel}
                   </p>
                 </div>
-                <Link
-                  href="/michael-njo-dds?tab=news"
+                <a
+                  href={program.registrationUrl || "/michael-njo-dds?tab=news"}
+                  target={program.registrationUrl ? "_blank" : undefined}
+                  rel={program.registrationUrl ? "noopener noreferrer" : undefined}
                   className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-medium text-brand hover:text-brand/70"
                 >
-                  View details &amp; register
+                  View current details {program.registrationUrl ? "at PTI" : ""}
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </a>
               </div>
             ))}
           </div>

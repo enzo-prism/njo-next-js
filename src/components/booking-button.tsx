@@ -21,7 +21,13 @@ export function BookingButton({
 }: BookingButtonProps) {
   return (
     <Button asChild variant={variant} size={size} className={className}>
-      <a href={href} target="_blank" rel="noopener noreferrer">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-analytics-event="booking_click"
+        data-analytics-label={label}
+      >
         {showIcon ? <CalendarCheck className="h-4 w-4" /> : null}
         {label}
       </a>

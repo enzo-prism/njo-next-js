@@ -66,8 +66,16 @@ function preloadWidgetScript() {
 
 export function CalendlyLeadTracker() {
   useEffect(() => {
-    loadWidgetStylesheet();
-    preloadWidgetScript();
+    const warmWidget = (event: Event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const href = target.closest("a")?.getAttribute("href");
+      if (!href || !isBookingHref(href)) return;
+
+      loadWidgetStylesheet();
+      preloadWidgetScript();
+    };
 
     const onMessage = (event: MessageEvent) => {
       if (!isCalendlyOrigin(event.origin) || !isCalendlyEventScheduledMessage(event.data)) {
@@ -97,6 +105,9 @@ export function CalendlyLeadTracker() {
         return;
       }
 
+      loadWidgetStylesheet();
+      preloadWidgetScript();
+
       // Only intercept when the official popup API is already available. Otherwise
       // leave the native new-tab <a> alone so a blocked/failed widget never
       // swallows the primary booking CTA.
@@ -114,10 +125,16 @@ export function CalendlyLeadTracker() {
     };
 
     window.addEventListener("message", onMessage);
+    document.addEventListener("pointerover", warmWidget, true);
+    document.addEventListener("focusin", warmWidget, true);
+    document.addEventListener("touchstart", warmWidget, { capture: true, passive: true });
     document.addEventListener("click", onClick, true);
 
     return () => {
       window.removeEventListener("message", onMessage);
+      document.removeEventListener("pointerover", warmWidget, true);
+      document.removeEventListener("focusin", warmWidget, true);
+      document.removeEventListener("touchstart", warmWidget, true);
       document.removeEventListener("click", onClick, true);
     };
   }, []);

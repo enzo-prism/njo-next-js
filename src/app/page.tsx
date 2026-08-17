@@ -5,12 +5,13 @@ import { buildRouteMetadata } from "@/seo/metadata";
 import { buildPageStructuredData } from "@/seo/route-structured-data";
 
 export const metadata: Metadata = buildRouteMetadata("/");
+export const revalidate = 3600;
 
 export default function Page() {
   return (
     <>
       <StructuredDataScript data={buildPageStructuredData("/")} id="route-structured-data" />
-      <HomePage />
+      <HomePage referenceDate={new Date()} />
     </>
   );
 }

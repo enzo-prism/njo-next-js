@@ -12,7 +12,7 @@ export default function DentalflixPage() {
   const claimSteps = [
     "Book a 30-minute call with Dr. Njo, or reach out through the contact page, email, or phone.",
     `Mention this exact line: "${redemptionPhrase}"`,
-    "Your $500 DentalFlix discount is applied to consultations and advisory services.",
+    "Ask Dr. Njo to confirm the offer's current availability, eligible service, and written engagement terms.",
   ];
 
   return (
@@ -26,7 +26,9 @@ export default function DentalflixPage() {
                   <Sparkles className="h-4 w-4" />
                   DentalFlix Exclusive
                 </Badge>
-                <CardTitle className="text-4xl">$500 Off With Dr. Michael Njo</CardTitle>
+                <CardTitle>
+                  <h1 className="text-4xl">DentalFlix referral offer with Dr. Michael Njo</h1>
+                </CardTitle>
               </div>
               <Badge className="w-fit">Valid for DentalFlix referrals</Badge>
             </div>
@@ -36,9 +38,23 @@ export default function DentalflixPage() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              If you mention the DentalFlix line, Dr. Njo will apply a direct discount to your first services.
+              Mention the DentalFlix referral when you first get in touch so Dr. Njo can confirm whether the $500
+              promotion is currently available for the service you are considering.
             </p>
           </CardContent>
+        </Card>
+      </section>
+
+      <section aria-labelledby="offer-details-title">
+        <Card>
+          <CardHeader>
+            <CardTitle id="offer-details-title">Confirm the offer before engaging services</CardTitle>
+            <CardDescription>
+              Promotional availability, eligible services, expiration, and exclusions may change. Ask Dr. Njo to
+              confirm the current details in writing before relying on the offer. The final written engagement terms
+              govern any discount.
+            </CardDescription>
+          </CardHeader>
         </Card>
       </section>
 

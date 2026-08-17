@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Filter, Quote, Search, Star } from "lucide-react";
+import { ArrowRight, ExternalLink, Filter, Quote, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/layout/section";
@@ -12,10 +12,6 @@ import { CONTACT_PATH } from "@/config/site";
 import { testimonialPages } from "@/data/testimonials";
 
 type SortMode = "newest" | "alpha";
-
-const averageRating = (
-  testimonialPages.reduce((total, item) => total + item.stars, 0) / testimonialPages.length
-).toFixed(1);
 
 const featuredTestimonials = [...testimonialPages]
   .sort((a, b) => b.excerpt.length - a.excerpt.length)
@@ -46,17 +42,21 @@ export default function TestimonialsPage() {
           title="Testimonials for Dr. Michael Njo"
           description="Real-world stories from dentists and healthcare professionals who partnered with Dr. Njo for transitions, growth, and leadership support."
         />
-        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-2">
-            <span className="flex items-center gap-0.5 text-amber-500" aria-hidden="true">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Star key={index} className="h-4 w-4 fill-current" />
-              ))}
-            </span>
-            {averageRating} average rating
-          </span>
-          <span>·</span>
-          <span>{testimonialPages.length} client stories</span>
+        <div className="mt-6 rounded-2xl border border-border/70 bg-card p-5 text-sm leading-relaxed text-muted-foreground shadow-sm">
+          <p>
+            These stories span Dr. Njo&apos;s personal consulting, coaching, teaching,
+            and transition work. Testimonials are presented as received, with a
+            public source identified when one is recorded.
+          </p>
+          <a
+            href="https://practicetransitionsinstitute.com/testimonials"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 font-medium text-brand hover:text-brand/70"
+          >
+            See PTI&apos;s transaction-focused review library
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
         </div>
       </Section>
 
@@ -151,7 +151,7 @@ export default function TestimonialsPage() {
       <Section tone="brand" spacing="compact">
         <div className="mx-auto max-w-2xl space-y-5 text-center">
           <h2 className="text-balance font-serif text-2xl font-semibold text-white sm:text-3xl">
-            Want results like these for your practice?
+            Need Personal Strategy or Leadership Support?
           </h2>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button asChild size="lg" variant="secondary">
@@ -163,7 +163,13 @@ export default function TestimonialsPage() {
               variant="outline"
               className="border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"
             >
-              <Link href="/">Back to home</Link>
+              <a
+                href="https://practicetransitionsinstitute.com/services"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Practice Transaction? Visit PTI
+              </a>
             </Button>
           </div>
         </div>

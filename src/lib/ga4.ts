@@ -1,4 +1,5 @@
-import { CALENDLY_MESSAGE_ORIGINS } from "@/config/site";
+import { CALENDLY_MESSAGE_ORIGINS, PRODUCTION_HOSTNAME } from "@/config/site";
+import { getAnalyticsConsent, trackAnalyticsEvent } from "@/lib/analytics-events";
 
 export const generateLeadMethods = {
   form: "form",
@@ -15,15 +16,6 @@ export type GenerateLeadParams = {
   method?: GenerateLeadMethod;
   contact_method?: GenerateLeadMethod;
 };
-
-type GtagFunction = (...args: unknown[]) => void;
-
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: GtagFunction;
-  }
-}
 
 const ALLOWED_GENERATE_LEAD_KEYS = new Set<keyof GenerateLeadParams>([
   "form_id",
@@ -99,35 +91,19 @@ export function isCalendlyEventScheduledMessage(data: unknown): boolean {
   return (data as { event?: unknown }).event === "calendly.event_scheduled";
 }
 
-function getGtag(): GtagFunction | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  window.dataLayer = window.dataLayer || [];
-
-  if (typeof window.gtag === "function") {
-    return window.gtag;
-  }
-
-  const gtagBridge: GtagFunction = function gtagBridge() {
-    // gtag.js reads the Arguments object, not a rest array
-    // eslint-disable-next-line prefer-rest-params -- match gtag dataLayer queue shape
-    window.dataLayer?.push(arguments);
-  };
-
-  window.gtag = gtagBridge;
-  return gtagBridge;
+function canTrackGenerateLead(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.location.hostname.toLowerCase() === PRODUCTION_HOSTNAME &&
+    getAnalyticsConsent() === "accepted"
+  );
 }
 
 export function trackGenerateLead(params: GenerateLeadParams): void {
+  if (!canTrackGenerateLead()) return;
+
   const sanitizedParams = sanitizeGenerateLeadParams(params);
-
-  if (process.env.NODE_ENV !== "production") {
-    console.info("[ga4]", "generate_lead", sanitizedParams);
-  }
-
-  getGtag()?.("event", "generate_lead", sanitizedParams);
+  trackAnalyticsEvent("generate_lead", sanitizedParams);
 }
 
 const FORM_LEAD_DEDUP_PREFIX = "njo_ga4_generate_lead_form";
@@ -157,7 +133,7 @@ export function shouldRecordFormLead(formId?: string): boolean {
 }
 
 export function recordFormLead(params: GenerateLeadParams): void {
-  if (!shouldRecordFormLead(params.form_id)) {
+  if (!canTrackGenerateLead() || !shouldRecordFormLead(params.form_id)) {
     return;
   }
 

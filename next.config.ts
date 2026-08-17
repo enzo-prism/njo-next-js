@@ -1,5 +1,22 @@
 import type { NextConfig } from "next";
 
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self' https://formspree.io",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://*.google-analytics.com https://*.hotjar.com https://www.instagram.com https://*.cdninstagram.com",
+  "font-src 'self' data:",
+  "media-src 'self' https://res.cloudinary.com",
+  "frame-src https://www.instagram.com https://vars.hotjar.com",
+  "connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.hotjar.com wss://*.hotjar.com",
+  "worker-src 'self' blob:",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   trailingSlash: false,
@@ -22,6 +39,10 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
+            key: "Content-Security-Policy",
+            value: contentSecurityPolicy,
+          },
+          {
             key: "X-Frame-Options",
             value: "DENY",
           },
@@ -32,6 +53,14 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
           },
         ],
       },
@@ -52,6 +81,16 @@ const nextConfig: NextConfig = {
           { type: "header", key: "x-forwarded-proto", value: "http" },
         ],
         destination: "https://michaelnjodds.com/:path*",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/michael-njo-dds",
+        permanent: true,
+      },
+      {
+        source: "/events",
+        destination: "/michael-njo-dds?tab=news",
         permanent: true,
       },
       {

@@ -1,5 +1,3 @@
-import { CONTACT_EMAIL, CONTACT_PHONE } from "@/config/site";
-
 export type EventOccurrence = {
   dateLabel: string;
   timeLabel: string;
@@ -22,11 +20,82 @@ export type EventProgram = {
   highlights?: string[];
   upcomingDates?: EventOccurrence[];
   completedEventsLabel?: string;
-  callToAction?: {
-    phone: string;
-    email: string;
-  };
+  registrationUrl?: string;
 };
+
+export type UpcomingEventProgram = EventProgram & {
+  nextOccurrence: EventOccurrence;
+  upcomingDates: EventOccurrence[];
+  completedOccurrences: EventOccurrence[];
+};
+
+function parseDateTime(value: string): number {
+  const timestamp = Date.parse(value);
+  if (Number.isNaN(timestamp)) {
+    throw new Error(`Invalid event date-time: ${value}`);
+  }
+  return timestamp;
+}
+
+function getProgramOccurrences(program: EventProgram): EventOccurrence[] {
+  if (program.upcomingDates?.length) return [...program.upcomingDates];
+
+  return [
+    {
+      dateLabel: program.nextDateLabel,
+      timeLabel: program.timeLabel,
+      location: program.locationLabel,
+      startDateTime: program.nextDateTime,
+    },
+  ];
+}
+
+export function isEventOccurrenceUpcoming(occurrence: EventOccurrence, referenceDate: Date): boolean {
+  const eventEnd = occurrence.endDateTime || occurrence.startDateTime;
+  return parseDateTime(eventEnd) >= referenceDate.getTime();
+}
+
+/**
+ * Builds display-ready event programs without mutating the editorial source.
+ * Callers inject the reference date so rendering and tests use the same clock.
+ */
+export function getUpcomingEventPrograms(
+  referenceDate: Date,
+  programs: readonly EventProgram[] = eventPrograms,
+): UpcomingEventProgram[] {
+  return programs.flatMap((program) => {
+    const occurrences = getProgramOccurrences(program).sort(
+      (left, right) => parseDateTime(left.startDateTime) - parseDateTime(right.startDateTime),
+    );
+    const upcomingDates = occurrences.filter((occurrence) => isEventOccurrenceUpcoming(occurrence, referenceDate));
+
+    if (upcomingDates.length === 0) return [];
+
+    const nextOccurrence = upcomingDates[0];
+    const completedOccurrences = occurrences.filter(
+      (occurrence) => !isEventOccurrenceUpcoming(occurrence, referenceDate),
+    );
+
+    return [
+      {
+        ...program,
+        nextOccurrence,
+        nextDateLabel: nextOccurrence.dateLabel,
+        nextDateTime: nextOccurrence.startDateTime,
+        timeLabel: nextOccurrence.timeLabel,
+        locationLabel:
+          upcomingDates.length === 1 ? nextOccurrence.location : `${upcomingDates.length} locations available`,
+        upcomingDates,
+        completedOccurrences,
+        completedEventsLabel:
+          completedOccurrences.length > 0
+            ? `${completedOccurrences.length} completed ${completedOccurrences.length === 1 ? "date" : "dates"}`
+            : undefined,
+        scheduleLabel: `${upcomingDates.length} ${upcomingDates.length === 1 ? "date" : "dates"}`,
+      },
+    ];
+  });
+}
 
 export const eventPrograms: EventProgram[] = [
   {
@@ -40,7 +109,7 @@ export const eventPrograms: EventProgram[] = [
     timeLabel: "8am - 3pm",
     locationLabel: "5 locations available",
     description:
-      "Whether entering, expanding, or exiting your career, meticulous planning is essential. Dr. Michael Njo and Practice Transitions Institute experts guide you through each stage, helping you avoid costly missteps and ensuring a seamless and prosperous transition.",
+      "Whether entering, expanding, or exiting your career, careful planning matters. Dr. Michael Njo and Practice Transitions Institute experts explain the decisions, tradeoffs, and professional coordination involved at each stage of a dental practice transition.",
     highlights: [
       "Negotiate a win-win practice transition",
       "Understand the economic climate and its effect on practice value and ownership",
@@ -73,10 +142,7 @@ export const eventPrograms: EventProgram[] = [
       },
     ],
     completedEventsLabel: "View 2 completed events",
-    callToAction: {
-      phone: CONTACT_PHONE,
-      email: CONTACT_EMAIL,
-    },
+    registrationUrl: "https://practicetransitionsinstitute.com/events/practice-transition-seminar",
   },
   {
     slug: "leadership-retreat-2026",
@@ -84,10 +150,20 @@ export const eventPrograms: EventProgram[] = [
     registrationStatus: "Registration Open",
     title: "Leadership Retreat",
     nextDateLabel: "June 4-6, 2026",
-    nextDateTime: "2026-06-04",
+    nextDateTime: "2026-06-04T09:00:00-04:00",
     timeLabel: "Multi-day",
     locationLabel: "Savannah, GA",
     description:
       "An immersive leadership retreat for practice owners ready to lead with clarity and confidence, hosted by MaryLynn Wheaton and Liz Armato with featured speaker Brian Parsley and a PTI panel on transition readiness that includes Dr. Michael Njo.",
+    upcomingDates: [
+      {
+        dateLabel: "June 4-6, 2026",
+        timeLabel: "Multi-day",
+        location: "Savannah, GA",
+        startDateTime: "2026-06-04T09:00:00-04:00",
+        endDateTime: "2026-06-06T17:00:00-04:00",
+      },
+    ],
+    registrationUrl: "https://practicetransitionsinstitute.com/events/leadership-retreat",
   },
 ];

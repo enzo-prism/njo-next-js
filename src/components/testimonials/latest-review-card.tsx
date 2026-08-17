@@ -24,6 +24,7 @@ export function LatestReviewCard({ testimonial, className }: LatestReviewCardPro
       <div className="flex items-center justify-between gap-3">
         <span
           className="flex items-center gap-0.5 text-amber-500"
+          role="img"
           aria-label={`Rated ${testimonial.stars} out of 5 stars`}
         >
           {Array.from({ length: testimonial.stars }).map((_, index) => (

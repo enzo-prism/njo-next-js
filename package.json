@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check:testimonials": "tsx scripts/check-testimonials.ts",
+    "check:events": "tsx scripts/check-events.ts",
     "check:forms": "tsx scripts/check-forms.ts",
     "check:contact-ctas": "tsx scripts/check-contact-ctas.ts",
     "check:route-head-snapshots": "tsx scripts/check-route-head-snapshots.ts",
@@ -20,7 +21,7 @@
     "check:seo-http": "tsx scripts/check-seo-http.ts",
     "check:robots": "tsx scripts/check-robots.ts",
     "check:redirects": "tsx scripts/check-redirects.ts",
-    "check:parity": "npm run typecheck && npm run lint && npm run check:testimonials && npm run check:forms && npm run check:contact-ctas && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:seo-http && npm run check:robots && npm run check:redirects"
+    "check:parity": "npm run typecheck && npm run lint && npm run check:testimonials && npm run check:events && npm run check:forms && npm run check:contact-ctas && npm run build && npm run check:route-head-snapshots && npm run check:schema && npm run check:sitemap && npm run check:seo-http && npm run check:robots && npm run check:redirects"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -34,10 +35,11 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
-    "next": "^15.5.0",
+    "next": "^15.5.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.55.0",
+    "sharp": "^0.35.3",
     "tailwind-merge": "^2.6.0",
     "zod": "^3.24.2"
   },
@@ -48,11 +50,16 @@
     "@types/react-dom": "^18.3.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
-    "eslint-config-next": "^15.5.0",
-    "postcss": "^8.4.47",
+    "eslint-config-next": "^15.5.21",
+    "postcss": "^8.5.26",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.5",
     "typescript": "^5.6.3"
+  },
+  "overrides": {
+    "nanoid": "^3.3.18",
+    "postcss": "$postcss",
+    "sharp": "$sharp"
   }
 }

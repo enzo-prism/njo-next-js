@@ -80,6 +80,9 @@ Validate on preview URL:
 - Canonical tags and JSON-LD are present.
 - If analytics changed, validate browser-side instrumentation using `docs/analytics-and-observability.md`.
 
+Preview hosts intentionally do not load analytics providers. A successful preview check therefore confirms that
+Google Analytics, Hotjar, and Vercel Analytics remain absent even if a saved production consent value exists.
+
 ## 4. Production Deployment
 
 Production can be triggered either:
@@ -125,7 +128,8 @@ If custom domain cutover has not been completed yet:
    - Redirects
    - Forms
    - SEO endpoints
-   - Analytics script load and Vercel Analytics ingestion path
+   - Analytics consent behavior: absent before choice, absent after decline, present only after allow
+   - Footer privacy-preference reset
 
 ### Current DNS Baseline (Squarespace + Vercel)
 
@@ -195,8 +199,10 @@ dscacheutil -q host -a name michaelnjodds.com
 
 - Vercel Analytics will not show useful data until the deployed site receives real visits.
 - After shipping analytics changes:
-  - visit the deployed site in a normal browser
-  - navigate across a few pages
+  - visit the deployed canonical site in a normal browser
+  - confirm provider scripts are absent before consent
+  - decline and confirm they remain absent
+  - reset privacy choices in the footer, allow analytics, then navigate across a few pages
   - wait 30 to 60 seconds before judging dashboard freshness
 - If no data appears, check ad/content blockers before assuming the integration is broken.
 - See `docs/analytics-and-observability.md` for the full validation flow.

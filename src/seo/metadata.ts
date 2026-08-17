@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SOCIAL_SHARE_IMAGE } from "@/config/site";
 import { getResourceArticleByPath } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
-import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
+import { LEGACY_TESTIMONIAL_SLUGS, NOINDEX_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
 
 const OG_IMAGE = SOCIAL_SHARE_IMAGE;
@@ -110,7 +110,7 @@ export function buildPageTitle(pathname: string): string {
     case "/michael-njo-dds":
       return "Michael Njo DDS | Practice Transitions Consultant";
     case "/phillips-event":
-      return "Phillips Event | Building a Sale-Ready Dental Practice | Dental Strategies";
+      return "Phillips Event Follow-Up | Michael Njo DDS";
     case "/dr-michael-njo-interview":
       return "Dr. Michael Njo Interview | Dental Practice Transitions & Consulting";
     case "/dr-michael-neal-interview":
@@ -120,11 +120,15 @@ export function buildPageTitle(pathname: string): string {
     case "/resources":
       return "Resources | Michael Njo, DDS";
     case "/dentalflix":
-      return "DentalFlix Event Offer | Michael Njo, DDS";
+      return "DentalFlix Referral Offer | Michael Njo, DDS";
     case "/contact":
       return "Contact Michael Njo, DDS | Dental Strategies";
     case "/contact/success":
       return "Message Sent | Michael Njo, DDS";
+    case "/privacy":
+      return "Privacy Policy | Michael Njo, DDS";
+    case "/terms":
+      return "Terms of Use | Michael Njo, DDS";
     default:
       return "Michael Njo, DDS | Dental Strategies";
   }
@@ -166,13 +170,17 @@ export function buildPageDescription(pathname: string): string {
     case "/resources":
       return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and other resources curated by Michael Njo, DDS for practice owners.";
     case "/phillips-event":
-      return "Attend the Phillips Event in Anaheim to learn how to make your dental practice more valuable, more durable, and ready for any transition.";
+      return "Continue the conversation after a Phillips-supported presentation with Michael Njo, DDS about dental practice growth, valuation, and transitions.";
     case "/dentalflix":
-      return "DentalFlix event offer: get $500 off any service with Dr. Michael Njo. When you book or reach out, mention you heard about Michael from the DentalFlix event.";
+      return "Ask Michael Njo, DDS whether the DentalFlix $500 referral promotion is currently available for the advisory service you are considering.";
     case "/dr-michael-neal-interview":
       return "Watch the Dr. Michael Neal interview, then read how these lessons connect to Dr. Michael Njo's practice transition work.";
     case "/contact/success":
       return "Confirmation that your message was sent to Michael Njo, DDS. Dental Strategies will respond within two business days.";
+    case "/privacy":
+      return "Learn how Dental Strategies collects, uses, protects, and shares information submitted through michaelnjodds.com and its service providers.";
+    case "/terms":
+      return "Review the terms governing use of michaelnjodds.com, including educational-content, acceptable-use, and professional-advice limitations.";
     default:
       return "Dental Strategies Consulting by Dr. Michael Njo helps healthcare owners launch, grow, value, and transition practices successfully.";
   }
@@ -202,12 +210,16 @@ export function buildRouteMetadata(pathname: string): Metadata {
   const ogType = buildOpenGraphType(pathname);
   const keywords = buildPageKeywords(pathname);
   const ogImage = getRouteOpenGraphImage(resourceArticle);
+  const shouldNoIndex =
+    (NOINDEX_STATIC_SITE_PATHS as readonly string[]).includes(normalizedPath) ||
+    normalizedPath.startsWith("/testimonials/");
 
   return {
     title,
     description,
     keywords,
     authors: resourceArticle ? [{ name: "Michael Njo, DDS" }] : undefined,
+    robots: shouldNoIndex ? { index: false, follow: true } : undefined,
     alternates: {
       canonical,
     },

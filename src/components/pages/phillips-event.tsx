@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,16 +31,17 @@ import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
 import { Container } from "@/components/layout/container";
+import {
+  isLeadFormRateLimited,
+  LEAD_FORM_LIMITS,
+  markLeadFormSubmitted,
+  sharedLeadFormFields,
+} from "@/lib/lead-form-validation";
+import { trackAnalyticsEvent } from "@/lib/analytics-events";
 
 const eventFormSchema = z.object({
-  name: z.string().min(2, "Please enter your full name."),
-  email: z.string().email("Enter a valid email address."),
-  practiceCity: z.string().min(2, "Please enter your practice city."),
-  practiceWebsite: z.string().optional(),
-  services: z
-    .array(z.string())
-    .min(1, "Please select at least one service of interest."),
-  notes: z.string().optional(),
+  ...sharedLeadFormFields,
+  notes: z.string().trim().max(LEAD_FORM_LIMITS.notes, "Keep your notes under 2,000 characters.").optional(),
 });
 
 type EventFormValues = z.infer<typeof eventFormSchema>;
@@ -52,11 +53,15 @@ const defaultValues: EventFormValues = {
   practiceWebsite: "",
   services: [],
   notes: "",
+  privacyAcknowledged: false,
+  companyWebsite: "",
 };
 
 export default function PhillipsEvent() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const startedAtRef = useRef(Date.now());
+  const hasTrackedStartRef = useRef(false);
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -65,6 +70,10 @@ export default function PhillipsEvent() {
 
   const onSubmit = async (values: EventFormValues) => {
     setSubmitError(null);
+    if (isLeadFormRateLimited("phillips_event")) {
+      setSubmitError("Your request was already sent. Please wait a moment before submitting again.");
+      return;
+    }
 
     const payload = new FormData();
     payload.append("name", values.name);
@@ -82,7 +91,10 @@ export default function PhillipsEvent() {
       `Phillips Event - New contact from ${values.name}`
     );
     payload.append("_replyto", values.email);
-    appendFormspreeOpsMetadata(payload, "phillips_event");
+    payload.append("privacy_acknowledged", values.privacyAcknowledged ? "yes" : "no");
+    payload.append("_gotcha", values.companyWebsite);
+    appendFormspreeOpsMetadata(payload, "phillips_event", startedAtRef.current);
+    trackAnalyticsEvent("form_submit", { form: "phillips_event", path: window.location.pathname });
 
     try {
       const res = await fetch(FORMSPREE_ENDPOINTS.phillipsEvent, {
@@ -94,14 +106,23 @@ export default function PhillipsEvent() {
       if (!res.ok) {
         throw new Error(`Failed with status ${res.status}`);
       }
+      markLeadFormSubmitted("phillips_event");
+      trackAnalyticsEvent("form_success", { form: "phillips_event", path: window.location.pathname });
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error(err);
+      trackAnalyticsEvent("form_error", { form: "phillips_event", path: window.location.pathname });
       setSubmitError(
         `We couldn't send your information. Please try again or email ${CONTACT_EMAIL}.`
       );
     }
+  };
+
+  const trackFormStart = () => {
+    if (hasTrackedStartRef.current) return;
+    hasTrackedStartRef.current = true;
+    trackAnalyticsEvent("form_start", { form: "phillips_event", path: window.location.pathname });
   };
 
   if (submitted) {
@@ -116,7 +137,7 @@ export default function PhillipsEvent() {
           </h1>
           <p className="text-muted-foreground">
             Dr. Njo has received your information and will follow up with you
-            personally. Thank you for attending today&apos;s presentation.
+            personally. Thank you for continuing the conversation after the presentation.
           </p>
           <div className="flex flex-col flex-wrap justify-center gap-3 sm:flex-row">
             <BookingButton />
@@ -134,6 +155,14 @@ export default function PhillipsEvent() {
 
   return (
     <Container className="space-y-8 py-10 sm:py-14">
+      <section className="mx-auto max-w-3xl space-y-3 text-center">
+        <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Phillips event follow-up</p>
+        <h1 className="text-balance text-4xl font-semibold">Continue the conversation with Dr. Michael Njo</h1>
+        <p className="text-pretty text-muted-foreground">
+          For attendees of a Phillips-supported presentation and dental professionals exploring practice growth,
+          valuation, or transition planning. Share your priorities below or schedule a private introductory call.
+        </p>
+      </section>
       {/* Contact form */}
       <div className="mx-auto w-full max-w-3xl">
         <Card className="border border-border/70 shadow-sm">
@@ -141,7 +170,7 @@ export default function PhillipsEvent() {
             <div className="space-y-1.5">
               <CardTitle className="text-2xl">Connect with Dr. Njo</CardTitle>
               <CardDescription>
-                Interested in learning more after today&apos;s presentation? Share
+                Interested in learning more after the presentation? Share
                 your details and Dr. Njo will follow up personally with tailored
                 next steps.
               </CardDescription>
@@ -154,9 +183,23 @@ export default function PhillipsEvent() {
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit, () => {
+                  trackAnalyticsEvent("form_validation_error", { form: "phillips_event", path: window.location.pathname });
+                })}
+                onFocusCapture={trackFormStart}
                 className="space-y-5"
+                noValidate
               >
+                <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+                  <label htmlFor="phillips-company-website">Company website</label>
+                  <input
+                    id="phillips-company-website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    {...form.register("companyWebsite")}
+                  />
+                </div>
                 {/* Name */}
                 <FormField
                   control={form.control}
@@ -165,8 +208,9 @@ export default function PhillipsEvent() {
                     <FormItem>
                       <FormLabel>Full name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Your full name" {...field} />
+                        <Input autoComplete="name" maxLength={LEAD_FORM_LIMITS.name} placeholder="Your full name" {...field} />
                       </FormControl>
+                      <FormDescription className="sr-only">Enter your first and last name.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -182,6 +226,9 @@ export default function PhillipsEvent() {
                       <FormControl>
                         <Input
                           type="email"
+                          inputMode="email"
+                          autoComplete="email"
+                          maxLength={LEAD_FORM_LIMITS.email}
                           placeholder="you@email.com"
                           {...field}
                         />
@@ -204,9 +251,12 @@ export default function PhillipsEvent() {
                       <FormControl>
                         <Input
                           placeholder="e.g. Anaheim, CA"
+                          autoComplete="address-level2"
+                          maxLength={LEAD_FORM_LIMITS.practiceCity}
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription className="sr-only">Enter the city and state or region where your practice is located.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -221,10 +271,15 @@ export default function PhillipsEvent() {
                       <FormLabel>Practice website (optional)</FormLabel>
                       <FormControl>
                         <Input
+                          type="url"
+                          inputMode="url"
+                          autoComplete="url"
+                          maxLength={LEAD_FORM_LIMITS.practiceWebsite}
                           placeholder="https://yourpractice.com"
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription>Enter a full domain or URL. We will add https:// if needed.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -236,10 +291,11 @@ export default function PhillipsEvent() {
                   name="services"
                   render={() => (
                     <FormItem>
-                      <FormLabel>
+                      <fieldset aria-describedby="phillips-services-description phillips-services-error">
+                      <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                         Services you&apos;re interested in
-                      </FormLabel>
-                      <FormDescription>
+                      </legend>
+                      <FormDescription id="phillips-services-description">
                         Select the services that align with your priorities.
                       </FormDescription>
                       <div className="grid gap-2 sm:grid-cols-2 pt-1">
@@ -283,7 +339,8 @@ export default function PhillipsEvent() {
                           );
                         })}
                       </div>
-                      <FormMessage />
+                      <FormMessage id="phillips-services-error" />
+                      </fieldset>
                     </FormItem>
                   )}
                 />
@@ -298,10 +355,41 @@ export default function PhillipsEvent() {
                       <FormControl>
                         <Textarea
                           rows={4}
+                          maxLength={LEAD_FORM_LIMITS.notes}
                           placeholder="Anything else you'd like Dr. Njo to know - questions, timeline, specific challenges, etc."
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription>Optional. Do not include patient records or other sensitive health information.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="privacyAcknowledged"
+                  render={({ field }) => (
+                    <FormItem className="rounded-xl border border-border bg-surface p-4">
+                      <div className="flex items-start gap-3">
+                        <FormControl>
+                          <input
+                            type="checkbox"
+                            aria-label="I acknowledge the Privacy Policy and agree that Dental Strategies may use my information to respond to this request."
+                            className="mt-0.5 h-5 w-5 shrink-0 rounded accent-primary"
+                            checked={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal leading-relaxed">
+                          I understand that Dental Strategies will use my information to respond to this request, as described in the{" "}
+                          <Link href="/privacy" className="font-medium text-brand underline underline-offset-4">Privacy Policy</Link>.
+                        </FormLabel>
+                      </div>
+                      <FormDescription className="sr-only">Required acknowledgment for processing this request.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

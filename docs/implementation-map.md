@@ -28,8 +28,9 @@ Read this together with `AGENTS.md`. `AGENTS.md` defines invariants; this file e
 - Form model:
   - browser submits directly to Formspree
   - there are no internal API routes for lead capture
+  - shared validation, privacy acknowledgment, honeypot, and repeat-submit safeguards live in `src/lib/lead-form-validation.ts`
 - Analytics model:
-  - Vercel Analytics, Google Analytics, and Hotjar are mounted once from `src/app/layout.tsx`
+  - consent-gated Vercel Analytics, Google Analytics, and Hotjar are coordinated once from `src/app/layout.tsx`
 
 ## Rendering Model
 
@@ -86,9 +87,10 @@ If a route seems heavier than expected in the build output, start with this list
 
 ## Route Inventory And Ownership
 
-### Static indexable routes
+### Static public and indexable routes
 
-`src/config/routes.ts` owns `STATIC_SITE_PATHS`, which is the source of truth for static indexable routes used by sitemap and parity checks.
+`src/config/routes.ts` owns `STATIC_SITE_PATHS`, the public route inventory used by parity checks, and
+`INDEXABLE_STATIC_SITE_PATHS`, the sitemap-safe subset.
 
 Today that list includes:
 
@@ -100,10 +102,13 @@ Today that list includes:
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`
+- `/privacy`
+- `/terms`
 
 Important:
 
 - `/contact/success` is intentionally not in `STATIC_SITE_PATHS`
+- `/dentalflix` and `/phillips-event` remain public campaign/follow-up routes but are `noindex,follow` and omitted from the sitemap
 - redirect-only routes do not belong in `STATIC_SITE_PATHS`
 
 ### Legacy route handling
@@ -176,6 +181,8 @@ Important behaviors:
 - ties fall back to original array order
 - slugs are generated from author names, with numeric suffixes for duplicates
 - excerpts are generated automatically from quote text
+- testimonial detail pages remain browseable but are `noindex,follow` and omitted from the sitemap; PTI owns detailed transition-proof search intent
+- `/testimonials` remains indexable as the curated personal-site proof hub
 
 This means author edits can change slugs. If you rename an author on an already-public testimonial:
 
@@ -186,6 +193,12 @@ This means author edits can change slugs. If you rename an author on an already-
 ### Events
 
 `src/data/events.ts` drives the event/news content on the Michael Njo profile page and also feeds event-related structured data through `src/seo/structured-data.ts`.
+
+`getUpcomingEventPrograms(referenceDate)` is the single date-state helper. It derives the next occurrence, removes
+completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
+hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI.
+`src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
+parameters aligned.
 
 If event details change, check both:
 
@@ -264,7 +277,9 @@ Current metadata-only routes:
 - `/dentalflix`
 - `/phillips-event`
 
-That is intentional in the current implementation. If those routes become more SEO-critical, extend `buildPageStructuredData()` rather than adding ad hoc inline schema in page files.
+Both are intentionally `noindex,follow` campaign routes. If either becomes a durable, evidence-complete evergreen
+page, remove it from `NOINDEX_STATIC_SITE_PATHS` and add structured data through `buildPageStructuredData()` rather
+than adding ad hoc inline schema.
 
 ### Robots and sitemap
 
@@ -273,7 +288,8 @@ These are generated code paths, not static files:
 - `src/app/robots.ts` -> `src/seo/robots-data.ts`
 - `src/app/sitemap.ts` -> `src/seo/sitemap-data.ts`
 
-If you add an indexable static route, update `STATIC_SITE_PATHS` so sitemap and checks stay aligned.
+If you add an indexable static route, update `STATIC_SITE_PATHS` and ensure it is not in
+`NOINDEX_STATIC_SITE_PATHS` so sitemap and checks stay aligned.
 
 ## Primary CTAs (Contact and Booking)
 
@@ -374,13 +390,13 @@ The env helper intentionally trims whitespace. Do not remove that behavior witho
 - `metadataBase`
 - favicon metadata
 - Vercel Analytics mount
-- GA bootstrap (assigns `window.gtag`; still a single `gtag('config')`)
-- Hotjar bootstrap
+- Consent-gated GA and Hotjar loading
 - `CalendlyLeadTracker` (booking popup + `event_scheduled` lead events)
 
-`src/lib/ga4.ts` owns allowlisted `generate_lead` params, the gtag/dataLayer bridge, and
+`src/lib/ga4.ts` owns allowlisted `generate_lead` params, canonical-host/consent checks, and
 sessionStorage dedupe. Contact Formspree success and the `/contact/success` safety net share
-`form_id=contact`. Calendly fires only on `event_scheduled`.
+`form_id=contact`. Calendly fires only on `event_scheduled`, and its widget assets warm only after
+booking intent.
 
 Future changes should preserve the single-mount model. Do not add a second measurement ID.
 
@@ -394,6 +410,8 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - catches ESLint and Next lint issues
 - `check:testimonials`
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
+- `check:events`
+  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, and source immutability
 - `check:forms`
   - validates that contact and event submissions still use the intended Formspree endpoints
 - `check:contact-ctas`
@@ -405,7 +423,7 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:schema`
   - validates JSON-LD exists on expected routes and blocks forbidden review/rating types
 - `check:sitemap`
-  - validates sitemap coverage and ensures `/contact/success` is excluded
+  - validates indexable sitemap coverage and ensures campaign, testimonial-detail, and `/contact/success` URLs are excluded
 - `check:seo-http`
   - runs `next start`, fetches live `robots.txt` and `sitemap.xml`, and validates served SEO output
 - `check:robots`

@@ -19,7 +19,9 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Dental Exit Blueprint launch coverage added across the home page, resources index, and a dedicated resource page, using the author-supplied cover and launch-specific metadata/schema.
 - Editorial photos are inventoried in `src/data/media.ts` (`layoutVariant` must match the real file). The interview player is defined in `src/data/interview-video.ts`. Panel of Experts dinner photos live in `public/media/`.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
-- Vercel Analytics enabled at the root layout for deployed page-view and visitor tracking.
+- Consent-gated Vercel Analytics, Google Analytics, and Hotjar enabled only on the canonical production host.
+- Event/news surfaces are date-aware, refresh hourly, exclude completed events from current schema, and hand current registration intent to PTI.
+- Contact and Phillips forms share privacy acknowledgment, normalized validation, honeypot, and repeat-submit safeguards while preserving direct Formspree delivery.
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:
   - `https://michaelnjodds.com`
@@ -59,10 +61,17 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/phillips-event`
 - `/contact`
 - `/contact/success`
+- `/privacy`
+- `/terms`
 - custom 404
+
+`/dentalflix`, `/phillips-event`, and testimonial detail routes remain directly accessible but are intentionally
+`noindex,follow`; they are not included in the sitemap.
 
 ### Legacy Redirects
 
+- `/about` -> `/michael-njo-dds`
+- `/events` -> `/michael-njo-dds?tab=news`
 - `/dr-michael-neal-interview` -> `/dr-michael-njo-interview`
 - `/testimonials/dr-fat` -> `/testimonials/diana-fat-dds`
 - `/testimonials/richard-and-kimberly-crum` -> `/testimonials/kimberly-crum`
@@ -92,9 +101,10 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 - `robots.txt` via `src/app/robots.ts`
 - `sitemap.xml` via `src/app/sitemap.ts`
 - `llms.txt` served from `public/llms.txt`
-- Vercel Analytics mounted once in `src/app/layout.tsx`
-- Google Analytics + Hotjar injected in `src/app/layout.tsx`
-- GA4 `generate_lead` on contact Formspree success (plus `/contact/success` safety net) and Calendly `event_scheduled`
+- One analytics consent manager mounted in `src/app/layout.tsx`
+- Vercel Analytics, Google Analytics, and Hotjar loaded only after consent by `src/components/analytics-consent.tsx`
+- Non-sensitive conversion events centralized in `src/lib/analytics-events.ts`
+- Consent-gated GA4 `generate_lead` on contact Formspree success (plus `/contact/success` safety net) and Calendly `event_scheduled`
 
 ## Environment Variables
 
@@ -160,6 +170,8 @@ This runs:
 - Typecheck
 - Lint
 - Testimonial content guard
+- Event freshness and profile-tab behavior checks
+- Form wiring and contact/booking CTA checks
 - Next build
 - Route metadata snapshots
 - Structured data assertions

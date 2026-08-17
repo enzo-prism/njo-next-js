@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays, Clock3 } from "lucide-react";
+import { ArrowRight, Building2, CalendarDays, CheckCircle2, Clock3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -86,19 +86,45 @@ export default function ResourcesPage() {
         )}
 
         {institute && (
-          <Card className="overflow-hidden">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-2xl">{institute.name}</CardTitle>
-              <CardDescription className="text-sm leading-relaxed max-w-lg">{institute.description}</CardDescription>
+          <Card className="overflow-hidden border-brand/20 bg-gradient-to-br from-slate-950 to-slate-800 text-white">
+            <CardHeader className="space-y-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10">
+                <Building2 className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+                  For dental practice transactions
+                </p>
+                <CardTitle className="mt-2 text-2xl text-white">{institute.name}</CardTitle>
+              </div>
+              <CardDescription className="max-w-lg text-sm leading-relaxed text-white/75">
+                PTI is Dr. Njo&apos;s dedicated firm for dentists making an ownership or transaction decision.
+                Use the institute when you need a team to guide the process, not only educational material.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button
-                asChild
-                variant="outline"
-                className="inline-flex w-full justify-center border-primary/30 text-primary sm:w-auto"
-              >
-                <a href={institute.url} target="_blank" rel="noopener noreferrer">
-                  Visit institute
+            <CardContent className="space-y-5">
+              <ul className="grid gap-3 text-sm text-white/85 sm:grid-cols-2">
+                {[
+                  "Sell a dental practice",
+                  "Buy and evaluate a practice",
+                  "Review a DSO offer",
+                  "Value a practice",
+                  "Plan an associate buy-in",
+                  "Structure a partnership",
+                ].map((service) => (
+                  <li key={service} className="flex items-start gap-2">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" aria-hidden="true" />
+                    <span>{service}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button asChild variant="secondary" className="inline-flex w-full justify-center sm:w-auto">
+                <a
+                  href="https://practicetransitionsinstitute.com/services"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Explore PTI Transition Services
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>

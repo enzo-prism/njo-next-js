@@ -185,7 +185,7 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
         </p>
 
         {slides.length > 1 ? (
-          <div className="mt-5 flex items-center gap-2" role="tablist" aria-label="Select slide">
+          <div className="mt-3 flex items-center gap-1" role="tablist" aria-label="Select slide">
             {slides.map((slide, i) => {
               const isActive = i === index;
               return (
@@ -196,11 +196,18 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
                   aria-selected={isActive}
                   aria-label={`Show slide ${i + 1}: ${slide.eyebrow}`}
                   onClick={() => goTo(i)}
-                  className={cn(
-                    "h-1.5 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white",
-                    isActive ? "w-8 bg-white" : "w-1.5 bg-white/45 hover:bg-white/80",
-                  )}
-                />
+                  className="group/slide-dot inline-flex h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-300",
+                      isActive
+                        ? "w-8 bg-white"
+                        : "w-1.5 bg-white/45 group-hover/slide-dot:bg-white/80",
+                    )}
+                  />
+                </button>
               );
             })}
           </div>

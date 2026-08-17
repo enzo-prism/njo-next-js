@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { once } from "node:events";
 import { createServer } from "node:net";
 import { spawn } from "node:child_process";
-import { STATIC_SITE_PATHS } from "@/config/routes";
+import { INDEXABLE_STATIC_SITE_PATHS, NOINDEX_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
@@ -110,13 +110,17 @@ async function main() {
       "sitemap.xml should not index /contact/success",
     );
 
-    for (const path of STATIC_SITE_PATHS) {
+    for (const path of INDEXABLE_STATIC_SITE_PATHS) {
       assert.ok(sitemapUrls.has(buildCanonicalUrl(path)), `Missing static sitemap URL: ${path}`);
+    }
+
+    for (const path of NOINDEX_STATIC_SITE_PATHS) {
+      assert.ok(!sitemapUrls.has(buildCanonicalUrl(path)), `Noindex campaign route should not be in sitemap: ${path}`);
     }
 
     for (const testimonial of testimonialPages) {
       const detailUrl = buildCanonicalUrl(`/testimonials/${testimonial.slug}`);
-      assert.ok(sitemapUrls.has(detailUrl), `Missing testimonial URL: ${detailUrl}`);
+      assert.ok(!sitemapUrls.has(detailUrl), `Noindex testimonial URL should not be in sitemap: ${detailUrl}`);
     }
 
     for (const article of resourceArticles) {

@@ -10,7 +10,7 @@ type TestimonialListCardProps = {
 };
 
 const Rating = ({ value, max = 5 }: { value: number; max?: number }) => (
-  <div className="flex items-center gap-0.5 text-amber-500" aria-label={`${value} out of ${max} stars`}>
+  <div className="flex items-center gap-0.5 text-amber-500" role="img" aria-label={`${value} out of ${max} stars`}>
     {Array.from({ length: max }).map((_, index) => (
       <Star
         key={index}

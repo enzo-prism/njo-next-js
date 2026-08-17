@@ -19,7 +19,7 @@ type StarCountProps = {
 };
 
 const StarCount = ({ count, total = 5 }: StarCountProps) => (
-  <div className="mt-2 flex items-center gap-1" aria-label={`${count} out of ${total} stars`}>
+  <div className="mt-2 flex items-center gap-1" role="img" aria-label={`${count} out of ${total} stars`}>
     {Array.from({ length: total }).map((_, index) => (
       <Star
         key={`${index}-${count}`}

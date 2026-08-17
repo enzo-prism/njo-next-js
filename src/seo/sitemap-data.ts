@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
-import { STATIC_SITE_PATHS } from "@/config/routes";
+import { INDEXABLE_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
-import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 
 function parseLastModified(value?: string): Date | undefined {
@@ -12,17 +11,10 @@ function parseLastModified(value?: string): Date | undefined {
 }
 
 export function buildSitemapEntries(): MetadataRoute.Sitemap {
-  const staticEntries: MetadataRoute.Sitemap = STATIC_SITE_PATHS.map((path) => ({
+  const staticEntries: MetadataRoute.Sitemap = INDEXABLE_STATIC_SITE_PATHS.map((path) => ({
     url: buildCanonicalUrl(path),
     changeFrequency: path === "/" ? "weekly" : "monthly",
     priority: path === "/" ? 1 : 0.7,
-  }));
-
-  const testimonialEntries: MetadataRoute.Sitemap = testimonialPages.map((testimonial) => ({
-    url: buildCanonicalUrl(`/testimonials/${testimonial.slug}`),
-    lastModified: parseLastModified(testimonial.publishedAt),
-    changeFrequency: "monthly",
-    priority: 0.6,
   }));
 
   const resourceArticleEntries: MetadataRoute.Sitemap = resourceArticles.map((article) => ({
@@ -32,5 +24,5 @@ export function buildSitemapEntries(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticEntries, ...testimonialEntries, ...resourceArticleEntries];
+  return [...staticEntries, ...resourceArticleEntries];
 }
