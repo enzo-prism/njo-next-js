@@ -110,7 +110,7 @@ function getGtag(): GtagFunction | null {
     return window.gtag;
   }
 
-  const gtagBridge: GtagFunction = function gtagBridge(..._args: unknown[]) {
+  const gtagBridge: GtagFunction = function gtagBridge() {
     // gtag.js reads the Arguments object, not a rest array
     // eslint-disable-next-line prefer-rest-params -- match gtag dataLayer queue shape
     window.dataLayer?.push(arguments);
