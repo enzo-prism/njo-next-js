@@ -85,7 +85,7 @@ Allowlisted lead events live in `src/lib/ga4.ts`. They send only sanitized param
 | `/contact/success` safety net | Once per dedupe window via `ContactSuccessLeadTracker` | Same `form_id=contact` params as the form |
 | Calendly popup | Only on `calendly.event_scheduled` postMessage, never on "Book a call" click | `form_id=calendly`, `form_name=calendly`, `lead_source=website_calendly`, `location` from the current pathname slug, `method=calendly`, `contact_method=calendly` |
 
-Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) intercepts primary clicks and opens the official popup widget. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`. If the widget fails to load, the click falls back to a new tab. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page.
+Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) preloads the official popup widget and intercepts a primary click only when `window.Calendly` is already available. If the widget is missing or blocked, the native new-tab link proceeds. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`.
 
 If `window.gtag` is missing, the helper bridges to `window.dataLayer.push(arguments)` so events can queue before `gtag.js` finishes loading.
 

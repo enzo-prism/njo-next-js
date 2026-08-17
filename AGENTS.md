@@ -53,7 +53,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/components/booking-button.tsx`
   - Reusable primary "Book a call" CTA used site-wide; renders `<a href={BOOKING_URL}>` (or a passed `href`)
 - `src/components/analytics/calendly-lead-tracker.tsx`
-  - Root-layout client island: intercepts booking clicks into the official popup and records `generate_lead` only on `event_scheduled`
+  - Root-layout client island: opens the official popup when the widget is already loaded, otherwise leaves the new-tab link alone; records `generate_lead` only on `event_scheduled`
 - `src/components/analytics/contact-success-lead-tracker.tsx`
   - Thank-you-page safety net for the contact-form `generate_lead` (same `form_id=contact` dedupe key)
 - `src/components/dso-pricing-callout.tsx`

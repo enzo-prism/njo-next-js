@@ -53,50 +53,22 @@ function loadWidgetStylesheet() {
   document.head.appendChild(link);
 }
 
-function loadWidgetScript(): Promise<PopupWidgetApi> {
-  if (window.Calendly) {
-    return Promise.resolve(window.Calendly);
+function preloadWidgetScript() {
+  if (window.Calendly || document.querySelector(`script[src="${CALENDLY_WIDGET_JS}"]`)) {
+    return;
   }
 
-  const existing = document.querySelector<HTMLScriptElement>(`script[src="${CALENDLY_WIDGET_JS}"]`);
-  if (existing) {
-    return new Promise((resolve, reject) => {
-      existing.addEventListener("load", () => {
-        if (window.Calendly) {
-          resolve(window.Calendly);
-          return;
-        }
-        reject(new Error("Booking widget loaded without an API"));
-      });
-      existing.addEventListener("error", () => reject(new Error("Booking widget failed to load")));
-    });
-  }
-
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = CALENDLY_WIDGET_JS;
-    script.async = true;
-    script.onload = () => {
-      if (window.Calendly) {
-        resolve(window.Calendly);
-        return;
-      }
-      reject(new Error("Booking widget loaded without an API"));
-    };
-    script.onerror = () => reject(new Error("Booking widget failed to load"));
-    document.head.appendChild(script);
-  });
-}
-
-function openBookingPopup(url: string) {
-  loadWidgetStylesheet();
-  return loadWidgetScript().then((api) => {
-    api.initPopupWidget({ url });
-  });
+  const script = document.createElement("script");
+  script.src = CALENDLY_WIDGET_JS;
+  script.async = true;
+  document.head.appendChild(script);
 }
 
 export function CalendlyLeadTracker() {
   useEffect(() => {
+    loadWidgetStylesheet();
+    preloadWidgetScript();
+
     const onMessage = (event: MessageEvent) => {
       if (!isCalendlyOrigin(event.origin) || !isCalendlyEventScheduledMessage(event.data)) {
         return;
@@ -125,10 +97,20 @@ export function CalendlyLeadTracker() {
         return;
       }
 
+      // Only intercept when the official popup API is already available. Otherwise
+      // leave the native new-tab <a> alone so a blocked/failed widget never
+      // swallows the primary booking CTA.
+      const popupApi = window.Calendly;
+      if (!popupApi) {
+        return;
+      }
+
       event.preventDefault();
-      openBookingPopup(anchor.href).catch(() => {
+      try {
+        popupApi.initPopupWidget({ url: anchor.href });
+      } catch {
         window.open(anchor.href, "_blank", "noopener,noreferrer");
-      });
+      }
     };
 
     window.addEventListener("message", onMessage);

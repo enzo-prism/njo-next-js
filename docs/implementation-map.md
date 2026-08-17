@@ -281,8 +281,8 @@ The site drives two main actions: booking a call and contacting Dr. Njo.
 
 - Booking is the lead (primary, filled) action site-wide. It is a `BookingButton`
   (`src/components/booking-button.tsx`) that renders an `<a href={BOOKING_URL}>` (or a passed
-  `href`) for no-JS and CTA checks. `CalendlyLeadTracker` intercepts primary clicks and opens the
-  official popup widget; modifier-clicks and widget-load failures still open a new tab.
+  `href`) for no-JS and CTA checks. `CalendlyLeadTracker` intercepts a primary click only when the
+  official popup API is already loaded; otherwise the native new-tab link proceeds.
 - Calendly URLs live only in `src/config/site.ts`. Every CTA imports a shared constant — never
   hardcode the link. `check:contact-ctas` enforces this. Two links exist today:
   - `BOOKING_URL`: general 30-minute intro call (default for `BookingButton`).
