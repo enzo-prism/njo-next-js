@@ -93,8 +93,9 @@ assert.ok(!("publisher" in (dentalExitBlueprintBook || {})), "Do not add an unve
 assert.ok(!JSON.stringify(dentalExitBlueprintSchema).includes("#1"), "Do not add an unverified #1 claim");
 
 const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
-assert.equal(augustEventNodes.length, 1, "Only the October seminar occurrence should be upcoming in August");
+assert.equal(augustEventNodes.length, 2, "The October and Anaheim seminar occurrences should be upcoming in August");
 assert.equal(augustEventNodes[0].startDate, "2026-10-02T08:00:00-07:00");
+assert.equal(augustEventNodes[1].startDate, "2027-03-12T08:00:00-08:00");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");

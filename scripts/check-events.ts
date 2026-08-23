@@ -11,19 +11,23 @@ const sourceSnapshot = JSON.stringify(eventPrograms);
 
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
 assert.equal(beforeSeason.length, 2, "Both 2026 programs should be upcoming at the start of the year");
-assert.equal(beforeSeason[0].upcomingDates.length, 3, "All seminar dates should initially be upcoming");
+assert.equal(beforeSeason[0].upcomingDates.length, 4, "All seminar dates should initially be upcoming");
 
 const augustView = getUpcomingEventPrograms(new Date("2026-08-17T12:00:00-07:00"));
 assert.equal(augustView.length, 1, "Completed programs must not render as upcoming");
 assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
-assert.equal(augustView[0].upcomingDates.length, 1);
+assert.equal(augustView[0].upcomingDates.length, 2);
 assert.equal(augustView[0].completedOccurrences.length, 2);
-assert.equal(augustView[0].scheduleLabel, "1 date");
+assert.equal(augustView[0].scheduleLabel, "2 dates");
 assert.equal(augustView[0].completedEventsLabel, "2 completed dates");
 
 const afterSeason = getUpcomingEventPrograms(new Date("2026-10-03T00:00:00-07:00"));
-assert.deepEqual(afterSeason, [], "No 2026 event should remain open after its final occurrence");
+assert.equal(afterSeason.length, 1, "The 2027 Anaheim seminar should remain available after the 2026 dates");
+assert.equal(afterSeason[0].nextDateLabel, "March 12, 2027");
+
+const afterAnaheim = getUpcomingEventPrograms(new Date("2027-03-13T00:00:00-08:00"));
+assert.deepEqual(afterAnaheim, [], "No seminar should remain open after the final occurrence");
 
 const inProgressOccurrence: EventOccurrence = {
   dateLabel: "Test",

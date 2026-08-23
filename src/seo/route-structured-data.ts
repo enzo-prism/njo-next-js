@@ -1,4 +1,5 @@
 import { buildResourceArticlePath, getResourceArticleByPath, resourceArticles } from "@/data/resource-articles";
+import { getCommunityPostByPath } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { CANONICAL_ORIGIN, SOCIAL_SHARE_IMAGE } from "@/config/site";
@@ -430,6 +431,72 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   };
 }
 
+function buildCommunityPostStructuredData(pathname: string): SchemaNode | null {
+  const post = getCommunityPostByPath(pathname);
+  if (!post) return null;
+
+  const detailUrl = buildCanonicalUrl(pathname);
+  const articleId = `${detailUrl}#article`;
+  const imageId = post.image ? `${detailUrl}#primaryimage` : undefined;
+  const breadcrumbId = `${detailUrl}#breadcrumb`;
+
+  const breadcrumb = buildBreadcrumb(
+    [
+      { name: "Home", item: buildCanonicalUrl("/") },
+      { name: post.title, item: detailUrl },
+    ],
+    breadcrumbId,
+  );
+
+  const imageNode: SchemaNode | null = post.image
+    ? {
+        "@type": "ImageObject",
+        "@id": imageId,
+        url: `${CANONICAL_ORIGIN}${post.image.src}`,
+        width: post.image.width,
+        height: post.image.height,
+      }
+    : null;
+
+  const articleNode: SchemaNode = {
+    "@type": "BlogPosting",
+    "@id": articleId,
+    url: detailUrl,
+    headline: post.title,
+    description: post.description,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    inLanguage: "en",
+    articleSection: "Community",
+    image: imageId ? { "@id": imageId } : undefined,
+    author: { "@type": "Person", "@id": PERSON_NODE_ID, name: "Michael Njo, DDS" },
+    publisher: {
+      "@type": "Organization",
+      name: "Dental Strategies",
+      url: CANONICAL_ORIGIN,
+      logo: { "@type": "ImageObject", url: SOCIAL_SHARE_IMAGE.url },
+    },
+    mainEntityOfPage: { "@id": `${detailUrl}#webpage` },
+  };
+
+  const page: SchemaNode = {
+    "@type": ["WebPage", "Article"],
+    "@id": `${detailUrl}#webpage`,
+    url: detailUrl,
+    name: buildPageTitle(pathname),
+    description: buildPageDescription(pathname),
+    inLanguage: "en",
+    breadcrumb: { "@id": breadcrumbId },
+    mainEntity: { "@id": articleId },
+    primaryImageOfPage: imageId ? { "@id": imageId } : undefined,
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [page, breadcrumb, imageNode, articleNode].filter(Boolean) as SchemaNode[],
+  };
+}
+
 export function buildPageStructuredData(pathname: string): SchemaNode | null {
   const normalizedPath = normalizePathname(pathname);
 
@@ -451,6 +518,10 @@ export function buildPageStructuredData(pathname: string): SchemaNode | null {
 
   if (normalizedPath.startsWith("/resources/")) {
     return buildResourceArticleStructuredData(normalizedPath);
+  }
+
+  if (normalizedPath.startsWith("/blog/")) {
+    return buildCommunityPostStructuredData(normalizedPath);
   }
 
   if (normalizedPath === "/contact") {

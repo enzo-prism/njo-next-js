@@ -418,6 +418,7 @@ export const getMichaelNjoInterviewStructuredData = () => {
     contentUrl: interviewVideoAssets.playbackUrl,
     embedUrl: interviewVideoAssets.playbackUrl,
     thumbnailUrl: interviewVideoAssets.posterUrl,
+    uploadDate: interviewVideoAssets.uploadDate,
     url: interviewUrl,
     inLanguage: "en",
     creator: {

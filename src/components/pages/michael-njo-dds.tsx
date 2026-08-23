@@ -54,10 +54,16 @@ function getTabFromLocation() {
   return resolveProfileTab(window.location.search, window.location.hash);
 }
 
-export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: string }) {
+export default function MichaelNjoDDS({
+  referenceDateIso,
+  initialTab = "overview",
+}: {
+  referenceDateIso: string;
+  initialTab?: ProfileTab;
+}) {
   const featuredTestimonials = testimonialPages.slice(0, 6);
   const upcomingEventPrograms = getUpcomingEventPrograms(new Date(referenceDateIso));
-  const [activeTab, setActiveTab] = useState<ProfileTab>("overview");
+  const [activeTab, setActiveTab] = useState<ProfileTab>(initialTab);
   const [selectedImage, setSelectedImage] = useState<EditorialMediaAsset | null>(null);
 
   useEffect(() => {
@@ -344,7 +350,7 @@ export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: 
                   alt="Dr. Michael Njo with dentists and referral partners at the Panel of Experts dinner"
                   width={1600}
                   height={2133}
-                  className="h-full w-full rounded-xl object-cover"
+                  className="h-auto w-full rounded-xl bg-slate-50 object-contain"
                   sizes="(min-width: 768px) 240px, 100vw"
                   priority
                 />
@@ -353,7 +359,7 @@ export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: 
                   alt="Dr. Michael Njo autographing Dental Practice Transitions Handbook at the Panel of Experts dinner"
                   width={1600}
                   height={2133}
-                  className="h-full w-full rounded-xl object-cover"
+                  className="h-auto w-full rounded-xl bg-slate-50 object-contain"
                   sizes="(min-width: 768px) 240px, 100vw"
                 />
                 <Image
@@ -361,7 +367,7 @@ export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: 
                   alt="Panel of Experts dinner table with dentists and referral partners"
                   width={1600}
                   height={2133}
-                  className="h-full w-full rounded-xl object-cover"
+                  className="h-auto w-full rounded-xl bg-slate-50 object-contain"
                   sizes="(min-width: 768px) 240px, 100vw"
                 />
               </div>
@@ -371,6 +377,9 @@ export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: 
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
                 It was also an honor to autograph the <em>Dental Practice Transitions Handbook</em> at the dinner. Dr. Njo&apos;s newest publishing collaboration, <em>The Dental Exit Blueprint</em>, was released July 15, 2026.
               </p>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/blog/panel-of-experts-dinner-roseville">Read the full story</Link>
+              </Button>
             </article>
 
             <article id="industry-leaders" className={`${panel} space-y-4`}>
@@ -402,6 +411,9 @@ export default function MichaelNjoDDS({ referenceDateIso }: { referenceDateIso: 
                 </a>{" "}
                 on Instagram.
               </p>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/blog/amazing-4-days-with-industry-leaders">Read the full story</Link>
+              </Button>
             </article>
 
             <div id="upcoming-events" className={`${panel}`}>

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { INDEXABLE_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
+import { buildCommunityPostPath, communityPosts } from "@/data/community-posts";
 import { buildCanonicalUrl } from "@/seo/canonical";
 
 function parseLastModified(value?: string): Date | undefined {
@@ -24,5 +25,12 @@ export function buildSitemapEntries(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticEntries, ...resourceArticleEntries];
+  const communityPostEntries: MetadataRoute.Sitemap = communityPosts.map((post) => ({
+    url: buildCanonicalUrl(buildCommunityPostPath(post.slug)),
+    lastModified: parseLastModified(post.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticEntries, ...resourceArticleEntries, ...communityPostEntries];
 }

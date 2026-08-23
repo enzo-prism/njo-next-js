@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SOCIAL_SHARE_IMAGE } from "@/config/site";
 import { getResourceArticleByPath } from "@/data/resource-articles";
+import { getCommunityPostByPath } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS, NOINDEX_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
@@ -89,10 +90,13 @@ function buildTestimonialMetaDescription({
 export function buildPageTitle(pathname: string): string {
   const normalizedPath = normalizePathname(pathname);
   const resourceArticle = getResourceArticleByPath(normalizedPath);
+  const communityPost = getCommunityPostByPath(normalizedPath);
 
   if (resourceArticle) {
     return resourceArticle.metaTitle;
   }
+
+  if (communityPost) return `${communityPost.title} | Michael Njo, DDS`;
 
   if (normalizedPath.startsWith("/testimonials/")) {
     const context = getTestimonialContext(normalizedPath);
@@ -137,10 +141,13 @@ export function buildPageTitle(pathname: string): string {
 export function buildPageDescription(pathname: string): string {
   const normalizedPath = normalizePathname(pathname);
   const resourceArticle = getResourceArticleByPath(normalizedPath);
+  const communityPost = getCommunityPostByPath(normalizedPath);
 
   if (resourceArticle) {
     return resourceArticle.description;
   }
+
+  if (communityPost) return communityPost.description;
 
   if (normalizedPath.startsWith("/testimonials/")) {
     const context = getTestimonialContext(normalizedPath);
@@ -190,6 +197,7 @@ export function buildOpenGraphType(pathname: string): "website" | "article" {
   const normalizedPath = normalizePathname(pathname);
   if (normalizedPath.startsWith("/testimonials/")) return "article";
   if (getResourceArticleByPath(normalizedPath)) return "article";
+  if (getCommunityPostByPath(normalizedPath)) return "article";
   return "website";
 }
 
@@ -204,6 +212,7 @@ export function buildPageKeywords(pathname: string): string[] | undefined {
 export function buildRouteMetadata(pathname: string): Metadata {
   const normalizedPath = normalizePathname(pathname);
   const resourceArticle = getResourceArticleByPath(normalizedPath);
+  const communityPost = getCommunityPostByPath(normalizedPath);
   const title = buildPageTitle(pathname);
   const description = buildPageDescription(pathname);
   const canonical = buildCanonicalUrl(pathname);
@@ -218,7 +227,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
     title,
     description,
     keywords,
-    authors: resourceArticle ? [{ name: "Michael Njo, DDS" }] : undefined,
+    authors: resourceArticle || communityPost ? [{ name: "Michael Njo, DDS" }] : undefined,
     robots: shouldNoIndex ? { index: false, follow: true } : undefined,
     alternates: {
       canonical,
@@ -228,20 +237,27 @@ export function buildRouteMetadata(pathname: string): Metadata {
       title,
       description,
       url: canonical,
-      images: [ogImage],
-      publishedTime: resourceArticle?.publishedAt,
-      modifiedTime: resourceArticle?.updatedAt || resourceArticle?.publishedAt,
-      authors: resourceArticle
+      images: [communityPost?.image ? {
+        url: communityPost.image.src,
+        width: communityPost.image.width,
+        height: communityPost.image.height,
+        alt: communityPost.image.alt,
+      } : ogImage],
+      modifiedTime: resourceArticle?.updatedAt || resourceArticle?.publishedAt || communityPost?.publishedAt,
+      authors: communityPost
+        ? ["Michael Njo, DDS"]
+        : resourceArticle
         ? [resourceArticle.bookLaunch?.leadAuthor || "Michael Njo, DDS"]
         : undefined,
-      section: resourceArticle ? "Resources" : undefined,
+      publishedTime: resourceArticle?.publishedAt || communityPost?.publishedAt,
+      section: resourceArticle ? "Resources" : communityPost ? "Community" : undefined,
       tags: resourceArticle ? [resourceArticle.primaryKeyword, ...resourceArticle.secondaryKeywords] : undefined,
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [ogImage.url],
+      images: [communityPost?.image ? communityPost.image.src : ogImage.url],
     },
   };
 }

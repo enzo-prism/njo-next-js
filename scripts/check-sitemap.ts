@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { INDEXABLE_STATIC_SITE_PATHS, NOINDEX_STATIC_SITE_PATHS } from "@/config/routes";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
+import { buildCommunityPostPath, communityPosts } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildSitemapEntries } from "@/seo/sitemap-data";
@@ -28,9 +29,14 @@ for (const article of resourceArticles) {
   assert.ok(urls.has(detailUrl), `Missing resource article URL: ${detailUrl}`);
 }
 
+for (const post of communityPosts) {
+  const detailUrl = buildCanonicalUrl(buildCommunityPostPath(post.slug));
+  assert.ok(urls.has(detailUrl), `Missing community post URL: ${detailUrl}`);
+}
+
 assert.equal(
   entries.length,
-  INDEXABLE_STATIC_SITE_PATHS.length + resourceArticles.length,
+  INDEXABLE_STATIC_SITE_PATHS.length + resourceArticles.length + communityPosts.length,
   "Unexpected sitemap entry count",
 );
 
