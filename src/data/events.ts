@@ -173,4 +173,31 @@ export const eventPrograms: EventProgram[] = [
     ],
     registrationUrl: "https://practicetransitionsinstitute.com/events/leadership-retreat",
   },
+  {
+    slug: "beyond-the-chair-anaheim",
+    category: "seminar",
+    registrationStatus: "Registration Open",
+    title: "The Dental Practice Beyond the Chair",
+    nextDateLabel: "September 25, 2026",
+    nextDateTime: "2026-09-25T08:30:00-07:00",
+    timeLabel: "8:30 AM – 1:30 PM",
+    locationLabel: "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA",
+    description:
+      "A 5-hour working session for dentists and practice owners. Building Enterprise Value, Intellectual Property, Wealth, and Legacy. Led by Michael A. Njo, DDS, Director, Dental Strategies.",
+    highlights: [
+      "Redefine practice equity: move from running a clinical job to building a scalable, bankable asset",
+      "Master modern valuation: how lenders and buyers evaluate normalized EBITDA, collections, and payer concentration",
+      "Monetize intellectual property: turn operational frameworks, team systems, clinical protocols, and brand into transferable enterprise value",
+      "Optimize career transition: create clear associate pathways, plan strategic exits early, and protect proceeds with tax-smart strategies",
+    ],
+    upcomingDates: [
+      {
+        dateLabel: "September 25, 2026",
+        timeLabel: "8:30 AM – 1:30 PM",
+        location: "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA",
+        startDateTime: "2026-09-25T08:30:00-07:00",
+        endDateTime: "2026-09-25T13:30:00-07:00",
+      },
+    ],
+  },
 ];
