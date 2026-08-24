@@ -341,6 +341,36 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="beyond-the-chair-anaheim" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">September 25, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">The Dental Practice Beyond the Chair</h2>
+              <Image
+                src="/media/promotional-flyer-dental-strategies.webp"
+                alt="Promotional flyer for The Dental Practice Beyond the Chair, a September 25, 2026 working session in Anaheim led by Michael A. Njo, DDS"
+                width={1414}
+                height={2000}
+                className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 768px) 448px, 100vw"
+                priority
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                A 5-hour working session for dentists and practice owners. Building Enterprise Value, Intellectual
+                Property, Wealth, and Legacy.
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                September 25, 2026, 8:30 AM – 1:30 PM at The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim,
+                CA. Led by Michael A. Njo, DDS, Director, Dental Strategies.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/beyond-the-chair-anaheim">Read the full story</Link>
+                </Button>
+              </div>
+            </article>
+
             <article id="panel-of-experts-dinner" className={`${panel} space-y-4`}>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 14, 2026</p>
               <h2 className="font-serif text-xl font-semibold">Panel of Experts dinner</h2>
@@ -352,7 +382,6 @@ export default function MichaelNjoDDS({
                   height={2133}
                   className="h-auto w-full rounded-xl bg-slate-50 object-contain"
                   sizes="(min-width: 768px) 240px, 100vw"
-                  priority
                 />
                 <Image
                   src="/media/IMG_4923.webp"
@@ -526,7 +555,11 @@ export default function MichaelNjoDDS({
                       View current event details at PTI
                     </a>
                   </Button>
-                ) : null}
+                ) : (
+                  <Button asChild size="sm">
+                    <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                  </Button>
+                )}
               </div>
             ))}
 

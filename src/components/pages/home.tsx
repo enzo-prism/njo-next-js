@@ -396,12 +396,12 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                   </p>
                 </div>
                 <a
-                  href={program.registrationUrl || "/michael-njo-dds?tab=news"}
+                  href={program.registrationUrl || CONTACT_PATH}
                   target={program.registrationUrl ? "_blank" : undefined}
                   rel={program.registrationUrl ? "noopener noreferrer" : undefined}
                   className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-medium text-brand hover:text-brand/70"
                 >
-                  View current details {program.registrationUrl ? "at PTI" : ""}
+                  {program.registrationUrl ? "View current details at PTI" : "Contact Dr. Njo"}
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

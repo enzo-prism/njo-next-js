@@ -10,17 +10,22 @@ import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
-assert.equal(beforeSeason.length, 2, "Both 2026 programs should be upcoming at the start of the year");
+assert.equal(beforeSeason.length, 3, "All published programs should be upcoming at the start of the year");
 assert.equal(beforeSeason[0].upcomingDates.length, 4, "All seminar dates should initially be upcoming");
+assert.equal(beforeSeason[2].slug, "beyond-the-chair-anaheim");
+assert.equal(beforeSeason[2].upcomingDates.length, 1);
 
 const augustView = getUpcomingEventPrograms(new Date("2026-08-17T12:00:00-07:00"));
-assert.equal(augustView.length, 1, "Completed programs must not render as upcoming");
+assert.equal(augustView.length, 2, "Completed programs must not render as upcoming");
 assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
 assert.equal(augustView[0].upcomingDates.length, 2);
 assert.equal(augustView[0].completedOccurrences.length, 2);
 assert.equal(augustView[0].scheduleLabel, "2 dates");
 assert.equal(augustView[0].completedEventsLabel, "2 completed dates");
+assert.equal(augustView[1].slug, "beyond-the-chair-anaheim");
+assert.equal(augustView[1].nextDateLabel, "September 25, 2026");
+assert.equal(augustView[1].locationLabel, "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA");
 
 const afterSeason = getUpcomingEventPrograms(new Date("2026-10-03T00:00:00-07:00"));
 assert.equal(afterSeason.length, 1, "The 2027 Anaheim seminar should remain available after the 2026 dates");
@@ -50,6 +55,11 @@ assert.equal(
 assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation must not mutate editorial event data");
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
+assert.equal(
+  resolveProfileTab("", "#beyond-the-chair-anaheim"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
 assert.equal(
   resolveProfileTab("", "#panel-of-experts-dinner"),
   "news",

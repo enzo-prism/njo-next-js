@@ -1,6 +1,12 @@
 export type ProfileTab = "overview" | "news";
 
-const newsSectionIds = new Set(["panel-of-experts-dinner", "industry-leaders", "upcoming-events", "past-events"]);
+const newsSectionIds = new Set([
+  "beyond-the-chair-anaheim",
+  "panel-of-experts-dinner",
+  "industry-leaders",
+  "upcoming-events",
+  "past-events",
+]);
 
 export function resolveProfileTab(search: string, hash: string): ProfileTab {
   const queryTab = new URLSearchParams(search).get("tab");

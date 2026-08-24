@@ -20,6 +20,25 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "beyond-the-chair-anaheim",
+    title: "The Dental Practice Beyond the Chair",
+    description:
+      "A 5-hour working session on September 25, 2026 in Anaheim for dentists and practice owners building enterprise value, intellectual property, wealth, and legacy.",
+    publishedAt: "2026-08-24",
+    image: {
+      src: "/media/promotional-flyer-dental-strategies.webp",
+      width: 1414,
+      height: 2000,
+      alt: "Promotional flyer for The Dental Practice Beyond the Chair, a September 25, 2026 working session in Anaheim led by Michael A. Njo, DDS.",
+      caption: "The Dental Practice Beyond the Chair — September 25, 2026 at The Phillips Group in Anaheim.",
+    },
+    body: [
+      "The Dental Practice Beyond the Chair is a 5-hour working session for dentists and practice owners, with the subtitle Building Enterprise Value, Intellectual Property, Wealth, and Legacy.",
+      "The session is September 25, 2026, from 8:30 AM to 1:30 PM, at The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA. It is led by Michael A. Njo, DDS, Director, Dental Strategies.",
+      "Contact Dr. Njo to register or ask about the session.",
+    ],
+  },
+  {
     slug: "amazing-4-days-with-industry-leaders",
     title: "An Amazing 4 Days with Industry Leaders",
     description: "Highlights from four days of conversations with industry leaders in dentistry and healthcare.",

@@ -209,7 +209,7 @@ If event details change, check both:
 
 `src/data/media.ts` is the source of truth for editorial photos. `layoutVariant` and `width`/`height` must match the real file. Landscape originals forced into `portrait` tiles get cropped in `src/components/media/editorial-mosaic.tsx`.
 
-Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals live in `src/assets/media/`. Panel of Experts dinner photos are local WebP files in `public/media/` and render first in the News tab of `src/components/pages/michael-njo-dds.tsx` so `#panel-of-experts-dinner` lands on the photographs.
+Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals live in `src/assets/media/`. News-tab assets in `public/media/` include the Beyond the Chair flyer (`promotional-flyer-dental-strategies.webp`, `#beyond-the-chair-anaheim`) and Panel of Experts dinner photos. The flyer renders first in the News tab of `src/components/pages/michael-njo-dds.tsx`.
 
 The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file.
 
