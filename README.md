@@ -17,7 +17,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
 - Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
 - Dental Exit Blueprint launch coverage added across the home page, resources index, and a dedicated resource page, using the author-supplied cover and launch-specific metadata/schema.
-- Editorial photos are inventoried in `src/data/media.ts` (`layoutVariant` must match the real file). The interview player is defined in `src/data/interview-video.ts`. News-tab assets in `public/media/` include the Beyond the Chair flyer and Panel of Experts dinner photos.
+- Editorial photos are inventoried in `src/data/media.ts` (`layoutVariant` must match the real file). The interview player is defined in `src/data/interview-video.ts`. News-tab assets in `public/media/` include the Another perfect match photos, the Beyond the Chair flyer, and Panel of Experts dinner photos.
 - Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
 - Consent-gated Vercel Analytics, Google Analytics, and Hotjar enabled only on the canonical production host.
 - Event/news surfaces are date-aware, refresh hourly, exclude completed events from current schema, and hand current registration intent to PTI.
