@@ -1,6 +1,7 @@
 export type ProfileTab = "overview" | "news";
 
 const newsSectionIds = new Set([
+  "another-perfect-match",
   "beyond-the-chair-anaheim",
   "panel-of-experts-dinner",
   "industry-leaders",

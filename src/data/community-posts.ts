@@ -20,6 +20,40 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "another-perfect-match",
+    title: "Another perfect match",
+    description:
+      "Another perfect match! Dr. Michael Njo is excited to have both clients matched—a former Dugoni Business Club student with an accomplished practitioner.",
+    publishedAt: "2026-08-25",
+    image: {
+      src: "/media/bill-mikki-porch.webp",
+      width: 1199,
+      height: 1600,
+      alt: "Young woman and older man smiling on the brick porch of a house numbered 257.",
+      caption: "Young woman and older man smiling on the brick porch of a house numbered 257.",
+    },
+    images: [
+      {
+        src: "/media/bill-mikki-porch.webp",
+        width: 1199,
+        height: 1600,
+        alt: "Young woman and older man smiling on the brick porch of a house numbered 257.",
+        caption: "Young woman and older man smiling on the brick porch of a house numbered 257.",
+      },
+      {
+        src: "/media/bill-mikki-trio.webp",
+        width: 1200,
+        height: 1600,
+        alt: "Three people smiling outdoors in front of a burgundy building.",
+        caption: "Three people smiling outdoors in front of a burgundy building.",
+      },
+    ],
+    body: [
+      "Another perfect match! So excited to have both of my clients matched- with my former Dugoni Business Club Student with an accomplished practitioner!",
+      "Bill and Mikki, thank you for your incredibly thoughtful words and for trusting me to help guide such an important transition. It was truly an honor to support you in finding the right successor for the practice, patients, team, and legacy you worked so hard to build.",
+    ],
+  },
+  {
     slug: "beyond-the-chair-anaheim",
     title: "The Dental Practice Beyond the Chair",
     description:

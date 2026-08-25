@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
+import { buildCommunityPostPath } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { buildPageStructuredData } from "@/seo/route-structured-data";
 import { buildUpcomingEventNodes } from "@/seo/structured-data";
@@ -101,5 +102,15 @@ assert.equal(augustEventNodes[2].name, "The Dental Practice Beyond the Chair");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
+
+const matchPath = buildCommunityPostPath("another-perfect-match");
+const matchSchema = buildPageStructuredData(matchPath);
+assert.ok(matchSchema, "Expected structured data for the Another perfect match community post");
+const matchGraph = matchSchema["@graph"] as Array<Record<string, unknown>>;
+const matchArticle = matchGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(matchArticle?.headline, "Another perfect match");
+assert.equal(matchArticle?.datePublished, "2026-08-25");
+assert.ok(!JSON.stringify(matchSchema).includes("sold-out"), "Do not claim sold-out for a news match post");
+assert.ok(!JSON.stringify(matchSchema).includes("Registration"), "Do not add registration claims for a news match post");
 
 console.log(`Validated structured data for ${paths.length} routes.`);

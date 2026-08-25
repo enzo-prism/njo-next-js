@@ -341,6 +341,47 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="another-perfect-match" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 25, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">Another perfect match</h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Image
+                  src="/media/bill-mikki-porch.webp"
+                  alt="Young woman and older man smiling on the brick porch of a house numbered 257."
+                  width={1199}
+                  height={1600}
+                  className="h-auto w-full rounded-xl bg-slate-50 object-contain"
+                  sizes="(min-width: 768px) 360px, 100vw"
+                  priority
+                />
+                <Image
+                  src="/media/bill-mikki-trio.webp"
+                  alt="Three people smiling outdoors in front of a burgundy building."
+                  width={1200}
+                  height={1600}
+                  className="h-auto w-full rounded-xl bg-slate-50 object-contain"
+                  sizes="(min-width: 768px) 360px, 100vw"
+                />
+              </div>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Another perfect match! So excited to have both of my clients matched- with my former Dugoni Business
+                Club Student with an accomplished practitioner!
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Bill and Mikki, thank you for your incredibly thoughtful words and for trusting me to help guide such an
+                important transition. It was truly an honor to support you in finding the right successor for the
+                practice, patients, team, and legacy you worked so hard to build.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/another-perfect-match">Read the full story</Link>
+                </Button>
+              </div>
+            </article>
+
             <article id="beyond-the-chair-anaheim" className={`${panel} space-y-4`}>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">September 25, 2026</p>
               <h2 className="font-serif text-xl font-semibold">The Dental Practice Beyond the Chair</h2>

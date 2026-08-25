@@ -76,7 +76,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
 - `src/components/pages/michael-njo-dds.tsx`
-  - News tab copy, Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
+  - News tab copy, Another perfect match photos (`public/media/bill-mikki-porch.webp`, `bill-mikki-trio.webp`), Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
 - `src/data/events.ts`
   - Editorial event records plus date-aware upcoming/current derivation
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema

@@ -30,7 +30,9 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         </header>
 
         {post.images?.length ? (
-          <div className="grid items-start gap-4 sm:grid-cols-3">
+          <div
+            className={`grid items-start gap-4 ${post.images.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
+          >
             {post.images.map((image, index) => (
               <figure key={image.src} className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
                 <Image
