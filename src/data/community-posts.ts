@@ -42,8 +42,8 @@ export const communityPosts: CommunityPost[] = [
       },
       {
         src: "/media/bill-mikki-trio.webp",
-        width: 1600,
-        height: 1200,
+        width: 1200,
+        height: 1600,
         alt: "Three people smiling outdoors in front of a burgundy building.",
         caption: "Three people smiling outdoors in front of a burgundy building.",
       },

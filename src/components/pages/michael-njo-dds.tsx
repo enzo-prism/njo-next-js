@@ -357,8 +357,8 @@ export default function MichaelNjoDDS({
                 <Image
                   src="/media/bill-mikki-trio.webp"
                   alt="Three people smiling outdoors in front of a burgundy building."
-                  width={1600}
-                  height={1200}
+                  width={1200}
+                  height={1600}
                   className="h-auto w-full rounded-xl bg-slate-50 object-contain"
                   sizes="(min-width: 768px) 360px, 100vw"
                 />
