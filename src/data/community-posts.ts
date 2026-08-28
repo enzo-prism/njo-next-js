@@ -20,6 +20,24 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "practice-blueprint-roseville-aug-2026",
+    title: "The Practice Blueprint dinner",
+    description:
+      "Great night with great Dentists and referral partners at The Practice Blueprint dinner. Thank you Provide, Patterson, Kohan, Carr, and Dr. Diana Fat.",
+    publishedAt: "2026-08-28",
+    image: {
+      src: "/media/poe-roseville-aug-2026.webp",
+      width: 864,
+      height: 1821,
+      alt: "The Practice Blueprint recap collage from an exclusive dinner with industry leaders, showing a restaurant table, a standing group, and black-and-white shots of the welcome sign, table setting, branded notebook, and gift bags.",
+      caption: "The Practice Blueprint dinner recap — an exclusive evening with dentists and referral partners.",
+    },
+    body: [
+      "Great night with great Dentists and referral partners! Thank you Provide, Patterson, Kohan, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams!",
+      "Thank you to my dear friend, colleague, and long time client Dr. Diana Fat for welcoming us to her family restaurant.",
+    ],
+  },
+  {
     slug: "another-perfect-match",
     title: "Another perfect match",
     description:

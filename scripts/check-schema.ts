@@ -113,4 +113,15 @@ assert.equal(matchArticle?.datePublished, "2026-08-25");
 assert.ok(!JSON.stringify(matchSchema).includes("sold-out"), "Do not claim sold-out for a news match post");
 assert.ok(!JSON.stringify(matchSchema).includes("Registration"), "Do not add registration claims for a news match post");
 
+const blueprintPath = buildCommunityPostPath("practice-blueprint-roseville-aug-2026");
+const blueprintSchema = buildPageStructuredData(blueprintPath);
+assert.ok(blueprintSchema, "Expected structured data for The Practice Blueprint dinner community post");
+const blueprintGraph = blueprintSchema["@graph"] as Array<Record<string, unknown>>;
+const blueprintArticle = blueprintGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(blueprintArticle?.headline, "The Practice Blueprint dinner");
+assert.equal(blueprintArticle?.datePublished, "2026-08-28");
+assert.ok(!JSON.stringify(blueprintSchema).includes("sold-out"), "Do not claim sold-out for a news recap post");
+assert.ok(!JSON.stringify(blueprintSchema).includes("Registration"), "Do not add registration claims for a news recap post");
+assert.ok(!JSON.stringify(blueprintSchema).includes("panel-of-experts-dinner-roseville"), "Do not reuse the August 14 dinner slug");
+
 console.log(`Validated structured data for ${paths.length} routes.`);

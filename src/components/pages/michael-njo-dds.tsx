@@ -341,6 +341,37 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="practice-blueprint-roseville-aug-2026" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 28, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">The Practice Blueprint dinner</h2>
+              <Image
+                src="/media/poe-roseville-aug-2026.webp"
+                alt="The Practice Blueprint recap collage from an exclusive dinner with industry leaders, showing a restaurant table, a standing group, and black-and-white shots of the welcome sign, table setting, branded notebook, and gift bags."
+                width={864}
+                height={1821}
+                className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 768px) 448px, 100vw"
+                priority
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Kohan, and Carr for
+                including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a
+                team that can realize those dreams!
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Thank you to my dear friend, colleague, and long time client Dr. Diana Fat for welcoming us to her family
+                restaurant.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/practice-blueprint-roseville-aug-2026">Read the full story</Link>
+                </Button>
+              </div>
+            </article>
+
             <article id="another-perfect-match" className={`${panel} space-y-4`}>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 25, 2026</p>
               <h2 className="font-serif text-xl font-semibold">Another perfect match</h2>
