@@ -103,6 +103,20 @@ assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April 
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
 
+const fatPath = buildCommunityPostPath("diana-fat-board-of-regents");
+const fatSchema = buildPageStructuredData(fatPath);
+assert.ok(fatSchema, "Expected structured data for the Diana Fat Board of Regents community post");
+const fatGraph = fatSchema["@graph"] as Array<Record<string, unknown>>;
+const fatArticle = fatGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(
+  fatArticle?.headline,
+  "Dr. Diana Fat appointed to the University of the Pacific Board of Regents",
+);
+assert.equal(fatArticle?.datePublished, "2026-08-28");
+assert.ok(!JSON.stringify(fatSchema).includes("sold-out"), "Do not claim sold-out for a congratulations news post");
+assert.ok(!JSON.stringify(fatSchema).includes("Registration"), "Do not add registration claims for a congratulations news post");
+assert.ok(!JSON.stringify(fatSchema).includes("Eventbrite"), "Do not invent Eventbrite language for a congratulations news post");
+
 const matchPath = buildCommunityPostPath("another-perfect-match");
 const matchSchema = buildPageStructuredData(matchPath);
 assert.ok(matchSchema, "Expected structured data for the Another perfect match community post");

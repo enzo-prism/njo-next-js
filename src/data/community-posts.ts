@@ -20,6 +20,25 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "diana-fat-board-of-regents",
+    title: "Dr. Diana Fat appointed to the University of the Pacific Board of Regents",
+    description:
+      "Dr. Michael Njo congratulates longtime client Dr. Diana Fat, a distinguished Sacramento prosthodontist, on her appointment to the University of the Pacific Board of Regents.",
+    publishedAt: "2026-08-28",
+    image: {
+      src: "/media/diana-fat-board-of-regents.webp",
+      width: 1003,
+      height: 1568,
+      alt: "Dr. Michael Njo and Dr. Diana Fat standing in her Sacramento dental office, with a graphic announcing her appointment to the University of the Pacific Board of Regents.",
+      caption: "Congratulations to Dr. Diana Fat on her appointment to the University of the Pacific Board of Regents.",
+    },
+    body: [
+      "I am so proud to congratulate my longtime client of more than 20 years, Dr. Diana Fat, a distinguished Sacramento prosthodontist, on her appointment to the University of the Pacific Board of Regents.",
+      "Diana continues to make a meaningful difference in dentistry, in her community, and now for our alma mater. Congratulations, Diana—this honor is so well deserved!",
+      "#UniversityOfThePacific #BoardOfRegents #PacificProud #DentalLeadership",
+    ],
+  },
+  {
     slug: "practice-blueprint-roseville-aug-2026",
     title: "The Practice Blueprint dinner",
     description:
