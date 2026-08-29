@@ -56,6 +56,11 @@ assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation mus
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
 assert.equal(
+  resolveProfileTab("", "#diana-fat-board-of-regents"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
+assert.equal(
   resolveProfileTab("", "#practice-blueprint-roseville-aug-2026"),
   "news",
   "A direct news-section hash should open the news tab without requiring a query parameter",

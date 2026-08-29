@@ -1,6 +1,7 @@
 export type ProfileTab = "overview" | "news";
 
 const newsSectionIds = new Set([
+  "diana-fat-board-of-regents",
   "practice-blueprint-roseville-aug-2026",
   "another-perfect-match",
   "beyond-the-chair-anaheim",

@@ -341,6 +341,41 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            <article id="diana-fat-board-of-regents" className={`${panel} space-y-4`}>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 28, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">
+                Dr. Diana Fat appointed to the University of the Pacific Board of Regents
+              </h2>
+              <Image
+                src="/media/diana-fat-board-of-regents.webp"
+                alt="Dr. Michael Njo and Dr. Diana Fat standing in her Sacramento dental office, with a graphic announcing her appointment to the University of the Pacific Board of Regents."
+                width={1003}
+                height={1568}
+                className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 768px) 448px, 100vw"
+                priority
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                I am so proud to congratulate my longtime client of more than 20 years, Dr. Diana Fat, a distinguished
+                Sacramento prosthodontist, on her appointment to the University of the Pacific Board of Regents.
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Diana continues to make a meaningful difference in dentistry, in her community, and now for our alma
+                mater. Congratulations, Diana—this honor is so well deserved!
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                #UniversityOfThePacific #BoardOfRegents #PacificProud #DentalLeadership
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/diana-fat-board-of-regents">Read the full story</Link>
+                </Button>
+              </div>
+            </article>
+
             <article id="practice-blueprint-roseville-aug-2026" className={`${panel} space-y-4`}>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 28, 2026</p>
               <h2 className="font-serif text-xl font-semibold">The Practice Blueprint dinner</h2>
