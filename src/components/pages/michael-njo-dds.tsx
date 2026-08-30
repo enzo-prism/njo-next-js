@@ -125,9 +125,9 @@ export default function MichaelNjoDDS({
         </section>
 
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
-          <TabsList className="mx-auto grid w-full max-w-md grid-cols-2">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="news">News</TabsTrigger>
+          <TabsList className="mx-auto grid h-11 min-h-11 w-full max-w-md grid-cols-2">
+            <TabsTrigger value="overview" className="min-h-11">Overview</TabsTrigger>
+            <TabsTrigger value="news" className="min-h-11">News</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-8">
@@ -470,7 +470,13 @@ export default function MichaelNjoDDS({
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild size="sm">
-                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                  <a
+                    href="https://practicetransitionsinstitute.com/events"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View current event details at PTI
+                  </a>
                 </Button>
                 <Button asChild variant="outline" size="sm">
                   <Link href="/blog/beyond-the-chair-anaheim">Read the full story</Link>
@@ -508,7 +514,7 @@ export default function MichaelNjoDDS({
                 />
               </div>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! Looking forward to the next event in Roseville August 27th!
+                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! The Practice Blueprint dinner followed on August 27 in Roseville.
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
                 It was also an honor to autograph the <em>Dental Practice Transitions Handbook</em> at the dinner. Dr. Njo&apos;s newest publishing collaboration, <em>The Dental Exit Blueprint</em>, was released July 15, 2026.
