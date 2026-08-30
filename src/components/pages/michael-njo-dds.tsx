@@ -140,7 +140,7 @@ export default function MichaelNjoDDS({
                   alt={dugoniCollaborationImage.alt}
                   width={dugoniCollaborationImage.width}
                   height={dugoniCollaborationImage.height}
-                  className="mx-auto h-64 w-64 rounded-2xl object-cover object-center"
+                  className="mx-auto h-64 w-64 rounded-2xl object-cover object-top"
                 />
                 <p className="text-pretty leading-relaxed text-muted-foreground">
                   A practitioner-turned-consultant with deep private practice experience, Dr. Njo helps healthcare owners
@@ -183,15 +183,15 @@ export default function MichaelNjoDDS({
 
             {/* Residency feature */}
             <div className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
-              <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
-                <div className="bg-surface">
+              <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+                <div className="relative aspect-[4/3] bg-surface">
                   <Image
                     src={gprResidencyPresentationImage.src}
                     alt={gprResidencyPresentationImage.alt}
                     sizes={gprResidencyPresentationImage.sizes}
-                    width={gprResidencyPresentationImage.width}
-                    height={gprResidencyPresentationImage.height}
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
+                    style={{ objectPosition: gprResidencyPresentationImage.objectPosition ?? "center" }}
                   />
                 </div>
                 <div className="space-y-4 p-6 md:p-8">
