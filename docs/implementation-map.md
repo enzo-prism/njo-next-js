@@ -196,14 +196,18 @@ This means author edits can change slugs. If you rename an author on an already-
 
 `getUpcomingEventPrograms(referenceDate)` is the single date-state helper. It derives the next occurrence, removes
 completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
-hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI.
+hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI via
+`registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). News-tab
+copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
+completed dinners as upcoming.
 `src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
 parameters aligned.
 
-If event details change, check both:
+If event details change, check:
 
 - `src/components/pages/michael-njo-dds.tsx`
 - `src/seo/structured-data.ts`
+- `src/data/community-posts.ts`
 
 ### Media
 
@@ -303,6 +307,9 @@ The site drives two main actions: booking a call and contacting Dr. Njo.
   hardcode the link. `check:contact-ctas` enforces this. Two links exist today:
   - `BOOKING_URL`: general 30-minute intro call (default for `BookingButton`).
   - `DSO_PRICING_BOOKING_URL`: focused DSO pricing discussion call.
+- The Content Security Policy in `next.config.ts` allows those official widget origins
+  (`CALENDLY_ASSETS_ORIGIN` plus `CALENDLY_MESSAGE_ORIGINS`) so the popup can load instead of
+  always falling back to a new tab. `check:redirects` asserts those hosts remain in CSP.
 - The DSO pricing CTA is a dedicated `DsoPricingCallout` (`src/components/dso-pricing-callout.tsx`).
   It is intentionally scoped to selling/valuation contexts — the home page, the contact page, and
   the `/michael-njo-dds` overview — rather than placed site-wide like the intro-call button.
@@ -411,7 +418,7 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:testimonials`
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
-  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, and source immutability
+  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense
 - `check:forms`
   - validates that contact and event submissions still use the intended Formspree endpoints
 - `check:contact-ctas`
