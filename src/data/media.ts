@@ -57,7 +57,6 @@ const createLocalAsset = ({ src, sizes, ...asset }: LocalAssetOptions): Editoria
 
 const createRemoteAsset = ({ sizes, ...asset }: RemoteAssetOptions): EditorialMediaAsset => ({
   ...asset,
-  src,
   sizes: sizes ?? defaultSizesByVariant[asset.layoutVariant],
 });
 
