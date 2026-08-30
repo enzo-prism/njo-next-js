@@ -211,7 +211,7 @@ If event details change, check:
 
 ### Media
 
-`src/data/media.ts` is the source of truth for editorial photos. `layoutVariant` and `width`/`height` must match the real file. Landscape originals forced into `portrait` tiles get cropped in `src/components/media/editorial-mosaic.tsx`.
+`src/data/media.ts` is the source of truth for editorial photos. `layoutVariant` and `width`/`height` must match the real file. Landscape originals forced into `portrait` tiles get cropped in `src/components/media/editorial-mosaic.tsx`. Mosaic landscape tiles stay `aspect-[4/3]` at every breakpoint (do not widen to 16:10). Gallery `layoutMode="columns"` uses intrinsic image dimensions. The home hero uses `aspect-[4/3]` on mobile so 4:3 slides are not side-cropped. GPR/education bands lock a 4:3 frame instead of stretching `object-cover` to the text column.
 
 Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals live in `src/assets/media/`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations (`diana-fat-board-of-regents.webp`, `#diana-fat-board-of-regents`), The Practice Blueprint dinner recap (`poe-roseville-aug-2026.webp`, `#practice-blueprint-roseville-aug-2026`), the Another perfect match photos (`bill-mikki-porch.webp`, `bill-mikki-trio.webp`, `#another-perfect-match`), the Beyond the Chair flyer (`promotional-flyer-dental-strategies.webp`, `#beyond-the-chair-anaheim`), and Panel of Experts dinner photos. The Diana Fat Board of Regents congratulations renders first in the News tab of `src/components/pages/michael-njo-dds.tsx`.
 

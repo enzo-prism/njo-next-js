@@ -3,6 +3,15 @@
 Date: 2026-03-04 (initial report)
 Updated: 2026-03-07 (Node 24 alignment and production rollout)
 
+## Media Display Update (2026-08-30)
+
+Framing pass so every editorial photo matches its native ratio on mobile and desktop:
+
+- `solo-dinner-gallery-only` and `three-person-event` are landscape 4:3; mosaic metadata now matches so they are not cropped as portraits.
+- Backstage quote card and mentorship poster use the portrait (`4/5`) tile instead of a taller `9/14` poster crop.
+- Mosaic landscape tiles stay `4/3` at xl. Gallery columns use intrinsic height.
+- Home hero mobile frame is `4/3`. GPR/education bands no longer stretch `object-cover` to the adjacent text column.
+
 ## Media Display Update (2026-08-15)
 
 Fixed remaining image and video display bugs after the Panel of Experts dinner photos shipped:
