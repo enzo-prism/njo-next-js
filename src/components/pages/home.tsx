@@ -329,7 +329,7 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
               sizes={gprResidencyPresentationImage.sizes}
               width={gprResidencyPresentationImage.width}
               height={gprResidencyPresentationImage.height}
-              className="h-full w-full object-cover"
+              className="h-auto w-full object-cover"
             />
           </div>
           <div className="space-y-5">
