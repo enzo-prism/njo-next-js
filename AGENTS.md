@@ -73,6 +73,11 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
 - `src/data/media.ts`
   - editorial photo inventory, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
+  - `layoutVariant` must match the real file: 4:3 photos are `landscape`, 4:5 quote cards are `portrait`. Never force a landscape original into a portrait mosaic tile.
+- `src/components/media/editorial-mosaic.tsx`
+  - grid tiles use native-ratio aspect classes (`4/3` landscape, `4/5` portrait); `layoutMode="columns"` uses intrinsic width/height instead of a forced crop
+- `src/components/media/hero-slideshow.tsx`
+  - mobile frame is `aspect-[4/3]` so the 4:3 leadership slides are not side-cropped in a 5:6 box
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
 - `src/components/pages/michael-njo-dds.tsx`
