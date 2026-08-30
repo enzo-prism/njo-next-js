@@ -57,6 +57,7 @@ const createLocalAsset = ({ src, sizes, ...asset }: LocalAssetOptions): Editoria
 
 const createRemoteAsset = ({ sizes, ...asset }: RemoteAssetOptions): EditorialMediaAsset => ({
   ...asset,
+  src,
   sizes: sizes ?? defaultSizesByVariant[asset.layoutVariant],
 });
 
@@ -109,11 +110,11 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
   createLocalAsset({
     id: "three-person-event",
     src: threePersonEvent,
-    layoutVariant: "portrait",
+    layoutVariant: "landscape",
     alt: "Dr. Michael Njo with fellow attendees at a professional event.",
     caption: "A candid event moment underscoring the network around Dr. Njo's consulting and speaking work.",
     featuredRoutes: ["profile:relationships", "profile:gallery"],
-    objectPosition: "center top",
+    objectPosition: "center center",
   }),
   createLocalAsset({
     id: "handbook-cover",
@@ -128,7 +129,7 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
   createLocalAsset({
     id: "backstage-quote-card",
     src: backstageQuoteCard,
-    layoutVariant: "poster",
+    layoutVariant: "portrait",
     alt: "Backstage Mastermind feature card highlighting Dr. Michael Njo's practice support message.",
     caption: "A shareable quote card positioning Dr. Njo as a trusted partner for everything beyond the operatory.",
     featuredRoutes: ["interview:quote", "profile:gallery"],
@@ -137,11 +138,11 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
   createLocalAsset({
     id: "solo-dinner-gallery-only",
     src: soloDinnerGalleryOnly,
-    layoutVariant: "portrait",
+    layoutVariant: "landscape",
     alt: "Dinner portrait from a private celebration setting.",
     caption: "A gallery-only moment kept secondary to the public business narrative.",
     featuredRoutes: ["profile:gallery"],
-    objectPosition: "center top",
+    objectPosition: "center center",
     galleryOnly: true,
   }),
 ];
@@ -181,7 +182,7 @@ const legacyGalleryImages: EditorialMediaAsset[] = [
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1770776307/Updated_cskep5.png",
     width: 724,
     height: 888,
-    layoutVariant: "poster",
+    layoutVariant: "portrait",
     alt: "Dr. Michael Njo guiding dental professionals and mentoring future leaders.",
     caption: "Dr. Michael Njo in action guiding dental professionals.",
     featuredRoutes: ["profile:news", "profile:gallery"],

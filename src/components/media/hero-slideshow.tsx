@@ -77,7 +77,7 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
     <div
       className={cn(
         "group relative isolate flex h-full w-full flex-col overflow-hidden bg-slate-950",
-        "aspect-[5/6] md:aspect-auto md:min-h-[560px]",
+        "aspect-[4/3] md:aspect-auto md:min-h-[560px]",
         className,
       )}
       role="region"
