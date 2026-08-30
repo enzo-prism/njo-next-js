@@ -105,6 +105,19 @@ export function AnalyticsConsentManager() {
     loadHotjar();
   }, [consent]);
 
+  const isBannerOpen = hasLoadedPreference && consent === null;
+
+  useEffect(() => {
+    if (!isBannerOpen) {
+      return;
+    }
+    const previousPadding = document.body.style.paddingBottom;
+    document.body.style.paddingBottom = "12rem";
+    return () => {
+      document.body.style.paddingBottom = previousPadding;
+    };
+  }, [isBannerOpen]);
+
   useEffect(() => {
     const handleTrackedEvent = (event: Event) => {
       sendAnalyticsEvent((event as CustomEvent<AnalyticsEventDetail>).detail);
@@ -142,7 +155,7 @@ export function AnalyticsConsentManager() {
   return (
     <>
       {consent === "accepted" && isProductionBrowser() ? <Analytics /> : null}
-      {hasLoadedPreference && consent === null ? (
+      {isBannerOpen ? (
         <aside
           aria-label="Analytics privacy choices"
           className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-3xl rounded-2xl border border-border bg-background p-4 shadow-2xl sm:p-5"
@@ -157,10 +170,10 @@ export function AnalyticsConsentManager() {
               .
             </p>
             <div className="flex shrink-0 flex-col gap-2 min-[420px]:flex-row">
-              <Button type="button" variant="outline" onClick={() => chooseConsent("declined")}>
+              <Button type="button" variant="outline" className="min-h-11" onClick={() => chooseConsent("declined")}>
                 Decline
               </Button>
-              <Button type="button" onClick={() => chooseConsent("accepted")}>
+              <Button type="button" className="min-h-11" onClick={() => chooseConsent("accepted")}>
                 Allow analytics
               </Button>
             </div>

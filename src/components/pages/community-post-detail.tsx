@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CONTACT_PATH } from "@/config/site";
 import type { CommunityPost } from "@/data/community-posts";
+import { eventPrograms } from "@/data/events";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(
@@ -15,6 +16,8 @@ function formatDate(value: string) {
 }
 
 export default function CommunityPostDetailPage({ post }: { post: CommunityPost }) {
+  const matchingEvent = eventPrograms.find((program) => program.slug === post.slug);
+
   return (
     <Container className="py-10 sm:py-14">
       <article className="mx-auto max-w-4xl space-y-8">
@@ -84,7 +87,17 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         </Card>
 
         <div className="flex flex-wrap gap-3">
-          <Button asChild><Link href={CONTACT_PATH}>Talk to Dr. Njo</Link></Button>
+          {matchingEvent?.registrationUrl ? (
+            <Button asChild>
+              <a href={matchingEvent.registrationUrl} target="_blank" rel="noopener noreferrer">
+                View current event details at PTI
+              </a>
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link href={CONTACT_PATH}>Talk to Dr. Njo</Link>
+            </Button>
+          )}
           <Button asChild variant="outline"><Link href="/michael-njo-dds">About Dr. Njo</Link></Button>
         </div>
       </article>

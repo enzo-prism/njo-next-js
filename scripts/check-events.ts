@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { communityPosts } from "@/data/community-posts";
 import {
   eventPrograms,
   getUpcomingEventPrograms,
@@ -110,6 +113,30 @@ assert.equal(
   }),
   "/michael-njo-dds?utm_source=newsletter",
   "Selecting overview should remove stale news state while preserving unrelated query parameters",
+);
+
+const beyondTheChair = eventPrograms.find((program) => program.slug === "beyond-the-chair-anaheim");
+assert.ok(
+  beyondTheChair?.registrationUrl?.startsWith("https://practicetransitionsinstitute.com/"),
+  "Beyond the Chair must hand current registration intent to PTI",
+);
+
+const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");
+assert.ok(dinnerPost, "Panel of Experts dinner recap must exist");
+assert.equal(
+  dinnerPost?.body.some((paragraph) => /upcoming event scheduled for August 27/i.test(paragraph)),
+  false,
+  "Dinner recap must not advertise the completed Roseville dinner as upcoming",
+);
+
+const profileNewsSource = readFileSync(
+  path.join(process.cwd(), "src/components/pages/michael-njo-dds.tsx"),
+  "utf8",
+);
+assert.equal(
+  /Looking forward to the next event in Roseville/i.test(profileNewsSource),
+  false,
+  "Profile news copy must not treat the completed Roseville dinner as upcoming",
 );
 
 console.log("Event date-state and profile-tab assertions passed.");

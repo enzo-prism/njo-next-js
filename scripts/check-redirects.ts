@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import nextConfig from "../next.config";
 import { LEGACY_REDIRECTS } from "@/config/routes";
-import { CANONICAL_PROTOCOL, PREFERRED_HOSTNAME } from "@/config/site";
+import { CALENDLY_ASSETS_ORIGIN, CALENDLY_MESSAGE_ORIGINS, CANONICAL_PROTOCOL, PREFERRED_HOSTNAME } from "@/config/site";
 import { getCanonicalRedirectLocation } from "@/seo/canonical";
 
 const requiredLegacyRedirects = [
@@ -70,6 +70,18 @@ async function main() {
     headerMap.get("content-security-policy")?.includes("frame-ancestors 'none'"),
     "Content Security Policy must prevent framing.",
   );
+
+  const contentSecurityPolicy = headerMap.get("content-security-policy") ?? "";
+  assert.ok(
+    contentSecurityPolicy.includes(CALENDLY_ASSETS_ORIGIN),
+    "Content Security Policy must allow official Calendly widget assets.",
+  );
+  for (const origin of CALENDLY_MESSAGE_ORIGINS) {
+    assert.ok(
+      contentSecurityPolicy.includes(origin),
+      `Content Security Policy must allow Calendly frames and connections from ${origin}.`,
+    );
+  }
 
   const redirects = await nextConfig.redirects?.();
   assert.ok(redirects && redirects.length >= 4, "next.config redirects should include legacy mappings");
