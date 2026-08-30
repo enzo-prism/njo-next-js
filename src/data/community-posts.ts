@@ -106,7 +106,7 @@ export const communityPosts: CommunityPost[] = [
     body: [
       "The Dental Practice Beyond the Chair is a 5-hour working session for dentists and practice owners, with the subtitle Building Enterprise Value, Intellectual Property, Wealth, and Legacy.",
       "The session is September 25, 2026, from 8:30 AM to 1:30 PM, at The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA. It is led by Michael A. Njo, DDS, Director, Dental Strategies.",
-      "Contact Dr. Njo to register or ask about the session.",
+      "Current session details are on the Practice Transitions Institute events page. Contact Dr. Njo with questions about the working session.",
     ],
   },
   {
@@ -160,7 +160,7 @@ export const communityPosts: CommunityPost[] = [
     body: [
       "Great night with great dentists and referral partners. Thank you to Provide, Patterson, Sarv Designs, and Carr for including Dr. Njo at this vibrant event.",
       "It is always energizing to spend an evening with dentists who have ambitious goals and a team that can help bring those goals to life.",
-      "Dr. Njo was honored to autograph the Dental Practice Transitions Handbook during the evening. The Roseville Practice Blueprint dinner was a separate upcoming event scheduled for August 27.",
+      "Dr. Njo was honored to autograph the Dental Practice Transitions Handbook during the evening. The Practice Blueprint dinner followed on August 27 at Fats Asia Bistro in Roseville.",
     ],
   },
 ];

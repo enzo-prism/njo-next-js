@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { CALENDLY_ASSETS_ORIGIN, CALENDLY_MESSAGE_ORIGINS } from "./src/config/site";
+
+const calendlyAppOrigins = CALENDLY_MESSAGE_ORIGINS.join(" ");
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -6,13 +9,13 @@ const contentSecurityPolicy = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self' https://formspree.io",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://res.cloudinary.com https://*.google-analytics.com https://*.hotjar.com https://www.instagram.com https://*.cdninstagram.com",
-  "font-src 'self' data:",
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com ${CALENDLY_ASSETS_ORIGIN}`,
+  `style-src 'self' 'unsafe-inline' ${CALENDLY_ASSETS_ORIGIN}`,
+  `img-src 'self' data: blob: https://res.cloudinary.com https://*.google-analytics.com https://*.hotjar.com https://www.instagram.com https://*.cdninstagram.com ${CALENDLY_ASSETS_ORIGIN}`,
+  `font-src 'self' data: ${CALENDLY_ASSETS_ORIGIN}`,
   "media-src 'self' https://res.cloudinary.com",
-  "frame-src https://www.instagram.com https://vars.hotjar.com",
-  "connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.hotjar.com wss://*.hotjar.com",
+  `frame-src https://www.instagram.com https://vars.hotjar.com ${calendlyAppOrigins}`,
+  `connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.hotjar.com wss://*.hotjar.com ${CALENDLY_ASSETS_ORIGIN} ${calendlyAppOrigins}`,
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",
 ].join("; ");

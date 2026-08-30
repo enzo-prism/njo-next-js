@@ -39,6 +39,7 @@ export const DSO_PRICING_BOOKING_URL =
 export const CALENDLY_WIDGET_JS = "https://assets.calendly.com/assets/external/widget.js";
 export const CALENDLY_WIDGET_CSS = "https://assets.calendly.com/assets/external/widget.css";
 export const CALENDLY_MESSAGE_ORIGINS = ["https://calendly.com", "https://www.calendly.com"] as const;
+export const CALENDLY_ASSETS_ORIGIN = new URL(CALENDLY_WIDGET_JS).origin;
 
 export const siteRuntime = {
   gaId: readEnv("NEXT_PUBLIC_GA_ID", DEFAULT_GA_ID),

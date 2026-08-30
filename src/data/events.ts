@@ -199,5 +199,6 @@ export const eventPrograms: EventProgram[] = [
         endDateTime: "2026-09-25T13:30:00-07:00",
       },
     ],
+    registrationUrl: "https://practicetransitionsinstitute.com/events",
   },
 ];
