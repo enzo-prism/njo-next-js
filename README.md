@@ -18,7 +18,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
 - Dental Exit Blueprint launch coverage added across the home page, resources index, and a dedicated resource page, using the author-supplied cover and launch-specific metadata/schema.
 - Editorial photos are inventoried in `src/data/media.ts` (`layoutVariant` must match the real file). The interview player is defined in `src/data/interview-video.ts`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations, The Practice Blueprint dinner recap, the Another perfect match photos, the Beyond the Chair flyer, and Panel of Experts dinner photos.
-- Security response headers enabled globally via Next config (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`).
+- Security response headers enabled globally via Next config (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`). CSP allows official Calendly popup widget assets so Book-a-call can open in-page.
 - Consent-gated Vercel Analytics, Google Analytics, and Hotjar enabled only on the canonical production host.
 - Event/news surfaces are date-aware, refresh hourly, exclude completed events from current schema, and hand current registration intent to PTI.
 - Contact and Phillips forms share privacy acknowledgment, normalized validation, honeypot, and repeat-submit safeguards while preserving direct Formspree delivery.

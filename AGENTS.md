@@ -48,7 +48,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Canonical site URL and runtime analytics IDs
   - `BOOKING_URL`: single source of truth for the general Calendly intro-call link
   - `DSO_PRICING_BOOKING_URL`: single source of truth for the DSO pricing-call link
-  - Calendly popup widget URLs and postMessage origins (the only files allowed to contain `calendly.com`)
+  - Calendly popup widget URLs, postMessage origins, and `CALENDLY_ASSETS_ORIGIN` (the only files allowed to contain `calendly.com` as a string are `src/config/site.ts`; `next.config.ts` imports those constants into CSP)
   - Environment variable parsing trims whitespace, which is intentional
 - `src/lib/ga4.ts`
   - Allowlisted, consent-gated `generate_lead` helper and sessionStorage dedupe
@@ -63,7 +63,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `next.config.ts`
   - canonical redirects
   - legacy redirects
-  - global security headers
+  - global security headers, including a Content Security Policy that allows official Calendly popup widget assets via the `src/config/site.ts` constants
 - `src/config/routes.ts`
   - static route inventory and redirect metadata used by checks
 - `src/seo/*`
@@ -80,6 +80,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/data/events.ts`
   - Editorial event records plus date-aware upcoming/current derivation
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
+  - Current programs that PTI hosts (including Beyond the Chair) set `registrationUrl` so home, news, and community posts hand off to PTI instead of a generic contact CTA
 - `src/lib/profile-tabs.ts`
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
