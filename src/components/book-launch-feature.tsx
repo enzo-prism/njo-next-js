@@ -34,8 +34,8 @@ export function BookLaunchFeature({ article, detail = false, priority = false, c
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.18),transparent_40%),linear-gradient(135deg,rgba(255,255,255,0.04),transparent_55%)]"
       />
-      <div className="grid items-center gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="p-5 sm:p-7 lg:p-9">
+      <div className="grid min-w-0 items-center gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="min-w-0 p-5 sm:p-7 lg:p-9">
           <div className="overflow-hidden rounded-2xl border border-white/15 bg-black/30 shadow-2xl shadow-black/30">
             <Image
               src={launch.coverImagePath}
@@ -49,9 +49,9 @@ export function BookLaunchFeature({ article, detail = false, priority = false, c
           </div>
         </div>
 
-        <div className="space-y-5 px-6 pb-8 sm:px-10 sm:pb-10 lg:px-8 lg:py-12 lg:pr-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-amber-200">
-            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+        <div className="min-w-0 space-y-5 px-6 pb-8 sm:px-10 sm:pb-10 lg:px-8 lg:py-12 lg:pr-12">
+          <div className="inline-flex max-w-full items-center gap-2 whitespace-normal rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1.5 text-xs font-semibold uppercase leading-snug tracking-[0.16em] text-amber-200">
+            <BookOpen className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             New book · Released July 15, 2026
           </div>
 
@@ -74,21 +74,21 @@ export function BookLaunchFeature({ article, detail = false, priority = false, c
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button asChild className="bg-amber-300 text-ink hover:bg-amber-200">
+            <Button asChild className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug bg-amber-300 text-ink hover:bg-amber-200 sm:w-auto">
               <a href={launch.amazonUrl} target="_blank" rel="noopener noreferrer">
                 Buy The Dental Exit Blueprint on Amazon
                 <ExternalLink className="h-4 w-4" aria-hidden="true" />
               </a>
             </Button>
             {!detail ? (
-              <Button asChild variant="outline" className="border-white/25 bg-white/5 text-white hover:bg-white/10 hover:text-white">
+              <Button asChild variant="outline" className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug border-white/25 bg-white/5 text-white hover:bg-white/10 hover:text-white sm:w-auto">
                 <Link href={buildResourceArticlePath(article.slug)}>
                   Explore the book
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
             ) : null}
-            <Button asChild variant="ghost" className="text-white/85 hover:bg-white/10 hover:text-white">
+            <Button asChild variant="ghost" className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug text-white/85 hover:bg-white/10 hover:text-white sm:w-auto">
               <a href={launch.syndicatedPressReleaseUrl} target="_blank" rel="noopener noreferrer">
                 Read the launch announcement
                 <ExternalLink className="h-4 w-4" aria-hidden="true" />

@@ -23,7 +23,7 @@ export function LatestReviewCard({ testimonial, className }: LatestReviewCardPro
     >
       <div className="flex items-center justify-between gap-3">
         <span
-          className="flex items-center gap-0.5 text-amber-500"
+          className="flex items-center gap-0.5 text-amber-600"
           role="img"
           aria-label={`Rated ${testimonial.stars} out of 5 stars`}
         >
@@ -44,7 +44,7 @@ export function LatestReviewCard({ testimonial, className }: LatestReviewCardPro
         <span className="font-semibold text-foreground">{testimonial.author}</span>
         <Link
           href={`/testimonials/${testimonial.slug}`}
-          className="inline-flex shrink-0 items-center gap-1 font-medium text-brand transition-colors hover:text-brand/70"
+          className="inline-flex min-h-11 shrink-0 items-center gap-1 font-medium text-brand transition-colors hover:text-brand/70"
         >
           Read full review
           <ArrowRight className="h-4 w-4" />

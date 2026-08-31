@@ -149,7 +149,7 @@ export default function Contact() {
                 </p>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-brand"
+                  className="flex min-h-11 items-center gap-3 text-sm text-foreground transition-colors hover:text-brand"
                 >
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand/10 text-brand">
                     <Mail className="h-4 w-4" />
@@ -158,7 +158,7 @@ export default function Contact() {
                 </a>
                 <a
                   href={`tel:${CONTACT_PHONE}`}
-                  className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-brand"
+                  className="flex min-h-11 items-center gap-3 text-sm text-foreground transition-colors hover:text-brand"
                 >
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand/10 text-brand">
                     <PhoneCall className="h-4 w-4" />
@@ -167,7 +167,7 @@ export default function Contact() {
                 </a>
                 <a
                   href="#contact-form"
-                  className="inline-flex items-center gap-1.5 pt-1 text-sm font-medium text-brand hover:text-brand/70 lg:hidden"
+                  className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand hover:text-brand/70 lg:hidden"
                 >
                   <MessageSquareText className="h-4 w-4" />
                   Jump to the form

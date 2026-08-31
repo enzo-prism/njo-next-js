@@ -158,7 +158,7 @@ export function AnalyticsConsentManager() {
       {isBannerOpen ? (
         <aside
           aria-label="Analytics privacy choices"
-          className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-3xl rounded-2xl border border-border bg-background p-4 shadow-2xl sm:p-5"
+          className="fixed inset-x-3 bottom-3 z-[45] mx-auto max-w-3xl rounded-2xl border border-border bg-background p-4 shadow-2xl sm:p-5"
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">

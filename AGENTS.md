@@ -72,12 +72,13 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/data/resource-articles.ts`
   - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
 - `src/data/media.ts`
-  - editorial photo inventory, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
-  - `layoutVariant` must match the real file: 4:3 photos are `landscape`, 4:5 quote cards are `portrait`. Never force a landscape original into a portrait mosaic tile.
+  - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
+  - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
+  - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
 - `src/components/media/editorial-mosaic.tsx`
-  - grid tiles use native-ratio aspect classes (`4/3` landscape, `4/5` portrait); `layoutMode="columns"` uses intrinsic width/height instead of a forced crop
+  - grid tiles derive their aspect ratio from each asset's display dimensions and preserve the full image by default; `layoutMode="columns"` uses intrinsic width/height
 - `src/components/media/hero-slideshow.tsx`
-  - mobile frame is `aspect-[4/3]` so the 4:3 leadership slides are not side-cropped in a 5:6 box
+  - mobile frame is `aspect-[4/3]`; slides preserve the complete image by default and do not zoom-crop during transitions
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
 - `src/components/pages/michael-njo-dds.tsx`
@@ -105,6 +106,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Shared trimming, maximum lengths, HTTP(S) URL normalization, privacy acknowledgment, honeypot, and repeat-submit safeguards
 - `scripts/*`
   - parity and SEO validation scripts
+  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, and checks that galleries and slides cannot re-crop during interaction
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`

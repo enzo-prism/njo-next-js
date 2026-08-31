@@ -2,7 +2,14 @@
 
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import Image, { type StaticImageData } from "next/image";
-import { type CSSProperties, type KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "@/lib/utils";
 
 export type HeroSlide = {
@@ -12,6 +19,7 @@ export type HeroSlide = {
   eyebrow: string;
   caption: string;
   objectPosition?: string;
+  objectFit?: "cover" | "contain";
 };
 
 type HeroSlideshowProps = {
@@ -20,7 +28,11 @@ type HeroSlideshowProps = {
   className?: string;
 };
 
-export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlideshowProps) {
+export function HeroSlideshow({
+  slides,
+  autoPlayMs = 5600,
+  className,
+}: HeroSlideshowProps) {
   const [index, setIndex] = useState(0);
   const [isUserPaused, setIsUserPaused] = useState(false);
   const [isHoverPaused, setIsHoverPaused] = useState(false);
@@ -31,7 +43,8 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
     if (typeof window === "undefined") return;
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mql.matches);
-    const handler = (event: MediaQueryListEvent) => setReducedMotion(event.matches);
+    const handler = (event: MediaQueryListEvent) =>
+      setReducedMotion(event.matches);
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);
   }, []);
@@ -77,7 +90,7 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
     <div
       className={cn(
         "group relative isolate flex h-full w-full flex-col overflow-hidden bg-slate-950",
-        "aspect-[4/3] md:aspect-auto md:min-h-[560px]",
+        "aspect-[4/3] md:aspect-auto md:min-h-[520px] lg:min-h-[420px] xl:min-h-[480px]",
         className,
       )}
       role="region"
@@ -88,7 +101,6 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
       onFocus={() => setIsHoverPaused(true)}
       onBlur={() => setIsHoverPaused(false)}
       onKeyDown={handleKeyDown}
-      tabIndex={0}
     >
       <div className="absolute inset-0">
         {slides.map((slide, i) => {
@@ -107,11 +119,14 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
                 alt={slide.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 60vw, 720px"
-                className={cn(
-                  "object-cover transition-transform ease-out will-change-transform [transition-duration:8000ms]",
-                  isActive && !reducedMotion ? "scale-100" : "scale-[1.06]",
-                )}
-                style={{ objectPosition: slide.objectPosition ?? "center center" }}
+                className={
+                  slide.objectFit === "cover"
+                    ? "object-cover"
+                    : "object-contain"
+                }
+                style={{
+                  objectPosition: slide.objectPosition ?? "center center",
+                }}
                 priority={i === 0}
               />
             </div>
@@ -134,9 +149,13 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
 
       <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
         <div className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/90 backdrop-blur">
-          <span className="tabular-nums">{String(index + 1).padStart(2, "0")}</span>
+          <span className="tabular-nums">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <span className="mx-1 text-white/40">/</span>
-          <span className="tabular-nums text-white/60">{String(slides.length).padStart(2, "0")}</span>
+          <span className="tabular-nums text-white/60">
+            {String(slides.length).padStart(2, "0")}
+          </span>
         </div>
         {slides.length > 1 && !reducedMotion ? (
           <button
@@ -144,9 +163,13 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
             onClick={() => setIsUserPaused((prev) => !prev)}
             aria-label={isUserPaused ? "Resume gallery" : "Pause gallery"}
             aria-pressed={isUserPaused}
-            className="rounded-full border border-white/20 bg-black/40 p-1.5 text-white/90 backdrop-blur transition-colors duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/90 backdrop-blur transition-colors duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
-            {isUserPaused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+            {isUserPaused ? (
+              <Play className="h-3.5 w-3.5" />
+            ) : (
+              <Pause className="h-3.5 w-3.5" />
+            )}
           </button>
         ) : null}
       </div>
@@ -185,15 +208,17 @@ export function HeroSlideshow({ slides, autoPlayMs = 5600, className }: HeroSlid
         </p>
 
         {slides.length > 1 ? (
-          <div className="mt-3 flex items-center gap-1" role="tablist" aria-label="Select slide">
+          <div
+            className="mt-3 flex items-center gap-1"
+            aria-label="Select slide"
+          >
             {slides.map((slide, i) => {
               const isActive = i === index;
               return (
                 <button
                   key={slide.id}
                   type="button"
-                  role="tab"
-                  aria-selected={isActive}
+                  aria-pressed={isActive}
                   aria-label={`Show slide ${i + 1}: ${slide.eyebrow}`}
                   onClick={() => goTo(i)}
                   className="group/slide-dot inline-flex h-11 min-w-11 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

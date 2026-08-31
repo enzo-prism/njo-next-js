@@ -72,7 +72,7 @@ export default function SiteFooter() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="inline-flex min-h-6 items-center py-0.5 text-sm text-slate-300 transition-colors hover:text-white"
+                    className="inline-flex min-h-11 items-center py-1 text-sm text-slate-300 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -84,14 +84,14 @@ export default function SiteFooter() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Get in touch</p>
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                className="inline-flex min-h-6 items-center gap-2 py-0.5 text-sm text-slate-300 transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center gap-2 py-1 text-sm text-slate-300 transition-colors hover:text-white"
               >
                 <Mail className="h-4 w-4" />
                 {CONTACT_EMAIL}
               </a>
               <a
                 href={`tel:${CONTACT_PHONE}`}
-                className="inline-flex min-h-6 items-center gap-2 py-0.5 text-sm text-slate-300 transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center gap-2 py-1 text-sm text-slate-300 transition-colors hover:text-white"
               >
                 <PhoneCall className="h-4 w-4" />
                 {CONTACT_PHONE_DISPLAY}
@@ -106,7 +106,7 @@ export default function SiteFooter() {
           <p className="text-xs text-slate-300">© {year} Dental Strategies. All rights reserved.</p>
           <nav aria-label="Legal" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:justify-end">
             {legalLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="inline-flex min-h-6 items-center text-slate-300 transition-colors hover:text-white">
+              <Link key={link.href} href={link.href} className="inline-flex min-h-11 items-center text-slate-300 transition-colors hover:text-white">
                 {link.label}
               </Link>
             ))}

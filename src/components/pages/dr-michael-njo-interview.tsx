@@ -6,15 +6,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { interviewQuoteImage } from "@/data/media";
 import { interviewVideo } from "@/data/interview-video";
 import { CONTACT_PATH } from "@/config/site";
 import { Container } from "@/components/layout/container";
 
 const sharePageUrl = "https://michaelnjodds.com/dr-michael-njo-interview";
-const shareHeadline = "Helping Dentists Thrive Through Every Stage of Their Career";
+const shareHeadline =
+  "Helping Dentists Thrive Through Every Stage of Their Career";
 const shareText = `Watch this featured conversation with Dr. Michael Njo on practice transitions, management, and legal guidance for dentists.`;
 
 const corePrinciples = [
@@ -24,26 +36,43 @@ const corePrinciples = [
   },
   {
     title: "Pro Work-Life Balance",
-    description: "Practice systems should protect leadership bandwidth, relationships, and health.",
+    description:
+      "Practice systems should protect leadership bandwidth, relationships, and health.",
   },
   {
     title: "Pro Family",
-    description: "Family stability and well-being are design requirements, not afterthoughts.",
+    description:
+      "Family stability and well-being are design requirements, not afterthoughts.",
   },
 ];
 
 const expertiseAreas = [
   {
     title: "Practice Transitions",
-    bullets: ["Buy practices", "Sell practices", "Partnership restructuring", "Practice expansion"],
+    bullets: [
+      "Buy practices",
+      "Sell practices",
+      "Partnership restructuring",
+      "Practice expansion",
+    ],
   },
   {
     title: "Management Consulting",
-    bullets: ["Culture building", "Team alignment", "Leadership development", "Operational clarity"],
+    bullets: [
+      "Culture building",
+      "Team alignment",
+      "Leadership development",
+      "Operational clarity",
+    ],
   },
   {
     title: "Legal Navigation",
-    bullets: ["Partner disputes", "Labor and compliance", "Risk management", "Transition contracts"],
+    bullets: [
+      "Partner disputes",
+      "Labor and compliance",
+      "Risk management",
+      "Transition contracts",
+    ],
   },
 ];
 
@@ -95,184 +124,226 @@ export default function DrMichaelNjoInterview() {
 
   return (
     <Container className="space-y-10 py-10 sm:py-14">
-      <h1 className="sr-only">Dr. Michael Njo Interview | Dental Practice Transitions &amp; Consulting</h1>
-        <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+      <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <Card>
+          <CardHeader>
+            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Featured Conversation
+            </p>
+            <p className="sr-only">Full Interview</p>
+            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
+              Helping Dentists Thrive Through Every Stage of Their Career
+            </h1>
+            <CardDescription>
+              Learn how Dr. Njo applies practical transition principles in
+              long-cycle ownership, growth, and legal transitions.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Interviewed by Dr. Farokh Jiveh, Dr. Michael Njo shares the
+              framework he used moving from clinical dentistry to building a
+              high-trust consulting practice.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <BookingButton />
+              <Button asChild variant="outline">
+                <a
+                  href="#interview-video"
+                  className="inline-flex items-center gap-2"
+                >
+                  <Play className="h-4 w-4" />
+                  Watch interview
+                </a>
+              </Button>
+              <Button asChild variant="outline">
+                <Link
+                  href={CONTACT_PATH}
+                  className="inline-flex items-center gap-2"
+                >
+                  <MessageSquareText className="h-4 w-4" />
+                  Contact Dr. Njo
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="space-y-4">
           <Card>
             <CardHeader>
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Featured Conversation</p>
-              <p className="sr-only">Full Interview</p>
-              <CardTitle className="text-3xl md:text-4xl">Helping Dentists Thrive Through Every Stage of Their Career</CardTitle>
+              <CardTitle>Share this interview</CardTitle>
               <CardDescription>
-                Learn how Dr. Njo applies practical transition principles in long-cycle ownership, growth, and legal transitions.
+                Quick actions for your team and workflow
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Interviewed by Dr. Farokh Jiveh, Dr. Michael Njo shares the framework he used moving from clinical dentistry
-                to building a high-trust consulting practice.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <BookingButton />
-                <Button asChild variant="outline">
-                  <a href="#interview-video" className="inline-flex items-center gap-2">
-                    <Play className="h-4 w-4" />
-                    Watch interview
+            <CardContent className="space-y-3">
+              <Button
+                type="button"
+                onClick={copyLink}
+                variant="outline"
+                className="inline-flex items-center gap-2"
+              >
+                <Copy className="h-4 w-4" />
+                {copied ? "Link copied" : "Copy interview link"}
+              </Button>
+              {shareLinks.map((share) => (
+                <Button key={share.label} asChild variant="secondary" size="sm">
+                  <a
+                    href={share.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2"
+                  >
+                    <Link2 className="h-4 w-4" />
+                    {share.label}
                   </a>
                 </Button>
-                <Button asChild variant="outline">
-                  <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
-                    <MessageSquareText className="h-4 w-4" />
-                    Contact Dr. Njo
-                  </Link>
-                </Button>
-              </div>
+              ))}
             </CardContent>
           </Card>
 
-          <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Share this interview</CardTitle>
-                <CardDescription>Quick actions for your team and workflow</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button type="button" onClick={copyLink} variant="outline" className="inline-flex items-center gap-2">
-                  <Copy className="h-4 w-4" />
-                  {copied ? "Link copied" : "Copy interview link"}
-                </Button>
-                {shareLinks.map((share) => (
-                  <Button key={share.label} asChild variant="secondary" size="sm">
-                    <a href={share.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                      <Link2 className="h-4 w-4" />
-                      {share.label}
-                    </a>
-                  </Button>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="overflow-hidden">
-              <div className="grid gap-0 sm:grid-cols-[0.78fr_1.22fr] lg:grid-cols-1">
-                <div className="bg-slate-950/95 p-4">
-                  <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40">
-                    <Image
-                      src={interviewQuoteImage.src}
-                      alt={interviewQuoteImage.alt}
-                      width={interviewQuoteImage.width}
-                      height={interviewQuoteImage.height}
-                      sizes={interviewQuoteImage.sizes}
-                      className="h-auto w-full object-cover"
-                      priority
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3 p-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Social Proof</p>
-                  <h2 className="text-xl font-semibold">A message already traveling well in Michael&apos;s orbit</h2>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    This feature card distills the same promise behind the interview: clinical leaders should not have to carry every
-                    operational, transition, and growth challenge alone.
-                  </p>
-                  <p className="text-sm leading-relaxed text-muted-foreground">{interviewQuoteImage.caption}</p>
+          <Card className="overflow-hidden">
+            <div className="grid gap-0 sm:grid-cols-[0.78fr_1.22fr] lg:grid-cols-1">
+              <div className="bg-slate-950/95 p-4">
+                <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40">
+                  <Image
+                    src={interviewQuoteImage.src}
+                    alt={interviewQuoteImage.alt}
+                    width={interviewQuoteImage.width}
+                    height={interviewQuoteImage.height}
+                    sizes={interviewQuoteImage.sizes}
+                    className="h-auto w-full object-contain"
+                    priority
+                  />
                 </div>
               </div>
-            </Card>
-          </div>
-        </section>
-
-        <Card id="interview-video">
-          <CardHeader>
-            <CardTitle>Full conversation</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-hidden rounded-xl border border-border bg-black">
-              <video
-                controls
-                className="h-auto w-full bg-black"
-                preload="metadata"
-                playsInline
-                poster={interviewVideo.posterUrl}
-              >
-                <source src={interviewVideo.playbackUrl} type="video/mp4" />
-                Your browser does not support embedded video.
-              </video>
+              <div className="space-y-3 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                  Social Proof
+                </p>
+                <h2 className="text-xl font-semibold">
+                  A message already traveling well in Michael&apos;s orbit
+                </h2>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  This feature card distills the same promise behind the
+                  interview: clinical leaders should not have to carry every
+                  operational, transition, and growth challenge alone.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {interviewQuoteImage.caption}
+                </p>
+              </div>
             </div>
-            <p className="mt-4 text-sm text-muted-foreground">Direct link: {sharePageUrl}</p>
-          </CardContent>
-        </Card>
+          </Card>
+        </div>
+      </section>
 
-        <section className="grid gap-6 md:grid-cols-3">
-          {corePrinciples.map((principle) => (
-            <Card key={principle.title}>
-              <CardHeader>
-                <CardTitle className="text-lg">{principle.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{principle.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
+      <Card id="interview-video">
+        <CardHeader>
+          <CardTitle>Full conversation</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-hidden rounded-xl border border-border bg-black">
+            <video
+              controls
+              className="h-auto w-full bg-black"
+              preload="metadata"
+              playsInline
+              poster={interviewVideo.posterUrl}
+            >
+              <source src={interviewVideo.playbackUrl} type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
+          </div>
+          <p className="mt-4 break-all text-sm text-muted-foreground">
+            Direct link: {sharePageUrl}
+          </p>
+        </CardContent>
+      </Card>
 
-        <section className="grid gap-4 lg:grid-cols-3">
-          {expertiseAreas.map((area) => (
-            <Card key={area.title}>
-              <CardHeader>
-                <CardTitle>{area.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
+      <section className="grid gap-6 md:grid-cols-3">
+        {corePrinciples.map((principle) => (
+          <Card key={principle.title}>
+            <CardHeader>
+              <CardTitle className="text-lg">{principle.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                {principle.description}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-3">
+        {expertiseAreas.map((area) => (
+          <Card key={area.title}>
+            <CardHeader>
+              <CardTitle>{area.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {area.bullets.map((bullet) => (
+                  <li key={bullet} className="ml-4 list-disc">
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Detailed interview notes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="audience">
+              <AccordionTrigger>Who this is for</AccordionTrigger>
+              <AccordionContent>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  {area.bullets.map((bullet) => (
-                    <li key={bullet} className="ml-4 list-disc">
-                      {bullet}
+                  {audiencePoints.map((point) => (
+                    <li key={point} className="ml-4 list-disc">
+                      {point}
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-            </Card>
-          ))}
-        </section>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="summary">
+              <AccordionTrigger>Core summary</AccordionTrigger>
+              <AccordionContent>
+                <p className="text-sm text-muted-foreground">
+                  This conversation balances practical legal preparedness with
+                  operational execution, with a strong emphasis on communication
+                  rhythm, team alignment, and values-driven growth.
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Detailed interview notes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="audience">
-                <AccordionTrigger>Who this is for</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    {audiencePoints.map((point) => (
-                      <li key={point} className="ml-4 list-disc">
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="summary">
-                <AccordionTrigger>Core summary</AccordionTrigger>
-                <AccordionContent>
-                  <p className="text-sm text-muted-foreground">
-                    This conversation balances practical legal preparedness with operational execution, with a strong emphasis on
-                    communication rhythm, team alignment, and values-driven growth.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </CardContent>
-        </Card>
-
-        <section className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row">
-          <BookingButton label="Book a 30-min call with Dr. Njo" />
-          <Button asChild variant="outline">
-            <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
-              Contact Dr. Njo about your next step
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </section>
+      <section className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row">
+        <BookingButton
+          label="Book a 30-min call with Dr. Njo"
+          className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug sm:w-auto"
+        />
+        <Button
+          asChild
+          variant="outline"
+          className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug sm:w-auto"
+        >
+          <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+            Contact Dr. Njo about your next step
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
+      </section>
     </Container>
   );
 }

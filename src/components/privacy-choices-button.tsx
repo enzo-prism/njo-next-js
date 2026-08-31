@@ -19,7 +19,7 @@ export function PrivacyChoicesButton() {
       type="button"
       variant="link"
       size="sm"
-      className="h-auto min-h-6 p-0 text-xs text-slate-300 hover:text-white"
+      className="h-auto min-h-11 p-0 text-xs text-slate-300 hover:text-white"
       onClick={resetConsent}
     >
       Privacy choices

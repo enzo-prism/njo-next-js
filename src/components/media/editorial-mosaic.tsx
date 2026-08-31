@@ -11,7 +11,10 @@ type EditorialMosaicProps = {
   layoutMode?: "grid" | "columns";
 };
 
-const tileSpanClasses: Record<EditorialMediaAsset["layoutVariant"], { base: string; featured: string }> = {
+const tileSpanClasses: Record<
+  EditorialMediaAsset["layoutVariant"],
+  { base: string; featured: string }
+> = {
   landscape: {
     base: "sm:col-span-6 xl:col-span-6",
     featured: "sm:col-span-6 xl:col-span-8",
@@ -28,13 +31,6 @@ const tileSpanClasses: Record<EditorialMediaAsset["layoutVariant"], { base: stri
     base: "sm:col-span-3 xl:col-span-4",
     featured: "sm:col-span-6 xl:col-span-5",
   },
-};
-
-const tileAspectClasses: Record<EditorialMediaAsset["layoutVariant"], string> = {
-  landscape: "aspect-[4/3]",
-  portrait: "aspect-[4/5]",
-  poster: "aspect-[4/5]",
-  square: "aspect-square",
 };
 
 export function EditorialMosaic({
@@ -55,9 +51,14 @@ export function EditorialMosaic({
       )}
     >
       {assets.map((asset) => {
-        const spanClasses = asset.priority
-          ? tileSpanClasses[asset.layoutVariant].featured
-          : tileSpanClasses[asset.layoutVariant].base;
+        const spanClasses =
+          asset.gridSpan === "full"
+            ? "sm:col-span-6 xl:col-span-12"
+            : asset.gridSpan === "wide"
+              ? "sm:col-span-3 xl:col-span-8"
+              : asset.priority
+                ? tileSpanClasses[asset.layoutVariant].featured
+                : tileSpanClasses[asset.layoutVariant].base;
         const wrapperClasses =
           layoutMode === "columns"
             ? "mb-4 block w-full break-inside-avoid space-y-3"
@@ -68,8 +69,12 @@ export function EditorialMosaic({
             <div
               className={cn(
                 "relative overflow-hidden rounded-[1.5rem] border border-border/80 bg-slate-100/70 shadow-sm",
-                !useIntrinsicFrame && tileAspectClasses[asset.layoutVariant],
               )}
+              style={
+                !useIntrinsicFrame
+                  ? { aspectRatio: `${asset.width} / ${asset.height}` }
+                  : undefined
+              }
             >
               {useIntrinsicFrame ? (
                 <Image
@@ -79,8 +84,7 @@ export function EditorialMosaic({
                   height={asset.height}
                   sizes={asset.sizes}
                   className={cn(
-                    "h-auto w-full object-contain transition duration-300",
-                    interactive && "group-hover:scale-[1.03] group-focus-visible:scale-[1.03]",
+                    "h-auto w-full object-contain transition-opacity duration-300",
                   )}
                 />
               ) : (
@@ -90,8 +94,10 @@ export function EditorialMosaic({
                   fill
                   sizes={asset.sizes}
                   className={cn(
-                    "object-cover transition duration-300",
-                    interactive && "group-hover:scale-[1.03] group-focus-visible:scale-[1.03]",
+                    asset.objectFit === "cover"
+                      ? "object-cover"
+                      : "object-contain",
+                    "transition-opacity duration-300",
                   )}
                   style={{ objectPosition: asset.objectPosition ?? "center" }}
                 />
@@ -104,8 +110,12 @@ export function EditorialMosaic({
             </div>
             {captionMode === "below" && asset.caption ? (
               <div className="space-y-1 px-1">
-                <p className="text-sm font-medium text-foreground">{asset.alt}</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">{asset.caption}</p>
+                <p className="text-sm font-medium text-foreground">
+                  {asset.alt}
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {asset.caption}
+                </p>
               </div>
             ) : null}
           </>

@@ -15,20 +15,39 @@ import Link from "next/link";
 import dinnerStrategyGroup from "@/assets/media/dinner-strategy-group.jpg";
 import handbookCover from "@/assets/media/handbook-cover.jpg";
 import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
-import { getLatestFiveStarTestimonial, testimonialPages } from "@/data/testimonials";
+import {
+  getLatestFiveStarTestimonial,
+  testimonialPages,
+} from "@/data/testimonials";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { LatestReviewCard } from "@/components/testimonials/latest-review-card";
-import { HeroSlideshow, type HeroSlide } from "@/components/media/hero-slideshow";
+import {
+  HeroSlideshow,
+  type HeroSlide,
+} from "@/components/media/hero-slideshow";
 import { BookingButton } from "@/components/booking-button";
 import { BookLaunchFeature } from "@/components/book-launch-feature";
 import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Section } from "@/components/layout/section";
 import { SectionHeading } from "@/components/layout/section-heading";
-import { faqItems, bookReviews, services, resources } from "@/seo/structured-data";
-import { dugoniCollaborationImage, gprResidencyPresentationImage } from "@/data/media";
+import {
+  faqItems,
+  bookReviews,
+  services,
+  resources,
+} from "@/seo/structured-data";
+import {
+  dugoniCollaborationImage,
+  gprResidencyPresentationImage,
+} from "@/data/media";
 import { getUpcomingEventPrograms } from "@/data/events";
 import { resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
@@ -39,48 +58,60 @@ const heroSlides: HeroSlide[] = [
     src: officeStrategyGroup,
     alt: "Dr. Michael Njo with healthcare and dental leaders in an office strategy setting.",
     eyebrow: "Strategy in the room",
-    caption: "Cross-functional strategy conversations connecting ownership, leadership, and operational clarity.",
+    caption:
+      "Cross-functional strategy conversations connecting ownership, leadership, and operational clarity.",
     objectPosition: "center center",
+    objectFit: "contain",
   },
   {
     id: "residency-teaching",
     src: gprResidencyPresentationImage.src,
     alt: gprResidencyPresentationImage.alt,
     eyebrow: "Teaching the next generation",
-    caption: "Presenting to General Practice Residents holding copies of the Dental Practice Transitions Handbook.",
+    caption:
+      "Presenting to General Practice Residents holding copies of the Dental Practice Transitions Handbook.",
     objectPosition: "center center",
+    objectFit: "contain",
   },
   {
     id: "handbook-author",
     src: handbookCover,
     alt: "Cover of Dental Practice Transitions Handbook by Michael A. Njo, DDS.",
     eyebrow: "Published author",
-    caption: "Author of the Dental Practice Transitions Handbook — the practical playbook for buying, selling, and structuring transitions.",
+    caption:
+      "Author of the Dental Practice Transitions Handbook — the practical playbook for buying, selling, and structuring transitions.",
     objectPosition: "center center",
+    objectFit: "contain",
   },
   {
     id: "university-collaboration",
     src: dugoniCollaborationImage.src,
     alt: dugoniCollaborationImage.alt,
     eyebrow: "University collaboration",
-    caption: "Working closely with the University of the Pacific Arthur A. Dugoni School of Dentistry.",
+    caption:
+      "Working closely with the University of the Pacific Arthur A. Dugoni School of Dentistry.",
     objectPosition: "center top",
+    objectFit: "contain",
   },
   {
     id: "peer-dinner",
     src: dinnerStrategyGroup,
     alt: "Dr. Michael Njo with peers at an evening strategy dinner.",
     eyebrow: "Peer dinner conversations",
-    caption: "Decades of trusted peer relationships — the network behind every recommendation.",
+    caption:
+      "Decades of trusted peer relationships — the network behind every recommendation.",
     objectPosition: "center center",
+    objectFit: "contain",
   },
   {
     id: "leadership-retreat",
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",
     alt: "Leadership retreat with Dr. Njo and peers.",
     eyebrow: "Leadership retreat",
-    caption: "On the ground with peers from across the profession — the leadership side of the consulting work.",
+    caption:
+      "On the ground with peers from across the profession — the leadership side of the consulting work.",
     objectPosition: "center center",
+    objectFit: "contain",
   },
 ];
 
@@ -116,15 +147,22 @@ const processSteps = [
   },
 ];
 
-export default function Home({ referenceDate = new Date() }: { referenceDate?: Date }) {
+export default function Home({
+  referenceDate = new Date(),
+}: {
+  referenceDate?: Date;
+}) {
   const latestReview = getLatestFiveStarTestimonial();
   // Skip the hero's latest review so the same quote does not appear twice.
   const featuredTestimonials = testimonialPages
     .filter((testimonial) => testimonial.slug !== latestReview?.slug)
     .slice(0, 3);
   const book = resources.find((resource) => resource.type === "Book");
-  const bookLaunchArticle = resourceArticles.find((article) => article.bookLaunch);
-  const shortReview = bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
+  const bookLaunchArticle = resourceArticles.find(
+    (article) => article.bookLaunch,
+  );
+  const shortReview =
+    bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
   const upcomingEventPrograms = getUpcomingEventPrograms(referenceDate);
 
   return (
@@ -140,7 +178,7 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                   alt="Michael Njo, DDS — professional headshot"
                   fill
                   sizes="48px"
-                  className="object-cover object-center"
+                  className="object-cover object-top"
                   priority
                 />
               </span>
@@ -150,12 +188,14 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
             </div>
 
             <h1 className="text-balance font-serif text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.4rem]">
-              Launch, grow, value, and transition your dental practice with confidence.
+              Launch, grow, value, and transition your dental practice with
+              confidence.
             </h1>
 
             <p className="max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-              For more than two decades, Dr. Michael Njo has guided dentists and healthcare owners through the
-              highest-stakes decisions of practice ownership — from first acquisition to final sale.
+              For more than two decades, Dr. Michael Njo has guided dentists and
+              healthcare owners through the highest-stakes decisions of practice
+              ownership — from first acquisition to final sale.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -166,11 +206,17 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Author of the <span className="font-medium text-foreground">Dental Practice Transitions Handbook</span> ·
-              University of the Pacific Dugoni faculty · Founder, Practice Transitions Institute
+              Author of the{" "}
+              <span className="font-medium text-foreground">
+                Dental Practice Transitions Handbook
+              </span>{" "}
+              · University of the Pacific Dugoni faculty · Founder, Practice
+              Transitions Institute
             </p>
 
-            {latestReview ? <LatestReviewCard testimonial={latestReview} /> : null}
+            {latestReview ? (
+              <LatestReviewCard testimonial={latestReview} />
+            ) : null}
           </div>
 
           <div className="overflow-hidden rounded-3xl border border-border/70 shadow-2xl shadow-ink/10">
@@ -189,7 +235,9 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                 <span className="block font-serif text-4xl font-semibold text-amber-300 sm:text-5xl">
                   {stat.value}
                 </span>
-                <span className="mt-2 block text-sm leading-relaxed text-white/70">{stat.label}</span>
+                <span className="mt-2 block text-sm leading-relaxed text-white/70">
+                  {stat.label}
+                </span>
               </dd>
             </div>
           ))}
@@ -221,8 +269,12 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand/10 text-brand">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="font-serif text-lg font-semibold text-foreground">{service.name}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{service.description}</p>
+                <h3 className="font-serif text-lg font-semibold text-foreground">
+                  {service.name}
+                </h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {service.description}
+                </p>
                 <p className="mt-auto pt-1 text-xs font-medium uppercase tracking-wide text-brand/80">
                   For {service.audience}
                 </p>
@@ -242,9 +294,15 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
         <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {processSteps.map((item) => (
             <li key={item.step} className="space-y-3">
-              <span className="block font-serif text-4xl font-semibold text-brand/25">{item.step}</span>
-              <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+              <span className="block font-serif text-4xl font-semibold text-brand/25">
+                {item.step}
+              </span>
+              <h3 className="text-lg font-semibold text-foreground">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {item.body}
+              </p>
             </li>
           ))}
         </ol>
@@ -258,7 +316,10 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
           description={`Drawn from ${testimonialPages.length} client stories across dentistry and healthcare.`}
           action={
             <Button asChild variant="outline">
-              <Link href="/testimonials" className="inline-flex items-center gap-2">
+              <Link
+                href="/testimonials"
+                className="inline-flex items-center gap-2"
+              >
                 View all stories
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -267,7 +328,10 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
         />
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {featuredTestimonials.map((testimonial) => (
-            <TestimonialListCard key={testimonial.slug} testimonial={testimonial} />
+            <TestimonialListCard
+              key={testimonial.slug}
+              testimonial={testimonial}
+            />
           ))}
         </div>
       </Section>
@@ -289,23 +353,44 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                 <BookOpen className="h-3.5 w-3.5" />
                 Published author
               </div>
-              <h2 className="text-balance font-serif text-3xl font-semibold text-foreground">{book.name}</h2>
+              <h2 className="text-balance font-serif text-3xl font-semibold text-foreground">
+                {book.name}
+              </h2>
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-0.5 text-amber-500" role="img" aria-label="Rated 5 out of 5 stars">
+                <span
+                  className="flex items-center gap-0.5 text-amber-500"
+                  role="img"
+                  aria-label="Rated 5 out of 5 stars"
+                >
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} className="h-4 w-4 fill-current" aria-hidden="true" />
+                    <Star
+                      key={index}
+                      className="h-4 w-4 fill-current"
+                      aria-hidden="true"
+                    />
                   ))}
                 </span>
-                <span className="text-sm text-muted-foreground">Rated 5.0 by readers on Amazon</span>
+                <span className="text-sm text-muted-foreground">
+                  Rated 5.0 by readers on Amazon
+                </span>
               </div>
-              <p className="max-w-2xl text-pretty leading-relaxed text-muted-foreground">{book.description}</p>
+              <p className="max-w-2xl text-pretty leading-relaxed text-muted-foreground">
+                {book.description}
+              </p>
               <blockquote className="border-l-2 border-amber-400 pl-4 font-serif text-[15px] italic leading-relaxed text-foreground/80">
                 “{shortReview.body}”
-                <span className="mt-1 block text-sm not-italic text-muted-foreground">— {shortReview.author}</span>
+                <span className="mt-1 block text-sm not-italic text-muted-foreground">
+                  — {shortReview.author}
+                </span>
               </blockquote>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button asChild>
-                  <a href={book.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                  <a
+                    href={book.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2"
+                  >
                     View on Amazon
                     <ArrowRight className="h-4 w-4" />
                   </a>
@@ -329,21 +414,29 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
               sizes={gprResidencyPresentationImage.sizes}
               width={gprResidencyPresentationImage.width}
               height={gprResidencyPresentationImage.height}
-              className="h-auto w-full object-cover"
+              className="h-auto w-full object-contain"
             />
           </div>
           <div className="space-y-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Education & mentorship</p>
-            <h2 id="education-title" className="text-balance font-serif text-3xl font-semibold text-foreground">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              Education & mentorship
+            </p>
+            <h2
+              id="education-title"
+              className="text-balance font-serif text-3xl font-semibold text-foreground"
+            >
               Teaching the next generation of dental leaders
             </h2>
             <p className="text-pretty leading-relaxed text-muted-foreground">
-              Dr. Njo regularly presents to General Practice Residency programs, where residents hold copies of his book
-              while discussing practice ownership, leadership, and transition planning.
+              Dr. Njo regularly presents to General Practice Residency programs,
+              where residents hold copies of his book while discussing practice
+              ownership, leadership, and transition planning.
             </p>
             <p className="text-pretty leading-relaxed text-muted-foreground">
-              That bridge between education and execution is central to his impact — helping dentists connect clinical
-              training with long-term decisions about acquisitions, partnerships, valuations, and durable practices.
+              That bridge between education and execution is central to his
+              impact — helping dentists connect clinical training with long-term
+              decisions about acquisitions, partnerships, valuations, and
+              durable practices.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="outline">
@@ -378,9 +471,13 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge>{program.registrationStatus}</Badge>
-                  {program.scheduleLabel ? <Badge variant="outline">{program.scheduleLabel}</Badge> : null}
+                  {program.scheduleLabel ? (
+                    <Badge variant="outline">{program.scheduleLabel}</Badge>
+                  ) : null}
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-foreground">{program.title}</h3>
+                <h3 className="font-serif text-lg font-semibold text-foreground">
+                  {program.title}
+                </h3>
                 <div className="space-y-1.5 text-sm text-muted-foreground">
                   <p className="inline-flex items-center gap-2">
                     <CalendarDays className="h-4 w-4" />
@@ -398,10 +495,14 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
                 <a
                   href={program.registrationUrl || CONTACT_PATH}
                   target={program.registrationUrl ? "_blank" : undefined}
-                  rel={program.registrationUrl ? "noopener noreferrer" : undefined}
+                  rel={
+                    program.registrationUrl ? "noopener noreferrer" : undefined
+                  }
                   className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-medium text-brand hover:text-brand/70"
                 >
-                  {program.registrationUrl ? "View current details at PTI" : "Contact Dr. Njo"}
+                  {program.registrationUrl
+                    ? "View current details at PTI"
+                    : "Contact Dr. Njo"}
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
@@ -417,7 +518,10 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
           title="Frequently asked questions"
           action={
             <Button asChild variant="ghost">
-              <Link href="/resources" className="inline-flex items-center gap-2">
+              <Link
+                href="/resources"
+                className="inline-flex items-center gap-2"
+              >
                 View resources
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -427,8 +531,13 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
         <div className="mt-8 rounded-2xl border border-border/70 bg-card px-2 shadow-sm sm:px-4">
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((faq, index) => (
-              <AccordionItem key={`${faq.question}-${index}`} value={`faq-${index}`}>
-                <AccordionTrigger className="text-left text-base">{faq.question}</AccordionTrigger>
+              <AccordionItem
+                key={`${faq.question}-${index}`}
+                value={`faq-${index}`}
+              >
+                <AccordionTrigger className="text-left text-base">
+                  {faq.question}
+                </AccordionTrigger>
                 <AccordionContent className="text-[15px] leading-relaxed text-muted-foreground">
                   {faq.answer}
                 </AccordionContent>
@@ -450,8 +559,8 @@ export default function Home({ referenceDate = new Date() }: { referenceDate?: D
             Ready to talk through your next move?
           </h2>
           <p className="text-pretty text-white/75">
-            Whether you&apos;re years from a transition or weighing an offer today, a short call is the simplest place to
-            start.
+            Whether you&apos;re years from a transition or weighing an offer
+            today, a short call is the simplest place to start.
           </p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
             <BookingButton variant="secondary" size="lg" />

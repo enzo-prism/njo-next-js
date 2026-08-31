@@ -72,16 +72,16 @@ If you add a new data-driven detail route, keep this same pattern unless there i
 
 These are the main interactive islands and why they are client-side:
 
-| File | Why it is client-side |
-| --- | --- |
-| `src/components/layout/site-header.tsx` | `usePathname()` active nav state and mobile sheet menu |
-| `src/components/pages/contact.tsx` | React Hook Form, validation, Formspree submission, `generate_lead` on success |
-| `src/components/analytics/contact-success-lead-tracker.tsx` | Thank-you-page `generate_lead` safety net with form-id dedupe |
-| `src/components/analytics/calendly-lead-tracker.tsx` | Booking popup intercept and `event_scheduled` `generate_lead` |
-| `src/components/pages/phillips-event.tsx` | React Hook Form, checkbox state, Formspree submission |
-| `src/components/pages/testimonials.tsx` | client-side search and sort |
-| `src/components/pages/dr-michael-njo-interview.tsx` | share/copy interactions |
-| `src/components/pages/michael-njo-dds.tsx` | tab state, gallery modal, query-param-driven tab selection |
+| File                                                        | Why it is client-side                                                         |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `src/components/layout/site-header.tsx`                     | `usePathname()` active nav state and mobile sheet menu                        |
+| `src/components/pages/contact.tsx`                          | React Hook Form, validation, Formspree submission, `generate_lead` on success |
+| `src/components/analytics/contact-success-lead-tracker.tsx` | Thank-you-page `generate_lead` safety net with form-id dedupe                 |
+| `src/components/analytics/calendly-lead-tracker.tsx`        | Booking popup intercept and `event_scheduled` `generate_lead`                 |
+| `src/components/pages/phillips-event.tsx`                   | React Hook Form, checkbox state, Formspree submission                         |
+| `src/components/pages/testimonials.tsx`                     | client-side search and sort                                                   |
+| `src/components/pages/dr-michael-njo-interview.tsx`         | share/copy interactions                                                       |
+| `src/components/pages/michael-njo-dds.tsx`                  | tab state, gallery modal, query-param-driven tab selection                    |
 
 If a route seems heavier than expected in the build output, start with this list.
 
@@ -211,7 +211,7 @@ If event details change, check:
 
 ### Media
 
-`src/data/media.ts` is the source of truth for editorial photos. `layoutVariant` and `width`/`height` must match the real file. Landscape originals forced into `portrait` tiles get cropped in `src/components/media/editorial-mosaic.tsx`. Mosaic landscape tiles stay `aspect-[4/3]` at every breakpoint (do not widen to 16:10). Gallery `layoutMode="columns"` uses intrinsic image dimensions. The home hero uses `aspect-[4/3]` on mobile so 4:3 slides are not side-cropped. GPR/education bands lock a 4:3 frame instead of stretching `object-cover` to the text column.
+`src/data/media.ts` is the source of truth for editorial photos. `layoutVariant` and display `width`/`height` must match the visually oriented file, including EXIF rotation. For example, `three-person-event.jpg` has a landscape JPEG pixel matrix but an EXIF rotation that makes the displayed photo portrait, so its display dimensions are explicitly 3024×4032. Mosaic grid frames derive their aspect ratio from those display dimensions and use `object-contain` by default; opt into `objectFit: "cover"` only when a crop is intentional and visually reviewed. Gallery `layoutMode="columns"` uses intrinsic image dimensions. Home hero slides explicitly preserve the complete image and do not zoom during transitions, so people and book covers are not clipped at variable breakpoints. Interactive galleries reveal controls without scaling the underlying photo. GPR/education bands preserve their complete 4:3 source media.
 
 Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals live in `src/assets/media/`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations (`diana-fat-board-of-regents.webp`, `#diana-fat-board-of-regents`), The Practice Blueprint dinner recap (`poe-roseville-aug-2026.webp`, `#practice-blueprint-roseville-aug-2026`), the Another perfect match photos (`bill-mikki-porch.webp`, `bill-mikki-trio.webp`, `#another-perfect-match`), the Beyond the Chair flyer (`promotional-flyer-dental-strategies.webp`, `#beyond-the-chair-anaheim`), and Panel of Experts dinner photos. The Diana Fat Board of Regents congratulations renders first in the News tab of `src/components/pages/michael-njo-dds.tsx`.
 

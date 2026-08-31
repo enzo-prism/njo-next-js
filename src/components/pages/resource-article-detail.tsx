@@ -171,7 +171,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" className="h-auto w-full whitespace-normal py-2.5 text-center leading-snug sm:w-auto">
                 <Link href="/testimonials">See how other dentists navigated change</Link>
               </Button>
             </CardContent>

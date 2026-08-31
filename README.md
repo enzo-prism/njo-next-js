@@ -17,10 +17,11 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Runtime pinned to Node.js 24.x (`package.json` engines + `.nvmrc`) to match the Vercel project runtime and keep local/CI behavior aligned.
 - Node 24 runtime alignment validated end-to-end across local verification, protected preview deploys, and the current production deployment.
 - Dental Exit Blueprint launch coverage added across the home page, resources index, and a dedicated resource page, using the author-supplied cover and launch-specific metadata/schema.
-- Editorial photos are inventoried in `src/data/media.ts` (`layoutVariant` must match the real file: 4:3 photos are landscape, ~4:5 quote cards are portrait). Mosaic tiles keep native ratios; the home hero is `4/3` on mobile. The interview player is defined in `src/data/interview-video.ts`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations, The Practice Blueprint dinner recap, the Another perfect match photos, the Beyond the Chair flyer, and Panel of Experts dinner photos.
+- Editorial photos are inventoried in `src/data/media.ts`. Display dimensions account for EXIF rotation, mosaic tiles derive their frame from those dimensions and preserve the full image by default, and the home hero uses per-slide full-frame rendering. The interview player is defined in `src/data/interview-video.ts`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations, The Practice Blueprint dinner recap, the Another perfect match photos, the Beyond the Chair flyer, and Panel of Experts dinner photos.
 - Security response headers enabled globally via Next config (`Content-Security-Policy`, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`). CSP allows official Calendly popup widget assets so Book-a-call can open in-page.
 - Consent-gated Vercel Analytics, Google Analytics, and Hotjar enabled only on the canonical production host.
 - Event/news surfaces are date-aware, refresh hourly, exclude completed events from current schema, and hand current registration intent to PTI.
+- Media parity checks prevent EXIF-rotated editorial photos from being silently classified with the wrong display orientation, block unmanaged cover crops, and keep hover/slide transitions from re-cropping faces.
 - Contact and Phillips forms share privacy acknowledgment, normalized validation, honeypot, and repeat-submit safeguards while preserving direct Formspree delivery.
 - `main` branch protection enabled with required CI check (`Parity Checks`) and required PR review.
 - Production aliases live:
@@ -108,14 +109,14 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 
 ## Environment Variables
 
-| Variable | Purpose | Default |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical base URL for metadata/sitemap | `https://michaelnjodds.com` |
-| `PREFERRED_HOSTNAME` | Canonical host enforcement logic | `michaelnjodds.com` |
-| `CANONICAL_PROTOCOL` | Canonical protocol enforcement logic | `https` |
-| `NEXT_PUBLIC_GA_ID` | GA tracking ID | `G-6HWEE040EH` |
-| `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID | `6575522` |
-| `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version | `6` |
+| Variable                | Purpose                                 | Default                     |
+| ----------------------- | --------------------------------------- | --------------------------- |
+| `NEXT_PUBLIC_SITE_URL`  | Canonical base URL for metadata/sitemap | `https://michaelnjodds.com` |
+| `PREFERRED_HOSTNAME`    | Canonical host enforcement logic        | `michaelnjodds.com`         |
+| `CANONICAL_PROTOCOL`    | Canonical protocol enforcement logic    | `https`                     |
+| `NEXT_PUBLIC_GA_ID`     | GA tracking ID                          | `G-6HWEE040EH`              |
+| `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID                          | `6575522`                   |
+| `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version                          | `6`                         |
 
 ## Local Development
 

@@ -27,6 +27,8 @@ export type EditorialMediaAsset = {
   layoutVariant: MediaLayoutVariant;
   featuredRoutes: MediaFeatureRoute[];
   objectPosition?: string;
+  objectFit?: "cover" | "contain";
+  gridSpan?: "wide" | "full";
   galleryOnly?: boolean;
   priority?: boolean;
 };
@@ -41,17 +43,19 @@ const defaultSizesByVariant: Record<MediaLayoutVariant, string> = {
 type LocalAssetOptions = Omit<EditorialMediaAsset, "src" | "width" | "height" | "sizes"> & {
   src: StaticImageData;
   sizes?: string;
+  displayWidth?: number;
+  displayHeight?: number;
 };
 
 type RemoteAssetOptions = Omit<EditorialMediaAsset, "sizes"> & {
   sizes?: string;
 };
 
-const createLocalAsset = ({ src, sizes, ...asset }: LocalAssetOptions): EditorialMediaAsset => ({
+const createLocalAsset = ({ src, sizes, displayWidth, displayHeight, ...asset }: LocalAssetOptions): EditorialMediaAsset => ({
   ...asset,
   src,
-  width: src.width,
-  height: src.height,
+  width: displayWidth ?? src.width,
+  height: displayHeight ?? src.height,
   sizes: sizes ?? defaultSizesByVariant[asset.layoutVariant],
 });
 
@@ -95,6 +99,7 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     caption: "Cross-functional strategy conversations that connect ownership, leadership, and operational clarity.",
     featuredRoutes: ["home:leadership", "profile:gallery"],
     objectPosition: "center center",
+    objectFit: "contain",
     priority: true,
   }),
   createLocalAsset({
@@ -105,15 +110,20 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     caption: "Peer dinner conversations that sharpen perspective on growth, partnerships, and what comes next in the profession.",
     featuredRoutes: ["home:leadership", "profile:relationships", "profile:gallery"],
     objectPosition: "center center",
+    objectFit: "contain",
+    gridSpan: "full",
   }),
   createLocalAsset({
     id: "three-person-event",
     src: threePersonEvent,
-    layoutVariant: "landscape",
+    layoutVariant: "portrait",
+    displayWidth: 3024,
+    displayHeight: 4032,
     alt: "Dr. Michael Njo with fellow attendees at a professional event.",
     caption: "A candid event moment underscoring the network around Dr. Njo's consulting and speaking work.",
     featuredRoutes: ["profile:relationships", "profile:gallery"],
     objectPosition: "center center",
+    objectFit: "contain",
   }),
   createLocalAsset({
     id: "handbook-cover",
@@ -142,6 +152,7 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     caption: "A gallery-only moment kept secondary to the public business narrative.",
     featuredRoutes: ["profile:gallery"],
     objectPosition: "center center",
+    objectFit: "contain",
     galleryOnly: true,
   }),
 ];
@@ -206,6 +217,7 @@ const legacyGalleryImages: EditorialMediaAsset[] = [
     alt: "University of the Pacific board dinner with Dr. Njo.",
     caption: "UOP board dinner — relationship capital that surrounds the consulting work.",
     featuredRoutes: ["profile:relationships", "profile:gallery"],
+    gridSpan: "wide",
   }),
 ];
 

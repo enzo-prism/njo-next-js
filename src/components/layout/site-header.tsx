@@ -104,8 +104,8 @@ export default function SiteHeader() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-[85%] sm:max-w-sm">
-            <SheetTitle className="mb-1 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          <SheetContent className="w-[85%] pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:max-w-sm">
+            <SheetTitle className="mb-1 pr-12 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
               Navigation
             </SheetTitle>
             <SheetDescription className="sr-only">
@@ -117,7 +117,7 @@ export default function SiteHeader() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "flex min-h-11 items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
                       isActiveNav(pathname, item.href)
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted hover:text-foreground",
@@ -141,16 +141,16 @@ export default function SiteHeader() {
                   Contact Dr. Njo
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="outline" className="h-auto w-full whitespace-normal py-2 text-center leading-snug">
                 <a href={`mailto:${CONTACT_EMAIL}`}>
                   <Mail className="h-4 w-4" />
-                  Email: {CONTACT_EMAIL}
+                  <span className="min-w-0 break-all">Email: {CONTACT_EMAIL}</span>
                 </a>
               </Button>
-              <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="outline" className="h-auto w-full whitespace-normal py-2 text-center leading-snug">
                 <a href={`tel:${CONTACT_PHONE}`}>
                   <PhoneCall className="h-4 w-4" />
-                  Call: {CONTACT_PHONE_DISPLAY}
+                  <span className="min-w-0">Call: {CONTACT_PHONE_DISPLAY}</span>
                 </a>
               </Button>
             </div>

@@ -3,9 +3,20 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, CheckCircle2, Clock3, MapPin, MessageSquareQuote } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  MapPin,
+  MessageSquareQuote,
+} from "lucide-react";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { services } from "@/seo/structured-data";
 import { testimonialPages } from "@/data/testimonials";
@@ -27,9 +38,14 @@ import { EditorialMosaic } from "@/components/media/editorial-mosaic";
 import { BookingButton } from "@/components/booking-button";
 import { DsoPricingCallout } from "@/components/dso-pricing-callout";
 import { CONTACT_PATH } from "@/config/site";
-import { buildProfileTabPath, resolveProfileTab, type ProfileTab } from "@/lib/profile-tabs";
+import {
+  buildProfileTabPath,
+  resolveProfileTab,
+  type ProfileTab,
+} from "@/lib/profile-tabs";
 
-const panel = "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
+const panel =
+  "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
 const organizations = [
   {
@@ -62,9 +78,12 @@ export default function MichaelNjoDDS({
   initialTab?: ProfileTab;
 }) {
   const featuredTestimonials = testimonialPages.slice(0, 6);
-  const upcomingEventPrograms = getUpcomingEventPrograms(new Date(referenceDateIso));
+  const upcomingEventPrograms = getUpcomingEventPrograms(
+    new Date(referenceDateIso),
+  );
   const [activeTab, setActiveTab] = useState<ProfileTab>(initialTab);
-  const [selectedImage, setSelectedImage] = useState<EditorialMediaAsset | null>(null);
+  const [selectedImage, setSelectedImage] =
+    useState<EditorialMediaAsset | null>(null);
 
   useEffect(() => {
     const syncTabFromLocation = () => setActiveTab(getTabFromLocation());
@@ -97,7 +116,9 @@ export default function MichaelNjoDDS({
     const id = window.location.hash.replace("#", "");
     if (!id) return;
     const timer = window.setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document
+        .getElementById(id)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 80);
     return () => window.clearTimeout(timer);
   }, [activeTab]);
@@ -107,11 +128,16 @@ export default function MichaelNjoDDS({
       <Container className="space-y-12 py-10 sm:py-14">
         {/* Hero */}
         <section className="mx-auto max-w-3xl space-y-5 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Consulting profile</p>
-          <h1 className="text-balance font-serif text-4xl font-semibold sm:text-5xl">Dr. Michael Njo</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+            Consulting profile
+          </p>
+          <h1 className="text-balance font-serif text-4xl font-semibold sm:text-5xl">
+            Dr. Michael Njo
+          </h1>
           <p className="mx-auto max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground">
-            Founder of Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute —
-            mentoring healthcare owners through ownership, growth, and transitions.
+            Founder of Dental Strategies, HealthcareStrategiesMD, Business
+            Strategies, and Practice Transitions Institute — mentoring
+            healthcare owners through ownership, growth, and transitions.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <BookingButton size="lg" />
@@ -124,43 +150,65 @@ export default function MichaelNjoDDS({
           </div>
         </section>
 
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="space-y-8"
+        >
           <TabsList className="mx-auto grid h-11 min-h-11 w-full max-w-md grid-cols-2">
-            <TabsTrigger value="overview" className="min-h-11">Overview</TabsTrigger>
-            <TabsTrigger value="news" className="min-h-11">News</TabsTrigger>
+            <TabsTrigger value="overview" className="min-h-11">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="news" className="min-h-11">
+              News
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-8">
             <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
               <div className={`${panel} space-y-4`}>
-                <h2 className="font-serif text-xl font-semibold">About Dr. Michael Njo</h2>
+                <h2 className="font-serif text-xl font-semibold">
+                  About Dr. Michael Njo
+                </h2>
                 <Image
                   src={dugoniCollaborationImage.src}
                   sizes={dugoniCollaborationImage.sizes}
                   alt={dugoniCollaborationImage.alt}
                   width={dugoniCollaborationImage.width}
                   height={dugoniCollaborationImage.height}
-                  className="mx-auto h-64 w-64 rounded-2xl object-cover object-top"
+                  className="mx-auto h-auto w-full max-w-64 rounded-2xl object-contain"
                 />
                 <p className="text-pretty leading-relaxed text-muted-foreground">
-                  A practitioner-turned-consultant with deep private practice experience, Dr. Njo helps healthcare owners
-                  design resilient systems for team execution, growth strategy, and transitions.
+                  A practitioner-turned-consultant with deep private practice
+                  experience, Dr. Njo helps healthcare owners design resilient
+                  systems for team execution, growth strategy, and transitions.
                 </p>
               </div>
 
               <div className={`${panel} space-y-4`}>
                 <div className="space-y-1">
-                  <h2 className="font-serif text-xl font-semibold">Core services</h2>
-                  <p className="text-sm text-muted-foreground">Practice launches, management, and transition work</p>
+                  <h2 className="font-serif text-xl font-semibold">
+                    Core services
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    Practice launches, management, and transition work
+                  </p>
                 </div>
                 <div className="grid gap-3">
                   {services.map((service) => (
-                    <div key={service.name} className="rounded-xl border border-border/70 bg-surface p-4">
+                    <div
+                      key={service.name}
+                      className="rounded-xl border border-border/70 bg-surface p-4"
+                    >
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-sm font-semibold text-foreground">{service.name}</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          {service.name}
+                        </p>
                         <Badge variant="secondary">Service</Badge>
                       </div>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{service.description}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                        {service.description}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -168,12 +216,19 @@ export default function MichaelNjoDDS({
             </div>
 
             <div className={`${panel} space-y-4`}>
-              <h2 className="font-serif text-xl font-semibold">Organizations</h2>
+              <h2 className="font-serif text-xl font-semibold">
+                Organizations
+              </h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 {organizations.map((org) => (
-                  <div key={org.title} className="rounded-xl border border-border/70 bg-surface p-4">
+                  <div
+                    key={org.title}
+                    className="rounded-xl border border-border/70 bg-surface p-4"
+                  >
                     <p className="font-medium text-foreground">{org.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{org.body}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      {org.body}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -190,8 +245,12 @@ export default function MichaelNjoDDS({
                     alt={gprResidencyPresentationImage.alt}
                     sizes={gprResidencyPresentationImage.sizes}
                     fill
-                    className="object-cover"
-                    style={{ objectPosition: gprResidencyPresentationImage.objectPosition ?? "center" }}
+                    className="object-contain"
+                    style={{
+                      objectPosition:
+                        gprResidencyPresentationImage.objectPosition ??
+                        "center",
+                    }}
                   />
                 </div>
                 <div className="space-y-4 p-6 md:p-8">
@@ -202,29 +261,51 @@ export default function MichaelNjoDDS({
                     Guiding GPR residents through real-world transition strategy
                   </h2>
                   <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                    Dr. Njo regularly brings practical ownership and transition insight into academic and residency
-                    settings. In this General Practice Residency (GPR) presentation, residents held copies of{" "}
-                    <em>Dental Practice Transitions Handbook</em> while discussing career pathways, partnership structures,
+                    Dr. Njo regularly brings practical ownership and transition
+                    insight into academic and residency settings. In this
+                    General Practice Residency (GPR) presentation, residents
+                    held copies of <em>Dental Practice Transitions Handbook</em>{" "}
+                    while discussing career pathways, partnership structures,
                     and long-term practice planning.
                   </p>
                   <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                    That bridge between education and execution is central to his impact. Dr. Njo helps early-career
-                    dentists understand how leadership, valuation, operations, and exit planning shape the future of a
-                    practice long before a transition is on the calendar.
+                    That bridge between education and execution is central to
+                    his impact. Dr. Njo helps early-career dentists understand
+                    how leadership, valuation, operations, and exit planning
+                    shape the future of a practice long before a transition is
+                    on the calendar.
                   </p>
                   <div className="grid gap-3 sm:grid-cols-3">
                     {[
-                      { title: "Guest lecturer", body: "Dental residency and professional programs" },
-                      { title: "Published author", body: "Dental Practice Transitions Handbook" },
-                      { title: "Career mentor", body: "Ownership, growth, and transition guidance" },
+                      {
+                        title: "Guest lecturer",
+                        body: "Dental residency and professional programs",
+                      },
+                      {
+                        title: "Published author",
+                        body: "Dental Practice Transitions Handbook",
+                      },
+                      {
+                        title: "Career mentor",
+                        body: "Ownership, growth, and transition guidance",
+                      },
                     ].map((item) => (
-                      <div key={item.title} className="rounded-xl border border-border/70 bg-surface p-3">
-                        <p className="text-sm font-semibold text-foreground">{item.title}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{item.body}</p>
+                      <div
+                        key={item.title}
+                        className="rounded-xl border border-border/70 bg-surface p-3"
+                      >
+                        <p className="text-sm font-semibold text-foreground">
+                          {item.title}
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.body}
+                        </p>
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground">{gprResidencyPresentationImage.caption}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {gprResidencyPresentationImage.caption}
+                  </p>
                   <Button asChild variant="outline">
                     <Link href="/resources">Explore resources</Link>
                   </Button>
@@ -244,27 +325,41 @@ export default function MichaelNjoDDS({
                       Trust that shows up in rooms where reputation matters
                     </h2>
                     <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                      Dr. Njo&apos;s advisory work is reinforced by longstanding relationships with peers, collaborators,
-                      and healthcare leaders who continue to invite him into conversations about growth, transitions, and
-                      professional stewardship.
+                      Dr. Njo&apos;s advisory work is reinforced by longstanding
+                      relationships with peers, collaborators, and healthcare
+                      leaders who continue to invite him into conversations
+                      about growth, transitions, and professional stewardship.
                     </p>
                     <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                      These moments show the caliber of network, trust, and industry presence that surrounds Michael&apos;s
-                      work when clients are looking for judgment as much as technical guidance.
+                      These moments show the caliber of network, trust, and
+                      industry presence that surrounds Michael&apos;s work when
+                      clients are looking for judgment as much as technical
+                      guidance.
                     </p>
                     <div className="grid gap-3 sm:grid-cols-2">
                       <div className="rounded-xl border border-border/70 bg-surface p-3">
-                        <p className="text-sm font-semibold text-foreground">Peer trust</p>
-                        <p className="mt-1 text-sm text-muted-foreground">Relationships that outlast single deals.</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          Peer trust
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Relationships that outlast single deals.
+                        </p>
                       </div>
                       <div className="rounded-xl border border-border/70 bg-surface p-3">
-                        <p className="text-sm font-semibold text-foreground">Visible credibility</p>
-                        <p className="mt-1 text-sm text-muted-foreground">Settings where reputation and discretion matter.</p>
+                        <p className="text-sm font-semibold text-foreground">
+                          Visible credibility
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Settings where reputation and discretion matter.
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="bg-surface p-4 md:p-6">
-                    <EditorialMosaic assets={profileRelationshipImages} captionMode="below" />
+                    <EditorialMosaic
+                      assets={profileRelationshipImages}
+                      captionMode="below"
+                    />
                   </div>
                 </div>
               </div>
@@ -273,9 +368,12 @@ export default function MichaelNjoDDS({
             {/* Gallery */}
             <div className={`${panel}`}>
               <div className="mb-6 space-y-1">
-                <h2 className="font-serif text-xl font-semibold">Expanded leadership gallery</h2>
+                <h2 className="font-serif text-xl font-semibold">
+                  Expanded leadership gallery
+                </h2>
                 <p className="text-sm text-muted-foreground">
-                  Teaching, speaking, peer relationships, and professional event moments.
+                  Teaching, speaking, peer relationships, and professional event
+                  moments.
                 </p>
               </div>
               <EditorialMosaic
@@ -298,8 +396,12 @@ export default function MichaelNjoDDS({
               <DialogContent className="max-w-5xl border-none bg-black/90 p-0 text-white">
                 {selectedImage ? (
                   <>
-                    <DialogTitle className="sr-only">{selectedImage.alt}</DialogTitle>
-                    <DialogDescription className="sr-only">{selectedImage.alt}</DialogDescription>
+                    <DialogTitle className="sr-only">
+                      {selectedImage.alt}
+                    </DialogTitle>
+                    <DialogDescription className="sr-only">
+                      {selectedImage.alt}
+                    </DialogDescription>
                     <div className="relative h-[70vh] w-full">
                       <Image
                         src={selectedImage.src}
@@ -307,13 +409,20 @@ export default function MichaelNjoDDS({
                         fill
                         sizes="100vw"
                         className="rounded-t-lg object-contain"
-                        style={{ objectPosition: selectedImage.objectPosition ?? "center" }}
+                        style={{
+                          objectPosition:
+                            selectedImage.objectPosition ?? "center",
+                        }}
                       />
                     </div>
                     <div className="space-y-2 px-6 pb-6">
-                      <p className="text-base font-semibold">{selectedImage.alt}</p>
+                      <p className="text-base font-semibold">
+                        {selectedImage.alt}
+                      </p>
                       {selectedImage.caption ? (
-                        <p className="text-sm leading-relaxed text-white/80">{selectedImage.caption}</p>
+                        <p className="text-sm leading-relaxed text-white/80">
+                          {selectedImage.caption}
+                        </p>
                       ) : null}
                     </div>
                   </>
@@ -334,17 +443,26 @@ export default function MichaelNjoDDS({
               />
               <div className="grid gap-5 md:grid-cols-2">
                 {featuredTestimonials.map((testimonial) => (
-                  <TestimonialListCard key={testimonial.slug} testimonial={testimonial} />
+                  <TestimonialListCard
+                    key={testimonial.slug}
+                    testimonial={testimonial}
+                  />
                 ))}
               </div>
             </div>
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
-            <article id="diana-fat-board-of-regents" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 28, 2026</p>
+            <article
+              id="diana-fat-board-of-regents"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                August 28, 2026
+              </p>
               <h2 className="font-serif text-xl font-semibold">
-                Dr. Diana Fat appointed to the University of the Pacific Board of Regents
+                Dr. Diana Fat appointed to the University of the Pacific Board
+                of Regents
               </h2>
               <Image
                 src="/media/diana-fat-board-of-regents.webp"
@@ -356,29 +474,42 @@ export default function MichaelNjoDDS({
                 priority
               />
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                I am so proud to congratulate my longtime client of more than 20 years, Dr. Diana Fat, a distinguished
-                Sacramento prosthodontist, on her appointment to the University of the Pacific Board of Regents.
+                I am so proud to congratulate my longtime client of more than 20
+                years, Dr. Diana Fat, a distinguished Sacramento prosthodontist,
+                on her appointment to the University of the Pacific Board of
+                Regents.
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Diana continues to make a meaningful difference in dentistry, in her community, and now for our alma
-                mater. Congratulations, Diana—this honor is so well deserved!
+                Diana continues to make a meaningful difference in dentistry, in
+                her community, and now for our alma mater. Congratulations,
+                Diana—this honor is so well deserved!
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                #UniversityOfThePacific #BoardOfRegents #PacificProud #DentalLeadership
+                #UniversityOfThePacific #BoardOfRegents #PacificProud
+                #DentalLeadership
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild size="sm">
                   <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
                 </Button>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/blog/diana-fat-board-of-regents">Read the full story</Link>
+                  <Link href="/blog/diana-fat-board-of-regents">
+                    Read the full story
+                  </Link>
                 </Button>
               </div>
             </article>
 
-            <article id="practice-blueprint-roseville-aug-2026" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 28, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">The Practice Blueprint dinner</h2>
+            <article
+              id="practice-blueprint-roseville-aug-2026"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                August 28, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                The Practice Blueprint dinner
+              </h2>
               <Image
                 src="/media/poe-roseville-aug-2026.webp"
                 alt="The Practice Blueprint recap collage from an exclusive dinner with industry leaders, showing a restaurant table, a standing group, and black-and-white shots of the welcome sign, table setting, branded notebook, and gift bags."
@@ -389,27 +520,37 @@ export default function MichaelNjoDDS({
                 priority
               />
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Kohan, and Carr for
-                including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a
-                team that can realize those dreams!
+                Great night with great Dentists and referral partners! Thank you
+                Provide, Patterson, Kohan, and Carr for including me at this
+                vibrant event. It is so fun to enjoy an evening with Dentists
+                who have dreams and a team that can realize those dreams!
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Thank you to my dear friend, colleague, and long time client Dr. Diana Fat for welcoming us to her family
-                restaurant.
+                Thank you to my dear friend, colleague, and long time client Dr.
+                Diana Fat for welcoming us to her family restaurant.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild size="sm">
                   <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
                 </Button>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/blog/practice-blueprint-roseville-aug-2026">Read the full story</Link>
+                  <Link href="/blog/practice-blueprint-roseville-aug-2026">
+                    Read the full story
+                  </Link>
                 </Button>
               </div>
             </article>
 
-            <article id="another-perfect-match" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 25, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">Another perfect match</h2>
+            <article
+              id="another-perfect-match"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                August 25, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                Another perfect match
+              </h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 <Image
                   src="/media/bill-mikki-porch.webp"
@@ -430,27 +571,39 @@ export default function MichaelNjoDDS({
                 />
               </div>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Another perfect match! So excited to have both of my clients matched- with my former Dugoni Business
-                Club Student with an accomplished practitioner!
+                Another perfect match! So excited to have both of my clients
+                matched- with my former Dugoni Business Club Student with an
+                accomplished practitioner!
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Bill and Mikki, thank you for your incredibly thoughtful words and for trusting me to help guide such an
-                important transition. It was truly an honor to support you in finding the right successor for the
-                practice, patients, team, and legacy you worked so hard to build.
+                Bill and Mikki, thank you for your incredibly thoughtful words
+                and for trusting me to help guide such an important transition.
+                It was truly an honor to support you in finding the right
+                successor for the practice, patients, team, and legacy you
+                worked so hard to build.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild size="sm">
                   <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
                 </Button>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/blog/another-perfect-match">Read the full story</Link>
+                  <Link href="/blog/another-perfect-match">
+                    Read the full story
+                  </Link>
                 </Button>
               </div>
             </article>
 
-            <article id="beyond-the-chair-anaheim" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">September 25, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">The Dental Practice Beyond the Chair</h2>
+            <article
+              id="beyond-the-chair-anaheim"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                September 25, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                The Dental Practice Beyond the Chair
+              </h2>
               <Image
                 src="/media/promotional-flyer-dental-strategies.webp"
                 alt="Promotional flyer for The Dental Practice Beyond the Chair, a September 25, 2026 working session in Anaheim led by Michael A. Njo, DDS"
@@ -461,12 +614,14 @@ export default function MichaelNjoDDS({
                 priority
               />
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                A 5-hour working session for dentists and practice owners. Building Enterprise Value, Intellectual
-                Property, Wealth, and Legacy.
+                A 5-hour working session for dentists and practice owners.
+                Building Enterprise Value, Intellectual Property, Wealth, and
+                Legacy.
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                September 25, 2026, 8:30 AM – 1:30 PM at The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim,
-                CA. Led by Michael A. Njo, DDS, Director, Dental Strategies.
+                September 25, 2026, 8:30 AM – 1:30 PM at The Phillips Group,
+                2300 E. Katella Ave, Suite 405, Anaheim, CA. Led by Michael A.
+                Njo, DDS, Director, Dental Strategies.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild size="sm">
@@ -479,14 +634,23 @@ export default function MichaelNjoDDS({
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm">
-                  <Link href="/blog/beyond-the-chair-anaheim">Read the full story</Link>
+                  <Link href="/blog/beyond-the-chair-anaheim">
+                    Read the full story
+                  </Link>
                 </Button>
               </div>
             </article>
 
-            <article id="panel-of-experts-dinner" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 14, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">Panel of Experts dinner</h2>
+            <article
+              id="panel-of-experts-dinner"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                August 14, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                Panel of Experts dinner
+              </h2>
               <div className="grid gap-3 sm:grid-cols-3">
                 <Image
                   src="/media/IMG_4918.webp"
@@ -514,19 +678,36 @@ export default function MichaelNjoDDS({
                 />
               </div>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                Great night with great Dentists and referral partners! Thank you Provide, Patterson, Sarv Designs, and Carr for including me at this vibrant event. It is so fun to enjoy an evening with Dentists who have dreams and a team that can realize those dreams! The Practice Blueprint dinner followed on August 27 in Roseville.
+                Great night with great Dentists and referral partners! Thank you
+                Provide, Patterson, Sarv Designs, and Carr for including me at
+                this vibrant event. It is so fun to enjoy an evening with
+                Dentists who have dreams and a team that can realize those
+                dreams! The Practice Blueprint dinner followed on August 27 in
+                Roseville.
               </p>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                It was also an honor to autograph the <em>Dental Practice Transitions Handbook</em> at the dinner. Dr. Njo&apos;s newest publishing collaboration, <em>The Dental Exit Blueprint</em>, was released July 15, 2026.
+                It was also an honor to autograph the{" "}
+                <em>Dental Practice Transitions Handbook</em> at the dinner. Dr.
+                Njo&apos;s newest publishing collaboration,{" "}
+                <em>The Dental Exit Blueprint</em>, was released July 15, 2026.
               </p>
               <Button asChild variant="outline" size="sm">
-                <Link href="/blog/panel-of-experts-dinner-roseville">Read the full story</Link>
+                <Link href="/blog/panel-of-experts-dinner-roseville">
+                  Read the full story
+                </Link>
               </Button>
             </article>
 
-            <article id="industry-leaders" className={`${panel} space-y-4`}>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">August 13, 2026</p>
-              <h2 className="font-serif text-xl font-semibold">An Amazing 4 days with Industry leaders!!!</h2>
+            <article
+              id="industry-leaders"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                August 13, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                An Amazing 4 days with Industry leaders!!!
+              </h2>
               <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
                 An Amazing 4 days with Industry leaders!!!
               </p>
@@ -554,15 +735,21 @@ export default function MichaelNjoDDS({
                 on Instagram.
               </p>
               <Button asChild variant="outline" size="sm">
-                <Link href="/blog/amazing-4-days-with-industry-leaders">Read the full story</Link>
+                <Link href="/blog/amazing-4-days-with-industry-leaders">
+                  Read the full story
+                </Link>
               </Button>
             </article>
 
-            <div id="upcoming-events" className={`${panel}`}>
+            <div id="upcoming-events" className={`${panel} scroll-mt-28`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Upcoming events</p>
-                  <h2 className="font-serif text-xl font-semibold">Don&apos;t miss our latest educational opportunities</h2>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                    Upcoming events
+                  </p>
+                  <h2 className="font-serif text-xl font-semibold">
+                    Don&apos;t miss our latest educational opportunities
+                  </h2>
                 </div>
                 <Button asChild variant="outline" size="sm">
                   <a
@@ -580,22 +767,30 @@ export default function MichaelNjoDDS({
               <div className="overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm">
                 <div className="grid gap-0 xl:grid-cols-[0.86fr_1.14fr]">
                   <div className="space-y-4 p-6 md:p-8">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Speaking proof</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                      Speaking proof
+                    </p>
                     <h2 className="text-balance font-serif text-2xl font-semibold">
                       Educational events that keep transition strategy practical
                     </h2>
                     <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                      Dr. Njo&apos;s event work spans society presentations, small-group seminars, and transition-focused
-                      educational programming — the public-facing side of the same advisory work clients hire him for
-                      privately.
+                      Dr. Njo&apos;s event work spans society presentations,
+                      small-group seminars, and transition-focused educational
+                      programming — the public-facing side of the same advisory
+                      work clients hire him for privately.
                     </p>
                     <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-                      The emphasis stays practical: helping dentists understand ownership timing, deal structure, practice
-                      value, and the people-side realities that sit underneath every transition.
+                      The emphasis stays practical: helping dentists understand
+                      ownership timing, deal structure, practice value, and the
+                      people-side realities that sit underneath every
+                      transition.
                     </p>
                   </div>
                   <div className="bg-surface p-4 md:p-6">
-                    <EditorialMosaic assets={profileNewsImages} captionMode="below" />
+                    <EditorialMosaic
+                      assets={profileNewsImages}
+                      captionMode="below"
+                    />
                   </div>
                 </div>
               </div>
@@ -608,9 +803,13 @@ export default function MichaelNjoDDS({
                     {program.category}
                   </Badge>
                   <Badge>{program.registrationStatus}</Badge>
-                  {program.scheduleLabel ? <Badge variant="outline">{program.scheduleLabel}</Badge> : null}
+                  {program.scheduleLabel ? (
+                    <Badge variant="outline">{program.scheduleLabel}</Badge>
+                  ) : null}
                 </div>
-                <h3 className="font-serif text-xl font-semibold">{program.title}</h3>
+                <h3 className="font-serif text-xl font-semibold">
+                  {program.title}
+                </h3>
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                   <span className="inline-flex items-center gap-2">
                     <CalendarDays className="h-4 w-4" />
@@ -626,14 +825,21 @@ export default function MichaelNjoDDS({
                   </span>
                 </div>
 
-                <p className="text-pretty text-sm leading-relaxed text-muted-foreground">{program.description}</p>
+                <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                  {program.description}
+                </p>
 
                 {program.highlights?.length ? (
                   <div className="space-y-3">
-                    <p className="text-sm font-semibold">At this seminar, you&apos;ll discover how to:</p>
+                    <p className="text-sm font-semibold">
+                      At this seminar, you&apos;ll discover how to:
+                    </p>
                     <ul className="space-y-2">
                       {program.highlights.map((item) => (
-                        <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <li
+                          key={item}
+                          className="flex items-start gap-2 text-sm text-muted-foreground"
+                        >
                           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                           <span>{item}</span>
                         </li>
@@ -644,13 +850,24 @@ export default function MichaelNjoDDS({
 
                 {program.upcomingDates?.length ? (
                   <div className="space-y-3 rounded-xl border border-border/70 bg-surface p-4">
-                    <p className="text-sm font-semibold">Available dates &amp; locations</p>
+                    <p className="text-sm font-semibold">
+                      Available dates &amp; locations
+                    </p>
                     <div className="grid gap-3 md:grid-cols-3">
                       {program.upcomingDates.map((date) => (
-                        <article key={`${program.slug}-${date.startDateTime}`} className="rounded-lg border border-border/70 bg-card p-3">
-                          <p className="text-sm font-medium">{date.dateLabel}</p>
-                          <p className="mt-1 text-xs text-muted-foreground">{date.timeLabel}</p>
-                          <p className="mt-2 text-sm text-muted-foreground">{date.location}</p>
+                        <article
+                          key={`${program.slug}-${date.startDateTime}`}
+                          className="rounded-lg border border-border/70 bg-card p-3"
+                        >
+                          <p className="text-sm font-medium">
+                            {date.dateLabel}
+                          </p>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {date.timeLabel}
+                          </p>
+                          <p className="mt-2 text-sm text-muted-foreground">
+                            {date.location}
+                          </p>
                         </article>
                       ))}
                     </div>
@@ -664,7 +881,11 @@ export default function MichaelNjoDDS({
 
                 {program.registrationUrl ? (
                   <Button asChild size="sm">
-                    <a href={program.registrationUrl} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={program.registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       View current event details at PTI
                     </a>
                   </Button>
@@ -678,12 +899,19 @@ export default function MichaelNjoDDS({
 
             {upcomingEventPrograms.length === 0 ? (
               <div className={`${panel} space-y-3`}>
-                <h3 className="font-serif text-lg font-semibold">No upcoming dates are currently published</h3>
+                <h3 className="font-serif text-lg font-semibold">
+                  No upcoming dates are currently published
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Visit Practice Transitions Institute for the latest seminar and education schedule.
+                  Visit Practice Transitions Institute for the latest seminar
+                  and education schedule.
                 </p>
                 <Button asChild variant="outline">
-                  <a href="https://practicetransitionsinstitute.com/events" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://practicetransitionsinstitute.com/events"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View PTI events
                   </a>
                 </Button>
@@ -691,14 +919,20 @@ export default function MichaelNjoDDS({
             ) : null}
 
             <div className={`${panel} space-y-3`}>
-              <h3 className="font-serif text-lg font-semibold">Media &amp; speaking</h3>
+              <h3 className="font-serif text-lg font-semibold">
+                Media &amp; speaking
+              </h3>
               <p className="text-sm text-muted-foreground">
-                Dr. Njo is frequently asked to provide transition guidance for dental professionals.
+                Dr. Njo is frequently asked to provide transition guidance for
+                dental professionals.
               </p>
               <div className="flex flex-wrap gap-3 pt-1">
                 <BookingButton />
                 <Button asChild variant="outline">
-                  <Link href={CONTACT_PATH} className="inline-flex items-center gap-2">
+                  <Link
+                    href={CONTACT_PATH}
+                    className="inline-flex items-center gap-2"
+                  >
                     <MessageSquareQuote className="h-4 w-4" />
                     Contact Dr. Njo
                   </Link>

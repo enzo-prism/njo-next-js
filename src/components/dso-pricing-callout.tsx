@@ -30,7 +30,7 @@ export function DsoPricingCallout({ className }: { className?: string }) {
           label="Book a DSO pricing call"
           variant="secondary"
           size="lg"
-          className="shrink-0"
+          className="h-auto w-full shrink-0 whitespace-normal py-2.5 text-center leading-snug md:w-auto"
         />
       </div>
     </div>

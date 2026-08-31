@@ -10,7 +10,7 @@ type TestimonialListCardProps = {
 };
 
 const Rating = ({ value, max = 5 }: { value: number; max?: number }) => (
-  <div className="flex items-center gap-0.5 text-amber-500" role="img" aria-label={`${value} out of ${max} stars`}>
+  <div className="flex items-center gap-0.5 text-amber-600" role="img" aria-label={`${value} out of ${max} stars`}>
     {Array.from({ length: max }).map((_, index) => (
       <Star
         key={index}
@@ -62,7 +62,7 @@ export function TestimonialListCard({ testimonial, withLink = true, className }:
       {withLink ? (
         <Link
           href={`/testimonials/${testimonial.slug}`}
-          className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand/70"
+          className="inline-flex min-h-11 w-fit items-center gap-1.5 text-sm font-medium text-brand transition-colors hover:text-brand/70"
         >
           Read full story
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

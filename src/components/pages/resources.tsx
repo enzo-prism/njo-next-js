@@ -1,12 +1,28 @@
-import { ArrowRight, Building2, CalendarDays, CheckCircle2, Clock3 } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
 import { BookLaunchFeature } from "@/components/book-launch-feature";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { buildResourceArticlePath, formatArticleDate, resourceArticles } from "@/data/resource-articles";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  buildResourceArticlePath,
+  formatArticleDate,
+  resourceArticles,
+} from "@/data/resource-articles";
 import { resourceBookFeatureImage, resourceBookInsetImage } from "@/data/media";
 import { resources, bookReviews } from "@/seo/structured-data";
 import { CONTACT_PATH } from "@/config/site";
@@ -14,21 +30,34 @@ import { Container } from "@/components/layout/container";
 
 export default function ResourcesPage() {
   const book = resources.find((resource) => resource.type === "Book");
-  const institute = resources.find((resource) => resource.type === "EducationalOrganization");
-  const bookLaunchArticle = resourceArticles.find((article) => article.bookLaunch);
-  const guidanceArticles = resourceArticles.filter((article) => !article.bookLaunch);
+  const institute = resources.find(
+    (resource) => resource.type === "EducationalOrganization",
+  );
+  const bookLaunchArticle = resourceArticles.find(
+    (article) => article.bookLaunch,
+  );
+  const guidanceArticles = resourceArticles.filter(
+    (article) => !article.bookLaunch,
+  );
 
   return (
     <Container className="space-y-8 py-10 sm:py-14">
       <section className="space-y-3 text-center">
-        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Resources</p>
-        <h1 className="text-4xl font-semibold">Education &amp; growth resources</h1>
+        <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Resources
+        </p>
+        <h1 className="text-4xl font-semibold">
+          Education &amp; growth resources
+        </h1>
         <p className="mx-auto max-w-3xl text-sm text-muted-foreground">
-          Practical materials and learning pathways curated to support healthcare ownership, transitions, and operations leadership.
+          Practical materials and learning pathways curated to support
+          healthcare ownership, transitions, and operations leadership.
         </p>
       </section>
 
-      {bookLaunchArticle ? <BookLaunchFeature article={bookLaunchArticle} priority /> : null}
+      {bookLaunchArticle ? (
+        <BookLaunchFeature article={bookLaunchArticle} priority />
+      ) : null}
 
       <section className="grid gap-4 md:grid-cols-2">
         {book && (
@@ -42,7 +71,7 @@ export default function ResourcesPage() {
                     width={resourceBookFeatureImage.width}
                     height={resourceBookFeatureImage.height}
                     sizes={resourceBookFeatureImage.sizes}
-                    className="h-auto w-full object-cover"
+                    className="h-auto w-full object-contain"
                     priority
                   />
                 </figure>
@@ -51,11 +80,14 @@ export default function ResourcesPage() {
               <div className="space-y-5 p-6">
                 <CardHeader className="space-y-3 px-0 pt-0">
                   <CardTitle className="text-2xl">{book.name}</CardTitle>
-                  <CardDescription className="max-w-lg text-sm leading-relaxed">{book.description}</CardDescription>
+                  <CardDescription className="max-w-lg text-sm leading-relaxed">
+                    {book.description}
+                  </CardDescription>
                 </CardHeader>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  A practical reference for dentists and healthcare owners navigating acquisitions, sales, partnerships, and
-                  transition timing across different market conditions.
+                  A practical reference for dentists and healthcare owners
+                  navigating acquisitions, sales, partnerships, and transition
+                  timing across different market conditions.
                 </p>
 
                 <figure className="overflow-hidden rounded-[1.5rem] border border-border bg-slate-50 shadow-sm">
@@ -66,7 +98,9 @@ export default function ResourcesPage() {
                       fill
                       sizes={resourceBookInsetImage.sizes}
                       className="object-contain p-3"
-                      style={{ objectPosition: resourceBookInsetImage.objectPosition }}
+                      style={{
+                        objectPosition: resourceBookInsetImage.objectPosition,
+                      }}
                     />
                   </div>
                   <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
@@ -74,7 +108,10 @@ export default function ResourcesPage() {
                   </figcaption>
                 </figure>
 
-                <Button asChild className="inline-flex w-full justify-center sm:w-auto">
+                <Button
+                  asChild
+                  className="inline-flex w-full justify-center sm:w-auto"
+                >
                   <a href={book.url} target="_blank" rel="noopener noreferrer">
                     View on Amazon
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -95,11 +132,14 @@ export default function ResourcesPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
                   For dental practice transactions
                 </p>
-                <CardTitle className="mt-2 text-2xl text-white">{institute.name}</CardTitle>
+                <CardTitle className="mt-2 text-2xl text-white">
+                  {institute.name}
+                </CardTitle>
               </div>
               <CardDescription className="max-w-lg text-sm leading-relaxed text-white/75">
-                PTI is Dr. Njo&apos;s dedicated firm for dentists making an ownership or transaction decision.
-                Use the institute when you need a team to guide the process, not only educational material.
+                PTI is Dr. Njo&apos;s dedicated firm for dentists making an
+                ownership or transaction decision. Use the institute when you
+                need a team to guide the process, not only educational material.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
@@ -113,12 +153,19 @@ export default function ResourcesPage() {
                   "Structure a partnership",
                 ].map((service) => (
                   <li key={service} className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" aria-hidden="true" />
+                    <CheckCircle2
+                      className="mt-0.5 h-4 w-4 shrink-0 text-sky-300"
+                      aria-hidden="true"
+                    />
                     <span>{service}</span>
                   </li>
                 ))}
               </ul>
-              <Button asChild variant="secondary" className="inline-flex w-full justify-center sm:w-auto">
+              <Button
+                asChild
+                variant="secondary"
+                className="inline-flex w-full justify-center sm:w-auto"
+              >
                 <a
                   href="https://practicetransitionsinstitute.com/services"
                   target="_blank"
@@ -138,7 +185,8 @@ export default function ResourcesPage() {
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold">Articles &amp; guidance</h2>
             <p className="max-w-3xl text-sm text-muted-foreground">
-              Practical reads for dentists weighing ownership, transitions, and long-term strategy.
+              Practical reads for dentists weighing ownership, transitions, and
+              long-term strategy.
             </p>
           </div>
         </div>
@@ -148,7 +196,10 @@ export default function ResourcesPage() {
             <Card key={article.slug} className="overflow-hidden">
               <CardHeader className="space-y-3">
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                  <Badge variant="secondary" className="uppercase tracking-wide">
+                  <Badge
+                    variant="secondary"
+                    className="uppercase tracking-wide"
+                  >
                     Article
                   </Badge>
                   <span className="inline-flex items-center gap-1">
@@ -161,14 +212,23 @@ export default function ResourcesPage() {
                   </span>
                 </div>
                 <CardTitle className="text-2xl leading-snug">
-                  <Link href={buildResourceArticlePath(article.slug)} className="transition-colors hover:text-primary">
+                  <Link
+                    href={buildResourceArticlePath(article.slug)}
+                    className="transition-colors hover:text-primary"
+                  >
                     {article.title}
                   </Link>
                 </CardTitle>
-                <CardDescription className="text-sm leading-relaxed max-w-lg">{article.excerpt}</CardDescription>
+                <CardDescription className="text-sm leading-relaxed max-w-lg">
+                  {article.excerpt}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button asChild variant="outline" className="inline-flex w-full justify-center sm:w-auto">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="inline-flex w-full justify-center sm:w-auto"
+                >
                   <Link href={buildResourceArticlePath(article.slug)}>
                     Read article
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -192,7 +252,9 @@ export default function ResourcesPage() {
           {bookReviews.map((review) => (
             <Card key={`${review.author}-${review.datePublished}`}>
               <CardHeader className="space-y-1">
-                <p className="text-sm text-muted-foreground">{review.datePublished}</p>
+                <p className="text-sm text-muted-foreground">
+                  {formatArticleDate(review.datePublished)}
+                </p>
                 <CardTitle className="text-lg">{review.title}</CardTitle>
                 <p className="text-sm text-muted-foreground">{review.author}</p>
               </CardHeader>
