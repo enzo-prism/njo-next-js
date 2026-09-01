@@ -8,6 +8,7 @@ const newsSectionIds = new Set([
   "panel-of-experts-dinner",
   "industry-leaders",
   "upcoming-events",
+  "sacramento-seminar-oct-2026",
   "past-events",
 ]);
 

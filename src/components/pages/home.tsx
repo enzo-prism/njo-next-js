@@ -48,6 +48,7 @@ import {
   dugoniCollaborationImage,
   gprResidencyPresentationImage,
 } from "@/data/media";
+import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
 import { getUpcomingEventPrograms } from "@/data/events";
 import { resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
@@ -487,11 +488,27 @@ export default function Home({
                     <Clock3 className="h-4 w-4" />
                     {program.timeLabel}
                   </p>
-                  <p className="inline-flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    {program.locationLabel}
+                  <p className="inline-flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>{program.nextOccurrence.location}</span>
                   </p>
                 </div>
+                <EventOccurrenceDetails
+                  occurrence={program.nextOccurrence}
+                  referenceDate={referenceDate}
+                />
+                {program.nextOccurrence.registrationPhoneDisplay &&
+                program.nextOccurrence.registrationPhone ? (
+                  <p className="text-sm text-muted-foreground">
+                    Register by phone{" "}
+                    <a
+                      href={`tel:${program.nextOccurrence.registrationPhone}`}
+                      className="font-medium text-brand hover:text-brand/70"
+                    >
+                      {program.nextOccurrence.registrationPhoneDisplay}
+                    </a>
+                  </p>
+                ) : null}
                 <a
                   href={program.registrationUrl || CONTACT_PATH}
                   target={program.registrationUrl ? "_blank" : undefined}

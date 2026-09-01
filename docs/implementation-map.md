@@ -197,8 +197,11 @@ This means author edits can change slugs. If you rename an author on an already-
 `getUpcomingEventPrograms(referenceDate)` is the single date-state helper. It derives the next occurrence, removes
 completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
 hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI via
-`registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). News-tab
-copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
+`registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). Occurrence-level
+fields such as `flyerImage`, speakers, guest labels, and date-gated pricing are allowed for a specific date only. The
+October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program at TDIC Headquarters
+and uses `/media/sacramento-seminar-oct-2026.webp`; do not duplicate that date or add a news/community post for it.
+News-tab copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
 completed dinners as upcoming.
 `src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
 parameters aligned.
@@ -206,6 +209,8 @@ parameters aligned.
 If event details change, check:
 
 - `src/components/pages/michael-njo-dds.tsx`
+- `src/components/pages/home.tsx`
+- `src/components/events/event-occurrence-details.tsx`
 - `src/seo/structured-data.ts`
 - `src/data/community-posts.ts`
 

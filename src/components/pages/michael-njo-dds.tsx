@@ -28,6 +28,7 @@ import {
   profileRelationshipImages,
   type EditorialMediaAsset,
 } from "@/data/media";
+import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
 import { getUpcomingEventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -819,9 +820,9 @@ export default function MichaelNjoDDS({
                     <Clock3 className="h-4 w-4" />
                     {program.timeLabel}
                   </span>
-                  <span className="inline-flex items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    {program.locationLabel}
+                  <span className="inline-flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                    {program.nextOccurrence.location}
                   </span>
                 </div>
 
@@ -857,7 +858,10 @@ export default function MichaelNjoDDS({
                       {program.upcomingDates.map((date) => (
                         <article
                           key={`${program.slug}-${date.startDateTime}`}
-                          className="rounded-lg border border-border/70 bg-card p-3"
+                          id={date.id}
+                          className={`scroll-mt-28 space-y-3 rounded-lg border border-border/70 bg-card p-3 ${
+                            date.flyerImage ? "md:col-span-2" : ""
+                          }`}
                         >
                           <p className="text-sm font-medium">
                             {date.dateLabel}
@@ -868,6 +872,22 @@ export default function MichaelNjoDDS({
                           <p className="mt-2 text-sm text-muted-foreground">
                             {date.location}
                           </p>
+                          <EventOccurrenceDetails
+                            occurrence={date}
+                            referenceDate={new Date(referenceDateIso)}
+                          />
+                          {date.registrationPhoneDisplay &&
+                          date.registrationPhone ? (
+                            <p className="text-sm text-muted-foreground">
+                              Register by phone{" "}
+                              <a
+                                href={`tel:${date.registrationPhone}`}
+                                className="font-medium text-brand underline-offset-2 hover:underline"
+                              >
+                                {date.registrationPhoneDisplay}
+                              </a>
+                            </p>
+                          ) : null}
                         </article>
                       ))}
                     </div>
