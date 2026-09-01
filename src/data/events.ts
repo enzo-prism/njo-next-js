@@ -1,9 +1,32 @@
+export type EventOccurrencePricing = {
+  earlyBirdPrice: number;
+  earlyBirdDeadlineLabel: string;
+  earlyBirdDeadlineDateTime: string;
+  standardPrice: number;
+  guestPrice: number;
+};
+
+export type EventOccurrenceSpeaker = {
+  name: string;
+  title: string;
+};
+
 export type EventOccurrence = {
+  id?: string;
   dateLabel: string;
   timeLabel: string;
   location: string;
   startDateTime: string;
   endDateTime?: string;
+  flyerImage?: string;
+  flyerImageAlt?: string;
+  headline?: string;
+  guestLabel?: string;
+  speakers?: EventOccurrenceSpeaker[];
+  highlights?: string[];
+  pricing?: EventOccurrencePricing;
+  registrationPhone?: string;
+  registrationPhoneDisplay?: string;
 };
 
 export type EventProgram = {
@@ -53,6 +76,24 @@ function getProgramOccurrences(program: EventProgram): EventOccurrence[] {
 export function isEventOccurrenceUpcoming(occurrence: EventOccurrence, referenceDate: Date): boolean {
   const eventEnd = occurrence.endDateTime || occurrence.startDateTime;
   return parseDateTime(eventEnd) >= referenceDate.getTime();
+}
+
+export function isOccurrenceEarlyBirdAvailable(
+  occurrence: EventOccurrence,
+  referenceDate: Date,
+): boolean {
+  if (!occurrence.pricing) return false;
+  return parseDateTime(occurrence.pricing.earlyBirdDeadlineDateTime) >= referenceDate.getTime();
+}
+
+export function getOccurrenceRegistrationPrice(
+  occurrence: EventOccurrence,
+  referenceDate: Date,
+): number | undefined {
+  if (!occurrence.pricing) return undefined;
+  return isOccurrenceEarlyBirdAvailable(occurrence, referenceDate)
+    ? occurrence.pricing.earlyBirdPrice
+    : occurrence.pricing.standardPrice;
 }
 
 /**
@@ -134,11 +175,37 @@ export const eventPrograms: EventProgram[] = [
         endDateTime: "2026-07-17T15:00:00-07:00",
       },
       {
+        id: "sacramento-seminar-oct-2026",
         dateLabel: "October 2, 2026",
         timeLabel: "8am - 3pm",
-        location: "Sacramento, CA",
+        location: "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
         startDateTime: "2026-10-02T08:00:00-07:00",
         endDateTime: "2026-10-02T15:00:00-07:00",
+        flyerImage: "/media/sacramento-seminar-oct-2026.webp",
+        flyerImageAlt:
+          "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 at TDIC Headquarters.",
+        headline: "Before you buy, expand, partner, or sell / Know your options",
+        guestLabel: "Special Sacramento guest: TDIC",
+        speakers: [
+          { name: "Liz Armato", title: "COO" },
+          { name: "Dr. Michael Njo", title: "Founder & Lead Transition Consultant" },
+        ],
+        highlights: [
+          "Which transition path may be right for you: start-up, associate buy-in, partnership, private sale, or DSO",
+          "When to begin preparing—and why timing can dramatically affect your options",
+          "How to evaluate a practice or opportunity beyond the asking price",
+          "What buyers are looking for in today's market",
+          "How to build the right advisory team and create a transition timeline that protects your future",
+        ],
+        pricing: {
+          earlyBirdPrice: 297,
+          earlyBirdDeadlineLabel: "September 2, 2026",
+          earlyBirdDeadlineDateTime: "2026-09-02T23:59:59-07:00",
+          standardPrice: 397,
+          guestPrice: 197,
+        },
+        registrationPhone: "+18337841121",
+        registrationPhoneDisplay: "(833) 784-1121",
       },
       {
         dateLabel: "March 12, 2027",

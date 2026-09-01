@@ -4,8 +4,10 @@ import path from "node:path";
 import { communityPosts } from "@/data/community-posts";
 import {
   eventPrograms,
+  getOccurrenceRegistrationPrice,
   getUpcomingEventPrograms,
   isEventOccurrenceUpcoming,
+  isOccurrenceEarlyBirdAvailable,
   type EventOccurrence,
 } from "@/data/events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
@@ -22,6 +24,10 @@ const augustView = getUpcomingEventPrograms(new Date("2026-08-17T12:00:00-07:00"
 assert.equal(augustView.length, 2, "Completed programs must not render as upcoming");
 assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
+assert.equal(
+  augustView[0].nextOccurrence.location,
+  "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+);
 assert.equal(augustView[0].upcomingDates.length, 2);
 assert.equal(augustView[0].completedOccurrences.length, 2);
 assert.equal(augustView[0].scheduleLabel, "2 dates");
@@ -83,6 +89,11 @@ assert.equal(
   "news",
   "A direct news-section hash should open the news tab without requiring a query parameter",
 );
+assert.equal(
+  resolveProfileTab("", "#sacramento-seminar-oct-2026"),
+  "news",
+  "The Sacramento seminar hash should open the news-tab calendar",
+);
 assert.equal(resolveProfileTab("", "#education-title"), "overview", "Overview hashes should not open the news tab");
 assert.equal(
   buildProfileTabPath({
@@ -119,6 +130,58 @@ const beyondTheChair = eventPrograms.find((program) => program.slug === "beyond-
 assert.ok(
   beyondTheChair?.registrationUrl?.startsWith("https://practicetransitionsinstitute.com/"),
   "Beyond the Chair must hand current registration intent to PTI",
+);
+
+const seminar = eventPrograms.find((program) => program.slug === "mastering-your-dental-transition");
+assert.ok(seminar, "Mastering Your Dental Transition program must exist");
+assert.equal(
+  seminar?.upcomingDates?.filter((occurrence) => occurrence.startDateTime.startsWith("2026-10-02")).length,
+  1,
+  "Do not duplicate the October 2, 2026 Sacramento date",
+);
+const sacramento = seminar?.upcomingDates?.find((occurrence) => occurrence.id === "sacramento-seminar-oct-2026");
+assert.ok(sacramento, "Sacramento October 2 occurrence must keep a stable calendar id");
+assert.equal(sacramento?.location, "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento?.timeLabel, "8am - 3pm");
+assert.equal(sacramento?.startDateTime, "2026-10-02T08:00:00-07:00");
+assert.equal(sacramento?.endDateTime, "2026-10-02T15:00:00-07:00");
+assert.equal(sacramento?.flyerImage, "/media/sacramento-seminar-oct-2026.webp");
+assert.equal(
+  sacramento?.flyerImageAlt,
+  "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 at TDIC Headquarters.",
+);
+assert.equal(sacramento?.guestLabel, "Special Sacramento guest: TDIC");
+assert.deepEqual(
+  sacramento?.speakers?.map((speaker) => speaker.name),
+  ["Liz Armato", "Dr. Michael Njo"],
+);
+assert.equal(
+  seminar?.registrationUrl,
+  "https://practicetransitionsinstitute.com/events/practice-transition-seminar",
+);
+assert.equal(sacramento?.registrationPhoneDisplay, "(833) 784-1121");
+assert.equal(
+  isOccurrenceEarlyBirdAvailable(sacramento as EventOccurrence, new Date("2026-09-01T12:00:00-07:00")),
+  true,
+  "Early bird must remain available on September 1, 2026",
+);
+assert.equal(
+  getOccurrenceRegistrationPrice(sacramento as EventOccurrence, new Date("2026-09-01T12:00:00-07:00")),
+  297,
+);
+assert.equal(
+  isOccurrenceEarlyBirdAvailable(sacramento as EventOccurrence, new Date("2026-09-03T00:00:00-07:00")),
+  false,
+  "Early bird must close after September 2, 2026",
+);
+assert.equal(
+  getOccurrenceRegistrationPrice(sacramento as EventOccurrence, new Date("2026-09-03T00:00:00-07:00")),
+  397,
+);
+assert.equal(
+  communityPosts.some((post) => /sacramento seminar/i.test(`${post.slug} ${post.title}`)),
+  false,
+  "Sacramento seminar must stay on the calendar and not become a news/community post",
 );
 
 const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");
