@@ -117,6 +117,8 @@ export function buildPageTitle(pathname: string): string {
       return "Phillips Event Follow-Up | Michael Njo DDS";
     case "/dr-michael-njo-interview":
       return "Dr. Michael Njo Interview | Dental Practice Transitions & Consulting";
+    case "/navigating-dental-insurance-podcast":
+      return "The Right Way to Go Out of Network | Navigating Dental Insurance Podcast";
     case "/dr-michael-neal-interview":
       return "Dr. Michael Neal Interview | Dental Strategies";
     case "/testimonials":
@@ -172,6 +174,8 @@ export function buildPageDescription(pathname: string): string {
       return "Learn about Michael Njo DDS, dental transitions consultant, author, and residency speaker helping dentists with growth, leadership, and ownership changes.";
     case "/dr-michael-njo-interview":
       return "Watch Dr. Michael Njo discuss his journey from private practice to building Dental Strategies through transitions, management, and legal guidance.";
+    case "/navigating-dental-insurance-podcast":
+      return "Hear Dr. Michael Njo as a guest on The Navigating Dental Insurance Podcast with Ben Tuinei and Jordon Comstock. Episode: The Right Way to Go Out of Network, published July 24, 2026.";
     case "/testimonials":
       return "Read testimonials from dentists and healthcare professionals who have worked with Michael Njo, DDS through Dental Strategies and Practice Transitions Institute.";
     case "/resources":

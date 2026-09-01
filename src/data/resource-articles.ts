@@ -187,6 +187,74 @@ export const resourceArticles: ResourceArticle[] = [
     },
   },
   {
+    slug: "second-book",
+    title: "Second Book (Coming)",
+    metaTitle: "Second Book (Coming) | Michael A. Njo, DDS",
+    description:
+      "Dr. Michael Njo is working on a second book. The title has not been announced. See the published Dental Practice Transitions Handbook in the meantime.",
+    excerpt:
+      "A forthcoming second book from Dr. Njo. The title has not been announced yet. The published handbook remains the current resource.",
+    category: "Forthcoming book",
+    publishedAt: "2026-09-01T00:00:00Z",
+    updatedAt: "2026-09-01T00:00:00Z",
+    readTimeMinutes: 2,
+    primaryKeyword: "Dr. Michael Njo second book",
+    secondaryKeywords: [
+      "Dental Practice Transitions Handbook",
+      "dental practice transition book",
+      "forthcoming dental book",
+    ],
+    keyTakeaways: [
+      "Dr. Michael Njo is working on a second book.",
+      "The title, cover, and publication date have not been announced.",
+      "Dental Practice Transitions Handbook remains the published resource to start with.",
+    ],
+    intro: [
+      "Dr. Michael Njo is working on a second book. The title has not been announced yet. The published handbook remains the current resource.",
+    ],
+    sections: [
+      {
+        id: "what-is-announced",
+        title: "A dedicated page for the next book",
+        paragraphs: [
+          "This page will be updated when a title and publication details are ready. We are not inventing a name, cover, or release date.",
+          "Until then, start with Dental Practice Transitions Handbook — the same book Dr. Njo signs at Panel of Experts dinners.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "What is the title of Dr. Njo's second book?",
+        answer: "The title has not been announced yet.",
+      },
+      {
+        question: "When will the second book be published?",
+        answer:
+          "A publication date has not been announced. This page will be updated when details are ready.",
+      },
+    ],
+    closing: [
+      "If you want to be notified when the next book is announced, contact Dr. Njo or start with the published handbook.",
+    ],
+    relatedLinks: [
+      {
+        href: "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
+        label: "Read Dental Practice Transitions Handbook on Amazon",
+        description: "The published first book, while the second book is forthcoming.",
+      },
+      {
+        href: "/resources",
+        label: "Browse all resources",
+        description: "See the handbook, articles, and other materials on the resources hub.",
+      },
+      {
+        href: "/contact",
+        label: "Ask about the next book",
+        description: "Start a conversation with Dr. Njo about the forthcoming book or a transition question.",
+      },
+    ],
+  },
+  {
     slug: "building-a-practice-that-gives-you-options",
     title: "Expert Insights: Building a Practice That Gives You Options",
     metaTitle: "Building a Practice That Gives You Options | Michael A. Njo, DDS",

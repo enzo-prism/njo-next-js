@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import nextConfig from "../next.config";
 import { LEGACY_REDIRECTS } from "@/config/routes";
-import { CALENDLY_ASSETS_ORIGIN, CALENDLY_MESSAGE_ORIGINS, CANONICAL_PROTOCOL, PREFERRED_HOSTNAME } from "@/config/site";
+import { APPLE_PODCASTS_EMBED_ORIGIN, CALENDLY_ASSETS_ORIGIN, CALENDLY_MESSAGE_ORIGINS, CANONICAL_PROTOCOL, PREFERRED_HOSTNAME } from "@/config/site";
 import { getCanonicalRedirectLocation } from "@/seo/canonical";
 
 const requiredLegacyRedirects = [
@@ -75,6 +75,10 @@ async function main() {
   assert.ok(
     contentSecurityPolicy.includes(CALENDLY_ASSETS_ORIGIN),
     "Content Security Policy must allow official Calendly widget assets.",
+  );
+  assert.ok(
+    contentSecurityPolicy.includes(APPLE_PODCASTS_EMBED_ORIGIN),
+    "Content Security Policy must allow the official Apple Podcasts embed player.",
   );
   for (const origin of CALENDLY_MESSAGE_ORIGINS) {
     assert.ok(

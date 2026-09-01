@@ -41,6 +41,10 @@ export const CALENDLY_WIDGET_CSS = "https://assets.calendly.com/assets/external/
 export const CALENDLY_MESSAGE_ORIGINS = ["https://calendly.com", "https://www.calendly.com"] as const;
 export const CALENDLY_ASSETS_ORIGIN = new URL(CALENDLY_WIDGET_JS).origin;
 
+// Official Apple Podcasts embed origin for the BoomCloud / Navigating Dental
+// Insurance guest episode. Imported into CSP so the player can frame.
+export const APPLE_PODCASTS_EMBED_ORIGIN = "https://embed.podcasts.apple.com";
+
 export const siteRuntime = {
   gaId: readEnv("NEXT_PUBLIC_GA_ID", DEFAULT_GA_ID),
   hotjarId: readEnv("NEXT_PUBLIC_HOTJAR_ID", DEFAULT_HOTJAR_ID),

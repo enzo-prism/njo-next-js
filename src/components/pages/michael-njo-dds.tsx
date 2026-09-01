@@ -417,9 +417,15 @@ export default function MichaelNjoDDS({
                       />
                     </div>
                     <div className="space-y-2 px-6 pb-6">
-                      <p className="text-base font-semibold">
-                        {selectedImage.alt}
-                      </p>
+                      {selectedImage.names?.length ? (
+                        <p className="text-base font-semibold">
+                          {selectedImage.names.join(" · ")}
+                        </p>
+                      ) : (
+                        <p className="text-base font-semibold">
+                          {selectedImage.alt}
+                        </p>
+                      )}
                       {selectedImage.caption ? (
                         <p className="text-sm leading-relaxed text-white/80">
                           {selectedImage.caption}

@@ -37,7 +37,10 @@ export default function ResourcesPage() {
     (article) => article.bookLaunch,
   );
   const guidanceArticles = resourceArticles.filter(
-    (article) => !article.bookLaunch,
+    (article) => !article.bookLaunch && article.slug !== "second-book",
+  );
+  const secondBookArticle = resourceArticles.find(
+    (article) => article.slug === "second-book",
   );
 
   return (
@@ -108,15 +111,28 @@ export default function ResourcesPage() {
                   </figcaption>
                 </figure>
 
-                <Button
-                  asChild
-                  className="inline-flex w-full justify-center sm:w-auto"
-                >
-                  <a href={book.url} target="_blank" rel="noopener noreferrer">
-                    View on Amazon
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button
+                    asChild
+                    className="inline-flex w-full justify-center sm:w-auto"
+                  >
+                    <a href={book.url} target="_blank" rel="noopener noreferrer">
+                      View on Amazon
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                  {secondBookArticle ? (
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="inline-flex w-full justify-center sm:w-auto"
+                    >
+                      <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
+                        Second book (coming)
+                      </Link>
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </div>
           </Card>
@@ -179,6 +195,28 @@ export default function ResourcesPage() {
           </Card>
         )}
       </section>
+
+      {secondBookArticle ? (
+        <Card className="overflow-hidden border-dashed">
+          <CardHeader className="space-y-3">
+            <Badge variant="secondary" className="w-fit uppercase tracking-wide">
+              Forthcoming
+            </Badge>
+            <CardTitle className="text-2xl">{secondBookArticle.title}</CardTitle>
+            <CardDescription className="max-w-2xl text-sm leading-relaxed">
+              {secondBookArticle.excerpt}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild variant="outline">
+              <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
+                See the forthcoming book page
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <section className="space-y-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

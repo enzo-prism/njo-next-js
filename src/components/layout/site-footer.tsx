@@ -10,6 +10,7 @@ import { CONTACT_EMAIL, CONTACT_PATH, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } fro
 const footerLinks = [
   { href: "/michael-njo-dds", label: "Profile" },
   { href: "/dr-michael-njo-interview", label: "Interview" },
+  { href: "/navigating-dental-insurance-podcast", label: "Podcast" },
   { href: "/testimonials", label: "Testimonials" },
   { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },

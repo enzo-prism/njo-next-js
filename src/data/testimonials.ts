@@ -98,7 +98,7 @@ Thank you, Dr. Njo, for always being there. Your guidance has been invaluable, a
     stars: 5,
   },
   {
-    quote: `Dr. Michael has become not only a colleague, but a trusted friend who has helped navigate the challenging landscape of a multi state, multi- practice operation. His availability is his best ability. His efficient, calm leadership really made our transition smooth. Providing healthcare for patients becomes harder every day. Dr. Michael makes it easier.`,
+    quote: `Dr Michael has become not only a colleague, but a trusted friend who has helped navigate the challenging landscape of a multi state, multi-practice operation. His availability is his best ability. His efficient, calm leadership really made our transition smooth. Providing healthcare for patients becomes harder every day. Dr Michael makes it easier.`,
     author: "Blaine Leeds",
     stars: 5,
     publishedAt: "2025-11-11",
@@ -583,6 +583,18 @@ I firmly believe that without his guidance, the transition would have been far m
     stars: 5,
     source: "alignable",
   },
+  {
+    quote: `Thanks so much for the important role you've played in such a major transition in our lives. We are thrilled with pretty much everything about where we are now, and we appreciate the role you played in helping us get here. Thanks!`,
+    author: "Michael and Courtney Wounacott",
+    stars: 5,
+    publishedAt: "2012-09-04",
+  },
+  {
+    quote: `Thank you for your help! I can see the light at the end of the tunnel.`,
+    author: "Andrew Wang, DDS",
+    stars: 5,
+    publishedAt: "2019-01-17",
+  },
 ];
 
 export const testimonialPages: TestimonialPage[] = (() => {
@@ -622,3 +634,19 @@ export const getLatestFiveStarTestimonial = (): TestimonialPage | undefined =>
   testimonialPages.find(
     (testimonial) => testimonial.stars === 5 && Boolean(testimonial.publishedAt),
   );
+
+const FEATURED_NAMED_AUTHORS = [
+  "Tony Choi",
+  "Brian Valle",
+  "G. Allen Herrera, DDS",
+  "Blaine Leeds",
+  "Gregory Baird",
+  "Lawrence Wong",
+  "Dr. Lee Boese",
+  "Ankit Sidana",
+] as const;
+
+export const getFeaturedNamedTestimonials = (): TestimonialPage[] =>
+  FEATURED_NAMED_AUTHORS.map((author) =>
+    testimonialPages.find((testimonial) => testimonial.author === author),
+  ).filter((testimonial): testimonial is TestimonialPage => Boolean(testimonial));

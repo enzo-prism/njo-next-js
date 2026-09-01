@@ -2,6 +2,7 @@ import type { StaticImageData } from "next/image";
 import backstageQuoteCard from "@/assets/media/backstage-quote-card.png";
 import dinnerStrategyGroup from "@/assets/media/dinner-strategy-group.jpg";
 import handbookCover from "@/assets/media/handbook-cover.jpg";
+import medalPortrait from "@/assets/media/medal-portrait.png";
 import officeStrategyGroup from "@/assets/media/office-strategy-group.jpg";
 import soloDinnerGalleryOnly from "@/assets/media/solo-dinner-gallery-only.jpg";
 import threePersonEvent from "@/assets/media/three-person-event.jpg";
@@ -31,6 +32,8 @@ export type EditorialMediaAsset = {
   gridSpan?: "wide" | "full";
   galleryOnly?: boolean;
   priority?: boolean;
+  /** Known names only. Leave unidentified faces unlabeled. */
+  names?: string[];
 };
 
 const defaultSizesByVariant: Record<MediaLayoutVariant, string> = {
@@ -95,12 +98,25 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     id: "office-strategy-group",
     src: officeStrategyGroup,
     layoutVariant: "landscape",
-    alt: "Dr. Michael Njo with healthcare and dental leaders in an office strategy setting.",
-    caption: "Cross-functional strategy conversations that connect ownership, leadership, and operational clarity.",
-    featuredRoutes: ["home:leadership", "profile:gallery"],
+    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Shahi, former Dean of the University of the Pacific School of Dentistry",
+    caption:
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
+    featuredRoutes: ["home:leadership", "profile:relationships", "profile:gallery"],
     objectPosition: "center center",
     objectFit: "contain",
     priority: true,
+    names: ["Nader Shahi, former Dean, University of the Pacific School of Dentistry"],
+  }),
+  createLocalAsset({
+    id: "black-tie-medal-portrait",
+    src: medalPortrait,
+    layoutVariant: "portrait",
+    alt: "Dr. Michael Njo standing with Dr. Allen Budenz, who is wearing a tuxedo and medallion, at a formal event",
+    caption: "Dr. Michael Njo with Dr. Allen Budenz.",
+    featuredRoutes: ["home:leadership", "profile:relationships", "profile:gallery"],
+    objectPosition: "center center",
+    objectFit: "contain",
+    names: ["Dr. Michael Njo", "Dr. Allen Budenz"],
   }),
   createLocalAsset({
     id: "dinner-strategy-group",
@@ -218,6 +234,90 @@ const legacyGalleryImages: EditorialMediaAsset[] = [
     caption: "UOP board dinner — relationship capital that surrounds the consulting work.",
     featuredRoutes: ["profile:relationships", "profile:gallery"],
     gridSpan: "wide",
+  }),
+  createRemoteAsset({
+    id: "panel-dinner-group",
+    src: "/media/IMG_4918.webp",
+    width: 1600,
+    height: 2133,
+    layoutVariant: "portrait",
+    alt: "Dr. Michael Njo with dentists and referral partners at the Los Angeles Panel of Experts dinner",
+    caption: "Los Angeles Panel of Experts dinner with dentists and referral partners.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectFit: "contain",
+    names: ["Dr. Michael Njo"],
+  }),
+  createRemoteAsset({
+    id: "panel-dinner-book-signing",
+    src: "/media/IMG_4923.webp",
+    width: 1600,
+    height: 2133,
+    layoutVariant: "portrait",
+    alt: "Dr. Michael Njo autographing Dental Practice Transitions Handbook at the Los Angeles Panel of Experts dinner",
+    caption:
+      "Dr. Michael Njo autographing the Dental Practice Transitions Handbook at the Los Angeles Panel of Experts dinner.",
+    featuredRoutes: ["profile:gallery"],
+    objectFit: "contain",
+    names: ["Dr. Michael Njo"],
+  }),
+  createRemoteAsset({
+    id: "panel-dinner-table",
+    src: "/media/IMG_3346.webp",
+    width: 1600,
+    height: 2133,
+    layoutVariant: "portrait",
+    alt: "Los Angeles Panel of Experts dinner table with dentists and referral partners",
+    caption: "The Los Angeles Panel of Experts dinner table.",
+    featuredRoutes: ["profile:relationships", "profile:gallery"],
+    objectFit: "contain",
+  }),
+  createRemoteAsset({
+    id: "poe-roseville-collage",
+    src: "/media/poe-roseville-aug-2026.webp",
+    width: 864,
+    height: 1821,
+    layoutVariant: "poster",
+    alt: "The Practice Blueprint recap collage from the August 2026 Roseville dinner, including a dinner-table group photo and a five-person portrait",
+    caption: "The Practice Blueprint dinner in Roseville, August 2026.",
+    featuredRoutes: ["profile:gallery"],
+    objectFit: "contain",
+  }),
+  createRemoteAsset({
+    id: "diana-fat-board-of-regents",
+    src: "/media/diana-fat-board-of-regents.webp",
+    width: 1003,
+    height: 1568,
+    layoutVariant: "portrait",
+    alt: "Dr. Michael Njo and Dr. Diana Fat standing together in her Sacramento dental office, beside a navy overlay announcing her appointment to the University of the Pacific Board of Regents",
+    caption:
+      "Dr. Michael Njo with Dr. Diana Fat on her appointment to the University of the Pacific Board of Regents.",
+    featuredRoutes: ["profile:gallery"],
+    objectFit: "contain",
+    names: ["Dr. Michael Njo", "Dr. Diana Fat"],
+  }),
+  createRemoteAsset({
+    id: "bill-mikki-porch",
+    src: "/media/bill-mikki-porch.webp",
+    width: 1199,
+    height: 1600,
+    layoutVariant: "portrait",
+    alt: "Bill and Mikki standing together on a brick walkway in front of a house numbered 257",
+    caption: "Bill and Mikki, from a practice-match celebration.",
+    featuredRoutes: ["profile:gallery"],
+    objectFit: "contain",
+    names: ["Bill", "Mikki"],
+  }),
+  createRemoteAsset({
+    id: "bill-mikki-trio",
+    src: "/media/bill-mikki-trio.webp",
+    width: 1200,
+    height: 1600,
+    layoutVariant: "portrait",
+    alt: "Three people standing outdoors: a man in light blue scrubs holding a yellow folder, a woman in navy scrubs, and a man in a white shirt and blue tie",
+    caption: "Bill, Mikki, and Dr. Michael Njo at the practice-match celebration.",
+    featuredRoutes: ["profile:gallery"],
+    objectFit: "contain",
+    names: ["Bill", "Mikki", "Dr. Michael Njo"],
   }),
 ];
 

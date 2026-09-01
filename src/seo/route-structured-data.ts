@@ -14,6 +14,7 @@ import {
   getHomeStructuredData,
   getMichaelNjoInterviewStructuredData,
   getMichaelNjoStructuredData,
+  getPodcastEpisodeStructuredData,
 } from "@/seo/structured-data";
 
 const WEBSITE_NODE_ID = `${CANONICAL_ORIGIN}/#website`;
@@ -510,6 +511,10 @@ export function buildPageStructuredData(pathname: string): SchemaNode | null {
 
   if (normalizedPath === "/dr-michael-njo-interview") {
     return getMichaelNjoInterviewStructuredData();
+  }
+
+  if (normalizedPath === "/navigating-dental-insurance-podcast") {
+    return getPodcastEpisodeStructuredData();
   }
 
   if (normalizedPath === "/resources") {

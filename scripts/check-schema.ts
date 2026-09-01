@@ -24,6 +24,7 @@ const paths = [
   "/",
   "/michael-njo-dds",
   "/dr-michael-njo-interview",
+  "/navigating-dental-insurance-podcast",
   "/resources",
   "/contact",
   "/contact/success",

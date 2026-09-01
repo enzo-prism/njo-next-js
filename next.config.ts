@@ -1,5 +1,9 @@
 import type { NextConfig } from "next";
-import { CALENDLY_ASSETS_ORIGIN, CALENDLY_MESSAGE_ORIGINS } from "./src/config/site";
+import {
+  APPLE_PODCASTS_EMBED_ORIGIN,
+  CALENDLY_ASSETS_ORIGIN,
+  CALENDLY_MESSAGE_ORIGINS,
+} from "./src/config/site";
 
 const calendlyAppOrigins = CALENDLY_MESSAGE_ORIGINS.join(" ");
 
@@ -14,7 +18,7 @@ const contentSecurityPolicy = [
   `img-src 'self' data: blob: https://res.cloudinary.com https://*.google-analytics.com https://*.hotjar.com https://www.instagram.com https://*.cdninstagram.com ${CALENDLY_ASSETS_ORIGIN}`,
   `font-src 'self' data: ${CALENDLY_ASSETS_ORIGIN}`,
   "media-src 'self' https://res.cloudinary.com",
-  `frame-src https://www.instagram.com https://vars.hotjar.com ${calendlyAppOrigins}`,
+  `frame-src https://www.instagram.com https://vars.hotjar.com ${APPLE_PODCASTS_EMBED_ORIGIN} ${calendlyAppOrigins}`,
   `connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.hotjar.com wss://*.hotjar.com ${CALENDLY_ASSETS_ORIGIN} ${calendlyAppOrigins}`,
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",

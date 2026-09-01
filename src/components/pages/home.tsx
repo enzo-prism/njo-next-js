@@ -57,10 +57,10 @@ const heroSlides: HeroSlide[] = [
   {
     id: "office-strategy",
     src: officeStrategyGroup,
-    alt: "Dr. Michael Njo with healthcare and dental leaders in an office strategy setting.",
-    eyebrow: "Strategy in the room",
+    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Shahi, former Dean of the University of the Pacific School of Dentistry",
+    eyebrow: "Leadership in the room",
     caption:
-      "Cross-functional strategy conversations connecting ownership, leadership, and operational clarity.",
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
     objectPosition: "center center",
     objectFit: "contain",
   },

@@ -16,6 +16,7 @@ export const STATIC_SITE_PATHS = [
   "/",
   "/michael-njo-dds",
   "/dr-michael-njo-interview",
+  "/navigating-dental-insurance-podcast",
   "/testimonials",
   "/resources",
   "/dentalflix",

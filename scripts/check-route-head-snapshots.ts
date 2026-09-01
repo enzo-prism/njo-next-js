@@ -23,6 +23,12 @@ const cases = [
     ogType: "website",
   },
   {
+    path: "/navigating-dental-insurance-podcast",
+    title: "The Right Way to Go Out of Network | Navigating Dental Insurance Podcast",
+    descriptionIncludes: "Navigating Dental Insurance Podcast",
+    ogType: "website",
+  },
+  {
     path: "/testimonials",
     title: "Testimonials for Michael Njo, DDS | Dental Strategies",
     descriptionIncludes: "testimonials",
