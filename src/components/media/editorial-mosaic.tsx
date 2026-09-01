@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { EditorialMediaAsset } from "@/data/media";
+import { PhotoNameOverlay } from "@/components/media/photo-name-overlay";
 import { cn } from "@/lib/utils";
 
 type EditorialMosaicProps = {
@@ -66,53 +67,60 @@ export function EditorialMosaic({
         const useIntrinsicFrame = layoutMode === "columns";
         const content = (
           <>
-            <div
-              className={cn(
-                "relative overflow-hidden rounded-[1.5rem] border border-border/80 bg-slate-100/70 shadow-sm",
-              )}
-              style={
-                !useIntrinsicFrame
-                  ? { aspectRatio: `${asset.width} / ${asset.height}` }
-                  : undefined
-              }
-            >
-              {useIntrinsicFrame ? (
-                <Image
-                  src={asset.src}
-                  alt={asset.alt}
-                  width={asset.width}
-                  height={asset.height}
-                  sizes={asset.sizes}
-                  className={cn(
-                    "h-auto w-full object-contain transition-opacity duration-300",
-                  )}
-                />
-              ) : (
-                <Image
-                  src={asset.src}
-                  alt={asset.alt}
-                  fill
-                  sizes={asset.sizes}
-                  className={cn(
-                    asset.objectFit === "cover"
-                      ? "object-cover"
-                      : "object-contain",
-                    "transition-opacity duration-300",
-                  )}
-                  style={{ objectPosition: asset.objectPosition ?? "center" }}
-                />
-              )}
-              {interactive ? (
-                <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-                  Open
-                </span>
-              ) : null}
+            <div className="overflow-hidden rounded-[1.5rem] border border-border/80 bg-slate-100/70 shadow-sm">
+              <div
+                className="relative"
+                style={
+                  !useIntrinsicFrame
+                    ? { aspectRatio: `${asset.width} / ${asset.height}` }
+                    : undefined
+                }
+              >
+                {useIntrinsicFrame ? (
+                  <Image
+                    src={asset.src}
+                    alt={asset.alt}
+                    width={asset.width}
+                    height={asset.height}
+                    sizes={asset.sizes}
+                    className={cn(
+                      "h-auto w-full object-contain transition-opacity duration-300",
+                    )}
+                  />
+                ) : (
+                  <Image
+                    src={asset.src}
+                    alt={asset.alt}
+                    fill
+                    sizes={asset.sizes}
+                    className={cn(
+                      asset.objectFit === "cover"
+                        ? "object-cover"
+                        : "object-contain",
+                      "transition-opacity duration-300",
+                    )}
+                    style={{ objectPosition: asset.objectPosition ?? "center" }}
+                  />
+                )}
+                {interactive ? (
+                  <span className="pointer-events-none absolute right-3 top-3 rounded-full bg-black/70 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                    Open
+                  </span>
+                ) : null}
+              </div>
+              <PhotoNameOverlay names={asset.names} />
             </div>
             {captionMode === "below" && asset.caption ? (
               <div className="space-y-1 px-1">
-                <p className="text-sm font-medium text-foreground">
-                  {asset.alt}
-                </p>
+                {asset.names?.length ? (
+                  <p className="text-sm font-semibold text-foreground">
+                    {asset.names.join(" · ")}
+                  </p>
+                ) : (
+                  <p className="text-sm font-medium text-foreground">
+                    {asset.alt}
+                  </p>
+                )}
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {asset.caption}
                 </p>

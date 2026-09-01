@@ -1,5 +1,6 @@
 import { getUpcomingEventPrograms } from "@/data/events";
 import { interviewVideo as interviewVideoAssets } from "@/data/interview-video";
+import { boomCloudPodcastEpisode, PODCAST_PATH } from "@/data/podcast-episode";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
@@ -457,6 +458,61 @@ export const getMichaelNjoInterviewStructuredData = () => {
   return {
     "@context": "https://schema.org",
     "@graph": graph,
+  };
+};
+
+export const getPodcastEpisodeStructuredData = () => {
+  const episodeUrl = `${siteMetadata.siteUrl}${PODCAST_PATH}`;
+  const breadcrumb = buildBreadcrumb([
+    { name: "Home", item: siteMetadata.siteUrl },
+    { name: boomCloudPodcastEpisode.title, item: episodeUrl },
+  ]);
+
+  const episode = {
+    "@type": "PodcastEpisode",
+    "@id": `${episodeUrl}#episode`,
+    name: boomCloudPodcastEpisode.title,
+    description:
+      "Dr. Michael Njo joins Ben Tuinei and Jordon Comstock on The Navigating Dental Insurance Podcast to discuss going out of network.",
+    url: episodeUrl,
+    datePublished: boomCloudPodcastEpisode.publishedAt,
+    duration: boomCloudPodcastEpisode.durationIso,
+    partOfSeries: {
+      "@type": "PodcastSeries",
+      name: boomCloudPodcastEpisode.showTitle,
+      url: boomCloudPodcastEpisode.appleShowUrl,
+    },
+    associatedMedia: {
+      "@type": "MediaObject",
+      embedUrl: boomCloudPodcastEpisode.appleEmbedUrl,
+      url: boomCloudPodcastEpisode.appleEpisodeUrl,
+    },
+    sameAs: [
+      boomCloudPodcastEpisode.appleEpisodeUrl,
+      boomCloudPodcastEpisode.castboxUrl,
+    ],
+    creator: {
+      "@id": personProfile.id,
+    },
+  };
+
+  const page: SchemaNode = {
+    ...buildWebPage({
+      id: `${episodeUrl}#webpage`,
+      name: boomCloudPodcastEpisode.title,
+      description:
+        "Hear Dr. Michael Njo as a guest on The Navigating Dental Insurance Podcast with Ben Tuinei and Jordon Comstock.",
+      url: episodeUrl,
+      breadcrumbId: breadcrumb["@id"] as string,
+    }),
+    mainEntity: {
+      "@id": episode["@id"] as string,
+    },
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [...getCoreGraphNodes(), page, episode, breadcrumb],
   };
 };
 

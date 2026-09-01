@@ -170,6 +170,29 @@ async function main() {
     }
   }
 
+  if (!mediaSource.includes("Dr. Allen Budenz")) {
+    errors.push("The tuxedo-and-medallion portrait must name Dr. Allen Budenz.");
+  }
+  if (mediaSource.includes("Allan Budenz") || mediaSource.includes("Alan Budenz")) {
+    errors.push("Do not misspell Dr. Allen Budenz.");
+  }
+  if (
+    !mediaSource.includes(
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
+    )
+  ) {
+    errors.push("The office leadership photo must use Mike's AI-startup caption and name Nader Shahi.");
+  }
+  if (mediaSource.toLowerCase().includes("openai")) {
+    errors.push("Do not name the AI startup.");
+  }
+  if (!mediaSource.includes("Los Angeles Panel of Experts dinner")) {
+    errors.push("Recent LA Panel of Experts dinner photos belong in the editorial gallery.");
+  }
+  if (!mediaSource.includes("The Practice Blueprint dinner in Roseville, August 2026.")) {
+    errors.push("The Roseville Practice Blueprint dinner collage belongs in the editorial gallery.");
+  }
+
   if (errors.length > 0) {
     console.error("Media framing checks failed:\n");
     errors.forEach((error) => console.error(`- ${error}`));

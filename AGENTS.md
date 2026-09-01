@@ -75,12 +75,18 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
   - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
+  - confirmed names sit on a bar under the photo (`names` + `PhotoNameOverlay`); tuxedo/medallion names Dr. Allen Budenz; office candid uses the AI-startup caption and names Nader Shahi without naming the startup
 - `src/components/media/editorial-mosaic.tsx`
   - grid tiles derive their aspect ratio from each asset's display dimensions and preserve the full image by default; `layoutMode="columns"` uses intrinsic width/height
 - `src/components/media/hero-slideshow.tsx`
   - mobile frame is `aspect-[4/3]`; slides preserve the complete image by default and do not zoom-crop during transitions
+  - caption text sits in a bar under the image so overlay copy does not cover faces
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
+- `src/data/podcast-episode.ts`
+  - Official Apple Podcasts embed and listings for `/navigating-dental-insurance-podcast`
+- `src/data/resource-articles.ts`
+  - includes `/resources/second-book` (forthcoming; no invented title or date)
 - `src/components/pages/michael-njo-dds.tsx`
   - News tab copy, the Diana Fat Board of Regents congratulations (`public/media/diana-fat-board-of-regents.webp`), The Practice Blueprint dinner recap (`public/media/poe-roseville-aug-2026.webp`), Another perfect match photos (`public/media/bill-mikki-porch.webp`, `bill-mikki-trio.webp`), Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
 - `src/data/events.ts`

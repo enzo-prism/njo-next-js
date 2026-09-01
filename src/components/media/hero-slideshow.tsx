@@ -90,7 +90,6 @@ export function HeroSlideshow({
     <div
       className={cn(
         "group relative isolate flex h-full w-full flex-col overflow-hidden bg-slate-950",
-        "aspect-[4/3] md:aspect-auto md:min-h-[520px] lg:min-h-[420px] xl:min-h-[480px]",
         className,
       )}
       role="region"
@@ -102,7 +101,7 @@ export function HeroSlideshow({
       onBlur={() => setIsHoverPaused(false)}
       onKeyDown={handleKeyDown}
     >
-      <div className="absolute inset-0">
+      <div className="relative aspect-[4/3] w-full bg-slate-950 md:min-h-[360px] lg:min-h-[320px] xl:min-h-[360px]">
         {slides.map((slide, i) => {
           const isActive = i === index;
           return (
@@ -132,70 +131,67 @@ export function HeroSlideshow({
             </div>
           );
         })}
-      </div>
 
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-white/15">
-        {!isPaused && slides.length > 1 ? (
-          <div
-            key={`progress-${index}`}
-            className="hero-progress-bar h-full bg-white/85"
-            style={progressStyle}
-          />
-        ) : null}
-      </div>
-
-      <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
-        <div className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/90 backdrop-blur">
-          <span className="tabular-nums">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <span className="mx-1 text-white/40">/</span>
-          <span className="tabular-nums text-white/60">
-            {String(slides.length).padStart(2, "0")}
-          </span>
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-white/15">
+          {!isPaused && slides.length > 1 ? (
+            <div
+              key={`progress-${index}`}
+              className="hero-progress-bar h-full bg-white/85"
+              style={progressStyle}
+            />
+          ) : null}
         </div>
-        {slides.length > 1 && !reducedMotion ? (
-          <button
-            type="button"
-            onClick={() => setIsUserPaused((prev) => !prev)}
-            aria-label={isUserPaused ? "Resume gallery" : "Pause gallery"}
-            aria-pressed={isUserPaused}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/90 backdrop-blur transition-colors duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            {isUserPaused ? (
-              <Play className="h-3.5 w-3.5" />
-            ) : (
-              <Pause className="h-3.5 w-3.5" />
-            )}
-          </button>
+
+        <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+          <div className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-white/90 backdrop-blur">
+            <span className="tabular-nums">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="mx-1 text-white/40">/</span>
+            <span className="tabular-nums text-white/60">
+              {String(slides.length).padStart(2, "0")}
+            </span>
+          </div>
+          {slides.length > 1 && !reducedMotion ? (
+            <button
+              type="button"
+              onClick={() => setIsUserPaused((prev) => !prev)}
+              aria-label={isUserPaused ? "Resume gallery" : "Pause gallery"}
+              aria-pressed={isUserPaused}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white/90 backdrop-blur transition-colors duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              {isUserPaused ? (
+                <Play className="h-3.5 w-3.5" />
+              ) : (
+                <Pause className="h-3.5 w-3.5" />
+              )}
+            </button>
+          ) : null}
+        </div>
+
+        {slides.length > 1 ? (
+          <>
+            <button
+              type="button"
+              onClick={goPrev}
+              aria-label="Previous slide"
+              className="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-2 text-white backdrop-blur transition-all duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:flex md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              aria-label="Next slide"
+              className="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-2 text-white backdrop-blur transition-all duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:flex md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </>
         ) : null}
       </div>
 
-      {slides.length > 1 ? (
-        <>
-          <button
-            type="button"
-            onClick={goPrev}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-2 text-white backdrop-blur transition-all duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:flex md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-white/20 bg-black/30 p-2 text-white backdrop-blur transition-all duration-200 hover:bg-black/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:flex md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </>
-      ) : null}
-
-      <div className="relative z-10 mt-auto p-5 sm:p-7 md:p-8">
+      <div className="border-t border-white/10 bg-slate-950 px-5 py-4 sm:px-6 sm:py-5">
         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/75">
           {active.eyebrow}
         </p>

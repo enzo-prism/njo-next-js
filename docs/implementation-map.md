@@ -97,6 +97,7 @@ Today that list includes:
 - `/`
 - `/michael-njo-dds`
 - `/dr-michael-njo-interview`
+- `/navigating-dental-insurance-podcast`
 - `/testimonials`
 - `/resources`
 - `/dentalflix`
@@ -220,7 +221,9 @@ If event details change, check:
 
 Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals live in `src/assets/media/`. News-tab assets in `public/media/` include the Diana Fat Board of Regents congratulations (`diana-fat-board-of-regents.webp`, `#diana-fat-board-of-regents`), The Practice Blueprint dinner recap (`poe-roseville-aug-2026.webp`, `#practice-blueprint-roseville-aug-2026`), the Another perfect match photos (`bill-mikki-porch.webp`, `bill-mikki-trio.webp`, `#another-perfect-match`), the Beyond the Chair flyer (`promotional-flyer-dental-strategies.webp`, `#beyond-the-chair-anaheim`), and Panel of Experts dinner photos. The Diana Fat Board of Regents congratulations renders first in the News tab of `src/components/pages/michael-njo-dds.tsx`.
 
-The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file.
+The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file. The BoomCloud guest episode on The Navigating Dental Insurance Podcast is a separate page at `/navigating-dental-insurance-podcast`, with official Apple Podcasts embed constants in `src/data/podcast-episode.ts`. Do not merge it into the Farokh Jiveh interview route.
+
+Profile gallery captions and confirmed names live on `EditorialMediaAsset` in `src/data/media.ts`. Name bars render under the photo (`PhotoNameOverlay`) so faces stay uncovered. The tuxedo-and-medallion portrait names Dr. Allen Budenz. The office leadership photo uses Mike's AI-startup caption and names Nader Shahi without naming the startup. Recent LA and Roseville dinner photos belong in the profile gallery; do not invent SF seminar photos that do not exist. The forthcoming second book is `/resources/second-book` and must not invent a title or date.
 
 ### Shared lead-intake options
 
@@ -272,6 +275,7 @@ Current route categories with JSON-LD:
 - home
 - Michael Njo profile page
 - interview page
+- Navigating Dental Insurance Podcast guest episode
 - resources index
 - resource detail pages
 - testimonials index

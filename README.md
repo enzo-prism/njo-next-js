@@ -53,11 +53,13 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/`
 - `/michael-njo-dds`
 - `/dr-michael-njo-interview`
+- `/navigating-dental-insurance-podcast`
 - `/testimonials`
 - `/testimonials/[slug]` (generated from testimonial data)
 - `/resources`
 - `/resources/[slug]` (generated from resource article data)
   - `/resources/dental-exit-blueprint` (featured book-launch resource)
+  - `/resources/second-book` (forthcoming second book; title not announced)
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`

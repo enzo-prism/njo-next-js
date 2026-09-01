@@ -9,13 +9,11 @@ import { Section } from "@/components/layout/section";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
 import { CONTACT_PATH } from "@/config/site";
-import { testimonialPages } from "@/data/testimonials";
+import { getFeaturedNamedTestimonials, testimonialPages } from "@/data/testimonials";
 
 type SortMode = "newest" | "alpha";
 
-const featuredTestimonials = [...testimonialPages]
-  .sort((a, b) => b.excerpt.length - a.excerpt.length)
-  .slice(0, 2);
+const featuredTestimonials = getFeaturedNamedTestimonials().slice(0, 8);
 
 const TESTIMONIAL_PAGE_SIZE = 12;
 
@@ -113,7 +111,7 @@ export default function TestimonialsPage() {
       {/* Featured pull-quotes */}
       {!query ? (
         <Section tone="surface" spacing="compact" aria-label="Featured testimonials">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-2">
             {featuredTestimonials.map((testimonial) => (
               <figure key={`featured-${testimonial.slug}`} className="flex flex-col gap-4 rounded-3xl border border-border/70 bg-card p-7 shadow-sm">
                 <Quote className="h-8 w-8 text-brand/25" aria-hidden="true" />

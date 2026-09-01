@@ -165,6 +165,11 @@ export default function DrMichaelNjoInterview() {
                   Contact Dr. Njo
                 </Link>
               </Button>
+              <Button asChild variant="ghost">
+                <Link href="/navigating-dental-insurance-podcast">
+                  Hear the BoomCloud podcast episode
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
