@@ -453,7 +453,7 @@ export default function Home({
 
       {/* Upcoming events */}
       {upcomingEventPrograms.length > 0 ? (
-        <Section>
+        <Section id="upcoming-events">
           <SectionHeading
             eyebrow="Speaking & events"
             title="Upcoming educational events"
