@@ -59,8 +59,6 @@ const heroSlides: HeroSlide[] = [
     src: officeStrategyGroup,
     alt: "Candid office photo with an AI startup founder and board of directors, including Nader Nadershahi, former Dean of the University of the Pacific School of Dentistry",
     eyebrow: "Leadership in the room",
-    caption:
-      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     objectPosition: "center center",
     objectFit: "contain",
   },
@@ -69,8 +67,6 @@ const heroSlides: HeroSlide[] = [
     src: gprResidencyPresentationImage.src,
     alt: gprResidencyPresentationImage.alt,
     eyebrow: "Teaching the next generation",
-    caption:
-      "Presenting to General Practice Residents holding copies of the Dental Practice Transitions Handbook.",
     objectPosition: "center center",
     objectFit: "contain",
   },
@@ -79,8 +75,6 @@ const heroSlides: HeroSlide[] = [
     src: handbookCover,
     alt: "Cover of Dental Practice Transitions Handbook by Michael A. Njo, DDS.",
     eyebrow: "Published author",
-    caption:
-      "Author of the Dental Practice Transitions Handbook — the practical playbook for buying, selling, and structuring transitions.",
     objectPosition: "center center",
     objectFit: "contain",
   },
@@ -89,7 +83,6 @@ const heroSlides: HeroSlide[] = [
     src: dugoniCollaborationImage.src,
     alt: dugoniCollaborationImage.alt,
     eyebrow: "University collaboration",
-    caption: dugoniCollaborationImage.caption ?? "",
     objectPosition: "center top",
     objectFit: "contain",
   },
@@ -98,8 +91,6 @@ const heroSlides: HeroSlide[] = [
     src: dinnerStrategyGroup,
     alt: "Dr. Michael Njo with peers at an evening strategy dinner.",
     eyebrow: "Peer dinner conversations",
-    caption:
-      "Decades of trusted peer relationships — the network behind every recommendation.",
     objectPosition: "center center",
     objectFit: "contain",
   },
@@ -108,8 +99,6 @@ const heroSlides: HeroSlide[] = [
     src: "https://res.cloudinary.com/dhqpqfw6w/image/upload/v1767707725/Leadership-retreat_peohe1.webp",
     alt: "Leadership retreat with Dr. Njo and peers.",
     eyebrow: "Leadership retreat",
-    caption:
-      "On the ground with peers from across the profession — the leadership side of the consulting work.",
     objectPosition: "center center",
     objectFit: "contain",
   },
