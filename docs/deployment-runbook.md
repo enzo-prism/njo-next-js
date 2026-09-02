@@ -73,6 +73,7 @@ vercel curl /dr-michael-neal-interview --deployment <preview-url> -- --include
 Validate on preview URL:
 
 - Main routes return expected content.
+- Photos on `/`, `/michael-njo-dds`, `/resources`, `/dr-michael-njo-interview`, and `/blog/another-perfect-match` have no caption or name-bar text under the image (alt text only; testimonial author names stay).
 - Unknown route returns custom 404.
 - Legacy redirects resolve correctly.
 - `robots.txt`, `sitemap.xml`, and `llms.txt` are accessible.
@@ -125,6 +126,7 @@ If custom domain cutover has not been completed yet:
    - `http` -> `https`
 5. Run post-cutover smoke tests on canonical domain:
    - Route rendering
+   - Photos on home, profile, resources, and community posts have no caption or name-bar text under the image
    - Redirects
    - Forms
    - SEO endpoints
