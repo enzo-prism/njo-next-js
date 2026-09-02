@@ -74,10 +74,12 @@ export const dugoniCollaborationImage = createRemoteAsset({
   height: 2170,
   layoutVariant: "portrait",
   sizes: "(max-width: 768px) 100vw, 420px",
-  alt: "Dr. Michael Njo working with the University of the Pacific Arthur A Dugoni School of Dentistry",
-  caption: "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry.",
+  alt: "Dr. Michael Njo working with the University of the Pacific Arthur A Dugoni School of Dentistry, with Dean Nadershahi and Interim Dean Chavez",
+  caption:
+    "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry, with Dean Nadershahi and Interim Dean Chavez.",
   featuredRoutes: ["profile:relationships", "profile:gallery"],
   objectPosition: "center top",
+  names: ["Dr. Michael Njo", "Dean Nadershahi", "Interim Dean Chavez"],
 });
 
 export const gprResidencyPresentationImage = createRemoteAsset({
@@ -98,9 +100,9 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     id: "office-strategy-group",
     src: officeStrategyGroup,
     layoutVariant: "landscape",
-    alt: "Candid office photo of Dr. Michael Njo with an AI startup founder and board of directors, including Nader Nadershahi, former Dean of the University of the Pacific School of Dentistry, and Interim Dean Dr. Chavez",
+    alt: "Candid office photo of Dr. Michael Njo with an AI startup founder and board of directors, including Nader Nadershahi, former Dean of the University of the Pacific School of Dentistry",
     caption:
-      "On the board of an AI startup (in stealth mode): with the founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi, and Interim Dean Dr. Chavez.",
+      "On the board of an AI startup (in stealth mode): with the founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     featuredRoutes: ["home:leadership", "profile:relationships", "profile:gallery"],
     objectPosition: "center center",
     objectFit: "contain",
@@ -108,7 +110,6 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     names: [
       "Dr. Michael Njo",
       "Nader Nadershahi, former Dean, University of the Pacific School of Dentistry",
-      "Dr. Chavez, Interim Dean",
     ],
   }),
   createLocalAsset({
