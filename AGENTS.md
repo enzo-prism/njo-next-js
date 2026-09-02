@@ -115,7 +115,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Shared trimming, maximum lengths, HTTP(S) URL normalization, privacy acknowledgment, honeypot, and repeat-submit safeguards
 - `scripts/*`
   - parity and SEO validation scripts
-  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, and checks that galleries and slides cannot re-crop during interaction
+  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, and fails if photo captions, name bars, or hero caption/eyebrow copy are reintroduced in the UI
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
@@ -188,6 +188,7 @@ Check these hotspots first when your work touches:
 
 ## Common Pitfalls
 
+- Do not reintroduce photo captions, figcaptions, name bars, or hero caption/eyebrow copy under images. Photos stand alone; `npm run check:media` enforces this.
 - Do not hardcode Calendly booking links. Import `BOOKING_URL` / `DSO_PRICING_BOOKING_URL` and use `BookingButton`; `check:contact-ctas` blocks hardcoded booking links and missing booking CTAs in the header, footer, and contact page.
 - Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
