@@ -304,9 +304,6 @@ export default function MichaelNjoDDS({
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    {gprResidencyPresentationImage.caption}
-                  </p>
                   <Button asChild variant="outline">
                     <Link href="/resources">Explore resources</Link>
                   </Button>
@@ -359,7 +356,6 @@ export default function MichaelNjoDDS({
                   <div className="bg-surface p-4 md:p-6">
                     <EditorialMosaic
                       assets={profileRelationshipImages}
-                      captionMode="below"
                     />
                   </div>
                 </div>
@@ -379,7 +375,6 @@ export default function MichaelNjoDDS({
               </div>
               <EditorialMosaic
                 assets={profileGalleryImages}
-                captionMode="hidden"
                 interactive
                 layoutMode="columns"
                 onSelect={(image) => setSelectedImage(image)}
@@ -409,28 +404,12 @@ export default function MichaelNjoDDS({
                         alt={selectedImage.alt}
                         fill
                         sizes="100vw"
-                        className="rounded-t-lg object-contain"
+                        className="rounded-lg object-contain"
                         style={{
                           objectPosition:
                             selectedImage.objectPosition ?? "center",
                         }}
                       />
-                    </div>
-                    <div className="space-y-2 px-6 pb-6">
-                      {selectedImage.names?.length ? (
-                        <p className="text-base font-semibold">
-                          {selectedImage.names.join(" · ")}
-                        </p>
-                      ) : (
-                        <p className="text-base font-semibold">
-                          {selectedImage.alt}
-                        </p>
-                      )}
-                      {selectedImage.caption ? (
-                        <p className="text-sm leading-relaxed text-white/80">
-                          {selectedImage.caption}
-                        </p>
-                      ) : null}
                     </div>
                   </>
                 ) : null}
@@ -796,7 +775,6 @@ export default function MichaelNjoDDS({
                   <div className="bg-surface p-4 md:p-6">
                     <EditorialMosaic
                       assets={profileNewsImages}
-                      captionMode="below"
                     />
                   </div>
                 </div>
