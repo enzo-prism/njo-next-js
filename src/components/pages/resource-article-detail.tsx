@@ -92,7 +92,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
               {article.keyTakeaways.map((takeaway) => (
                 <div
                   key={takeaway}
-                  className="rounded-xl border border-amber-200/70 bg-background px-4 py-3 text-sm leading-relaxed text-slate-700"
+                  className="rounded-xl border border-border/80 bg-background px-4 py-3 text-sm leading-relaxed text-slate-700"
                 >
                   {takeaway}
                 </div>
@@ -117,11 +117,6 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
                     className="h-auto w-full rounded-2xl object-contain"
                     priority
                   />
-                  {article.heroImage.caption ? (
-                    <figcaption className="mt-3 text-center text-sm text-muted-foreground">
-                      {article.heroImage.caption}
-                    </figcaption>
-                  ) : null}
                 </figure>
               </CardContent>
             </Card>
