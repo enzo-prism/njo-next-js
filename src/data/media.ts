@@ -98,14 +98,14 @@ const suppliedMediaAssets: EditorialMediaAsset[] = [
     id: "office-strategy-group",
     src: officeStrategyGroup,
     layoutVariant: "landscape",
-    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Shahi, former Dean of the University of the Pacific School of Dentistry",
+    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Nadershahi, former Dean of the University of the Pacific School of Dentistry",
     caption:
-      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     featuredRoutes: ["home:leadership", "profile:relationships", "profile:gallery"],
     objectPosition: "center center",
     objectFit: "contain",
     priority: true,
-    names: ["Nader Shahi, former Dean, University of the Pacific School of Dentistry"],
+    names: ["Nader Nadershahi, former Dean, University of the Pacific School of Dentistry"],
   }),
   createLocalAsset({
     id: "black-tie-medal-portrait",

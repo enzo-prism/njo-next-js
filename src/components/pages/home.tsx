@@ -57,10 +57,10 @@ const heroSlides: HeroSlide[] = [
   {
     id: "office-strategy",
     src: officeStrategyGroup,
-    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Shahi, former Dean of the University of the Pacific School of Dentistry",
+    alt: "Candid office photo with an AI startup founder and board of directors, including Nader Nadershahi, former Dean of the University of the Pacific School of Dentistry",
     eyebrow: "Leadership in the room",
     caption:
-      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     objectPosition: "center center",
     objectFit: "contain",
   },

@@ -178,10 +178,15 @@ async function main() {
   }
   if (
     !mediaSource.includes(
-      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Shahi.",
+      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     )
   ) {
-    errors.push("The office leadership photo must use Mike's AI-startup caption and name Nader Shahi.");
+    errors.push(
+      "The office leadership photo must use Mike's AI-startup caption and name Nader Nadershahi.",
+    );
+  }
+  if (/\bNader Shahi\b/.test(mediaSource)) {
+    errors.push("Spell the former Pacific dean as Nader Nadershahi, not Nader Shahi.");
   }
   if (mediaSource.toLowerCase().includes("openai")) {
     errors.push("Do not name the AI startup.");
