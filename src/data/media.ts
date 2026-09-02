@@ -218,6 +218,7 @@ const legacyGalleryImages: EditorialMediaAsset[] = [
     caption: "Dr. Michael Njo in action guiding dental professionals.",
     featuredRoutes: ["profile:news", "profile:gallery"],
   }),
+  dugoniCollaborationImage,
   gprResidencyPresentationImage,
   createRemoteAsset({
     id: "leadership-retreat",

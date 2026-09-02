@@ -89,8 +89,7 @@ const heroSlides: HeroSlide[] = [
     src: dugoniCollaborationImage.src,
     alt: dugoniCollaborationImage.alt,
     eyebrow: "University collaboration",
-    caption:
-      "Working closely with the University of the Pacific Arthur A. Dugoni School of Dentistry.",
+    caption: dugoniCollaborationImage.caption ?? "",
     objectPosition: "center top",
     objectFit: "contain",
   },
