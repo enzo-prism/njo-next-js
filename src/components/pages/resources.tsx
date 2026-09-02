@@ -23,7 +23,11 @@ import {
   formatArticleDate,
   resourceArticles,
 } from "@/data/resource-articles";
-import { resourceBookFeatureImage, resourceBookInsetImage } from "@/data/media";
+import {
+  resourceBookFeatureImage,
+  resourceBookInsetImage,
+  secondEditionAnnouncementImage,
+} from "@/data/media";
 import { resources, bookReviews } from "@/seo/structured-data";
 import { CONTACT_PATH } from "@/config/site";
 import { Container } from "@/components/layout/container";
@@ -57,6 +61,43 @@ export default function ResourcesPage() {
           healthcare ownership, transitions, and operations leadership.
         </p>
       </section>
+
+      {secondBookArticle ? (
+        <Card className="overflow-hidden">
+          <div className="grid gap-0 lg:grid-cols-[0.8fr_1.2fr]">
+            <div className="bg-slate-100/70 p-4">
+              <figure className="overflow-hidden rounded-[1.5rem] border border-border bg-background shadow-sm">
+                <Image
+                  src={secondEditionAnnouncementImage.src}
+                  alt={secondEditionAnnouncementImage.alt}
+                  width={secondEditionAnnouncementImage.width}
+                  height={secondEditionAnnouncementImage.height}
+                  sizes={secondEditionAnnouncementImage.sizes}
+                  className="h-auto w-full object-contain"
+                  priority
+                />
+              </figure>
+            </div>
+            <div className="space-y-5 p-6">
+              <CardHeader className="space-y-3 px-0 pt-0">
+                <Badge variant="secondary" className="w-fit uppercase tracking-wide">
+                  Upcoming book · Coming soon
+                </Badge>
+                <CardTitle className="text-2xl">{secondBookArticle.title}</CardTitle>
+                <CardDescription className="max-w-2xl text-sm leading-relaxed">
+                  {secondBookArticle.excerpt}
+                </CardDescription>
+              </CardHeader>
+              <Button asChild variant="outline">
+                <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
+                  Preview the second edition
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </Card>
+      ) : null}
 
       {bookLaunchArticle ? (
         <BookLaunchFeature article={bookLaunchArticle} priority />
@@ -128,7 +169,7 @@ export default function ResourcesPage() {
                       className="inline-flex w-full justify-center sm:w-auto"
                     >
                       <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
-                        Second book (coming)
+                        Second edition (coming soon)
                       </Link>
                     </Button>
                   ) : null}
@@ -195,28 +236,6 @@ export default function ResourcesPage() {
           </Card>
         )}
       </section>
-
-      {secondBookArticle ? (
-        <Card className="overflow-hidden border-dashed">
-          <CardHeader className="space-y-3">
-            <Badge variant="secondary" className="w-fit uppercase tracking-wide">
-              Forthcoming
-            </Badge>
-            <CardTitle className="text-2xl">{secondBookArticle.title}</CardTitle>
-            <CardDescription className="max-w-2xl text-sm leading-relaxed">
-              {secondBookArticle.excerpt}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild variant="outline">
-              <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
-                See the forthcoming book page
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ) : null}
 
       <section className="space-y-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

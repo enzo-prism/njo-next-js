@@ -29,6 +29,14 @@ export type ResourceArticleBookLaunch = {
   socialImagePath: string;
 };
 
+export type ResourceArticleHeroImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption?: string;
+};
+
 export type ResourceArticle = {
   slug: string;
   title: string;
@@ -48,6 +56,7 @@ export type ResourceArticle = {
   closing: string[];
   relatedLinks: ResourceArticleLink[];
   bookLaunch?: ResourceArticleBookLaunch;
+  heroImage?: ResourceArticleHeroImage;
 };
 
 const RESOURCE_ARTICLES_BASE_PATH = "/resources";
@@ -188,59 +197,79 @@ export const resourceArticles: ResourceArticle[] = [
   },
   {
     slug: "second-book",
-    title: "Second Book (Coming)",
-    metaTitle: "Second Book (Coming) | Michael A. Njo, DDS",
+    title: "Dental Practice Transitions Handbook, Second Edition (Coming Soon)",
+    metaTitle: "Dental Practice Transitions Handbook, Second Edition | Michael A. Njo, DDS",
     description:
-      "Dr. Michael Njo is working on a second book. The title has not been announced. See the published Dental Practice Transitions Handbook in the meantime.",
+      "Coming soon: the expanded second edition of Dr. Michael Njo's Dental Practice Transitions Handbook, with a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
     excerpt:
-      "A forthcoming second book from Dr. Njo. The title has not been announced yet. The published handbook remains the current resource.",
-    category: "Forthcoming book",
+      "Dr. Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: a new foreword by Dr. Glenn Vo, new advisor material, and new appendices. Coming soon.",
+    category: "Upcoming book",
     publishedAt: "2026-09-01T00:00:00Z",
-    updatedAt: "2026-09-01T00:00:00Z",
+    updatedAt: "2026-09-02T00:00:00Z",
+    heroImage: {
+      src: "/media/handbook-second-edition-coming-soon.webp",
+      alt: "Coming soon announcement for the second edition of Dental Practice Transitions Handbook by Michael A. Njo, DDS, Founder of Practice Transitions Institute, with a foreword by Dr. Glenn Vo",
+      width: 1120,
+      height: 1400,
+      caption: "Strategic transitions. Stronger futures. Lasting legacies.",
+    },
     readTimeMinutes: 2,
-    primaryKeyword: "Dr. Michael Njo second book",
+    primaryKeyword: "Dental Practice Transitions Handbook second edition",
     secondaryKeywords: [
       "Dental Practice Transitions Handbook",
       "dental practice transition book",
-      "forthcoming dental book",
+      "Dr. Michael Njo second book",
+      "Dr. Glenn Vo foreword",
     ],
     keyTakeaways: [
-      "Dr. Michael Njo is working on a second book.",
-      "The title, cover, and publication date have not been announced.",
-      "Dental Practice Transitions Handbook remains the published resource to start with.",
+      "Dr. Michael Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates.",
+      "The second edition adds a new foreword by Dr. Glenn Vo, new advisor material, and new appendices in a larger 6 x 9 format.",
+      "A release date has not been announced. The published first edition remains the current resource.",
     ],
     intro: [
-      "Dr. Michael Njo is working on a second book. The title has not been announced yet. The published handbook remains the current resource.",
+      "Dr. Michael Njo is completing a substantially expanded and rewritten second edition of the Dental Practice Transitions Handbook. The title and subtitle stay the same; the content grows.",
     ],
     sections: [
       {
-        id: "what-is-announced",
-        title: "A dedicated page for the next book",
+        id: "whats-new",
+        title: "What the second edition adds",
         paragraphs: [
-          "This page will be updated when a title and publication details are ready. We are not inventing a name, cover, or release date.",
-          "Until then, start with Dental Practice Transitions Handbook — the same book Dr. Njo signs at Panel of Experts dinners.",
+          "The second edition is a 6 x 9 expansion of the handbook dentists already use to plan, buy, sell, and structure transitions.",
+        ],
+        bullets: [
+          "A new foreword by Dr. Glenn Vo, founder of Nifty Thrifty Dentists and Editor-in-Chief of Dental Lifestyles Magazine.",
+          "New advisor material from featured advisors who work alongside dentists on the financial, legal, and operational side of a transition.",
+          "New appendices with practical checklists and reference material for the current market.",
+        ],
+      },
+      {
+        id: "until-release",
+        title: "Until the release",
+        paragraphs: [
+          "A release date has not been announced. Until then, start with the published first edition of Dental Practice Transitions Handbook, the same book Dr. Njo signs at Panel of Experts dinners and hands to General Practice Residency residents.",
         ],
       },
     ],
     faq: [
       {
-        question: "What is the title of Dr. Njo's second book?",
-        answer: "The title has not been announced yet.",
+        question: "Is the second book a new title?",
+        answer:
+          "No. It is the second edition of the Dental Practice Transitions Handbook, substantially expanded and rewritten, with a new foreword, new advisor material, and new appendices.",
       },
       {
-        question: "When will the second book be published?",
+        question: "When will the second edition be published?",
         answer:
-          "A publication date has not been announced. This page will be updated when details are ready.",
+          "A publication date has not been announced. This page will be updated when pre-order or release details are ready.",
       },
     ],
     closing: [
-      "If you want to be notified when the next book is announced, contact Dr. Njo or start with the published handbook.",
+      "If you want to be notified when the second edition is available, contact Dr. Njo. In the meantime, the first edition remains the resource to start with.",
     ],
     relatedLinks: [
       {
         href: "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
-        label: "Read Dental Practice Transitions Handbook on Amazon",
-        description: "The published first book, while the second book is forthcoming.",
+        label: "Read the first edition on Amazon",
+        description: "The published first edition of Dental Practice Transitions Handbook.",
       },
       {
         href: "/resources",
@@ -249,8 +278,8 @@ export const resourceArticles: ResourceArticle[] = [
       },
       {
         href: "/contact",
-        label: "Ask about the next book",
-        description: "Start a conversation with Dr. Njo about the forthcoming book or a transition question.",
+        label: "Ask about the second edition",
+        description: "Start a conversation with Dr. Njo about the second edition or a transition question.",
       },
     ],
   },

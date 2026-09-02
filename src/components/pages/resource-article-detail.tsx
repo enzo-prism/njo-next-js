@@ -1,4 +1,5 @@
 import { ArrowRight, BookOpen, CalendarDays, Clock3 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
@@ -103,6 +104,28 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-8">
+          {article.heroImage ? (
+            <Card className="overflow-hidden border-border/80 bg-slate-50">
+              <CardContent className="p-4 sm:p-6">
+                <figure className="mx-auto max-w-md">
+                  <Image
+                    src={article.heroImage.src}
+                    alt={article.heroImage.alt}
+                    width={article.heroImage.width}
+                    height={article.heroImage.height}
+                    sizes="(max-width: 768px) 100vw, 448px"
+                    className="h-auto w-full rounded-2xl object-contain"
+                    priority
+                  />
+                  {article.heroImage.caption ? (
+                    <figcaption className="mt-3 text-center text-sm text-muted-foreground">
+                      {article.heroImage.caption}
+                    </figcaption>
+                  ) : null}
+                </figure>
+              </CardContent>
+            </Card>
+          ) : null}
           <Card className="border-border/80 bg-background">
             <CardContent className="p-6 md:p-8">
               <article className="prose prose-slate max-w-none prose-headings:font-semibold prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-slate-900 prose-a:text-primary hover:prose-a:text-primary/80">

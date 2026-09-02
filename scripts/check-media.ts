@@ -178,11 +178,11 @@ async function main() {
   }
   if (
     !mediaSource.includes(
-      "With an AI startup founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
+      "On the board of an AI startup (in stealth mode): with the founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi, and Interim Dean Dr. Chavez.",
     )
   ) {
     errors.push(
-      "The office leadership photo must use Mike's AI-startup caption and name Nader Nadershahi.",
+      "The office leadership photo must use Mike's AI-startup caption and name Nader Nadershahi and Interim Dean Dr. Chavez.",
     );
   }
   if (/\bNader Shahi\b/.test(mediaSource)) {

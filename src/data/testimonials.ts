@@ -595,6 +595,75 @@ I firmly believe that without his guidance, the transition would have been far m
     stars: 5,
     publishedAt: "2019-01-17",
   },
+  {
+    quote: `Working with Michael has been the best decision I made in helping me transition in my business needs. He's very personable and always has your best interest at heart. He also has a strong network referral team to help you navigate through any questions you may have. Highly recommend him for consulting services!`,
+    author: "David",
+    stars: 5,
+  },
+  {
+    quote: `Thank you for taking time out of your busy schedule for me this morning. Really I have no complaints. I am happy with where I'm at. Michael, I just want to say that dentistry is a better place with you in it!`,
+    author: "Christina",
+    stars: 5,
+  },
+  {
+    quote: `Late fall of 2020 I decided to sell my general dental practice after 31 years of practicing. Through a friend I was introduced to Michael. We had an excellent initial conversation discussing what I had in mind, the reason for selling my office, details of the process, and the timeline I was looking at. What I appreciated the most about working with Michael was that he did not have a slew of individuals lined up to come and kick the tires and waste precious time and emotions. Michael presented two closely vetted potential candidates. The way Michael sets up the contracts and agreements minimizes the potential pitfalls that many buyers and sellers fall into. Michael is an expert who has developed a well-thought-out linear path when it comes to selling dental practices. He set me up with the right candidate and facilitated the sale process well. I am very happy with how things turned out.`,
+    author: "Reza",
+    stars: 5,
+  },
+  {
+    quote: `Thank you for your call this morning. It has been great having you by my side throughout this process as a guide and mentor. The thing I am most appreciative about is how available you have been for advice. Going through the uncharted territory of buying this practice, there were always times when I would be talking with someone and did not know what the norm was, and it was great to have you in my corner to run things by as a seasoned vet. Your early advice on how to negotiate my meetings with the seller and how to deal with his broker was incredibly helpful. It was also very nice to have someone who has gone through this process so many times give me a bird's-eye view of the entire process. You made it clear at the beginning what the process was, what order everything came in, and what I would need for each step. It has been a pleasure working with you so far, and I am very happy to have worked with you and hope to continue working with you.`,
+    author: "Jason",
+    stars: 5,
+  },
+  {
+    quote: `Thanks for everything. I can't thank you enough for making this transition go very smoothly.`,
+    author: "Hui",
+    stars: 5,
+  },
+  {
+    quote: `I will definitely be in touch, because the residents this year really enjoyed hearing your presentation.`,
+    author: "Michelle",
+    stars: 5,
+    organization: "UMC Residents, Fresno",
+  },
+  {
+    quote: `Just want to say how thankful I am to have met you and that you have not given up on me. I am a little slow, but I will eventually get this. Good things are happening day by day.`,
+    author: "Craig",
+    stars: 5,
+  },
+  {
+    quote: `You really did an amazing job working with all the partners and I'm excited to learn from you and become a better manager and partner. I'm grateful for you.`,
+    author: "Ryan",
+    stars: 5,
+  },
+  {
+    quote: `Michael, I poured my heart into the new office and I kept telling myself it was real, but this has been a long road. I shared with a few colleagues close to me and what you did was incredible. I know there are no guarantees in life, but you can do things to become successful. I truly believe this was a win-win for everyone. Thank you for your hard work and perseverance. I am glad we will get to continue our working relationship. I have gotten to know you over the years and see you more as my friend than a broker.`,
+    author: "Lee",
+    stars: 5,
+  },
+  {
+    quote: `Thank you for ushering in a new era of collaborative harmony for our organization! I can't thank you enough for the peace of mind that you've already brought into my life.`,
+    author: "Sue",
+    stars: 5,
+    publishedAt: "2018-10-08",
+  },
+  {
+    quote: `Thank you Michael for all that you do! I really appreciate the bonus that you helped me get. Thank you for the time you put into MPDG.`,
+    author: "Nicole",
+    stars: 5,
+    organization: "Ventura Thompson Family",
+  },
+  {
+    quote: `Thank you so much for the beautiful orchid arrangement. Valod was so impressed with your business knowledge, and he often said he wished we had met you sooner because things would have transpired very differently. Thank you for your time and effort in facilitating the sale.`,
+    author: "Jessica",
+    stars: 5,
+  },
+  {
+    quote: `We are thrilled to have you! Thank you for the guidance and positive enthusiasm you share with me. I love my job and your advice helps me to grow. I appreciate all you do.`,
+    author: "Jan",
+    stars: 5,
+    publishedAt: "2011-01-26",
+  },
 ];
 
 export const testimonialPages: TestimonialPage[] = (() => {
