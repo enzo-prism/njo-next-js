@@ -47,7 +47,6 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
                   sizes="(max-width: 640px) 100vw, 30vw"
                   className="h-auto w-full object-contain"
                 />
-                <figcaption className="px-4 py-3 text-sm text-muted-foreground">{image.caption}</figcaption>
               </figure>
             ))}
           </div>
@@ -62,7 +61,6 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
               sizes="(max-width: 768px) 100vw, 896px"
               className="h-auto w-full object-contain"
             />
-            <figcaption className="px-5 py-4 text-sm text-muted-foreground">{post.image.caption}</figcaption>
           </figure>
         ) : null}
 

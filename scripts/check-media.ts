@@ -170,6 +170,65 @@ async function main() {
     }
   }
 
+  if (
+    mosaicSource.includes("asset.caption") ||
+    mosaicSource.includes("PhotoNameOverlay") ||
+    mosaicSource.includes("asset.names")
+  ) {
+    errors.push(
+      "Editorial mosaics must not render photo captions or name bars.",
+    );
+  }
+
+  if (
+    heroSource.includes("{active.caption}") ||
+    heroSource.includes("{active.eyebrow}")
+  ) {
+    errors.push(
+      "Hero slideshow must not show caption or eyebrow text on slides.",
+    );
+  }
+
+  const communitySource = await readFile(
+    path.join(sourceDirectory, "components/pages/community-post-detail.tsx"),
+    "utf8",
+  );
+  const resourcesSource = await readFile(
+    path.join(sourceDirectory, "components/pages/resources.tsx"),
+    "utf8",
+  );
+  const articleSource = await readFile(
+    path.join(sourceDirectory, "components/pages/resource-article-detail.tsx"),
+    "utf8",
+  );
+  const profileSource = await readFile(
+    path.join(sourceDirectory, "components/pages/michael-njo-dds.tsx"),
+    "utf8",
+  );
+  const interviewSource = await readFile(
+    path.join(sourceDirectory, "components/pages/dr-michael-njo-interview.tsx"),
+    "utf8",
+  );
+  if (communitySource.includes("figcaption") || communitySource.includes(".caption}")) {
+    errors.push("Community posts must not show image captions.");
+  }
+  if (resourcesSource.includes("figcaption") || resourcesSource.includes("resourceBookInsetImage.caption")) {
+    errors.push("Resources page must not show a caption under the book image.");
+  }
+  if (articleSource.includes("figcaption") || articleSource.includes("heroImage.caption")) {
+    errors.push("Resource articles must not show a caption under the hero image.");
+  }
+  if (
+    profileSource.includes("selectedImage.caption") ||
+    profileSource.includes("gprResidencyPresentationImage.caption") ||
+    profileSource.includes("captionMode")
+  ) {
+    errors.push("Profile gallery must not show photo captions, name bars, or lightbox captions.");
+  }
+  if (interviewSource.includes("interviewQuoteImage.caption")) {
+    errors.push("Interview page must not show the quote-image caption.");
+  }
+
   if (!mediaSource.includes("Dr. Allen Budenz")) {
     errors.push("The tuxedo-and-medallion portrait must name Dr. Allen Budenz.");
   }

@@ -75,14 +75,14 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
   - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
-  - confirmed names sit on a bar under the photo (`names` + `PhotoNameOverlay`); tuxedo/medallion names Dr. Allen Budenz; office candid uses the AI-startup caption ("in stealth mode") and names Nader Nadershahi without naming the startup (`check-media.ts` asserts the exact caption); Dugoni collaboration names Dean Nadershahi and Interim Dean Chavez
+  - photo captions and name bars are not shown on images. Some labels have not matched the photos, so images stand on their own. Keep accurate `alt` text. Do not reintroduce visible captions, figcaptions, or `PhotoNameOverlay` name bars. `check-media.ts` asserts that UI components do not render caption text.
   - `sharedUpdateImages` is the September 2026 photo set from Dr. Njo plus the photos mirrored from the PTI site; both sites carry the same photos and testimonials, so mirror additions to `enzo-prism/pti`
   - `secondEditionAnnouncementImage` is the handbook second-edition "Coming Soon" graphic used on `/resources` and the `/resources/second-book` hero
 - `src/components/media/editorial-mosaic.tsx`
   - grid tiles derive their aspect ratio from each asset's display dimensions and preserve the full image by default; `layoutMode="columns"` uses intrinsic width/height
 - `src/components/media/hero-slideshow.tsx`
   - mobile frame is `aspect-[4/3]`; slides preserve the complete image by default and do not zoom-crop during transitions
-  - caption text sits in a bar under the image so overlay copy does not cover faces
+  - do not show caption or eyebrow copy under the image; slide controls stay in a slim bar so faces stay uncovered
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
 - `src/data/podcast-episode.ts`

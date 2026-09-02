@@ -117,11 +117,6 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
                     className="h-auto w-full rounded-2xl object-contain"
                     priority
                   />
-                  {article.heroImage.caption ? (
-                    <figcaption className="mt-3 text-center text-sm text-muted-foreground">
-                      {article.heroImage.caption}
-                    </figcaption>
-                  ) : null}
                 </figure>
               </CardContent>
             </Card>

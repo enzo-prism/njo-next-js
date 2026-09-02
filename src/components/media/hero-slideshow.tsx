@@ -16,8 +16,7 @@ export type HeroSlide = {
   id: string;
   src: StaticImageData | string;
   alt: string;
-  eyebrow: string;
-  caption: string;
+  eyebrow?: string;
   objectPosition?: string;
   objectFit?: "cover" | "contain";
 };
@@ -191,21 +190,14 @@ export function HeroSlideshow({
         ) : null}
       </div>
 
-      <div className="border-t border-white/10 bg-slate-950 px-5 py-4 sm:px-6 sm:py-5">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/75">
-          {active.eyebrow}
-        </p>
-        <p
-          ref={liveRegionRef}
-          className="mt-2 max-w-md text-sm leading-relaxed text-white sm:text-[15px]"
-          aria-live="polite"
-        >
-          {active.caption}
+      <div className="border-t border-white/10 bg-slate-950 px-5 py-3 sm:px-6">
+        <p ref={liveRegionRef} className="sr-only" aria-live="polite">
+          {active.alt}
         </p>
 
         {slides.length > 1 ? (
           <div
-            className="mt-3 flex items-center gap-1"
+            className="flex items-center gap-1"
             aria-label="Select slide"
           >
             {slides.map((slide, i) => {
