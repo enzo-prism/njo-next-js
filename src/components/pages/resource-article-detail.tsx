@@ -92,7 +92,7 @@ export default function ResourceArticleDetailPage({ article }: ResourceArticleDe
               {article.keyTakeaways.map((takeaway) => (
                 <div
                   key={takeaway}
-                  className="rounded-xl border border-border/80 bg-background px-4 py-3 text-sm leading-relaxed text-slate-700"
+                  className="rounded-xl border border-amber-200/70 bg-background px-4 py-3 text-sm leading-relaxed text-slate-700"
                 >
                   {takeaway}
                 </div>
