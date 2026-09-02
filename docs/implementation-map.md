@@ -223,7 +223,7 @@ Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals
 
 The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file. The BoomCloud guest episode on The Navigating Dental Insurance Podcast is a separate page at `/navigating-dental-insurance-podcast`, with official Apple Podcasts embed constants in `src/data/podcast-episode.ts`. Do not merge it into the Farokh Jiveh interview route.
 
-Profile gallery captions and confirmed names live on `EditorialMediaAsset` in `src/data/media.ts`. Name bars render under the photo (`PhotoNameOverlay`) so faces stay uncovered. The tuxedo-and-medallion portrait names Dr. Allen Budenz. The office leadership photo uses Mike's AI-startup caption and names Nader Shahi without naming the startup. Recent LA and Roseville dinner photos belong in the profile gallery; do not invent SF seminar photos that do not exist. The forthcoming second book is `/resources/second-book` and must not invent a title or date.
+Profile gallery captions and confirmed names live on `EditorialMediaAsset` in `src/data/media.ts`. Name bars render under the photo (`PhotoNameOverlay`) so faces stay uncovered. The tuxedo-and-medallion portrait names Dr. Allen Budenz. The office leadership photo uses Mike's AI-startup caption and names Nader Nadershahi without naming the startup. Recent LA and Roseville dinner photos belong in the profile gallery; do not invent SF seminar photos that do not exist. The forthcoming second book is `/resources/second-book` and must not invent a title or date.
 
 ### Shared lead-intake options
 
