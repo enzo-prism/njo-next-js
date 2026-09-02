@@ -236,7 +236,9 @@ export default function DrMichaelNjoInterview() {
                   operational, transition, and growth challenge alone.
                 </p>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  {interviewQuoteImage.caption}
+                  That message already travels in Michael&apos;s professional
+                  orbit — the same practical guidance he brings to residency
+                  rooms, peer dinners, and one-on-one advisory work.
                 </p>
               </div>
             </div>
