@@ -75,7 +75,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
   - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
-  - confirmed names sit on a bar under the photo (`names` + `PhotoNameOverlay`); tuxedo/medallion names Dr. Allen Budenz; office candid uses the AI-startup caption ("in stealth mode") and names Nader Nadershahi and Interim Dean Dr. Chavez without naming the startup (`check-media.ts` asserts the exact caption)
+  - confirmed names sit on a bar under the photo (`names` + `PhotoNameOverlay`); tuxedo/medallion names Dr. Allen Budenz; office candid uses the AI-startup caption ("in stealth mode") and names Nader Nadershahi without naming the startup (`check-media.ts` asserts the exact caption); Dugoni collaboration names Dean Nadershahi and Interim Dean Chavez
   - `sharedUpdateImages` is the September 2026 photo set from Dr. Njo plus the photos mirrored from the PTI site; both sites carry the same photos and testimonials, so mirror additions to `enzo-prism/pti`
   - `secondEditionAnnouncementImage` is the handbook second-edition "Coming Soon" graphic used on `/resources` and the `/resources/second-book` hero
 - `src/components/media/editorial-mosaic.tsx`

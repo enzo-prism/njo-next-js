@@ -176,13 +176,31 @@ async function main() {
   if (mediaSource.includes("Allan Budenz") || mediaSource.includes("Alan Budenz")) {
     errors.push("Do not misspell Dr. Allen Budenz.");
   }
+  const officeAssetMatch = mediaSource.match(
+    /id: "office-strategy-group",[\s\S]*?names:\s*\[[\s\S]*?\],/,
+  );
+  const officeAsset = officeAssetMatch?.[0] ?? "";
   if (
     !mediaSource.includes(
-      "On the board of an AI startup (in stealth mode): with the founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi, and Interim Dean Dr. Chavez.",
+      "On the board of an AI startup (in stealth mode): with the founder and board of directors, notably former Dean of University of the Pacific School of Dentistry, Nader Nadershahi.",
     )
   ) {
     errors.push(
-      "The office leadership photo must use Mike's AI-startup caption and name Nader Nadershahi and Interim Dean Dr. Chavez.",
+      "The office leadership photo must use Mike's AI-startup caption and name Nader Nadershahi.",
+    );
+  }
+  if (!officeAsset || /Chavez/i.test(officeAsset)) {
+    errors.push(
+      "The office leadership photo must name Nader Nadershahi only, not Interim Dean Chavez.",
+    );
+  }
+  if (
+    !mediaSource.includes(
+      "Working closely with the University of the Pacific Arthur A Dugoni School of Dentistry, with Dean Nadershahi and Interim Dean Chavez.",
+    )
+  ) {
+    errors.push(
+      "The Dugoni collaboration photo must name Dean Nadershahi and Interim Dean Chavez.",
     );
   }
   if (/\bNader Shahi\b/.test(mediaSource)) {
