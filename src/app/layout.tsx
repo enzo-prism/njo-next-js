@@ -25,6 +25,9 @@ const homeMetadata = buildRouteMetadata("/");
 export const metadata: Metadata = {
   ...homeMetadata,
   metadataBase: new URL(SITE_URL),
+  verification: {
+    google: "V89YYJptRudT5VuKm1BmYGc3mYrcO5VfBbrYNlaRd6E",
+  },
   manifest: "/manifest.webmanifest",
   robots: {
     index: true,
