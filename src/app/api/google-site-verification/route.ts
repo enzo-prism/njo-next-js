@@ -12,7 +12,7 @@ export function GET(request: Request) {
   return new NextResponse(body, {
     status: 200,
     headers: {
-      "Content-Type": "text/html; charset=utf-8",
+      "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, max-age=300",
       "X-Robots-Tag": "noindex",
     },
