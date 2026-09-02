@@ -147,9 +147,6 @@ export default function ResourcesPage() {
                       }}
                     />
                   </div>
-                  <figcaption className="px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-                    {resourceBookInsetImage.caption}
-                  </figcaption>
                 </figure>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
