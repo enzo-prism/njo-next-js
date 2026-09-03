@@ -1,15 +1,17 @@
 import { allEditorialImages, type EditorialMediaAsset } from "@/data/media";
+import {
+  loadLiveCaptionMap,
+  type PhotoCaptionMap,
+} from "@/lib/photo-caption-store";
+
+export {
+  loadLiveCaptionMap,
+  saveLiveCaption,
+  type PhotoCaptionMap,
+  type PhotoCaptionRecord,
+} from "@/lib/photo-caption-store";
 
 const SITE_ORIGIN = "https://michaelnjodds.com";
-const CACHE_KEY = "njo-photo-captions";
-const CACHE_TTL_SECONDS = 60 * 60 * 24 * 365;
-
-export type PhotoCaptionRecord = {
-  caption: string;
-  savedAt: string;
-};
-
-export type PhotoCaptionMap = Record<string, PhotoCaptionRecord>;
 
 export type WebsitePhoto = {
   id: string;
@@ -30,10 +32,6 @@ type ExtraPhoto = {
   alt: string;
   featuredRoutes: string[];
   emailNote: string | null;
-};
-
-type GlobalCaptionStore = typeof globalThis & {
-  __njoPhotoCaptions?: PhotoCaptionMap;
 };
 
 const EMAIL_NOTES: Record<string, string> = {
@@ -103,14 +101,6 @@ const EXTRA_PHOTOS: ExtraPhoto[] = [
   },
 ];
 
-function memoryStore(): PhotoCaptionMap {
-  const globalStore = globalThis as GlobalCaptionStore;
-  if (!globalStore.__njoPhotoCaptions) {
-    globalStore.__njoPhotoCaptions = {};
-  }
-  return globalStore.__njoPhotoCaptions;
-}
-
 export function resolvePublicImageUrl(
   src: EditorialMediaAsset["src"] | string,
 ): string {
@@ -126,68 +116,6 @@ export function resolvePublicImageUrl(
     return path;
   }
   return `${SITE_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
-}
-
-async function readRuntimeCache(): Promise<PhotoCaptionMap | null> {
-  try {
-    const { getCache } = await import("@vercel/functions");
-    const cached = await getCache({ namespace: "njo-photo-captions" }).get(
-      CACHE_KEY,
-    );
-    if (cached && typeof cached === "object") {
-      return cached as PhotoCaptionMap;
-    }
-  } catch {
-    return null;
-  }
-  return null;
-}
-
-async function writeRuntimeCache(map: PhotoCaptionMap): Promise<void> {
-  try {
-    const { getCache } = await import("@vercel/functions");
-    await getCache({ namespace: "njo-photo-captions" }).set(CACHE_KEY, map, {
-      ttl: CACHE_TTL_SECONDS,
-      tags: ["njo-photo-captions"],
-      name: "njo-photo-captions",
-    });
-  } catch {
-    // Local Next.js and environments without Runtime Cache keep the in-memory map.
-  }
-}
-
-export async function loadLiveCaptionMap(): Promise<PhotoCaptionMap> {
-  const cached = await readRuntimeCache();
-  if (cached) {
-    const store = memoryStore();
-    Object.assign(store, cached);
-    return store;
-  }
-  return memoryStore();
-}
-
-export async function saveLiveCaption(
-  id: string,
-  caption: string,
-): Promise<PhotoCaptionRecord | null> {
-  const map = await loadLiveCaptionMap();
-  const trimmed = caption.trim();
-
-  if (!trimmed) {
-    delete map[id];
-    (globalThis as GlobalCaptionStore).__njoPhotoCaptions = map;
-    await writeRuntimeCache(map);
-    return null;
-  }
-
-  const record: PhotoCaptionRecord = {
-    caption: trimmed,
-    savedAt: new Date().toISOString(),
-  };
-  map[id] = record;
-  (globalThis as GlobalCaptionStore).__njoPhotoCaptions = map;
-  await writeRuntimeCache(map);
-  return record;
 }
 
 function toWebsitePhoto(

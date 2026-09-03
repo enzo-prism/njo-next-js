@@ -16,4 +16,6 @@ do not show caption or eyebrow copy. Do not render inventory captions, name
 bars, or `PhotoNameOverlay`. Keep accurate `alt` text.
 
 Saves persist in Vercel Runtime Cache (one-year TTL) with an in-memory
-fallback for local `next dev`.
+fallback for local `next dev`. `npm run check:photo-captions` proves that an
+edit survives save, a fresh load, a second edit, and unpublish without
+losing other saved captions.
