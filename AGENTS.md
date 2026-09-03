@@ -69,6 +69,12 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/seo/*`
   - metadata, robots, sitemap, structured data generation
   - Book-launch resources use route-specific social images plus separate `Book` and `NewsArticle` schema nodes
+- `src/data/testimonials.ts`
+  - source of truth for `/testimonials` quotes, slugs, and optional confirmed portraits
+  - `NJO_TESTIMONIAL_INDEX_SLUGS` is the locked 16-slug hub; attach a circle only when `CONFIRMED_TESTIMONIAL_PORTRAITS` has a real photo
+  - index 56px circle left of the name; story 96px; quote-only with no initials when a face is not confirmed
+- `src/components/testimonials/testimonial-portrait.tsx`
+  - shared 56px/96px circle used by the testimonials index, featured cards, and story pages
 - `src/data/resource-articles.ts`
   - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
 - `src/data/media.ts`

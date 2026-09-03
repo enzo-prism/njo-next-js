@@ -3,6 +3,7 @@ import { CalendarDays, ArrowLeft, ArrowRight, Home, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SourceBadge, TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { TestimonialPortrait } from "@/components/testimonials/testimonial-portrait";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
 import { CONTACT_PATH } from "@/config/site";
 import { type TestimonialPage, testimonialPages } from "@/data/testimonials";
@@ -87,13 +88,20 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
             </BreadcrumbList>
           </Breadcrumb>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-3xl">Testimonial from {testimonial.author}</CardTitle>
-            {testimonial.source ? <SourceBadge source={testimonial.source} /> : null}
+          <div className="flex items-start gap-4">
+            {testimonial.photo ? (
+              <TestimonialPortrait photo={testimonial.photo} size="story" />
+            ) : null}
+            <div className="min-w-0 space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <CardTitle className="text-3xl">Testimonial from {testimonial.author}</CardTitle>
+                {testimonial.source ? <SourceBadge source={testimonial.source} /> : null}
+              </div>
+              {testimonial.organization ? (
+                <p className="text-sm text-muted-foreground">{testimonial.organization}</p>
+              ) : null}
+            </div>
           </div>
-          {testimonial.organization ? (
-            <p className="text-sm text-muted-foreground">{testimonial.organization}</p>
-          ) : null}
           <CardDescription>Primary quote and outcome</CardDescription>
         </CardHeader>
         <CardContent>
