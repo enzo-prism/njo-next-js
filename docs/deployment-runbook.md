@@ -74,6 +74,7 @@ Validate on preview URL:
 
 - Main routes return expected content.
 - Photos on `/` hero, `/resources`, `/dr-michael-njo-interview`, and `/blog/another-perfect-match` have no inventory caption or name-bar text under the image. Profile mosaics/lightbox on `/michael-njo-dds` may show a caption only after a Photos-tab save.
+- `GET /api/photo-captions` returns the website catalog. A reversible `PATCH` then a fresh `GET` (and dashboard `/photos` hard reload) keeps the edited caption. Restore or unpublish the test id so a test caption does not stay live. See `docs/photo-caption-qa.md`.
 - Unknown route returns custom 404.
 - Legacy redirects resolve correctly.
 - `robots.txt`, `sitemap.xml`, and `llms.txt` are accessible.
@@ -128,6 +129,7 @@ If custom domain cutover has not been completed yet:
    - Route rendering
    - Home hero, resources, community posts, and the interview quote image have no caption or name-bar text under the image
    - Profile gallery captions appear only when saved through `/api/photo-captions`
+   - Dashboard `/photos` save then hard reload still shows the same caption; do not leave the test wording live
    - Redirects
    - Forms
    - SEO endpoints

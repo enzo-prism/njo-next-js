@@ -174,6 +174,7 @@ This runs:
 - Lint
 - Testimonial content guard
 - Event freshness and profile-tab behavior checks
+- Media framing, caption overlay wiring, and photo-caption save/reload assertions
 - Form wiring and contact/booking CTA checks
 - Next build
 - Route metadata snapshots
@@ -246,6 +247,7 @@ If your current network still resolves an older apex IP after DNS changes, verif
 
 - `AGENTS.md` - repo-specific operating guide for future Codex sessions
 - `docs/implementation-map.md` - rendering model, route wiring, content sources, form payloads, and safe change playbooks
+- `docs/photo-caption-qa.md` - catalog, Runtime Cache store, API, dashboard editor semantics, and save/reload tests
 - `docs/analytics-and-observability.md` - Vercel Analytics, GA, and Hotjar wiring plus validation workflow
 - `docs/deployment-runbook.md` - preview/prod deployment and domain cutover checklist
 - `docs/forms-and-backends.md` - form backend wiring and validation details

@@ -13,6 +13,8 @@ There are exactly two submission forms in this codebase.
 
 Endpoint constants live in `src/config/form-backends.ts`. `npm run check:forms` guards these backend URLs and is included in `npm run check:parity`.
 
+`GET/PATCH /api/photo-captions` is not a form. It is the caption QA overlay for the Njo dashboard Photos tab. It does not use Formspree, does not capture leads, and must not be treated as a form backend migration. See `docs/photo-caption-qa.md`.
+
 ## Contact Form Details
 
 Component: `src/components/pages/contact.tsx`
