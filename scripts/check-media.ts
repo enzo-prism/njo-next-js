@@ -75,7 +75,7 @@ async function main() {
       "createLocalAsset({",
       sourceIndex,
     );
-    const blockEnd = mediaSource.indexOf("}),", sourceIndex);
+    const blockEnd = mediaSource.indexOf("}).,", sourceIndex);
     const assetBlock =
       blockStart >= 0 && blockEnd >= 0
         ? mediaSource.slice(blockStart, blockEnd)
@@ -218,8 +218,20 @@ async function main() {
     path.join(sourceDirectory, "app/api/photo-captions/route.ts"),
     "utf8",
   );
+  const captionStoreSource = await readFile(
+    path.join(sourceDirectory, "lib/photo-caption-store.ts"),
+    "utf8",
+  );
   if (!captionApiSource.includes("saveLiveCaption") || !captionApiSource.includes("listWebsitePhotos")) {
     errors.push("Photo caption QA API must list and save reviewed captions.");
+  }
+  if (
+    !captionStoreSource.includes("applyLiveCaptionEdit") ||
+    !captionStoreSource.includes("replaceMemory")
+  ) {
+    errors.push(
+      "Photo caption store must persist edits across a fresh load, not merge stale in-memory captions.",
+    );
   }
   if (communitySource.includes("figcaption") || communitySource.includes(".caption}")) {
     errors.push("Community posts must not show image captions.");
