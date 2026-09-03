@@ -85,6 +85,35 @@ export default function MichaelNjoDDS({
   const [activeTab, setActiveTab] = useState<ProfileTab>(initialTab);
   const [selectedImage, setSelectedImage] =
     useState<EditorialMediaAsset | null>(null);
+  const [qaCaptions, setQaCaptions] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/photo-captions", {
+      signal: controller.signal,
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          return;
+        }
+        const payload = (await response.json()) as {
+          photos?: { id: string; liveCaption: string | null }[];
+        };
+        const next: Record<string, string> = {};
+        for (const photo of payload.photos ?? []) {
+          if (photo.liveCaption?.trim()) {
+            next[photo.id] = photo.liveCaption.trim();
+          }
+        }
+        setQaCaptions(next);
+      })
+      .catch(() => {
+        // Inventory captions stay hidden until a QA save is available.
+      });
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
     const syncTabFromLocation = () => setActiveTab(getTabFromLocation());
@@ -356,6 +385,7 @@ export default function MichaelNjoDDS({
                   <div className="bg-surface p-4 md:p-6">
                     <EditorialMosaic
                       assets={profileRelationshipImages}
+                      qaCaptions={qaCaptions}
                     />
                   </div>
                 </div>
@@ -377,6 +407,7 @@ export default function MichaelNjoDDS({
                 assets={profileGalleryImages}
                 interactive
                 layoutMode="columns"
+                qaCaptions={qaCaptions}
                 onSelect={(image) => setSelectedImage(image)}
               />
             </div>
@@ -396,7 +427,7 @@ export default function MichaelNjoDDS({
                       {selectedImage.alt}
                     </DialogTitle>
                     <DialogDescription className="sr-only">
-                      {selectedImage.alt}
+                      {qaCaptions[selectedImage.id] || selectedImage.alt}
                     </DialogDescription>
                     <div className="relative h-[70vh] w-full">
                       <Image
@@ -411,6 +442,11 @@ export default function MichaelNjoDDS({
                         }}
                       />
                     </div>
+                    {qaCaptions[selectedImage.id] ? (
+                      <p className="px-5 py-4 text-sm leading-6 text-white/85">
+                        {qaCaptions[selectedImage.id]}
+                      </p>
+                    ) : null}
                   </>
                 ) : null}
               </DialogContent>
@@ -775,6 +811,7 @@ export default function MichaelNjoDDS({
                   <div className="bg-surface p-4 md:p-6">
                     <EditorialMosaic
                       assets={profileNewsImages}
+                      qaCaptions={qaCaptions}
                     />
                   </div>
                 </div>

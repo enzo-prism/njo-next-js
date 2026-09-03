@@ -8,6 +8,7 @@ type EditorialMosaicProps = {
   interactive?: boolean;
   onSelect?: (asset: EditorialMediaAsset) => void;
   layoutMode?: "grid" | "columns";
+  qaCaptions?: Record<string, string>;
 };
 
 const tileSpanClasses: Record<
@@ -38,6 +39,7 @@ export function EditorialMosaic({
   interactive = false,
   onSelect,
   layoutMode = "grid",
+  qaCaptions,
 }: EditorialMosaicProps) {
   return (
     <div
@@ -62,6 +64,7 @@ export function EditorialMosaic({
             ? "mb-4 block w-full break-inside-avoid"
             : cn("block w-full", spanClasses);
         const useIntrinsicFrame = layoutMode === "columns";
+        const qaCaption = qaCaptions?.[asset.id]?.trim() ?? "";
         const content = (
           <div className="overflow-hidden rounded-[1.5rem] border border-border/80 bg-slate-100/70 shadow-sm">
             <div
@@ -104,6 +107,11 @@ export function EditorialMosaic({
                 </span>
               ) : null}
             </div>
+            {qaCaption ? (
+              <figcaption className="border-t border-border/70 bg-white/90 px-4 py-3 text-sm leading-5 text-muted-foreground">
+                {qaCaption}
+              </figcaption>
+            ) : null}
           </div>
         );
 
@@ -114,7 +122,7 @@ export function EditorialMosaic({
               type="button"
               className={cn("group text-left", wrapperClasses)}
               onClick={() => onSelect(asset)}
-              aria-label={asset.alt}
+              aria-label={qaCaption || asset.alt}
             >
               {content}
             </button>

@@ -28,6 +28,7 @@ Read this together with `AGENTS.md`. `AGENTS.md` defines invariants; this file e
 - Form model:
   - browser submits directly to Formspree
   - there are no internal API routes for lead capture
+  - `GET/PATCH /api/photo-captions` is a caption QA overlay, not a form backend
   - shared validation, privacy acknowledgment, honeypot, and repeat-submit safeguards live in `src/lib/lead-form-validation.ts`
 - Analytics model:
   - consent-gated Vercel Analytics, Google Analytics, and Hotjar are coordinated once from `src/app/layout.tsx`
@@ -81,7 +82,7 @@ These are the main interactive islands and why they are client-side:
 | `src/components/pages/phillips-event.tsx`                   | React Hook Form, checkbox state, Formspree submission                         |
 | `src/components/pages/testimonials.tsx`                     | client-side search and sort                                                   |
 | `src/components/pages/dr-michael-njo-interview.tsx`         | share/copy interactions                                                       |
-| `src/components/pages/michael-njo-dds.tsx`                  | tab state, gallery modal, query-param-driven tab selection                    |
+| `src/components/pages/michael-njo-dds.tsx`                  | tab state, gallery modal, query-param-driven tab selection, QA caption overlay |
 
 If a route seems heavier than expected in the build output, start with this list.
 
@@ -223,7 +224,7 @@ Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals
 
 The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file. The BoomCloud guest episode on The Navigating Dental Insurance Podcast is a separate page at `/navigating-dental-insurance-podcast`, with official Apple Podcasts embed constants in `src/data/podcast-episode.ts`. Do not merge it into the Farokh Jiveh interview route.
 
-Profile gallery captions and confirmed names may still exist on `EditorialMediaAsset` in `src/data/media.ts` for inventory, but they are not rendered. The same is true of `caption` on community-post images, resource hero/inset images, and unused `eyebrow` / `caption` fields on home hero slides. Images stand on their own because some labels have not matched the photos. Do not reintroduce name bars (`PhotoNameOverlay`), figcaptions under photos, lightbox captions, or hero caption/eyebrow copy under the slideshow. Testimonial author `figcaption`s stay. Keep accurate `alt` text. The tuxedo-and-medallion portrait alt text names Dr. Allen Budenz. The office leadership photo alt names Nader Nadershahi without naming the startup. `scripts/check-media.ts` asserts UI components do not render caption text.
+Profile gallery captions and confirmed names may still exist on `EditorialMediaAsset` in `src/data/media.ts` for inventory. Those inventory captions are not rendered. Reviewed captions saved through `GET/PATCH /api/photo-captions` (Njo dashboard Photos tab) display on the profile mosaic and lightbox via `qaCaptions`. Hero slides, community-post images, resource hero/inset images, and the interview quote image stay caption-free. Do not reintroduce name bars (`PhotoNameOverlay`) or inventory `asset.caption` / `selectedImage.caption`. Testimonial author `figcaption`s stay. Keep accurate `alt` text. The tuxedo-and-medallion portrait alt text names Dr. Allen Budenz. The office leadership photo alt names Nader Nadershahi without naming the startup. `scripts/check-media.ts` asserts inventory captions stay hidden and that the QA overlay is wired. See `docs/photo-caption-qa.md`.
 
 `sharedUpdateImages` in `src/data/media.ts` holds the September 2026 photo set Dr. Njo supplied by email (July 2026 San Francisco seminar, Dugoni Business Club symposium/alumni/lunch/golf photos, the Alumni Association gala table, Backstage Retreat 2026 book signing and Disney World, the Dallas Launch Pod session, the FOUND book launch with Dr. Anissa Broussard, the Dental Lifestyles Magazine Summer 2026 feature, and the handbook second-edition "Coming Soon" graphic) plus the photos that previously lived only on the PTI site. Files are in `public/media/` (WebP, long edge ≤1600px, EXIF orientation applied). Both sites publish the same photo set and the same testimonials; mirror any addition to `enzo-prism/pti`.
 

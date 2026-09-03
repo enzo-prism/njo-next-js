@@ -75,11 +75,16 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
   - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
-  - photo captions and name bars are not shown on images. Some labels have not matched the photos, so images stand on their own. Keep accurate `alt` text. Do not reintroduce visible captions, figcaptions, or `PhotoNameOverlay` name bars. `check-media.ts` asserts that UI components do not render caption text.
+  - inventory `caption` fields stay hidden until a caption is saved through `GET/PATCH /api/photo-captions`. The Njo dashboard Photos tab is the editor. Saved captions render on the profile mosaic/lightbox via `qaCaptions`. Do not render inventory captions, name bars, or `PhotoNameOverlay`. Hero slides stay caption-free. Keep accurate `alt` text.
   - `sharedUpdateImages` is the September 2026 photo set from Dr. Njo plus the photos mirrored from the PTI site; both sites carry the same photos and testimonials, so mirror additions to `enzo-prism/pti`
   - `secondEditionAnnouncementImage` is the handbook second-edition "Coming Soon" graphic used on `/resources` and the `/resources/second-book` hero
 - `src/components/media/editorial-mosaic.tsx`
   - grid tiles derive their aspect ratio from each asset's display dimensions and preserve the full image by default; `layoutMode="columns"` uses intrinsic width/height
+  - optional `qaCaptions` overlay shows only captions saved through `/api/photo-captions`
+- `src/lib/photo-captions.ts`
+  - catalog and live-caption store for the dashboard Photos tab and profile gallery overlay
+- `src/app/api/photo-captions/route.ts`
+  - `GET` lists emailed/website photos; `PATCH` saves a reviewed caption
 - `src/components/media/hero-slideshow.tsx`
   - mobile frame is `aspect-[4/3]`; slides preserve the complete image by default and do not zoom-crop during transitions
   - do not show caption or eyebrow copy under the image; slide controls stay in a slim bar so faces stay uncovered
@@ -91,6 +96,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - includes `/resources/second-book`: the expanded second edition of *Dental Practice Transitions Handbook* (same title/subtitle, foreword by Dr. Glenn Vo, new advisor material and appendices). Optional `heroImage` renders on the article detail page. No release date is published; do not invent one.
 - `src/components/pages/michael-njo-dds.tsx`
   - News tab copy, the Diana Fat Board of Regents congratulations (`public/media/diana-fat-board-of-regents.webp`), The Practice Blueprint dinner recap (`public/media/poe-roseville-aug-2026.webp`), Another perfect match photos (`public/media/bill-mikki-porch.webp`, `bill-mikki-trio.webp`), Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
+  - loads reviewed `qaCaptions` from `/api/photo-captions` for mosaic and lightbox; do not use inventory `caption` fields
 - `src/data/events.ts`
   - Editorial event records plus date-aware upcoming/current derivation
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
@@ -115,7 +121,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Shared trimming, maximum lengths, HTTP(S) URL normalization, privacy acknowledgment, honeypot, and repeat-submit safeguards
 - `scripts/*`
   - parity and SEO validation scripts
-  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, and fails if photo captions, name bars, or hero caption/eyebrow copy are reintroduced in the UI
+  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, fails if inventory captions or name bars are reintroduced, and requires the QA caption overlay (`qaCaptions` / `/api/photo-captions`)
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
@@ -188,7 +194,7 @@ Check these hotspots first when your work touches:
 
 ## Common Pitfalls
 
-- Do not reintroduce photo captions, figcaptions, name bars, or hero caption/eyebrow copy under images. Photos stand alone; `npm run check:media` enforces this.
+- Do not render inventory photo captions, name bars, or hero caption/eyebrow copy. Reviewed captions belong on the profile mosaic/lightbox only after a Photos-tab save (`qaCaptions`). `npm run check:media` enforces this.
 - Do not hardcode Calendly booking links. Import `BOOKING_URL` / `DSO_PRICING_BOOKING_URL` and use `BookingButton`; `check:contact-ctas` blocks hardcoded booking links and missing booking CTAs in the header, footer, and contact page.
 - Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
