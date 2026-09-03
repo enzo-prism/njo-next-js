@@ -75,16 +75,22 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
   - mosaic media defaults to preserving the full image; use `objectFit: "cover"` only for a deliberate, reviewed crop
-  - inventory `caption` fields stay hidden until a caption is saved through `GET/PATCH /api/photo-captions`. The Njo dashboard Photos tab is the editor. Saved captions render on the profile mosaic/lightbox via `qaCaptions`. Do not render inventory captions, name bars, or `PhotoNameOverlay`. Hero slides stay caption-free. Keep accurate `alt` text.
+  - inventory `caption` fields stay hidden until a caption is saved through `GET/PATCH /api/photo-captions`. The Njo dashboard Photos tab is the editor. Saved captions render on the profile mosaic/lightbox via `qaCaptions`. Empty/whitespace save unpublishes. Do not render inventory captions, name bars, or `PhotoNameOverlay`. Hero slides stay caption-free. Keep accurate `alt` text. See `docs/photo-caption-qa.md`.
   - `sharedUpdateImages` is the September 2026 photo set from Dr. Njo plus the photos mirrored from the PTI site; both sites carry the same photos and testimonials, so mirror additions to `enzo-prism/pti`
   - `secondEditionAnnouncementImage` is the handbook second-edition "Coming Soon" graphic used on `/resources` and the `/resources/second-book` hero
 - `src/components/media/editorial-mosaic.tsx`
   - grid tiles derive their aspect ratio from each asset's display dimensions and preserve the full image by default; `layoutMode="columns"` uses intrinsic width/height
   - optional `qaCaptions` overlay shows only captions saved through `/api/photo-captions`
 - `src/lib/photo-captions.ts`
-  - catalog and live-caption store for the dashboard Photos tab and profile gallery overlay
+  - catalog for the dashboard Photos tab: `allEditorialImages` plus emailed `public/media` extras already on the site (not a Gmail dump)
+- `src/lib/photo-caption-store.ts`
+  - live-caption persistence: Vercel Runtime Cache (one-year TTL) plus `globalThis` fallback
+  - `loadLiveCaptionMap()` replaces memory from cache (`replaceMemory`); do not merge cache into memory or unpublished keys can resurrect
+  - empty/whitespace caption deletes that id; `saveLiveCaption` writes memory then cache
 - `src/app/api/photo-captions/route.ts`
-  - `GET` lists emailed/website photos; `PATCH` saves a reviewed caption
+  - `GET` lists emailed/website photos; `PATCH { id, caption }` saves (max 500 chars) or unpublishes; CORS for the dashboard and localhost
+- `docs/photo-caption-qa.md`
+  - operating guide for catalog honesty, store, API, editor dirty-vs-live, tests, and production smoke
 - `src/components/media/hero-slideshow.tsx`
   - mobile frame is `aspect-[4/3]`; slides preserve the complete image by default and do not zoom-crop during transitions
   - do not show caption or eyebrow copy under the image; slide controls stay in a slim bar so faces stay uncovered
@@ -121,7 +127,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Shared trimming, maximum lengths, HTTP(S) URL normalization, privacy acknowledgment, honeypot, and repeat-submit safeguards
 - `scripts/*`
   - parity and SEO validation scripts
-  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, fails if inventory captions or name bars are reintroduced, and requires the QA caption overlay (`qaCaptions` / `/api/photo-captions`)
+  - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, fails if inventory captions or name bars are reintroduced, and requires the QA overlay plus store `applyLiveCaptionEdit` / `replaceMemory`
+  - `check-photo-captions.ts` (`npm run check:photo-captions`, included in `check:parity`) proves a caption edit survives save, a fresh load, a second edit, and unpublish without losing other saved captions
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
@@ -155,6 +162,11 @@ Check these hotspots first when your work touches:
   - `src/components/pages/contact.tsx`
   - `src/components/pages/phillips-event.tsx`
   - `docs/forms-and-backends.md`
+- Photo captions:
+  - `src/lib/photo-caption-store.ts`
+  - `src/lib/photo-captions.ts`
+  - `src/app/api/photo-captions/route.ts`
+  - `docs/photo-caption-qa.md`
 
 ## Safe Working Pattern for Codex
 
@@ -194,7 +206,7 @@ Check these hotspots first when your work touches:
 
 ## Common Pitfalls
 
-- Do not render inventory photo captions, name bars, or hero caption/eyebrow copy. Reviewed captions belong on the profile mosaic/lightbox only after a Photos-tab save (`qaCaptions`). `npm run check:media` enforces this.
+- Do not render inventory photo captions, name bars, or hero caption/eyebrow copy. Reviewed captions belong on the profile mosaic/lightbox only after a Photos-tab save (`qaCaptions`). Empty/whitespace save unpublishes. Load must replace memory from cache, not merge. `npm run check:media` and `npm run check:photo-captions` enforce this.
 - Do not hardcode Calendly booking links. Import `BOOKING_URL` / `DSO_PRICING_BOOKING_URL` and use `BookingButton`; `check:contact-ctas` blocks hardcoded booking links and missing booking CTAs in the header, footer, and contact page.
 - Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
@@ -211,4 +223,5 @@ Update these together when behavior changes:
 - `README.md` for top-level developer context
 - `AGENTS.md` for future Codex sessions
 - `docs/implementation-map.md` for implementation workflow and change playbooks
+- `docs/photo-caption-qa.md` when caption catalog, persistence, or Photos-tab save behavior changes
 - the specific runbook in `docs/`
