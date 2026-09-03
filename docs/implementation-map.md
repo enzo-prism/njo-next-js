@@ -224,7 +224,7 @@ Remote Cloudinary images live on `res.cloudinary.com/dhqpqfw6w`. Local originals
 
 The interview player and `VideoObject` schema share `src/data/interview-video.ts`. Use the Cloudinary transformed MP4 (`q_auto:good,w_1280`) plus poster frame, not the ~100 MB source file. The BoomCloud guest episode on The Navigating Dental Insurance Podcast is a separate page at `/navigating-dental-insurance-podcast`, with official Apple Podcasts embed constants in `src/data/podcast-episode.ts`. Do not merge it into the Farokh Jiveh interview route.
 
-Profile gallery captions and confirmed names may still exist on `EditorialMediaAsset` in `src/data/media.ts` for inventory. Those inventory captions are not rendered. Reviewed captions saved through `GET/PATCH /api/photo-captions` (Njo dashboard Photos tab) display on the profile mosaic and lightbox via `qaCaptions`. Hero slides, community-post images, resource hero/inset images, and the interview quote image stay caption-free. Do not reintroduce name bars (`PhotoNameOverlay`) or inventory `asset.caption` / `selectedImage.caption`. Testimonial author `figcaption`s stay. Keep accurate `alt` text. The tuxedo-and-medallion portrait alt text names Dr. Allen Budenz. The office leadership photo alt names Nader Nadershahi without naming the startup. `scripts/check-media.ts` asserts inventory captions stay hidden and that the QA overlay is wired. See `docs/photo-caption-qa.md`.
+Profile gallery captions and confirmed names may still exist on `EditorialMediaAsset` in `src/data/media.ts` for inventory. Those inventory captions are not rendered. Reviewed captions saved through `GET/PATCH /api/photo-captions` (Njo dashboard Photos tab) display on the profile mosaic and lightbox via `qaCaptions`. Persistence lives in `src/lib/photo-caption-store.ts` (Vercel Runtime Cache, one-year TTL, in-memory fallback). Loads **replace** memory from cache; empty/whitespace save unpublishes that id. The catalog is published website photos plus emailed `public/media` extras, not a Gmail dump. Hero slides, community-post images, resource hero/inset images, and the interview quote image stay caption-free. Do not reintroduce name bars (`PhotoNameOverlay`) or inventory `asset.caption` / `selectedImage.caption`. Testimonial author `figcaption`s stay. Keep accurate `alt` text. The tuxedo-and-medallion portrait alt text names Dr. Allen Budenz. The office leadership photo alt names Nader Nadershahi without naming the startup. `scripts/check-media.ts` asserts inventory captions stay hidden and that the QA overlay plus store replace-on-load are wired. `scripts/check-photo-captions.ts` asserts save, reload, edit, and unpublish. See `docs/photo-caption-qa.md`.
 
 `sharedUpdateImages` in `src/data/media.ts` holds the September 2026 photo set Dr. Njo supplied by email (July 2026 San Francisco seminar, Dugoni Business Club symposium/alumni/lunch/golf photos, the Alumni Association gala table, Backstage Retreat 2026 book signing and Disney World, the Dallas Launch Pod session, the FOUND book launch with Dr. Anissa Broussard, the Dental Lifestyles Magazine Summer 2026 feature, and the handbook second-edition "Coming Soon" graphic) plus the photos that previously lived only on the PTI site. Files are in `public/media/` (WebP, long edge ≤1600px, EXIF orientation applied). Both sites publish the same photo set and the same testimonials; mirror any addition to `enzo-prism/pti`.
 
@@ -371,6 +371,7 @@ Fields sent:
 
 - `name`
 - `email`
+- `phone`
 - `practice_city`
 - `practice_website` when present
 - `services_interested`
@@ -433,6 +434,10 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
   - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense
+- `check:media`
+  - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, and that the caption store replaces memory from cache on load
+- `check:photo-captions`
+  - validates that a caption edit survives save, a fresh load, a second edit, a second photo, and unpublish without losing other saved captions
 - `check:forms`
   - validates that contact and event submissions still use the intended Formspree endpoints
 - `check:contact-ctas`
@@ -495,6 +500,14 @@ For a featured book launch, also:
 3. Update `docs/forms-and-backends.md`
 4. If shared intake labels changed, update `src/data/service-interest-options.ts`
 5. Run `npm run check:parity`
+
+### Change photo caption QA
+
+1. Keep catalog honesty in `src/lib/photo-captions.ts` (published website photos, not a Gmail dump)
+2. Persist through `src/lib/photo-caption-store.ts` with replace-on-load, never merge
+3. Empty/whitespace save must unpublish that id
+4. Update `docs/photo-caption-qa.md`
+5. Run `npm run check:media` and `npm run check:photo-captions` (or full `check:parity`)
 
 ## Known Sharp Edges
 
