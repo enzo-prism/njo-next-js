@@ -75,7 +75,7 @@ async function main() {
       "createLocalAsset({",
       sourceIndex,
     );
-    const blockEnd = mediaSource.indexOf("}).,", sourceIndex);
+    const blockEnd = mediaSource.indexOf("}),", sourceIndex);
     const assetBlock =
       blockStart >= 0 && blockEnd >= 0
         ? mediaSource.slice(blockStart, blockEnd)
