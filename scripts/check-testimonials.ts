@@ -104,4 +104,19 @@ const portraitComponent = readFileSync(
 assert.match(portraitComponent, /index:\s*56/, "Index portraits must be 56px.");
 assert.match(portraitComponent, /story:\s*96/, "Story portraits must be 96px.");
 
+const storyPage = readFileSync(
+  path.join(process.cwd(), "src/components/pages/testimonial-detail.tsx"),
+  "utf8",
+);
+assert.match(
+  storyPage,
+  /CardTitle className="font-serif text-3xl"/,
+  "Story titles must use Merriweather via font-serif.",
+);
+assert.match(
+  storyPage,
+  /<blockquote className="font-serif text-lg leading-relaxed text-slate-700">/,
+  "Story quotes must use Merriweather via font-serif.",
+);
+
 console.log(`Validated ${testimonials.length} testimonial entries.`);

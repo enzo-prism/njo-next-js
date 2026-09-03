@@ -94,7 +94,7 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
             ) : null}
             <div className="min-w-0 space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <CardTitle className="text-3xl">Testimonial from {testimonial.author}</CardTitle>
+                <CardTitle className="font-serif text-3xl">Testimonial from {testimonial.author}</CardTitle>
                 {testimonial.source ? <SourceBadge source={testimonial.source} /> : null}
               </div>
               {testimonial.organization ? (
@@ -105,7 +105,7 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
           <CardDescription>Primary quote and outcome</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg leading-relaxed text-slate-700">{testimonial.quote}</p>
+          <blockquote className="font-serif text-lg leading-relaxed text-slate-700">{testimonial.quote}</blockquote>
           <StarCount count={testimonial.stars} />
           <p className="mt-4 flex items-center gap-1 text-sm text-muted-foreground">
             <CalendarDays className="h-4 w-4" />
