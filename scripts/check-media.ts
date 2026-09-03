@@ -176,7 +176,12 @@ async function main() {
     mosaicSource.includes("asset.names")
   ) {
     errors.push(
-      "Editorial mosaics must not render photo captions or name bars.",
+      "Editorial mosaics must not render inventory captions or name bars.",
+    );
+  }
+  if (!mosaicSource.includes("qaCaptions")) {
+    errors.push(
+      "Editorial mosaics must accept QA captions from /api/photo-captions.",
     );
   }
 
@@ -209,6 +214,13 @@ async function main() {
     path.join(sourceDirectory, "components/pages/dr-michael-njo-interview.tsx"),
     "utf8",
   );
+  const captionApiSource = await readFile(
+    path.join(sourceDirectory, "app/api/photo-captions/route.ts"),
+    "utf8",
+  );
+  if (!captionApiSource.includes("saveLiveCaption") || !captionApiSource.includes("listWebsitePhotos")) {
+    errors.push("Photo caption QA API must list and save reviewed captions.");
+  }
   if (communitySource.includes("figcaption") || communitySource.includes(".caption}")) {
     errors.push("Community posts must not show image captions.");
   }
@@ -223,7 +235,14 @@ async function main() {
     profileSource.includes("gprResidencyPresentationImage.caption") ||
     profileSource.includes("captionMode")
   ) {
-    errors.push("Profile gallery must not show photo captions, name bars, or lightbox captions.");
+    errors.push(
+      "Profile gallery must not render inventory captions or name bars. Use qaCaptions from /api/photo-captions.",
+    );
+  }
+  if (!profileSource.includes("qaCaptions")) {
+    errors.push(
+      "Profile gallery must load reviewed captions from /api/photo-captions.",
+    );
   }
   if (interviewSource.includes("interviewQuoteImage.caption")) {
     errors.push("Interview page must not show the quote-image caption.");
