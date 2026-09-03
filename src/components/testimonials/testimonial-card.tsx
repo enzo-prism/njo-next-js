@@ -1,6 +1,7 @@
 import { ArrowRight, Quote, Star } from "lucide-react";
 import Link from "next/link";
 import type { TestimonialPage, TestimonialSource } from "@/data/testimonials";
+import { TestimonialAuthor } from "@/components/testimonials/testimonial-portrait";
 import { cn } from "@/lib/utils";
 
 type TestimonialListCardProps = {
@@ -52,11 +53,13 @@ export function TestimonialListCard({ testimonial, withLink = true, className }:
         {testimonial.excerpt}
       </blockquote>
 
-      <figcaption className="mt-auto space-y-0.5 border-t border-border/60 pt-4">
-        <p className="text-sm font-semibold text-foreground">{testimonial.author}</p>
-        {testimonial.organization ? (
-          <p className="text-xs text-muted-foreground">{testimonial.organization}</p>
-        ) : null}
+      <figcaption className="mt-auto border-t border-border/60 pt-4">
+        <TestimonialAuthor
+          author={testimonial.author}
+          organization={testimonial.organization}
+          photo={testimonial.photo}
+          size="index"
+        />
       </figcaption>
 
       {withLink ? (

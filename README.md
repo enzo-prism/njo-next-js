@@ -55,7 +55,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/dr-michael-njo-interview`
 - `/navigating-dental-insurance-podcast`
 - `/testimonials`
-- `/testimonials/[slug]` (generated from testimonial data)
+- `/testimonials/[slug]` (generated from testimonial data; 56px circle left of the name on the index and 96px on the story page only when `CONFIRMED_TESTIMONIAL_PORTRAITS` has a real photo — quote-only otherwise, no letter avatars)
 - `/resources`
 - `/resources/[slug]` (generated from resource article data)
   - `/resources/dental-exit-blueprint` (featured book-launch resource)

@@ -9,9 +9,55 @@ export type Testimonial = {
   source?: TestimonialSource;
 };
 
+export type TestimonialPortrait = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type TestimonialPage = Testimonial & {
   slug: string;
   excerpt: string;
+  photo?: TestimonialPortrait;
+};
+
+/**
+ * The 16 named stories on the public testimonials hub that may receive the
+ * locked face+quote treatment. Do not attach portraits outside this set.
+ */
+export const NJO_TESTIMONIAL_INDEX_SLUGS = [
+  "ankit-sidana",
+  "blaine-leeds",
+  "brian-valle",
+  "chris-p",
+  "diana-fat-dds",
+  "dr-lee-boese",
+  "g-allen-herrera-dds",
+  "gregory-baird",
+  "j-c",
+  "john-yun",
+  "jon-sierk",
+  "justus-williams",
+  "lawrence-wong",
+  "madison-brown-dds",
+  "scott-smith",
+  "tony-choi",
+] as const;
+
+/**
+ * Confirmed real portraits only. If a face cannot be honestly matched, omit
+ * the slug so the card stays quote-only. No initials or placeholder faces.
+ */
+export const CONFIRMED_TESTIMONIAL_PORTRAITS: Partial<
+  Record<(typeof NJO_TESTIMONIAL_INDEX_SLUGS)[number], TestimonialPortrait>
+> = {
+  "diana-fat-dds": {
+    src: "/media/testimonials/diana-fat-dds.webp",
+    alt: "Diana Fat, DDS",
+    width: 320,
+    height: 320,
+  },
 };
 
 const slugify = (value: string) =>
@@ -26,6 +72,14 @@ const buildExcerpt = (quote: string, maxLength = 200) => {
   if (cleaned.length <= maxLength) return cleaned;
   return `${cleaned.slice(0, maxLength - 1).trimEnd()}…`;
 };
+
+const isNjoIndexSlug = (
+  slug: string,
+): slug is (typeof NJO_TESTIMONIAL_INDEX_SLUGS)[number] =>
+  (NJO_TESTIMONIAL_INDEX_SLUGS as readonly string[]).includes(slug);
+
+const portraitForSlug = (slug: string): TestimonialPortrait | undefined =>
+  isNjoIndexSlug(slug) ? CONFIRMED_TESTIMONIAL_PORTRAITS[slug] : undefined;
 
 const parsePublishedAt = (value?: string) => {
   if (!value) return Number.NEGATIVE_INFINITY;
@@ -690,6 +744,7 @@ export const testimonialPages: TestimonialPage[] = (() => {
       ...testimonial,
       slug,
       excerpt: buildExcerpt(testimonial.quote),
+      photo: portraitForSlug(slug),
     };
   });
 })();

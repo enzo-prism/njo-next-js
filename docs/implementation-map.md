@@ -183,6 +183,9 @@ Important behaviors:
 - ties fall back to original array order
 - slugs are generated from author names, with numeric suffixes for duplicates
 - excerpts are generated automatically from quote text
+- `NJO_TESTIMONIAL_INDEX_SLUGS` is the locked 16-slug hub that may receive the face+quote treatment
+- `CONFIRMED_TESTIMONIAL_PORTRAITS` attaches a real photo only when one can be honestly matched; otherwise the card stays quote-only
+- index cards show a 56px circle to the left of the name; story pages show 96px; never invent initials or letter avatars
 - testimonial detail pages remain browseable but are `noindex,follow` and omitted from the sitemap; PTI owns detailed transition-proof search intent
 - `/testimonials` remains indexable as the curated personal-site proof hub
 

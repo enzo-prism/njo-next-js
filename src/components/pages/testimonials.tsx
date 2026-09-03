@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/layout/section";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { TestimonialListCard } from "@/components/testimonials/testimonial-card";
+import { TestimonialAuthor } from "@/components/testimonials/testimonial-portrait";
 import { CONTACT_PATH } from "@/config/site";
 import { getFeaturedNamedTestimonials, testimonialPages } from "@/data/testimonials";
 
@@ -117,11 +118,13 @@ export default function TestimonialsPage() {
                 <Quote className="h-8 w-8 text-brand/25" aria-hidden="true" />
                 <blockquote className="font-serif text-lg leading-relaxed text-foreground/90">{testimonial.excerpt}</blockquote>
                 <figcaption className="mt-auto flex items-center justify-between gap-3 border-t border-border/60 pt-4">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{testimonial.author}</p>
-                    {testimonial.organization ? <p className="text-xs text-muted-foreground">{testimonial.organization}</p> : null}
-                  </div>
-                  <Link href={`/testimonials/${testimonial.slug}`} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand hover:text-brand/70">
+                  <TestimonialAuthor
+                    author={testimonial.author}
+                    organization={testimonial.organization}
+                    photo={testimonial.photo}
+                    size="index"
+                  />
+                  <Link href={`/testimonials/${testimonial.slug}`} className="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-sm font-medium text-brand hover:text-brand/70">
                     Read story
                     <ArrowRight className="h-4 w-4" />
                   </Link>

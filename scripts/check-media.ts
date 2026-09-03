@@ -134,6 +134,7 @@ async function main() {
     path.join(sourceDirectory, "components/media/editorial-mosaic.tsx"),
     path.join(sourceDirectory, "components/media/hero-slideshow.tsx"),
     path.join(sourceDirectory, "components/pages/home.tsx"),
+    path.join(sourceDirectory, "components/testimonials/testimonial-portrait.tsx"),
   ]);
 
   for (const sourceFile of sourceFiles) {
