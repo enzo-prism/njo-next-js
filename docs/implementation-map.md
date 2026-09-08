@@ -206,6 +206,8 @@ hourly ISR so date state refreshes without requiring a deployment. Current regis
 fields such as `flyerImage`, speakers, guest labels, and date-gated pricing are allowed for a specific date only. The
 October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program at TDIC Headquarters
 and uses `/media/sacramento-seminar-oct-2026.webp`; do not duplicate that date or add a news/community post for it.
+The 2027 seminar calendar adds San Francisco on July 30, 2027 at UOP Dugoni and Sacramento on October 15, 2027 at
+TDIC Headquarters as ordinary city-date occurrences; do not add news/community posts for those dates.
 News-tab copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
 completed dinners as upcoming.
 `src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
