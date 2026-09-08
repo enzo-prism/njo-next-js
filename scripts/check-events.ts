@@ -16,7 +16,7 @@ const sourceSnapshot = JSON.stringify(eventPrograms);
 
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
 assert.equal(beforeSeason.length, 3, "All published programs should be upcoming at the start of the year");
-assert.equal(beforeSeason[0].upcomingDates.length, 4, "All seminar dates should initially be upcoming");
+assert.equal(beforeSeason[0].upcomingDates.length, 6, "All seminar dates should initially be upcoming");
 assert.equal(beforeSeason[2].slug, "beyond-the-chair-anaheim");
 assert.equal(beforeSeason[2].upcomingDates.length, 1);
 
@@ -28,9 +28,9 @@ assert.equal(
   augustView[0].nextOccurrence.location,
   "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
 );
-assert.equal(augustView[0].upcomingDates.length, 2);
+assert.equal(augustView[0].upcomingDates.length, 4);
 assert.equal(augustView[0].completedOccurrences.length, 2);
-assert.equal(augustView[0].scheduleLabel, "2 dates");
+assert.equal(augustView[0].scheduleLabel, "4 dates");
 assert.equal(augustView[0].completedEventsLabel, "2 completed dates");
 assert.equal(augustView[1].slug, "beyond-the-chair-anaheim");
 assert.equal(augustView[1].nextDateLabel, "September 25, 2026");
@@ -39,9 +39,27 @@ assert.equal(augustView[1].locationLabel, "The Phillips Group, 2300 E. Katella A
 const afterSeason = getUpcomingEventPrograms(new Date("2026-10-03T00:00:00-07:00"));
 assert.equal(afterSeason.length, 1, "The 2027 Anaheim seminar should remain available after the 2026 dates");
 assert.equal(afterSeason[0].nextDateLabel, "March 12, 2027");
+assert.equal(afterSeason[0].upcomingDates.length, 3);
 
 const afterAnaheim = getUpcomingEventPrograms(new Date("2027-03-13T00:00:00-08:00"));
-assert.deepEqual(afterAnaheim, [], "No seminar should remain open after the final occurrence");
+assert.equal(afterAnaheim.length, 1, "2027 San Francisco and Sacramento seminar dates remain after Anaheim");
+assert.equal(afterAnaheim[0].nextDateLabel, "July 30, 2027");
+assert.equal(
+  afterAnaheim[0].nextOccurrence.location,
+  "University of the Pacific (UOP) Arthur A. Dugoni School of Dentistry, San Francisco, CA",
+);
+assert.equal(afterAnaheim[0].upcomingDates.length, 2);
+
+const afterSanFrancisco = getUpcomingEventPrograms(new Date("2027-07-31T00:00:00-07:00"));
+assert.equal(afterSanFrancisco.length, 1, "Sacramento October 15, 2027 should remain after San Francisco");
+assert.equal(afterSanFrancisco[0].nextDateLabel, "October 15, 2027");
+assert.equal(
+  afterSanFrancisco[0].nextOccurrence.location,
+  "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+);
+
+const afterFinal = getUpcomingEventPrograms(new Date("2027-10-16T00:00:00-07:00"));
+assert.deepEqual(afterFinal, [], "No seminar should remain open after the final occurrence");
 
 const inProgressOccurrence: EventOccurrence = {
   dateLabel: "Test",
@@ -182,6 +200,33 @@ assert.equal(
   communityPosts.some((post) => /sacramento seminar/i.test(`${post.slug} ${post.title}`)),
   false,
   "Sacramento seminar must stay on the calendar and not become a news/community post",
+);
+
+const sacramento2027 = seminar?.upcomingDates?.find((occurrence) =>
+  occurrence.startDateTime.startsWith("2027-10-15"),
+);
+assert.ok(sacramento2027, "Sacramento October 15, 2027 must be on the seminar calendar");
+assert.equal(sacramento2027?.dateLabel, "October 15, 2027");
+assert.equal(sacramento2027?.timeLabel, "8am - 3pm");
+assert.equal(sacramento2027?.location, "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento2027?.endDateTime, "2027-10-15T15:00:00-07:00");
+assert.equal(sacramento2027?.flyerImage, undefined, "Do not reuse the 2026 Sacramento flyer on the 2027 date");
+
+const sanFrancisco2027 = seminar?.upcomingDates?.find((occurrence) =>
+  occurrence.startDateTime.startsWith("2027-07-30"),
+);
+assert.ok(sanFrancisco2027, "San Francisco July 30, 2027 must be on the seminar calendar");
+assert.equal(sanFrancisco2027?.dateLabel, "July 30, 2027");
+assert.equal(sanFrancisco2027?.timeLabel, "8am - 3pm");
+assert.equal(
+  sanFrancisco2027?.location,
+  "University of the Pacific (UOP) Arthur A. Dugoni School of Dentistry, San Francisco, CA",
+);
+assert.equal(sanFrancisco2027?.endDateTime, "2027-07-30T15:00:00-07:00");
+assert.equal(
+  communityPosts.some((post) => /july 30, 2027|october 15, 2027/i.test(`${post.slug} ${post.title} ${post.body.join(" ")}`)),
+  false,
+  "2027 calendar dates must not become news/community posts",
 );
 
 const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");

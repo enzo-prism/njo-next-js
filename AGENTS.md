@@ -114,6 +114,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
   - Current programs that PTI hosts (including Beyond the Chair) set `registrationUrl` so home, news, and community posts hand off to PTI instead of a generic contact CTA
   - The October 2, 2026 Sacramento date stays on Mastering Your Dental Transition (no duplicate date, no news post); occurrence-only flyer, TDIC venue, speakers, and date-gated early-bird pricing live on that date
+  - 2027 Mastering Your Dental Transition dates include San Francisco on July 30, 2027 (UOP Dugoni) and Sacramento on October 15, 2027 (TDIC Headquarters); calendar only, no news posts
 - `src/lib/profile-tabs.ts`
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
