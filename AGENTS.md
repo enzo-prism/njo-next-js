@@ -107,7 +107,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/data/resource-articles.ts`
   - includes `/resources/second-book`: the expanded second edition of *Dental Practice Transitions Handbook* (same title/subtitle, foreword by Dr. Glenn Vo, new advisor material and appendices). Optional `heroImage` renders on the article detail page. No release date is published; do not invent one.
 - `src/components/pages/michael-njo-dds.tsx`
-  - News tab copy, the Diana Fat Board of Regents congratulations (`public/media/diana-fat-board-of-regents.webp`), The Practice Blueprint dinner recap (`public/media/poe-roseville-aug-2026.webp`), Another perfect match photos (`public/media/bill-mikki-porch.webp`, `bill-mikki-trio.webp`), Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
+  - News tab copy, the Backstage Business Spotlight (`public/media/backstage-business-spotlight-michael-njo.webp`, `#backstage-business-spotlight-michael-njo`), the Diana Fat Board of Regents congratulations (`public/media/diana-fat-board-of-regents.webp`), The Practice Blueprint dinner recap (`public/media/poe-roseville-aug-2026.webp`), Another perfect match photos (`public/media/bill-mikki-porch.webp`, `bill-mikki-trio.webp`), Beyond the Chair flyer (`public/media/promotional-flyer-dental-strategies.webp`), and dinner photos (`public/media/IMG_4918.webp`, `IMG_4923.webp`, `IMG_3346.webp`)
   - loads reviewed `qaCaptions` from `/api/photo-captions` for mosaic and lightbox; do not use inventory `caption` fields
 - `src/data/events.ts`
   - Editorial event records plus date-aware upcoming/current derivation

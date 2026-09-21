@@ -73,11 +73,20 @@ const EMAIL_NOTES: Record<string, string> = {
     "Emailed September 1, 2026 as PLEASE POST ASAP AND AGAIN IN 2 WEEKS.",
   "promotional-flyer-dental-strategies":
     "Flyer Dr. Njo shared for Beyond the Chair posting.",
+  "backstage-business-spotlight-michael-njo":
+    "Emailed PLEASE POST: Backstage Business Spotlight featuring Michael Njo and Dental Strategies.",
   "dental-lifestyles-feature-p26":
     "Shared by Dr. Njo with the Summer 2026 Dental Lifestyles feature.",
 };
 
 const EXTRA_PHOTOS: ExtraPhoto[] = [
+  {
+    id: "backstage-business-spotlight-michael-njo",
+    src: "/media/backstage-business-spotlight-michael-njo.webp",
+    alt: "Backstage Business Spotlight graphic featuring Michael Njo, dental practice transition expert and founder of Dental Strategies.",
+    featuredRoutes: ["profile:news"],
+    emailNote: EMAIL_NOTES["backstage-business-spotlight-michael-njo"] ?? null,
+  },
   {
     id: "dental-lifestyles-feature-p26",
     src: "/media/dental-lifestyles-summer-2026-feature-p26.webp",

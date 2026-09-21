@@ -110,6 +110,17 @@ assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April 
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
 
+const spotlightPath = buildCommunityPostPath("backstage-business-spotlight-michael-njo");
+const spotlightSchema = buildPageStructuredData(spotlightPath);
+assert.ok(spotlightSchema, "Expected structured data for the Backstage Business Spotlight community post");
+const spotlightGraph = spotlightSchema["@graph"] as Array<Record<string, unknown>>;
+const spotlightArticle = spotlightGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(spotlightArticle?.headline, "Backstage Business Spotlight: Michael Njo");
+assert.equal(spotlightArticle?.datePublished, "2026-09-21");
+assert.ok(!JSON.stringify(spotlightSchema).includes("sold-out"), "Do not claim sold-out for a recognition news post");
+assert.ok(!JSON.stringify(spotlightSchema).includes("Registration"), "Do not add registration claims for a recognition news post");
+assert.ok(!JSON.stringify(spotlightSchema).includes("Eventbrite"), "Do not invent Eventbrite language for a recognition news post");
+
 const fatPath = buildCommunityPostPath("diana-fat-board-of-regents");
 const fatSchema = buildPageStructuredData(fatPath);
 assert.ok(fatSchema, "Expected structured data for the Diana Fat Board of Regents community post");
