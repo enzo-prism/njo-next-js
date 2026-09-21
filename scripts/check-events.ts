@@ -83,6 +83,11 @@ assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation mus
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
 assert.equal(
+  resolveProfileTab("", "#backstage-business-spotlight-michael-njo"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
+assert.equal(
   resolveProfileTab("", "#diana-fat-board-of-regents"),
   "news",
   "A direct news-section hash should open the news tab without requiring a query parameter",
@@ -227,6 +232,27 @@ assert.equal(
   communityPosts.some((post) => /july 30, 2027|october 15, 2027/i.test(`${post.slug} ${post.title} ${post.body.join(" ")}`)),
   false,
   "2027 calendar dates must not become news/community posts",
+);
+
+const spotlightPost = communityPosts.find((post) => post.slug === "backstage-business-spotlight-michael-njo");
+assert.ok(spotlightPost, "Backstage Business Spotlight news post must exist");
+assert.equal(spotlightPost?.publishedAt, "2026-09-21");
+const spotlightBody = spotlightPost?.body.join(" ") ?? "";
+assert.ok(
+  spotlightBody.includes("https://www.linkedin.com/in/michael-njo-b215a33a1/"),
+  "Spotlight post must use the locked LinkedIn keep-URL",
+);
+assert.equal(
+  (spotlightBody.match(/linkedin\.com\/in\/[^\s]+/g) ?? []).every(
+    (url) => url === "linkedin.com/in/michael-njo-b215a33a1/",
+  ),
+  true,
+  "Spotlight post must not use any other LinkedIn profile URL",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "backstage-business-spotlight-michael-njo" && /eventbrite|registration/i.test(post.body.join(" "))),
+  false,
+  "Backstage spotlight is news only and must not become an event listing",
 );
 
 const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");

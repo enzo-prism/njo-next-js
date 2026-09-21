@@ -20,6 +20,32 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "backstage-business-spotlight-michael-njo",
+    title: "Backstage Business Spotlight: Michael Njo",
+    description:
+      "Meet Michael Njo, founder of Dental Strategies and today’s Backstage Business Spotlight. He is a dental practice transition specialist, consultant, and advisor who helps dentists navigate buying, selling, and transitioning practice ownership.",
+    publishedAt: "2026-09-21",
+    image: {
+      src: "/media/backstage-business-spotlight-michael-njo.webp",
+      width: 1024,
+      height: 1024,
+      alt: "Backstage Business Spotlight graphic featuring Michael Njo, dental practice transition expert and founder of Dental Strategies.",
+      caption: "Backstage Business Spotlight featuring Michael Njo of Dental Strategies.",
+    },
+    body: [
+      "Meet Michael Njo, founder of Dental Strategies and today’s Backstage Business Spotlight.",
+      "Michael is a dental practice transition specialist, consultant, and advisor who helps dentists confidently navigate the process of buying, selling, and transitioning practice ownership.",
+      "Through Dental Strategies, Michael provides practice valuations, succession planning, exit strategy development, acquisitions, sales, and buy-in or buy-out guidance. His work is especially valuable for practice owners who want to begin preparing several years before a potential transition.",
+      "Michael is not a transaction-only broker. He takes the time to understand each dentist’s goals, evaluate the practice, and develop a thoughtful plan that protects what the owner has built while creating the right path forward.",
+      "His clinical background gives him firsthand insight into the professional and personal considerations involved in practice ownership. After a C6-C7 disc injury led him to transition away from clinical dentistry, Michael brought that experience into his advisory work, helping other dentists approach change with greater clarity and preparation.",
+      "Michael also supports buyers searching for the right practice and helps structure doctor-to-doctor transitions that create sustainable, mutually beneficial outcomes.",
+      "Known for his relationship-first approach, Michael has built much of his business through direct referrals and long-term professional trust. He works closely with dental CPAs, attorneys, lenders, consultants, and wealth advisors to help practice owners make informed decisions at every stage.",
+      "We’re proud to spotlight Michael Njo and recognize the strategic guidance, clinical perspective, and commitment to thoughtful dental practice transitions that he brings to the Backstage community.",
+      "Learn more about Michael Njo and Dental Strategies: https://www.linkedin.com/in/michael-njo-b215a33a1/",
+      "Discover more members of the Backstage community at backstagedentistry.com.",
+    ],
+  },
+  {
     slug: "diana-fat-board-of-regents",
     title: "Dr. Diana Fat appointed to the University of the Pacific Board of Regents",
     description:

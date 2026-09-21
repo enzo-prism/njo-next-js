@@ -19,8 +19,9 @@ bars, or `PhotoNameOverlay`. Keep accurate `alt` text.
 `src/lib/photo-captions.ts` lists:
 
 - every id in `allEditorialImages` (`src/data/media.ts`)
-- three matching `public/media` extras he emailed to post that are not in that
-  array: `dental-lifestyles-feature-p26`, `promotional-flyer-dental-strategies`,
+- matching `public/media` extras he emailed to post that are not in that
+  array: `backstage-business-spotlight-michael-njo`,
+  `dental-lifestyles-feature-p26`, `promotional-flyer-dental-strategies`,
   `sacramento-seminar-oct-2026`
 
 Unpublished email attachments, signature PNGs, PDFs, Calendly screenshots, and

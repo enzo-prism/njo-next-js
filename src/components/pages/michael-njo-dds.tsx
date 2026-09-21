@@ -476,6 +476,46 @@ export default function MichaelNjoDDS({
 
           <TabsContent value="news" className="space-y-6">
             <article
+              id="backstage-business-spotlight-michael-njo"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                September 21, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                Backstage Business Spotlight: Michael Njo
+              </h2>
+              <Image
+                src="/media/backstage-business-spotlight-michael-njo.webp"
+                alt="Backstage Business Spotlight graphic featuring Michael Njo, dental practice transition expert and founder of Dental Strategies."
+                width={1024}
+                height={1024}
+                className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 768px) 448px, 100vw"
+                priority
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Meet Michael Njo, founder of Dental Strategies and today’s
+                Backstage Business Spotlight.
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Michael is a dental practice transition specialist, consultant,
+                and advisor who helps dentists confidently navigate the process
+                of buying, selling, and transitioning practice ownership.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/backstage-business-spotlight-michael-njo">
+                    Read the full story
+                  </Link>
+                </Button>
+              </div>
+            </article>
+
+            <article
               id="diana-fat-board-of-regents"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
