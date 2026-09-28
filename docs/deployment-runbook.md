@@ -74,7 +74,7 @@ Validate on preview URL:
 
 - Main routes return expected content.
 - Photos on `/` hero, `/resources`, `/dr-michael-njo-interview`, and `/blog/another-perfect-match` have no inventory caption or name-bar text under the image. Profile mosaics/lightbox on `/michael-njo-dds` may show a caption only after a Photos-tab save.
-- `GET /api/photo-captions` returns the website catalog. A reversible `PATCH` then a fresh `GET` (and dashboard `/photos` hard reload) keeps the edited caption. Restore or unpublish the test id so a test caption does not stay live. See `docs/photo-caption-qa.md`.
+- `GET /api/photo-captions` returns the website catalog. `PATCH` without `Authorization: Bearer $CAPTION_ADMIN_TOKEN` returns `401` (or `503` if the env var is missing). A reversible authorized `PATCH` then a fresh `GET` (and dashboard `/photos` hard reload) keeps the edited caption. Restore or unpublish the test id so a test caption does not stay live. See `docs/photo-caption-qa.md`.
 - Unknown route returns custom 404.
 - Legacy redirects resolve correctly.
 - `robots.txt`, `sitemap.xml`, and `llms.txt` are accessible.

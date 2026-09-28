@@ -28,7 +28,7 @@ Read this together with `AGENTS.md`. `AGENTS.md` defines invariants; this file e
 - Form model:
   - browser submits directly to Formspree
   - there are no internal API routes for lead capture
-  - `GET/PATCH /api/photo-captions` is a caption QA overlay, not a form backend
+  - `GET/PATCH /api/photo-captions` is a caption QA overlay, not a form backend; `PATCH` requires `Authorization: Bearer $CAPTION_ADMIN_TOKEN`
   - shared validation, privacy acknowledgment, honeypot, and repeat-submit safeguards live in `src/lib/lead-form-validation.ts`
 - Analytics model:
   - consent-gated Vercel Analytics, Google Analytics, and Hotjar are coordinated once from `src/app/layout.tsx`
@@ -457,6 +457,8 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - validates indexable sitemap coverage and ensures campaign, testimonial-detail, and `/contact/success` URLs are excluded
 - `check:seo-http`
   - runs `next start`, fetches live `robots.txt` and `sitemap.xml`, and validates served SEO output
+- `check:api-security`
+  - runs `next start` with and without a test `CAPTION_ADMIN_TOKEN`; validates caption `PATCH` auth (401 without/with a wrong token, 503 when unconfigured), that `GET` stays public, and that only the real `google<token>.html` verification file is served
 - `check:robots`
   - validates robots rule shape and sitemap reference
 - `check:redirects`

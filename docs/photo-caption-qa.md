@@ -70,16 +70,29 @@ exist only for `scripts/check-photo-captions.ts`.
 
 `src/app/api/photo-captions/route.ts` is `force-dynamic` on the Node runtime.
 
-| Method | Body | Result |
-| --- | --- | --- |
-| `GET` | — | `{ generatedAt, photos }` |
-| `PATCH` | `{ id, caption }` | `{ saved, photo }` |
-| `OPTIONS` | — | CORS preflight |
+| Method | Auth | Body | Result |
+| --- | --- | --- | --- |
+| `GET` | public | — | `{ generatedAt, photos }` |
+| `PATCH` | `Authorization: Bearer $CAPTION_ADMIN_TOKEN` | `{ id, caption }` | `{ saved, photo }` |
+| `OPTIONS` | public | — | CORS preflight |
+
+`PATCH` checks the token before reading the body (`src/lib/caption-admin-auth.ts`
+compares SHA-256 digests with `timingSafeEqual`). A missing or wrong token is
+`401` with `WWW-Authenticate: Bearer`. If `CAPTION_ADMIN_TOKEN` is unset or
+shorter than 32 characters, `PATCH` is `503` for everyone, so editing fails
+closed. The token is server-only: set it in the Vercel project env for this
+site, never as `NEXT_PUBLIC_*`, and never ship it in the dashboard bundle.
+Dashboard editors paste it into the Photos tab "Editor token" field, which
+keeps it in that browser's `localStorage` and sends it on Save.
+
+Generate a token with `openssl rand -base64 32`. Rotating it means updating
+the Vercel env var, redeploying, and pasting the new token into the dashboard.
 
 Unknown ids are `404`. Captions longer than 500 characters are `400`. CORS
 allows `https://michaelnjodds.com`, `https://www.michaelnjodds.com`,
 `https://njo-dashboard.vercel.app`, `https://njo-dashboard*.vercel.app`
-previews, and `http://localhost` / `http://127.0.0.1`.
+previews, and `http://localhost` / `http://127.0.0.1`, and allows the
+`Authorization` header. CORS is not access control; the bearer token is.
 
 The dashboard never talks to this origin from the browser in production. It
 calls `/api/photos`, which Vercel rewrites to this route before the SPA
@@ -121,8 +134,12 @@ previous caption or unpublish the test id.
 
 ```bash
 curl -sS https://michaelnjodds.com/api/photo-captions
-# PATCH a known id, GET again from the site and from
-# https://njo-dashboard.vercel.app/api/photos, then restore
+# Anonymous PATCH must be rejected (401):
+curl -sS -X PATCH https://michaelnjodds.com/api/photo-captions \
+  -H 'Content-Type: application/json' -d '{"id":"not-a-real-photo","caption":""}'
+# With the token, PATCH a known id, GET again from the site and from
+# https://njo-dashboard.vercel.app/api/photos, then restore:
+#   -H "Authorization: Bearer $CAPTION_ADMIN_TOKEN"
 ```
 
 Dashboard: open `/photos`, edit, Save, hard reload. The same caption must
@@ -136,6 +153,8 @@ only.
 | `src/lib/photo-caption-store.ts` | Runtime Cache + memory, apply/save/load |
 | `src/lib/photo-captions.ts` | Catalog, `listWebsitePhotos`, public URLs |
 | `src/app/api/photo-captions/route.ts` | GET / PATCH / OPTIONS |
+| `src/lib/caption-admin-auth.ts` | Bearer token check for `PATCH` |
+| `scripts/check-api-security.ts` | `PATCH` auth over HTTP (`next start`) |
 | `src/components/media/editorial-mosaic.tsx` | Optional `qaCaptions` figcaption |
 | `src/components/pages/michael-njo-dds.tsx` | Fetches overlay; lightbox uses qa map |
 | `scripts/check-photo-captions.ts` | Persistence assertions |
