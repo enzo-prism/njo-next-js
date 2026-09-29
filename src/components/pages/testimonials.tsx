@@ -22,19 +22,19 @@ export default function TestimonialsPage() {
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(TESTIMONIAL_PAGE_SIZE);
+  const normalizedQuery = query.trim().toLowerCase();
 
   const filteredTestimonials = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const base = testimonialPages.filter((item) => item.author.toLowerCase().includes(q));
+    const base = testimonialPages.filter((item) => item.author.toLowerCase().includes(normalizedQuery));
 
     if (sortMode === "alpha") {
       return [...base].sort((a, b) => a.author.localeCompare(b.author));
     }
 
     return base;
-  }, [query, sortMode]);
+  }, [normalizedQuery, sortMode]);
 
-  const visibleTestimonials = query
+  const visibleTestimonials = normalizedQuery
     ? filteredTestimonials
     : filteredTestimonials.slice(0, visibleCount);
 
@@ -104,13 +104,13 @@ export default function TestimonialsPage() {
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-            Showing {visibleTestimonials.length} of {filteredTestimonials.length}{query ? " matching" : ""} testimonials.
+            Showing {visibleTestimonials.length} of {filteredTestimonials.length}{normalizedQuery ? " matching" : ""} testimonials.
           </p>
         </div>
       </Section>
 
       {/* Featured pull-quotes */}
-      {!query ? (
+      {!normalizedQuery ? (
         <Section tone="surface" spacing="compact" aria-label="Featured testimonials">
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-2">
             {featuredTestimonials.map((testimonial) => (
@@ -145,7 +145,7 @@ export default function TestimonialsPage() {
                 <TestimonialListCard key={`${testimonial.author}-${testimonial.slug}`} testimonial={testimonial} className="mb-5" />
               ))}
             </div>
-            {!query && visibleTestimonials.length < filteredTestimonials.length ? (
+            {!normalizedQuery && visibleTestimonials.length < filteredTestimonials.length ? (
               <div className="mt-8 flex justify-center">
                 <Button type="button" size="lg" variant="outline" onClick={() => setVisibleCount((count) => count + TESTIMONIAL_PAGE_SIZE)}>
                   Show 12 more stories

@@ -109,7 +109,11 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
           <StarCount count={testimonial.stars} />
           <p className="mt-4 flex items-center gap-1 text-sm text-muted-foreground">
             <CalendarDays className="h-4 w-4" />
-            {testimonial.source === "alignable" ? "Recommendation via Alignable" : "Verified client story"}
+            {testimonial.source === "alignable"
+              ? "Recommendation via Alignable"
+              : testimonial.source === "google"
+                ? "Review via Google"
+                : "Verified client story"}
           </p>
         </CardContent>
       </Card>

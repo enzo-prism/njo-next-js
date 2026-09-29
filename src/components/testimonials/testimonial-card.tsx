@@ -24,6 +24,7 @@ const Rating = ({ value, max = 5 }: { value: number; max?: number }) => (
 
 const sourceLabels: Record<TestimonialSource, string> = {
   alignable: "Alignable",
+  google: "Google",
 };
 
 export function SourceBadge({ source }: { source: TestimonialSource }) {
