@@ -179,7 +179,9 @@ Important behaviors:
 
 - `testimonials` is the raw source list
 - `testimonialPages` is derived data
-- testimonials are sorted newest-first by `publishedAt`
+- testimonials are sorted newest-first by `publishedAt`, falling back to `receivedAt` when an exact publication date is unavailable
+- `receivedAt` records when a review was supplied, never a guessed Google publication date; only `publishedAt` feeds publication-date schema
+- Google and Alignable sources are identified on cards and details
 - ties fall back to original array order
 - slugs are generated from author names, with numeric suffixes for duplicates
 - excerpts are generated automatically from quote text
@@ -519,6 +521,6 @@ For a featured book launch, also:
 ## Known Sharp Edges
 
 - `/about` is still recognized in metadata helpers for historical parity, but the public route is `/michael-njo-dds`
-- only `https://res.cloudinary.com` is whitelisted for remote `next/image` usage in `next.config.ts`
+- only `https://res.cloudinary.com/dhqpqfw6w/**` is whitelisted for remote `next/image` usage in `next.config.ts`
 - dynamic detail routes are static-only; unknown params should stay 404s
 - metadata and structured data are centralized on purpose; avoid per-page bespoke logic unless the route genuinely breaks the shared pattern

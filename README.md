@@ -43,6 +43,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - Static-first App Router site. Most pages are server-rendered wrappers around page components.
 - Data-driven detail routes are prerendered with `dynamicParams = false`.
 - Long-form content lives in TypeScript data files, not a CMS.
+- Testimonials preserve supplied wording and identify recorded Google/Alignable sources. Newest-review ordering uses verified publication dates or received dates; received dates are never emitted as publication-date schema.
 - SEO, canonical URL logic, and JSON-LD are centralized rather than assembled route-by-route.
 - The primary site-wide CTA is "Book a call" (Calendly), implemented once as `BookingButton` and sourced from the `BOOKING_URL` constant in `src/config/site.ts`. Contact (`/contact`) is the secondary action.
 - A second Calendly link, `DSO_PRICING_BOOKING_URL`, powers a scoped `DsoPricingCallout` for DSO pricing discussions, surfaced on the home, contact, and profile pages.

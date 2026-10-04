@@ -1,10 +1,12 @@
-export type TestimonialSource = "alignable";
+export type TestimonialSource = "alignable" | "google";
 
 export type Testimonial = {
   quote: string;
   author: string;
   stars: number;
   publishedAt?: string;
+  /** Date the review was received when its exact publication date is unavailable. */
+  receivedAt?: string;
   organization?: string;
   source?: TestimonialSource;
 };
@@ -91,12 +93,23 @@ const sortByNewest = (
   a: Testimonial & { _index: number },
   b: Testimonial & { _index: number },
 ) => {
-  const dateDelta = parsePublishedAt(b.publishedAt) - parsePublishedAt(a.publishedAt);
-  if (dateDelta !== 0) return dateDelta;
+  const aDate = parsePublishedAt(a.publishedAt || a.receivedAt);
+  const bDate = parsePublishedAt(b.publishedAt || b.receivedAt);
+  // Equal missing dates must fall back to source order, not Infinity - Infinity (NaN).
+  if (aDate !== bDate) return bDate - aDate;
   return a._index - b._index;
 };
 
 export const testimonials: Testimonial[] = [
+  {
+    quote: `Michael is professional, knowledgeable and responsive but most importantly he listened to what told him I was looking for in this transition from a practice owner to an associate. He was able to find an opportunity for me that is a great fit. The whole process was smooth and stress was kept to a minimum. Highly recommend.`,
+    author: "Tanya Harris",
+    stars: 5,
+    source: "google",
+    // Supplied in Michael's September 27 email; Google's relative edited date
+    // does not establish an exact publication date.
+    receivedAt: "2026-09-27",
+  },
   {
     quote: `I've had the privilege of knowing Michael for the past five years. We first met in dental school when he was mentoring our business club, and since then he's been there through every major milestone.
 
@@ -718,6 +731,11 @@ I firmly believe that without his guidance, the transition would have been far m
     stars: 5,
     publishedAt: "2011-01-26",
   },
+  {
+    quote: `Thank you so much for all your help and expertise. You have helped me grow, learn, and transition well. Looking forward to all that's ahead!`,
+    author: "Brittany",
+    stars: 5,
+  },
 ];
 
 export const testimonialPages: TestimonialPage[] = (() => {
@@ -732,6 +750,7 @@ export const testimonialPages: TestimonialPage[] = (() => {
       author: entry.author,
       stars: entry.stars,
       publishedAt: entry.publishedAt,
+      receivedAt: entry.receivedAt,
       organization: entry.organization,
       source: entry.source,
     };
@@ -751,12 +770,12 @@ export const testimonialPages: TestimonialPage[] = (() => {
 
 /**
  * Most recent 5-star client review. `testimonialPages` is already sorted
- * newest-first, so the first dated 5-star entry is the latest one. Used by the
+ * newest-first by publication or received date. Used by the
  * homepage hero to surface fresh social proof.
  */
 export const getLatestFiveStarTestimonial = (): TestimonialPage | undefined =>
   testimonialPages.find(
-    (testimonial) => testimonial.stars === 5 && Boolean(testimonial.publishedAt),
+    (testimonial) => testimonial.stars === 5 && Boolean(testimonial.publishedAt || testimonial.receivedAt),
   );
 
 const FEATURED_NAMED_AUTHORS = [
