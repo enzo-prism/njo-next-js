@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { checkCaptionAdminAuth } from "@/lib/caption-admin-auth";
 import {
   isKnownPhotoId,
   listWebsitePhotos,
@@ -46,18 +47,23 @@ function corsHeaders(request: Request) {
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET, PATCH, OPTIONS",
-    "Access-Control-Allow-Headers": "Accept, Content-Type",
+    "Access-Control-Allow-Headers": "Accept, Authorization, Content-Type",
     "Cache-Control": "no-store",
     Vary: "Origin",
   };
 }
 
-function errorResponse(request: Request, message: string, status: number) {
+function errorResponse(
+  request: Request,
+  message: string,
+  status: number,
+  extraHeaders: Record<string, string> = {},
+) {
   return NextResponse.json(
     { error: message },
     {
       status,
-      headers: corsHeaders(request),
+      headers: { ...corsHeaders(request), ...extraHeaders },
     },
   );
 }
@@ -89,6 +95,16 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const auth = checkCaptionAdminAuth(request.headers.get("authorization"));
+  if (auth === "unconfigured") {
+    return errorResponse(request, "Caption editing is not configured.", 503);
+  }
+  if (auth === "unauthorized") {
+    return errorResponse(request, "Caption editing requires a valid editor token.", 401, {
+      "WWW-Authenticate": 'Bearer realm="photo-captions"',
+    });
+  }
+
   let body: PatchBody;
   try {
     body = (await request.json()) as PatchBody;

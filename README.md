@@ -120,6 +120,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 | `NEXT_PUBLIC_GA_ID`     | GA tracking ID                          | `G-6HWEE040EH`              |
 | `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID                          | `6575522`                   |
 | `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version                          | `6`                         |
+| `CAPTION_ADMIN_TOKEN`   | Server-only bearer token for caption `PATCH` (32+ chars) | none; caption editing returns `503` until set |
 
 ## Local Development
 
@@ -182,6 +183,7 @@ This runs:
 - Structured data assertions
 - Sitemap assertions
 - HTTP SEO smoke assertions
+- API security assertions (caption write auth, no wildcard Search Console verification)
 - Robots assertions
 - Redirect assertions
 

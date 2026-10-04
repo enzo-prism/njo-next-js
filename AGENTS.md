@@ -95,6 +95,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - empty/whitespace caption deletes that id; `saveLiveCaption` writes memory then cache
 - `src/app/api/photo-captions/route.ts`
   - `GET` lists emailed/website photos; `PATCH { id, caption }` saves (max 500 chars) or unpublishes; CORS for the dashboard and localhost
+  - `PATCH` requires `Authorization: Bearer $CAPTION_ADMIN_TOKEN` (`src/lib/caption-admin-auth.ts`, SHA-256 + `timingSafeEqual`); with no token of at least 32 characters configured it returns `503`, so caption editing fails closed
 - `docs/photo-caption-qa.md`
   - operating guide for catalog honesty, store, API, editor dirty-vs-live, tests, and production smoke
 - `src/components/media/hero-slideshow.tsx`
@@ -136,6 +137,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - parity and SEO validation scripts
   - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, fails if inventory captions or name bars are reintroduced, and requires the QA overlay plus store `applyLiveCaptionEdit` / `replaceMemory`
   - `check-photo-captions.ts` (`npm run check:photo-captions`, included in `check:parity`) proves a caption edit survives save, a fresh load, a second edit, and unpublish without losing other saved captions
+  - `check-api-security.ts` (`npm run check:api-security`, included in `check:parity`) runs `next start` and proves caption `PATCH` rejects missing/wrong tokens, fails closed without `CAPTION_ADMIN_TOKEN`, and that only the real Search Console file verifies (no wildcard `google*.html` route); `scripts/lib/next-server.ts` is the shared `next start` harness
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
@@ -218,6 +220,8 @@ Check these hotspots first when your work touches:
 - Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
 - Do not add redirect-only or thank-you pages to the sitemap.
+- Do not add unauthenticated write endpoints. Caption `PATCH` must keep the `CAPTION_ADMIN_TOKEN` bearer check, and the token must stay server-only (never `NEXT_PUBLIC_*`, never in a dashboard `VITE_*` variable or bundle).
+- Do not serve Search Console verification files from a wildcard rewrite or route; anyone could verify ownership. Add each real `google<token>.html` to `public/` (currently `public/google078b551f409128a8.html` plus the `verification.google` meta tag in `src/app/layout.tsx`).
 - Do not change canonical host/protocol logic casually; multiple docs and checks depend on it.
 - Do not switch package managers unless the repo is intentionally migrated end-to-end.
 - Do not change testimonial author names casually without checking whether the generated slug changes.

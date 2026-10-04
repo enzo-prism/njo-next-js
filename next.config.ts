@@ -33,6 +33,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
+        // Only this site's Cloudinary account; any other account could feed the optimizer arbitrary files.
         pathname: "/dhqpqfw6w/**",
       },
     ],
@@ -120,14 +121,6 @@ const nextConfig: NextConfig = {
         source: "/testimonials/team-member-2",
         destination: "/testimonials/team-member",
         permanent: true,
-      },
-    ];
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/:file(google[a-zA-Z0-9]+\\.html)",
-        destination: "/api/google-site-verification?file=:file",
       },
     ];
   },
