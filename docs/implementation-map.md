@@ -418,6 +418,7 @@ The env helper intentionally trims whitespace. Do not remove that behavior witho
 
 - `metadataBase`
 - favicon metadata
+- Search Console `verification.google` meta (HTML-file verification is `public/google078b551f409128a8.html` only; do not add a `google*.html` rewrite)
 - Vercel Analytics mount
 - Consent-gated GA and Hotjar loading
 - `CalendlyLeadTracker` (booking popup + `event_scheduled` lead events)
@@ -459,6 +460,8 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - validates indexable sitemap coverage and ensures campaign, testimonial-detail, and `/contact/success` URLs are excluded
 - `check:seo-http`
   - runs `next start`, fetches live `robots.txt` and `sitemap.xml`, and validates served SEO output
+- `check:api-security`
+  - runs `next start` and checks the build manifest so only the real `google<token>.html` verification file is served (no wildcard rewrite or `/api/google-site-verification` route)
 - `check:robots`
   - validates robots rule shape and sitemap reference
 - `check:redirects`

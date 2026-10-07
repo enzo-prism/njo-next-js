@@ -40,6 +40,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
 - `src/app/layout.tsx`
   - Root layout
   - Mounts the single global analytics consent manager
+  - Owns the Search Console `verification.google` meta tag; HTML-file verification is the static file in `public/google078b551f409128a8.html`
 - `src/components/analytics-consent.tsx`
   - Consent-gated, production-host-only Vercel Analytics, Google Analytics, and Hotjar loading
 - `src/lib/analytics-events.ts`
@@ -64,6 +65,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - canonical redirects
   - legacy redirects
   - global security headers, including a Content Security Policy that allows official Calendly popup widget assets via the `src/config/site.ts` constants
+  - do not add a `google*.html` rewrite; Search Console file verification is the static public file only
 - `src/config/routes.ts`
   - static route inventory and redirect metadata used by checks
 - `src/seo/*`
@@ -136,6 +138,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - parity and SEO validation scripts
   - `check-media.ts` rejects EXIF-rotated editorial imports unless their displayed dimensions are declared explicitly, blocks unmanaged `object-cover`, checks that galleries and slides cannot re-crop during interaction, fails if inventory captions or name bars are reintroduced, and requires the QA overlay plus store `applyLiveCaptionEdit` / `replaceMemory`
   - `check-photo-captions.ts` (`npm run check:photo-captions`, included in `check:parity`) proves a caption edit survives save, a fresh load, a second edit, and unpublish without losing other saved captions
+  - `check-api-security.ts` (`npm run check:api-security`, included in `check:parity`) proves only the real Search Console file verifies (no wildcard `google*.html` rewrite or route); `scripts/lib/next-server.ts` is the shared `next start` harness
 - `docs/implementation-map.md`
   - rendering model, route wiring, content sources, form payloads, and change playbooks
 - `docs/deployment-runbook.md`
@@ -218,6 +221,7 @@ Check these hotspots first when your work touches:
 - Do not add per-page analytics mounts. The `/contact/success` lead-tracker island is the only allowed exception, and it must keep using `form_id=contact` so it dedupes with the form submit.
 - Do not move form submissions into API routes unless the migration is intentional and fully documented.
 - Do not add redirect-only or thank-you pages to the sitemap.
+- Do not serve Search Console verification files from a wildcard rewrite or route; anyone could verify ownership. Add each real `google<token>.html` to `public/` (currently `public/google078b551f409128a8.html` plus the `verification.google` meta tag in `src/app/layout.tsx`).
 - Do not change canonical host/protocol logic casually; multiple docs and checks depend on it.
 - Do not switch package managers unless the repo is intentionally migrated end-to-end.
 - Do not change testimonial author names casually without checking whether the generated slug changes.
