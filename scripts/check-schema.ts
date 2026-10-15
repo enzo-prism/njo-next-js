@@ -94,6 +94,23 @@ assert.ok(!("isbn" in (dentalExitBlueprintBook || {})), "Do not add an unverifie
 assert.ok(!("publisher" in (dentalExitBlueprintBook || {})), "Do not add an unverified Dental Exit Blueprint publisher");
 assert.ok(!JSON.stringify(dentalExitBlueprintSchema).includes("#1"), "Do not add an unverified #1 claim");
 
+const networkRecommendationSchema = buildPageStructuredData("/resources/the-unlocked-practice");
+const networkGraph = networkRecommendationSchema?.["@graph"] as Array<Record<string, unknown>>;
+const recommendedBook = networkGraph.find((node) => node["@type"] === "Book");
+const recommendationArticle = networkGraph.find((node) => node["@type"] === "BlogPosting");
+assert.deepEqual(recommendedBook?.author, [
+  { "@type": "Person", name: "Monica Cappelli" },
+  { "@type": "Person", name: "Anthony Jurjevic" },
+  { "@type": "Person", name: "Duane Tinker" },
+], "The recommended book must credit its three authors, separately from Dr. Njo");
+assert.equal(recommendedBook?.url, "https://www.amazon.com/dp/B0HMM29ZMX");
+assert.equal((recommendationArticle?.author as Record<string, unknown>)?.name, "Michael Njo, DDS");
+assert.deepEqual(recommendationArticle?.about, { "@id": "https://michaelnjodds.com/resources/the-unlocked-practice#book" });
+assert.ok(!networkGraph.some((node) => node["@type"] === "NewsArticle"), "A recommendation is not a book-launch announcement");
+for (const key of ["isbn", "publisher", "datePublished", "image", "aggregateRating", "offers"]) {
+  assert.ok(!(key in (recommendedBook || {})), `Do not invent recommended-book ${key}`);
+}
+
 const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
 assert.equal(
   augustEventNodes.length,

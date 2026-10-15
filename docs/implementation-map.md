@@ -169,6 +169,10 @@ The Dental Exit Blueprint is the current featured book-launch resource:
 
 Book-launch resources are intentionally distinct from standard guidance articles. The home page and resources index feature the launch separately, while the older solo-authored `Dental Practice Transitions Handbook` resource remains visible.
 
+Network recommendations use the optional `networkResource` payload in the same data file. `/resources#from-dr-njos-network` lists them separately from “Articles & guidance”; a homepage teaser links to the collection and its first recommendation. `src/components/network-resource-feature.tsx` renders the hub excerpt and the full, attributed recommendation on the generated detail route. The first entry, `/resources/the-unlocked-practice`, preserves Dr. Njo’s October 14, 2026 comments and Amazon destination. No cover is displayed because a verified cover asset was not supplied. Add future entries only with his recommendation and verified creator/link information, without empty categories or generated endorsements.
+
+Network detail pages emit `BlogPosting` for Michael’s recommendation and a separate `Book` whose authors are the actual creators. Do not substitute `bookLaunch`, imply Michael authored the recommended book, or invent publication metadata. The collection automatically participates in existing metadata, sitemap, and route generation. `check:schema` checks the author roles, and `check:seo-http` verifies the rendered recommendation flow.
+
 If you change a resource slug, add a redirect if the old URL has ever been public.
 
 ### Testimonials

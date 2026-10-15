@@ -37,6 +37,20 @@ export type ResourceArticleHeroImage = {
   caption?: string;
 };
 
+export type NetworkResource = {
+  kind: "Book";
+  title: string;
+  authors: string[];
+  url: string;
+  recommendedAt: string;
+  audience: string;
+  topics: string[];
+  recommendation: {
+    heading: string;
+    paragraphs: string[];
+  };
+};
+
 export type ResourceArticle = {
   slug: string;
   title: string;
@@ -57,6 +71,7 @@ export type ResourceArticle = {
   relatedLinks: ResourceArticleLink[];
   bookLaunch?: ResourceArticleBookLaunch;
   heroImage?: ResourceArticleHeroImage;
+  networkResource?: NetworkResource;
 };
 
 const RESOURCE_ARTICLES_BASE_PATH = "/resources";
@@ -83,6 +98,43 @@ export function formatArticleDate(value: string) {
 }
 
 export const resourceArticles: ResourceArticle[] = [
+  {
+    slug: "the-unlocked-practice",
+    title: "The Unlocked Practice",
+    metaTitle: "The Unlocked Practice: Dr. Njo’s Recommendation | Michael Njo, DDS",
+    description:
+      "Dr. Michael Njo recommends The Unlocked Practice by Monica Cappelli, Anthony Jurjevic, and Duane Tinker, with his thoughts on protecting a dental practice.",
+    excerpt:
+      "A recommendation from Dr. Njo’s network on HIPAA compliance, cybersecurity, data breaches, and embezzlement prevention for dental practice owners.",
+    category: "Practice protection",
+    publishedAt: "2026-10-15T00:00:00Z",
+    readTimeMinutes: 2,
+    primaryKeyword: "The Unlocked Practice",
+    secondaryKeywords: ["Dr. Njo book recommendations", "dental practice protection", "dental career resources"],
+    // Network recommendations use the attributed content below, rather than a generated article or FAQ.
+    keyTakeaways: [],
+    intro: [],
+    sections: [],
+    faq: [],
+    closing: [],
+    relatedLinks: [],
+    networkResource: {
+      kind: "Book" as const,
+      title: "The Unlocked Practice",
+      authors: ["Monica Cappelli", "Anthony Jurjevic", "Duane Tinker"],
+      url: "https://www.amazon.com/dp/B0HMM29ZMX",
+      recommendedAt: "2026-10-14",
+      audience: "Dental practice owners and dentists preparing for ownership",
+      topics: ["HIPAA compliance", "Cybersecurity", "Data breaches", "Embezzlement prevention"],
+      recommendation: {
+        heading: "Protecting Your Practice Is Part of Protecting Its Value",
+        paragraphs: [
+          "As a dentist and practice transition consultant, I know that building a successful practice includes protecting what you have worked so hard to create. The Unlocked Practice brings attention to issues every owner should take seriously: HIPAA compliance, cybersecurity, data breaches, and embezzlement prevention.",
+          "I appreciate Monica Cappelli, Anthony Jurjevic, and Duane Tinker addressing these subjects together. Protecting patient information, strengthening oversight, and recognizing vulnerabilities are essential responsibilities of practice ownership. These topics deserve a place in conversations with your team and advisors.",
+        ],
+      },
+    },
+  },
   {
     slug: "dental-exit-blueprint",
     title: "The Dental Exit Blueprint",

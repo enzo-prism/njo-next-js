@@ -77,6 +77,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - shared 56px/96px circle used by the testimonials index, featured cards, and story pages
 - `src/data/resource-articles.ts`
   - source of truth for `/resources/[slug]` content, SEO fields, article slugs, and optional book-launch data
+  - `networkResource` holds recommendations from Dr. Njo’s network: actual authors, destination URL, recommendation date, audience, topics, and his exact attributed comments. Keep these separate from `bookLaunch` and authored guidance. The first is `/resources/the-unlocked-practice`; Michael recommends it, while Monica Cappelli, Anthony Jurjevic, and Duane Tinker wrote the book. Never invent a cover, rating, publisher, or release date.
 - `src/data/media.ts`
   - editorial photo inventory, display dimensions, `layoutVariant`, and Cloudinary/local dimensions for the profile mosaic and gallery
   - display dimensions must reflect EXIF orientation, not only the JPEG pixel matrix; `three-person-event.jpg` is a 3:4 portrait stored as a rotated 4:3 JPEG
@@ -119,6 +120,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
   - Reusable featured-book UI for the home page, resources hub, and book-launch detail pages
+- `src/components/network-resource-feature.tsx`
+  - Server-rendered network recommendation card and full recommendation layout, with clear book authorship and accessible external-link labeling
 - `src/components/pages/resources.tsx`
   - Resources hub, including featured article links
 - `src/components/pages/resource-article-detail.tsx`

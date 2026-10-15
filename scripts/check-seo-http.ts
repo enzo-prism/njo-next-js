@@ -128,6 +128,37 @@ async function main() {
       assert.ok(sitemapUrls.has(detailUrl), `Missing resource article URL: ${detailUrl}`);
     }
 
+    // Check the rendered journey, including full attributed comments, not only sitemap inclusion.
+    const [homeResponse, resourcesResponse] = await Promise.all([
+      fetch(baseUrl),
+      fetch(`${baseUrl}/resources`),
+    ]);
+    assert.equal(homeResponse.status, 200);
+    assert.equal(resourcesResponse.status, 200);
+    const [homeHtml, resourcesHtml] = await Promise.all([homeResponse.text(), resourcesResponse.text()]);
+    assert.ok(homeHtml.includes('href="/resources#from-dr-njos-network"'), "Homepage must link to network recommendations");
+    const networkSection = resourcesHtml.match(/<section[^>]*id="from-dr-njos-network"[^>]*>([\s\S]*?)<\/section>/)?.[1];
+    assert.ok(networkSection, "Resources must expose a network recommendation section");
+    for (const article of resourceArticles.filter((item) => item.networkResource)) {
+      const resource = article.networkResource!;
+      const detailPath = buildResourceArticlePath(article.slug);
+      assert.ok(networkSection.includes(`href="${detailPath}"`), `Missing network recommendation link: ${detailPath}`);
+      const response = await fetch(`${baseUrl}${detailPath}`);
+      assert.equal(response.status, 200, `Recommendation must render: ${detailPath}`);
+      const html = await response.text();
+      const quote = html.match(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/)?.[1];
+      assert.ok(quote, `Missing attributed recommendation: ${detailPath}`);
+      for (const paragraph of resource.recommendation.paragraphs) {
+        const escaped = paragraph.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+        assert.ok(quote.includes(escaped), `Recommendation text must render in full: ${detailPath}`);
+      }
+      assert.ok(quote.includes("Dr. Michael Njo"), "Recommendation must be attributed to Michael");
+      assert.ok(html.includes(`href="${resource.url}"`), "Recommendation must link to its source");
+      for (const author of resource.authors) {
+        assert.ok(html.includes(author), `Book author missing from recommendation: ${author}`);
+      }
+    }
+
     assert.match(
       robotsText,
       new RegExp(`Sitemap: ${buildCanonicalUrl("/sitemap.xml").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
 import { BookLaunchFeature } from "@/components/book-launch-feature";
+import { NetworkResourceFeature } from "@/components/network-resource-feature";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CONTACT_PATH } from "@/config/site";
@@ -22,6 +23,33 @@ function isExternalLink(href: string) {
 
 export default function ResourceArticleDetailPage({ article }: ResourceArticleDetailPageProps) {
   const publishedLabel = formatArticleDate(article.publishedAt);
+
+  if (article.networkResource) {
+    return (
+      <Container className="space-y-7 py-10 sm:py-14">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbLink href="/resources#from-dr-njos-network">Resources</BreadcrumbLink></BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem><BreadcrumbPage>{article.title}</BreadcrumbPage></BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">From Dr. Njo’s Network</p>
+        <NetworkResourceFeature article={article} detail />
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            More perspectives for your next chapter: explore Dr. Njo’s books and
+            guidance on dental careers, ownership, and practice transitions.
+          </p>
+          <Button asChild variant="outline" className="shrink-0">
+            <Link href="/resources">Explore all resources<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+          </Button>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container className="space-y-8 py-10 sm:py-14">

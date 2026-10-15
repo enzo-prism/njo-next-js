@@ -50,7 +50,7 @@ import {
 } from "@/data/media";
 import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
 import { getUpcomingEventPrograms } from "@/data/events";
-import { resourceArticles } from "@/data/resource-articles";
+import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
 
 const heroSlides: HeroSlide[] = [
@@ -150,6 +150,7 @@ export default function Home({
   const bookLaunchArticle = resourceArticles.find(
     (article) => article.bookLaunch,
   );
+  const networkArticle = resourceArticles.find((article) => article.networkResource);
   const shortReview =
     bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
   const upcomingEventPrograms = getUpcomingEventPrograms(referenceDate);
@@ -232,6 +233,24 @@ export default function Home({
           ))}
         </dl>
       </Section>
+
+      {networkArticle ? (
+        <Section spacing="compact" aria-labelledby="network-resources-title">
+          <div className="flex flex-col gap-6 rounded-2xl border border-brand/20 bg-surface p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Recommended reading</p>
+              <h2 id="network-resources-title" className="text-2xl font-semibold sm:text-3xl">From Dr. Njo’s Network</h2>
+              <p className="text-base leading-relaxed text-muted-foreground">Books and ideas from trusted colleagues to help you grow in dentistry.</p>
+              <Link href={buildResourceArticlePath(networkArticle.slug)} className="inline-flex items-center gap-2 text-sm font-semibold text-brand underline-offset-4 hover:underline">
+                Start with {networkArticle.title}<ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <Button asChild variant="outline" className="shrink-0">
+              <Link href="/resources#from-dr-njos-network">Explore the resources<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+            </Button>
+          </div>
+        </Section>
+      ) : null}
 
       {/* New book launch */}
       {bookLaunchArticle ? (

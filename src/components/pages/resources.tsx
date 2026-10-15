@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookingButton } from "@/components/booking-button";
 import { BookLaunchFeature } from "@/components/book-launch-feature";
+import { NetworkResourceFeature } from "@/components/network-resource-feature";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -41,8 +42,9 @@ export default function ResourcesPage() {
     (article) => article.bookLaunch,
   );
   const guidanceArticles = resourceArticles.filter(
-    (article) => !article.bookLaunch && article.slug !== "second-book",
+    (article) => !article.bookLaunch && !article.networkResource && article.slug !== "second-book",
   );
+  const networkArticles = resourceArticles.filter((article) => article.networkResource);
   const secondBookArticle = resourceArticles.find(
     (article) => article.slug === "second-book",
   );
@@ -57,9 +59,23 @@ export default function ResourcesPage() {
           Education &amp; growth resources
         </h1>
         <p className="mx-auto max-w-3xl text-sm text-muted-foreground">
-          Practical materials and learning pathways curated to support
-          healthcare ownership, transitions, and operations leadership.
+          Books, ideas, and practical guidance to help dental professionals
+          grow their careers, strengthen their practices, and plan what comes next.
         </p>
+      </section>
+
+      <section id="from-dr-njos-network" aria-labelledby="network-heading" className="scroll-mt-28 space-y-6">
+        <div className="max-w-3xl space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Selected by Dr. Njo</p>
+          <h2 id="network-heading" className="text-3xl font-semibold tracking-tight sm:text-4xl">From Dr. Njo’s Network</h2>
+          <p className="text-base leading-relaxed text-muted-foreground">
+            Good ideas are worth sharing. Explore resources from colleagues Dr. Njo
+            knows and recommends, with his perspective on why they matter for a career in dentistry.
+          </p>
+        </div>
+        <div className="space-y-6">
+          {networkArticles.map((article) => <NetworkResourceFeature key={article.slug} article={article} />)}
+        </div>
       </section>
 
       {secondBookArticle ? (

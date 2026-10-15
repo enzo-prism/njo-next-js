@@ -283,6 +283,7 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   const faqId = `${detailUrl}#faq`;
   const imageId = `${detailUrl}#primaryimage`;
   const launch = article.bookLaunch;
+  const networkResource = article.networkResource;
   const bookId = `${detailUrl}#book`;
   const newsArticleId = `${detailUrl}#launch-announcement`;
   const imageUrl = launch ? buildCanonicalUrl(launch.socialImagePath) : SOCIAL_SHARE_IMAGE.url;
@@ -336,7 +337,7 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
     mainEntityOfPage: {
       "@id": `${detailUrl}#webpage`,
     },
-    about: launch
+    about: launch || networkResource
       ? {
           "@id": bookId,
         }
@@ -347,6 +348,10 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
 
   if (launch) {
     articleNode.isBasedOn = launch.syndicatedPressReleaseUrl;
+  }
+  if (networkResource) {
+    articleNode.articleSection = "From Dr. Njo’s Network";
+    articleNode.articleBody = networkResource.recommendation.paragraphs.join("\n\n");
   }
 
   const bookNode: SchemaNode | null = launch
@@ -373,7 +378,16 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
           "@id": newsArticleId,
         },
       }
-    : null;
+    : networkResource
+      ? {
+          "@type": "Book",
+          "@id": bookId,
+          name: networkResource.title,
+          url: networkResource.url,
+          author: networkResource.authors.map((name) => ({ "@type": "Person", name })),
+          subjectOf: { "@id": articleId },
+        }
+      : null;
 
   const faqNode: SchemaNode | null = article.faq.length
     ? {

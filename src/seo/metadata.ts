@@ -179,7 +179,7 @@ export function buildPageDescription(pathname: string): string {
     case "/testimonials":
       return "Read testimonials from dentists and healthcare professionals who have worked with Michael Njo, DDS through Dental Strategies and Practice Transitions Institute.";
     case "/resources":
-      return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and other resources curated by Michael Njo, DDS for practice owners.";
+      return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and recommendations from Dr. Njo’s network to support your dental career and practice.";
     case "/phillips-event":
       return "Continue the conversation after a Phillips-supported presentation with Michael Njo, DDS about dental practice growth, valuation, and transitions.";
     case "/dentalflix":
