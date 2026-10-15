@@ -85,6 +85,17 @@ Validate on preview URL:
 Preview hosts intentionally do not load analytics providers. A successful preview check therefore confirms that
 Google Analytics, Hotjar, and Vercel Analytics remain absent even if a saved production consent value exists.
 
+### Network resource release checks
+
+Use these checks on the preview deployment and repeat the read-only checks on the canonical production domain after release:
+
+- Follow the homepage “Explore the resources” link to `/resources#from-dr-njos-network`, then open *The Unlocked Practice* at `/resources/the-unlocked-practice`.
+- Confirm the hub excerpt links to the full recommendation. On the detail page, both paragraphs must match Dr. Njo’s October 14, 2026 recommendation in `src/data/resource-articles.ts` and remain attributed to him.
+- Confirm Monica Cappelli, Anthony Jurjevic, and Duane Tinker are the book authors and the Amazon destination is `https://www.amazon.com/dp/B0HMM29ZMX`.
+- Check desktop and narrow mobile layouts for readable text, usable links, and horizontal overflow.
+- Confirm HTTP 200, the canonical detail URL, sitemap inclusion, and the `llms.txt` resource links. The recommendation is a `BlogPosting` by Michael; its separate `Book` node credits the three book authors. Do not invent a cover, book release date, publisher, or rating.
+- Match the production deployment’s Git commit to the released `main` commit and confirm `michaelnjodds.com` resolves to that ready deployment. A successful build or merged commit alone does not establish that the feature is live.
+
 ## 4. Production Deployment
 
 Production can be triggered either:
