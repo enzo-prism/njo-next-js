@@ -123,14 +123,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:file(google[a-zA-Z0-9]+\\.html)",
-        destination: "/api/google-site-verification?file=:file",
-      },
-    ];
-  },
 };
 
 export default nextConfig;

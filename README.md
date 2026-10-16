@@ -184,6 +184,7 @@ This runs:
 - Structured data assertions
 - Sitemap assertions
 - HTTP SEO smoke assertions
+- API security assertions (no wildcard Search Console verification)
 - Robots assertions
 - Redirect assertions
 
