@@ -26,10 +26,10 @@ Object.assign(globalThis, { React });
 const IRREPLACEABLE_COVER_SHA256 =
   "e30503f800b0b8786b69aa134069e10f60048f48362efb1d336f39640e0fb0de";
 const IRREPLACEABLE_OG_SHA256 =
-  "0cc47d17d0b77ed0c1d0a2b162697465a3e7e72c47e18565120404f1bd2c836c";
+  "3986971a16ea4d5eee92459a17be5db5cdb844f0f7ea6b33a2ea8206638ba96f";
 const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
 const IRREPLACEABLE_OG_PATH = "/media/irreplaceable-leah-roling-og.jpg";
-const IRREPLACEABLE_OG_URL = `${buildCanonicalUrl(IRREPLACEABLE_OG_PATH)}?v=2`;
+const IRREPLACEABLE_OG_URL = `${buildCanonicalUrl(IRREPLACEABLE_OG_PATH)}?v=3`;
 const NEWS_CARD_DATE_CLASS_EXPR = "{newsCardDateClass}";
 
 function fileSha256(relativePath: string) {
@@ -360,7 +360,7 @@ assert.equal(irreplaceablePost?.socialImage?.src, IRREPLACEABLE_OG_PATH);
 assert.equal(irreplaceablePost?.socialImage?.width, 1200);
 assert.equal(irreplaceablePost?.socialImage?.height, 630);
 assert.equal(irreplaceablePost?.socialImage?.alt, IRREPLACEABLE_OG_ALT);
-assert.equal(irreplaceablePost?.socialImage?.cacheVersion, "2");
+assert.equal(irreplaceablePost?.socialImage?.cacheVersion, "3");
 assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
 const irreplaceableSentCopy =
   "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling’s IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge. Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.";
@@ -606,36 +606,51 @@ function newsTabCardsSource(profileSource: string) {
   return profileSource.slice(newsStart, upcoming);
 }
 
-function newsArticleDateClasses(source: string) {
-  return [...source.matchAll(/<article\b[^>]*>([\s\S]*?)<\/article>/g)].map((match, index) => {
-    const opening = match[0].match(/<article\b[^>]*>/)?.[0] ?? "";
-    const id =
-      opening.match(/\bid="([^"]+)"/)?.[1] ??
-      opening.match(/\bid=\{([^}]+)\}/)?.[1] ??
-      `article-${index + 1}`;
-    const firstParagraph = match[1].match(
-      /<p\s+className=(\{newsCardDateClass\}|"[^"]*")\s*>/,
-    );
-    return { id, dateClass: firstParagraph?.[1] ?? "" };
-  });
+function isNewsDateClassExpr(expr: string) {
+  return (
+    expr === NEWS_CARD_DATE_CLASS_EXPR ||
+    /uppercase/.test(expr) ||
+    /text-xs/.test(expr) ||
+    /text-\[13px\]/.test(expr)
+  );
+}
+
+function newsTabDateParagraphs(source: string) {
+  return [...source.matchAll(/<p\s+className=(\{newsCardDateClass\}|"[^"]*")\s*>([\s\S]*?)<\/p>/g)]
+    .filter((match) => isNewsDateClassExpr(match[1] ?? ""))
+    .map((match, index) => ({
+      index,
+      dateClass: match[1] ?? "",
+      inner: match[2] ?? "",
+    }));
 }
 
 function assertNewsCardDates(profileSource: string, newsCardSource: string) {
-  const cards = newsArticleDateClasses(newsTabCardsSource(profileSource));
-  assert.ok(cards.length > 0, "News tab must render at least one news card");
-  for (const card of cards) {
+  const dates = newsTabDateParagraphs(newsTabCardsSource(profileSource));
+  assert.ok(dates.length > 0, "News tab must render at least one news card date");
+  for (const date of dates) {
     assert.equal(
-      card.dateClass,
+      date.dateClass,
       NEWS_CARD_DATE_CLASS_EXPR,
-      `News card ${card.id} date must use newsCardDateClass`,
+      `News card date ${date.index + 1} must use newsCardDateClass`,
+    );
+    assert.equal(
+      date.inner.includes("text-xs"),
+      false,
+      `News card date ${date.index + 1} must not wrap the date in text-xs`,
     );
   }
-  const irreplaceableCards = newsArticleDateClasses(newsCardSource);
-  assert.equal(irreplaceableCards.length, 1, "IrReplaceable News card must be one article");
+  const irreplaceableDates = newsTabDateParagraphs(newsCardSource);
+  assert.equal(irreplaceableDates.length, 1, "IrReplaceable News card must have one date");
   assert.equal(
-    irreplaceableCards[0]?.dateClass,
+    irreplaceableDates[0]?.dateClass,
     NEWS_CARD_DATE_CLASS_EXPR,
     "IrReplaceable News card date must use newsCardDateClass",
+  );
+  assert.equal(
+    irreplaceableDates[0]?.inner.includes("text-xs"),
+    false,
+    "IrReplaceable News card date must not wrap the date in text-xs",
   );
 }
 
@@ -746,6 +761,37 @@ assertNewsCardDates(profileNewsSource, irreplaceableNewsCardSource);
   const styledCard = withSyntheticNewsCard(profileNewsSource, NEWS_CARD_DATE_CLASS_EXPR);
   assert.ok(styledCard.includes('id="synthetic-news-card"'));
   assertNewsCardDates(styledCard, irreplaceableNewsCardSource);
+  const innerTextXs = profileNewsSource.replace(
+    /<p className=\{newsCardDateClass\}>(\s*)([^<{]+)/,
+    `<p className={newsCardDateClass}>$1<span className="text-xs">$2</span>`,
+  );
+  assert.ok(innerTextXs.includes('className="text-xs"'));
+  assert.throws(
+    () => assertNewsCardDates(innerTextXs, irreplaceableNewsCardSource),
+    /text-xs/,
+    "A text-xs span inside a News card date must fail",
+  );
+  const divCard = profileNewsSource.replace(
+    `            <div id="upcoming-events"`,
+    `            <div
+              id="synthetic-div-card"
+              className={\`\${panel} scroll-mt-28 space-y-4\`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                October 23, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                Synthetic div card
+              </h2>
+            </div>
+            <div id="upcoming-events"`,
+  );
+  assert.ok(divCard.includes('id="synthetic-div-card"'));
+  assert.throws(
+    () => assertNewsCardDates(divCard, irreplaceableNewsCardSource),
+    /newsCardDateClass/,
+    "A News card built as a div with a text-xs date must fail",
+  );
 }
 assert.ok(
   irreplaceableNewsCardSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)") &&

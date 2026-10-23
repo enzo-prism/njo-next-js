@@ -14,7 +14,7 @@ const EDGE_SAMPLE_PX = 8;
 const VERTICAL_BLUR_SIGMA = 15;
 const COVER_PATH = "public/media/irreplaceable-leah-roling-dr-njo.webp";
 const OUTPUT_PATH = "public/media/irreplaceable-leah-roling-og.jpg";
-const MAX_EDGE_STEP = 2;
+const MAX_EDGE_STEP = 3;
 
 function gaussianKernel(sigma: number) {
   const radius = Math.ceil(sigma * 3);
@@ -179,7 +179,7 @@ async function main() {
   })
     .jpeg({
       quality: 85,
-      chromaSubsampling: "4:2:0",
+      chromaSubsampling: "4:4:4",
       mozjpeg: false,
       optimizeCoding: false,
     })

@@ -445,8 +445,10 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
   - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, that completed Roseville dinner copy stays in the past tense, and that each News card date uses `newsCardDateClass`
-- `check:events-mutants` (opt-in; not part of `check:parity`)
-  - copies `src` into a temp sandbox, proves news-polish mutants fail `check:events`, sweeps leftover `/tmp/news-polish-mutants-*` dirs on start, and removes the sandbox on SIGINT/SIGTERM/SIGHUP
+- `check:events-mutants` (opt-in; not part of `check:parity`; also a manual `workflow_dispatch` job)
+  - copies `src` into a temp sandbox with an `owner.pid` lock, proves news-polish mutants fail `check:events`, sweeps `/tmp/news-polish-mutants-*` dirs whose owner is dead or older than 30 minutes, and uses async spawn so SIGINT/SIGTERM can kill the check-events child and then remove the active sandbox
+- `check:irreplaceable-ax`
+  - starts the production server and asks Chrome for the IrReplaceable H1 accessible name (`ubuntu-latest` ships Google Chrome)
 - `check:media`
   - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, that the caption store replaces memory from cache on load, and pinned sha256 bytes plus OG alt for the IrReplaceable cover and link-preview JPEG (30-300 KB). Regenerate that JPEG with `npm run generate:irreplaceable-og`.
 - `check:photo-captions`

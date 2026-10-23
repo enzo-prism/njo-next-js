@@ -6,7 +6,7 @@ import sharp from "sharp";
 const IRREPLACEABLE_COVER_SHA256 =
   "e30503f800b0b8786b69aa134069e10f60048f48362efb1d336f39640e0fb0de";
 const IRREPLACEABLE_OG_SHA256 =
-  "0cc47d17d0b77ed0c1d0a2b162697465a3e7e72c47e18565120404f1bd2c836c";
+  "3986971a16ea4d5eee92459a17be5db5cdb844f0f7ea6b33a2ea8206638ba96f";
 const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
 
 function sha256Hex(bytes: Buffer) {
@@ -250,12 +250,15 @@ async function main() {
     path.join(sourceDirectory, "data/community-posts.ts"),
     "utf8",
   );
+  const irreplaceableSocialImage = communityPostsSource.match(
+    /slug: "irreplaceable-leah-roling",[\s\S]*?socialImage:\s*\{([\s\S]*?)\n    \},/,
+  )?.[1];
   if (
-    !communityPostsSource.includes('src: "/media/irreplaceable-leah-roling-og.jpg"') ||
-    !communityPostsSource.includes(`alt: "${IRREPLACEABLE_OG_ALT}"`)
+    !irreplaceableSocialImage?.includes('src: "/media/irreplaceable-leah-roling-og.jpg"') ||
+    !irreplaceableSocialImage.includes(`alt: "${IRREPLACEABLE_OG_ALT}"`)
   ) {
     errors.push(
-      "IrReplaceable og:image alt must stay Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
+      "IrReplaceable socialImage alt must stay Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
     );
   }
 

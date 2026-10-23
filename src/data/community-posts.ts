@@ -88,7 +88,7 @@ export const communityPosts: CommunityPost[] = [
       width: 1200,
       height: 630,
       alt: "Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
-      cacheVersion: "2",
+      cacheVersion: "3",
     },
     image: {
       src: "/media/irreplaceable-leah-roling-dr-njo.webp",
