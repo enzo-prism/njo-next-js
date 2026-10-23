@@ -14,6 +14,7 @@
     "check:testimonials": "tsx scripts/check-testimonials.ts",
     "check:events": "tsx scripts/check-events.ts",
     "check:events-mutants": "tsx scripts/check-events-mutants.ts",
+    "generate:irreplaceable-og": "tsx scripts/generate-irreplaceable-og.ts",
     "check:media": "tsx scripts/check-media.ts",
     "check:photo-captions": "tsx scripts/check-photo-captions.ts",
     "check:forms": "tsx scripts/check-forms.ts",

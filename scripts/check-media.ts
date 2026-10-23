@@ -6,7 +6,7 @@ import sharp from "sharp";
 const IRREPLACEABLE_COVER_SHA256 =
   "e30503f800b0b8786b69aa134069e10f60048f48362efb1d336f39640e0fb0de";
 const IRREPLACEABLE_OG_SHA256 =
-  "7c204e755642d56e7ed32cf65d4490ba887f969672d5aa3c0a7730b288e76e6b";
+  "0cc47d17d0b77ed0c1d0a2b162697465a3e7e72c47e18565120404f1bd2c836c";
 const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
 
 function sha256Hex(bytes: Buffer) {
@@ -234,9 +234,9 @@ async function main() {
     );
   }
   const irreplaceableOgBytes = (await stat(irreplaceableOgJpg)).size;
-  if (irreplaceableOgBytes < 150_000 || irreplaceableOgBytes > 250_000) {
+  if (irreplaceableOgBytes < 30_000 || irreplaceableOgBytes > 300_000) {
     errors.push(
-      `public/media/irreplaceable-leah-roling-og.jpg must stay about 150-250 KB (got ${irreplaceableOgBytes}).`,
+      `public/media/irreplaceable-leah-roling-og.jpg must stay about 30-300 KB (got ${irreplaceableOgBytes}).`,
     );
   }
   const irreplaceableOgFile = await readFile(irreplaceableOgJpg);

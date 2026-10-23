@@ -448,7 +448,7 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:events-mutants` (opt-in; not part of `check:parity`)
   - copies `src` into a temp sandbox, proves news-polish mutants fail `check:events`, sweeps leftover `/tmp/news-polish-mutants-*` dirs on start, and removes the sandbox on SIGINT/SIGTERM/SIGHUP
 - `check:media`
-  - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, that the caption store replaces memory from cache on load, and pinned sha256 bytes plus OG alt for the IrReplaceable cover and link-preview JPEG
+  - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, that the caption store replaces memory from cache on load, and pinned sha256 bytes plus OG alt for the IrReplaceable cover and link-preview JPEG (30-300 KB). Regenerate that JPEG with `npm run generate:irreplaceable-og`.
 - `check:photo-captions`
   - validates that a caption edit survives save, a fresh load, a second edit, a second photo, and unpublish without losing other saved captions
 - `check:forms`
