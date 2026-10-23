@@ -444,9 +444,11 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:testimonials`
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
-  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense
+  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, that completed Roseville dinner copy stays in the past tense, and that each News card date uses `newsCardDateClass`
+- `check:events-mutants` (opt-in; not part of `check:parity`)
+  - copies `src` into a temp sandbox, proves news-polish mutants fail `check:events`, sweeps leftover `/tmp/news-polish-mutants-*` dirs on start, and removes the sandbox on SIGINT/SIGTERM/SIGHUP
 - `check:media`
-  - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, and that the caption store replaces memory from cache on load
+  - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, that the caption store replaces memory from cache on load, and pinned sha256 bytes plus OG alt for the IrReplaceable cover and link-preview JPEG
 - `check:photo-captions`
   - validates that a caption edit survives save, a fresh load, a second edit, a second photo, and unpublish without losing other saved captions
 - `check:forms`
