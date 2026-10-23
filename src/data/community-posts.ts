@@ -14,7 +14,6 @@ export type CommunityPost = {
   image?: CommunityPostImage;
   images?: CommunityPostImage[];
   imageLayout?: "stacked-hero";
-  bodyMeasure?: "54ch";
   socialImage?: {
     src: string;
     width: number;
@@ -38,7 +37,6 @@ export const communityPosts: CommunityPost[] = [
       "Dr. Njo is honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees after more than 30 years in dentistry.",
     publishedAt: "2026-10-23",
     imageLayout: "stacked-hero",
-    bodyMeasure: "54ch",
     socialImage: {
       src: "/media/dental-lifestyles-40-over-40-og.jpg",
       width: 1200,
@@ -84,7 +82,6 @@ export const communityPosts: CommunityPost[] = [
     description:
       "Dr. Njo shares why Leah Roling’s IrReplaceable, on building accountable teams and growing without burnout, matters for practice owners.",
     publishedAt: "2026-10-23",
-    bodyMeasure: "54ch",
     image: {
       src: "/media/irreplaceable-leah-roling-dr-njo.webp",
       width: 1122,

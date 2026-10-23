@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -393,19 +394,18 @@ assert.ok(
   "Community posts must be able to render a labeled external link",
 );
 assert.ok(
-  communityPostDetailSource.includes('post.bodyMeasure === "54ch"') &&
-    communityPostDetailSource.includes("max-w-[54ch]"),
-  "54ch body measure must be opt-in per post",
+  communityPostDetailSource.includes('className="max-w-[54ch] break-words [overflow-wrap:anywhere]"'),
+  "Community post body paragraphs must default to the 54ch measure",
 );
 assert.equal(
-  communityPostDetailSource.includes("max-w-[68ch]"),
+  communityPostDetailSource.includes("bodyMeasure") || communityPostDetailSource.includes("max-w-[68ch]"),
   false,
-  "Community post body paragraphs must not keep the 68ch measure",
+  "Community post body paragraphs must not keep a bodyMeasure opt-in or the 68ch measure",
 );
-assert.deepEqual(
-  communityPosts.filter((post) => post.bodyMeasure === "54ch").map((post) => post.slug),
-  ["dental-lifestyles-40-over-40-2026", "irreplaceable-leah-roling"],
-  "Only 40 Over 40 and IrReplaceable may opt into the 54ch body measure",
+assert.equal(
+  communityPosts.some((post) => "bodyMeasure" in post),
+  false,
+  "Community posts must not carry a bodyMeasure opt-in",
 );
 assert.equal(communityPosts.length, 15, "Community post inventory must stay at 15 posts");
 assert.deepEqual(
@@ -433,6 +433,21 @@ function renderCommunityPost(slug: string) {
   return renderToStaticMarkup(createElement(CommunityPostDetailPage, { post }));
 }
 
+function countBodyMeasure(html: string) {
+  return html.split("max-w-[54ch]").length - 1;
+}
+
+for (const post of communityPosts) {
+  const html = renderCommunityPost(post.slug);
+  const expected = post.body.length + (post.link ? 1 : 0);
+  assert.equal(
+    countBodyMeasure(html),
+    expected,
+    `${post.slug} must put 54ch on every body paragraph and labeled link`,
+  );
+  assert.equal(html.includes("max-w-[68ch]"), false, `${post.slug} must not use the 68ch measure`);
+}
+
 const fortyOverFortyHtml = renderCommunityPost("dental-lifestyles-40-over-40-2026");
 assert.ok(
   fortyOverFortyHtml.includes("w-[80%]") &&
@@ -447,7 +462,7 @@ assert.equal(
   "Rendered 40 Over 40 page must not use the shared multi-image grid",
 );
 assert.equal(
-  fortyOverFortyHtml.split("max-w-[54ch]").length - 1,
+  countBodyMeasure(fortyOverFortyHtml),
   4,
   "Rendered 40 Over 40 body must put 54ch on all three paragraphs and the issue link",
 );
@@ -466,10 +481,9 @@ assert.equal(
   false,
   "Rendered Dugoni post must not receive the 40 Over 40 promo width",
 );
-assert.equal(
-  dugoniHtml.includes("max-w-[54ch]") || dugoniHtml.includes("max-w-[68ch]"),
-  false,
-  "Rendered Dugoni post must stay box-identical and not receive the 54ch measure",
+assert.ok(
+  dugoniHtml.includes("max-w-[54ch]"),
+  "Rendered Dugoni post must use the shared 54ch body measure",
 );
 
 const fortyOverFortyMetadata = buildRouteMetadata(buildCommunityPostPath("dental-lifestyles-40-over-40-2026"));
@@ -551,7 +565,7 @@ assert.equal(chromeLikeAccessibleName(irreplaceableH1Html), "IrReplaceable", "H1
 
 const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
 assert.equal(
-  irreplaceableHtml.split("max-w-[54ch]").length - 1,
+  countBodyMeasure(irreplaceableHtml),
   1,
   "Rendered IrReplaceable body must use the 54ch measure once",
 );
@@ -603,6 +617,16 @@ assert.ok(
     irreplaceableNewsCardSource.includes('"text-[13px] font-semibold uppercase tracking-[0.2em] text-brand"'),
   "News card date class must stay 13px",
 );
+assert.equal(
+  (profileNewsSource.match(/<p className=\{newsCardDateClass\}>/g) ?? []).length,
+  8,
+  "Every inline News card date must use newsCardDateClass",
+);
+assert.equal(
+  (irreplaceableNewsCardSource.match(/<p className=\{newsCardDateClass\}>/g) ?? []).length,
+  1,
+  "IrReplaceable News card date must use newsCardDateClass",
+);
 assert.ok(
   irreplaceableNewsCardSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)") &&
     irreplaceableNewsCardSource.includes("withIrReplaceableTitle(paragraph)"),
@@ -634,10 +658,9 @@ assert.equal(
   "Backstage spotlight is news only and must not become an event listing",
 );
 const spotlightHtml = renderCommunityPost("backstage-business-spotlight-michael-njo");
-assert.equal(
-  spotlightHtml.includes("max-w-[54ch]") || spotlightHtml.includes("max-w-[68ch]"),
-  false,
-  "Spotlight and the other unscoped posts must stay box-identical to main",
+assert.ok(
+  spotlightHtml.includes("max-w-[54ch]"),
+  "Spotlight must use the shared 54ch body measure",
 );
 
 const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");
@@ -667,73 +690,101 @@ assert.equal(
 );
 
 if (!process.env.NEWS_POLISH_MUTANT) {
-  const detailPath = path.join(process.cwd(), "src/components/pages/community-post-detail.tsx");
-  const newsCardPath = path.join(process.cwd(), "src/components/irreplaceable-news-card.tsx");
-  const detailOriginal = readFileSync(detailPath, "utf8");
-  const newsCardOriginal = readFileSync(newsCardPath, "utf8");
-  const tsxCli = path.join(process.cwd(), "node_modules/tsx/dist/cli.mjs");
+  const repoRoot = process.cwd();
+  const repoDetail = path.join(repoRoot, "src/components/pages/community-post-detail.tsx");
+  const repoNewsCard = path.join(repoRoot, "src/components/irreplaceable-news-card.tsx");
+  const repoProfile = path.join(repoRoot, "src/components/pages/michael-njo-dds.tsx");
+  const repoDetailOriginal = readFileSync(repoDetail, "utf8");
+  const repoNewsCardOriginal = readFileSync(repoNewsCard, "utf8");
+  const repoProfileOriginal = readFileSync(repoProfile, "utf8");
+  const tsxCli = path.join(repoRoot, "node_modules/tsx/dist/cli.mjs");
+  const tmpRoot = mkdtempSync(path.join(os.tmpdir(), "news-polish-mutants-"));
+
+  function assertRepoUnchanged() {
+    assert.equal(readFileSync(repoDetail, "utf8"), repoDetailOriginal, "mutants must not rewrite community-post-detail.tsx");
+    assert.equal(readFileSync(repoNewsCard, "utf8"), repoNewsCardOriginal, "mutants must not rewrite irreplaceable-news-card.tsx");
+    assert.equal(readFileSync(repoProfile, "utf8"), repoProfileOriginal, "mutants must not rewrite michael-njo-dds.tsx");
+  }
+
+  function seedSandbox() {
+    rmSync(path.join(tmpRoot, "src"), { recursive: true, force: true });
+    rmSync(path.join(tmpRoot, "scripts"), { recursive: true, force: true });
+    cpSync(path.join(repoRoot, "src"), path.join(tmpRoot, "src"), { recursive: true });
+    mkdirSync(path.join(tmpRoot, "scripts"), { recursive: true });
+    cpSync(path.join(repoRoot, "scripts/check-events.ts"), path.join(tmpRoot, "scripts/check-events.ts"));
+    cpSync(path.join(repoRoot, "tsconfig.json"), path.join(tmpRoot, "tsconfig.json"));
+    cpSync(path.join(repoRoot, "next-env.d.ts"), path.join(tmpRoot, "next-env.d.ts"));
+    const modulesLink = path.join(tmpRoot, "node_modules");
+    if (!existsSync(modulesLink)) {
+      symlinkSync(path.join(repoRoot, "node_modules"), modulesLink);
+    }
+    const publicLink = path.join(tmpRoot, "public");
+    if (!existsSync(publicLink)) {
+      symlinkSync(path.join(repoRoot, "public"), publicLink);
+    }
+  }
+
+  function sandboxPaths() {
+    return {
+      detail: path.join(tmpRoot, "src/components/pages/community-post-detail.tsx"),
+      newsCard: path.join(tmpRoot, "src/components/irreplaceable-news-card.tsx"),
+      profile: path.join(tmpRoot, "src/components/pages/michael-njo-dds.tsx"),
+    };
+  }
 
   function runCheckEvents() {
     return spawnSync(process.execPath, [tsxCli, "scripts/check-events.ts"], {
-      cwd: process.cwd(),
+      cwd: tmpRoot,
       env: { ...process.env, NEWS_POLISH_MUTANT: "1" },
       encoding: "utf8",
     });
   }
 
-  function restoreSources() {
-    writeFileSync(detailPath, detailOriginal);
-    writeFileSync(newsCardPath, newsCardOriginal);
+  function assertMutantFails(name: string, apply: (files: ReturnType<typeof sandboxPaths>) => void) {
+    seedSandbox();
+    const files = sandboxPaths();
+    const before = {
+      detail: readFileSync(files.detail, "utf8"),
+      newsCard: readFileSync(files.newsCard, "utf8"),
+      profile: readFileSync(files.profile, "utf8"),
+    };
+    apply(files);
+    const changed =
+      readFileSync(files.detail, "utf8") !== before.detail ||
+      readFileSync(files.newsCard, "utf8") !== before.newsCard ||
+      readFileSync(files.profile, "utf8") !== before.profile;
+    assert.equal(changed, true, `${name} mutant must change a sandbox file`);
+    assertRepoUnchanged();
+    const result = runCheckEvents();
+    assertRepoUnchanged();
+    assert.notEqual(result.status, 0, `${name} must fail check-events\n${result.stderr}\n${result.stdout}`);
+    console.log(`Mutant ${name} failed as required (exit ${result.status}).`);
   }
 
-  function assertMutantFails(name: string, apply: () => void) {
-    try {
-      apply();
-      const changed =
-        readFileSync(detailPath, "utf8") !== detailOriginal ||
-        readFileSync(newsCardPath, "utf8") !== newsCardOriginal;
-      assert.equal(changed, true, `${name} mutant must change a source file`);
-      const result = runCheckEvents();
-      assert.notEqual(result.status, 0, `${name} must fail check-events\n${result.stderr}\n${result.stdout}`);
-      console.log(`Mutant ${name} failed as required (exit ${result.status}).`);
-    } finally {
-      restoreSources();
-    }
-  }
+  try {
+    seedSandbox();
+    const control = runCheckEvents();
+    assertRepoUnchanged();
+    assert.equal(control.status, 0, `No-op control must pass check-events\n${control.stderr}\n${control.stdout}`);
+    console.log("Mutant no-op control passed.");
 
-  const control = runCheckEvents();
-  assert.equal(control.status, 0, `No-op control must pass check-events\n${control.stderr}\n${control.stdout}`);
-  console.log("Mutant no-op control passed.");
-
-  assertMutantFails("P1 helper dropped on post body", () => {
-    writeFileSync(
-      detailPath,
-      detailOriginal.replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"),
-    );
-  });
-  assertMutantFails("P2 helper dropped on H1", () => {
-    writeFileSync(
-      detailPath,
-      detailOriginal.replace("{withIrReplaceableTitle(post.title)}", "{post.title}"),
-    );
-  });
-  assertMutantFails("P3 helper dropped on subtitle", () => {
-    writeFileSync(
-      detailPath,
-      detailOriginal.replace("{withIrReplaceableTitle(post.description)}", "{post.description}"),
-    );
-  });
-  assertMutantFails("C1 helper dropped on News card body", () => {
-    writeFileSync(
-      newsCardPath,
-      newsCardOriginal.replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"),
-    );
-  });
-  assertMutantFails("H2 partial hardcoded News card text", () => {
-    writeFileSync(
-      newsCardPath,
-      newsCardOriginal.replace(
-        `      {irreplaceableCommunityPost.body.map((paragraph) => (
+    assertMutantFails("P1 helper dropped on post body", (files) => {
+      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"));
+    });
+    assertMutantFails("P2 helper dropped on H1", (files) => {
+      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(post.title)}", "{post.title}"));
+    });
+    assertMutantFails("P3 helper dropped on subtitle", (files) => {
+      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(post.description)}", "{post.description}"));
+    });
+    assertMutantFails("C1 helper dropped on News card body", (files) => {
+      writeFileSync(files.newsCard, readFileSync(files.newsCard, "utf8").replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"));
+    });
+    assertMutantFails("H2 partial hardcoded News card text", (files) => {
+      writeFileSync(
+        files.newsCard,
+        readFileSync(files.newsCard, "utf8").replace(
+          `      {irreplaceableCommunityPost.body.map((paragraph) => (
         <p
           key={paragraph}
           className="text-pretty text-sm leading-relaxed text-muted-foreground"
@@ -741,21 +792,31 @@ if (!process.env.NEWS_POLISH_MUTANT) {
           {withIrReplaceableTitle(paragraph)}
         </p>
       ))}`,
-        `      <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+          `      <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
         Role clarity, ownership, and strong leadership are essential.
       </p>`,
-      ),
-    );
-  });
-  assertMutantFails("M1 54ch removed", () => {
-    writeFileSync(
-      detailPath,
-      detailOriginal.replace('post.bodyMeasure === "54ch" ? "max-w-[54ch] " : ""', '""'),
-    );
-  });
-  assertMutantFails("N1 News date back to text-xs", () => {
-    writeFileSync(newsCardPath, newsCardOriginal.replace("text-[13px]", "text-xs"));
-  });
+        ),
+      );
+    });
+    assertMutantFails("M1 54ch removed", (files) => {
+      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replaceAll("max-w-[54ch] ", ""));
+    });
+    assertMutantFails("N1 News date back to text-xs", (files) => {
+      writeFileSync(files.newsCard, readFileSync(files.newsCard, "utf8").replace("text-[13px]", "text-xs"));
+    });
+    assertMutantFails("N2 another News card date set to text-xs", (files) => {
+      writeFileSync(
+        files.profile,
+        readFileSync(files.profile, "utf8").replace(
+          "<p className={newsCardDateClass}>",
+          '<p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">',
+        ),
+      );
+    });
+  } finally {
+    rmSync(tmpRoot, { recursive: true, force: true });
+    assertRepoUnchanged();
+  }
 }
 
 console.log("Event date-state and profile-tab assertions passed.");
