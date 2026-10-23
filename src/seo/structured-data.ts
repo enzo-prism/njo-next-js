@@ -224,7 +224,7 @@ const getFAQEntity = (): SchemaNode => ({
 
 export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[] =>
   getUpcomingEventPrograms(referenceDate).flatMap((program) => {
-    const eventType = program.category === "conference" ? "Event" : "EducationEvent";
+    const eventType = program.category === "seminar" ? "EducationEvent" : "Event";
     const pageUrl = `${siteMetadata.siteUrl}/michael-njo-dds?tab=news`;
     const occurrences = program.upcomingDates?.length
       ? program.upcomingDates
@@ -243,10 +243,10 @@ export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[
         "@type": "Place",
         name: occurrence.location,
       },
-      organizer: {
+      organizer: program.category === "dinner" ? undefined : {
         "@id": `${siteMetadata.siteUrl}#pti`,
       },
-      performer: {
+      performer: program.category === "dinner" ? undefined : {
         "@id": personProfile.id,
       },
       inLanguage: "en",

@@ -17,9 +17,6 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
-    labels:
-      - "dependencies"
-      - "security"
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -38,6 +35,3 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
-    labels:
-      - "dependencies"
-      - "ci"

@@ -128,6 +128,24 @@ export const communityPosts: CommunityPost[] = [
     ],
   },
   {
+    slug: "peninsula-dental-society-merger",
+    title: "A stronger future for organized dentistry",
+    description: "Dr. Michael Njo celebrates the collaboration behind The Peninsula Dental Society and the merger of SMCDS and MPDS.",
+    publishedAt: "2026-10-23",
+    image: {
+      src: "/media/peninsula-dental-society-merger.webp",
+      width: 1448,
+      height: 1086,
+      alt: "Group gathered in front of The Peninsula Dental Society sign.",
+      caption: "The Peninsula Dental Society.",
+    },
+    body: [
+      "The results of collaboration—making organized dentistry stronger through the merger of SMCDS and MPDS.",
+      "The Peninsula Dental Society emerges stronger, better connected, and better positioned to serve our members, our profession, and the communities we represent.",
+      "Together, we are building a stronger future for dentistry!",
+    ],
+  },
+  {
     slug: "diana-fat-board-of-regents",
     title: "Dr. Diana Fat appointed to the University of the Pacific Board of Regents",
     description:
