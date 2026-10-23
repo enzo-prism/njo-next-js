@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
+import { sharedLeadFormFields } from "@/lib/lead-form-validation";
+import { serviceInterestOptions } from "@/data/service-interest-options";
 
 const expectedEndpoints = {
   contact: "https://formspree.io/f/manaywyw",
@@ -85,4 +89,55 @@ assert.ok(
   "Contact Formspree endpoint must stay documented in docs/forms-and-backends.md and README.md.",
 );
 
-console.log("Validated Formspree form wiring.");
+async function checkLeadFormResolver() {
+  const schema = z.object(sharedLeadFormFields);
+  const validInput = {
+    name: "  Example Dentist  ",
+    email: "  dentist@example.com  ",
+    practiceCity: "  San Mateo  ",
+    practiceWebsite: " example.com ",
+    services: [serviceInterestOptions[0]],
+    privacyAcknowledged: true,
+    companyWebsite: "",
+  };
+  const invalidInput = {
+    ...validInput,
+    name: "",
+    email: "invalid",
+    practiceCity: "",
+    practiceWebsite: "not a website",
+    services: [],
+    privacyAcknowledged: false,
+    companyWebsite: "spam",
+  };
+
+  for (const mode of ["async", "sync"] as const) {
+    const resolver = zodResolver(schema, undefined, { mode });
+    const options = { fields: {}, shouldUseNativeValidation: false };
+    const invalid = await resolver(invalidInput, undefined, options);
+    assert.deepEqual(invalid.values, {}, `${mode}: invalid input must not become a submission.`);
+    for (const field of Object.keys(invalidInput)) {
+      assert.ok(
+        invalid.errors[field as keyof typeof invalidInput]?.message,
+        `${mode}: invalid ${field} must return a field error instead of throwing a ZodError.`,
+      );
+    }
+
+    const valid = await resolver(validInput, undefined, options);
+    assert.deepEqual(valid.errors, {}, `${mode}: valid input must not have field errors.`);
+    assert.deepEqual(valid.values, {
+      ...validInput,
+      name: "Example Dentist",
+      email: "dentist@example.com",
+      practiceCity: "San Mateo",
+      practiceWebsite: "https://example.com",
+    }, `${mode}: resolver must preserve trimmed values and the normalized website.`);
+  }
+}
+
+checkLeadFormResolver().then(() => {
+  console.log("Validated Formspree form wiring and shared lead-form resolver behavior.");
+}).catch((error: unknown) => {
+  console.error(error);
+  process.exitCode = 1;
+});
