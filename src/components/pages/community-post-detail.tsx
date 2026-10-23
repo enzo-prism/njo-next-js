@@ -50,7 +50,11 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
                   width={image.width}
                   height={image.height}
                   priority={index === 0}
-                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 60vw, 538px"}
+                  sizes={
+                    index === 0
+                      ? "(max-width: 768px) 100vw, 896px"
+                      : "(max-width: 639px) 80vw, (max-width: 768px) 60vw, 538px"
+                  }
                   className="h-auto w-full object-contain"
                 />
               </figure>
@@ -105,12 +109,12 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         <Card className="border-border/80 bg-background">
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
             {post.body.map((paragraph) => (
-              <p key={paragraph} className="max-w-[68ch] break-words [overflow-wrap:anywhere]">
+              <p key={paragraph} className="max-w-[54ch] break-words [overflow-wrap:anywhere]">
                 {withIrReplaceableTitle(paragraph)}
               </p>
             ))}
             {post.link ? (
-              <p className="max-w-[68ch] break-words [overflow-wrap:anywhere]">
+              <p className="max-w-[54ch] break-words [overflow-wrap:anywhere]">
                 <a
                   href={post.link.href}
                   target="_blank"

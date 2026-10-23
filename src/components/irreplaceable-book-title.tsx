@@ -3,8 +3,7 @@ import { Fragment, type ReactNode } from "react";
 export function IrReplaceableBookTitle() {
   return (
     <em>
-      <s aria-hidden="true">Ir</s>
-      <span className="sr-only">Ir</span>
+      <span className="line-through">Ir</span>
       Replaceable
     </em>
   );

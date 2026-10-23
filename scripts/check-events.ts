@@ -387,8 +387,13 @@ assert.ok(
   "Community posts must be able to render a labeled external link",
 );
 assert.ok(
+  communityPostDetailSource.includes("max-w-[54ch]"),
+  "Community post body paragraphs must cap readable measure at 54ch",
+);
+assert.equal(
   communityPostDetailSource.includes("max-w-[68ch]"),
-  "Community post body paragraphs must cap readable measure at 68ch",
+  false,
+  "Community post body paragraphs must not keep the 68ch measure",
 );
 assert.deepEqual(
   communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
@@ -420,8 +425,8 @@ assert.ok(
   fortyOverFortyHtml.includes("w-[80%]") &&
     fortyOverFortyHtml.includes("sm:w-[60%]") &&
     fortyOverFortyHtml.includes("max-w-[538px]") &&
-    fortyOverFortyHtml.includes("(max-width: 768px) 60vw, 538px"),
-  "Rendered 40 Over 40 promo must be 80% on small screens, 60% from sm, and cap at 538px",
+    fortyOverFortyHtml.includes("(max-width: 639px) 80vw, (max-width: 768px) 60vw, 538px"),
+  "Rendered 40 Over 40 promo must request 80vw below 640, 60vw through 768, and 538px after",
 );
 assert.equal(
   /sm:grid-cols-[23]/.test(fortyOverFortyHtml),
@@ -429,8 +434,8 @@ assert.equal(
   "Rendered 40 Over 40 page must not use the shared multi-image grid",
 );
 assert.ok(
-  fortyOverFortyHtml.includes("max-w-[68ch]"),
-  "Rendered 40 Over 40 body must use the 68ch measure",
+  fortyOverFortyHtml.includes("max-w-[54ch]"),
+  "Rendered 40 Over 40 body must use the 54ch measure",
 );
 assert.ok(
   fortyOverFortyHtml.includes("text-[13px]"),
@@ -473,17 +478,42 @@ assert.equal(
   "On-page honoree graphic must stay the unaltered original",
 );
 
-const irreplaceableTitleMarkup =
-  '<em><s aria-hidden="true">Ir</s><span class="sr-only">Ir</span>Replaceable</em>';
-const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
-assert.ok(
-  irreplaceableHtml.includes(irreplaceableTitleMarkup),
-  "Rendered IrReplaceable post must use the accessible struck-Ir title markup",
+const irreplaceableTitleMarkup = '<em><span class="line-through">Ir</span>Replaceable</em>';
+
+function htmlTextContent(html: string) {
+  return html.replace(/<[^>]+>/g, "");
+}
+
+const irreplaceableH1Html = renderToStaticMarkup(
+  createElement("h1", null, withIrReplaceableTitle("IrReplaceable")),
 );
 assert.equal(
-  irreplaceableHtml.includes('aria-label="IrReplaceable"'),
+  htmlTextContent(irreplaceableH1Html),
+  "IrReplaceable",
+  "H1 textContent must be exactly IrReplaceable",
+);
+
+const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
+const irreplaceablePageH1 = irreplaceableHtml.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "";
+assert.equal(
+  htmlTextContent(irreplaceablePageH1),
+  "Dr. Njo recommends IrReplaceable by Leah Roling",
+  "Rendered IrReplaceable H1 textContent must not double or split Ir",
+);
+assert.ok(
+  irreplaceableHtml.includes(irreplaceableTitleMarkup),
+  "Rendered IrReplaceable post must strike Ir with a line-through span",
+);
+assert.equal(
+  irreplaceableTitleMarkup.includes("sr-only") ||
+    irreplaceableTitleMarkup.includes("aria-hidden") ||
+    /<s[\s/>]/.test(irreplaceableTitleMarkup) ||
+    irreplaceableH1Html.includes("sr-only") ||
+    irreplaceableH1Html.includes("aria-hidden") ||
+    /<s[\s/>]/.test(irreplaceableH1Html) ||
+    irreplaceableH1Html.includes('aria-label="IrReplaceable"'),
   false,
-  "IrReplaceable title markup must not use aria-label on em",
+  "IrReplaceable title markup must not use sr-only, aria-hidden, s, or aria-label",
 );
 
 const irreplaceableNewsTitleHtml = renderToStaticMarkup(
@@ -494,12 +524,13 @@ const irreplaceableNewsBodyHtml = renderToStaticMarkup(
 );
 assert.ok(
   irreplaceableNewsTitleHtml.includes(irreplaceableTitleMarkup),
-  "IrReplaceable news card title must italicize the book title with the accessible markup",
+  "IrReplaceable news card title must italicize the book title with the line-through span",
 );
 assert.ok(
   irreplaceableNewsBodyHtml.includes(irreplaceableTitleMarkup),
-  "IrReplaceable news card body must use the same accessible title markup",
+  "IrReplaceable news card body must use the same line-through title markup",
 );
+assert.equal(htmlTextContent(irreplaceableNewsTitleHtml), irreplaceablePost?.title);
 assert.ok(
   profileNewsSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)"),
   "IrReplaceable news card title must render through the shared title helper",
