@@ -82,6 +82,12 @@ export const communityPosts: CommunityPost[] = [
     description:
       "Dr. Njo shares why Leah Roling’s IrReplaceable, on building accountable teams and growing without burnout, matters for practice owners.",
     publishedAt: "2026-10-23",
+    socialImage: {
+      src: "/media/irreplaceable-leah-roling-og.jpg",
+      width: 1200,
+      height: 630,
+      alt: "Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
+    },
     image: {
       src: "/media/irreplaceable-leah-roling-dr-njo.webp",
       width: 1122,

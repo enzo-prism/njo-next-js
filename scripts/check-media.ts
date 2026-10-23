@@ -197,6 +197,32 @@ async function main() {
     );
   }
 
+  const irreplaceableCover = path.join(
+    publicDirectory,
+    "media",
+    "irreplaceable-leah-roling-dr-njo.webp",
+  );
+  const irreplaceableCoverMetadata = await sharp(irreplaceableCover).metadata();
+  if (irreplaceableCoverMetadata.width !== 1122 || irreplaceableCoverMetadata.height !== 1402) {
+    errors.push(
+      "public/media/irreplaceable-leah-roling-dr-njo.webp must stay the unaltered 1122x1402 cover.",
+    );
+  }
+
+  const irreplaceableOgJpg = path.join(publicDirectory, "media", "irreplaceable-leah-roling-og.jpg");
+  const irreplaceableOgMetadata = await sharp(irreplaceableOgJpg).metadata();
+  if (irreplaceableOgMetadata.width !== 1200 || irreplaceableOgMetadata.height !== 630) {
+    errors.push(
+      "public/media/irreplaceable-leah-roling-og.jpg must be a 1200x630 link-preview JPEG.",
+    );
+  }
+  const irreplaceableOgBytes = (await stat(irreplaceableOgJpg)).size;
+  if (irreplaceableOgBytes < 150_000 || irreplaceableOgBytes > 250_000) {
+    errors.push(
+      `public/media/irreplaceable-leah-roling-og.jpg must stay about 150-250 KB (got ${irreplaceableOgBytes}).`,
+    );
+  }
+
   if (
     mosaicSource.includes("asset.caption") ||
     mosaicSource.includes("PhotoNameOverlay") ||

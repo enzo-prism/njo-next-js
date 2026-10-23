@@ -338,6 +338,15 @@ assert.ok(irreplaceablePost, "IrReplaceable news post must exist");
 assert.equal(irreplaceablePost?.publishedAt, "2026-10-23");
 assert.equal(irreplaceablePost?.title, "Dr. Njo recommends IrReplaceable by Leah Roling");
 assert.equal(irreplaceablePost?.image?.src, "/media/irreplaceable-leah-roling-dr-njo.webp");
+assert.equal(irreplaceablePost?.image?.width, 1122);
+assert.equal(irreplaceablePost?.image?.height, 1402);
+assert.equal(irreplaceablePost?.socialImage?.src, "/media/irreplaceable-leah-roling-og.jpg");
+assert.equal(irreplaceablePost?.socialImage?.width, 1200);
+assert.equal(irreplaceablePost?.socialImage?.height, 630);
+assert.equal(
+  existsSync(path.join(process.cwd(), "public/media/irreplaceable-leah-roling-og.jpg")),
+  true,
+);
 assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
 const irreplaceableSentCopy =
   "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling’s IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge. Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.";
@@ -509,6 +518,25 @@ assert.equal(
   fortyOverFortyPost?.image?.src,
   "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
   "On-page honoree graphic must stay the unaltered original",
+);
+
+const irreplaceableMetadata = buildRouteMetadata(buildCommunityPostPath("irreplaceable-leah-roling"));
+const irreplaceableOgImages = irreplaceableMetadata.openGraph?.images;
+const irreplaceableOgImage = Array.isArray(irreplaceableOgImages)
+  ? irreplaceableOgImages[0]
+  : irreplaceableOgImages;
+assert.ok(irreplaceableOgImage && typeof irreplaceableOgImage === "object");
+assert.equal(
+  "url" in irreplaceableOgImage ? irreplaceableOgImage.url : undefined,
+  "/media/irreplaceable-leah-roling-og.jpg",
+);
+assert.equal("width" in irreplaceableOgImage ? irreplaceableOgImage.width : undefined, 1200);
+assert.equal("height" in irreplaceableOgImage ? irreplaceableOgImage.height : undefined, 630);
+assert.deepEqual(irreplaceableMetadata.twitter?.images, ["/media/irreplaceable-leah-roling-og.jpg"]);
+assert.equal(
+  irreplaceablePost?.image?.src,
+  "/media/irreplaceable-leah-roling-dr-njo.webp",
+  "On-page IrReplaceable cover must stay the unaltered original",
 );
 
 const irreplaceableTitleMarkup = '<em><span class="line-through">Ir</span>Replaceable</em>';
@@ -713,7 +741,10 @@ if (!process.env.NEWS_POLISH_MUTANT) {
     mkdirSync(path.join(tmpRoot, "scripts"), { recursive: true });
     cpSync(path.join(repoRoot, "scripts/check-events.ts"), path.join(tmpRoot, "scripts/check-events.ts"));
     cpSync(path.join(repoRoot, "tsconfig.json"), path.join(tmpRoot, "tsconfig.json"));
-    cpSync(path.join(repoRoot, "next-env.d.ts"), path.join(tmpRoot, "next-env.d.ts"));
+    const nextEnv = path.join(repoRoot, "next-env.d.ts");
+    if (existsSync(nextEnv)) {
+      cpSync(nextEnv, path.join(tmpRoot, "next-env.d.ts"));
+    }
     const modulesLink = path.join(tmpRoot, "node_modules");
     if (!existsSync(modulesLink)) {
       symlinkSync(path.join(repoRoot, "node_modules"), modulesLink);
