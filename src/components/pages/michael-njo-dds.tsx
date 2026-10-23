@@ -50,6 +50,9 @@ import {
 const panel =
   "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
+const newsCardDateClass =
+  "text-[13px] font-semibold uppercase tracking-[0.2em] text-brand";
+
 const fortyOverFortyCommunityPost = communityPosts.find(
   (post) => post.slug === "dental-lifestyles-40-over-40-2026",
 );
@@ -499,7 +502,7 @@ export default function MichaelNjoDDS({
                 id={fortyOverFortyCommunityPost.slug}
                 className={`${panel} scroll-mt-28 space-y-4`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                <p className={newsCardDateClass}>
                   {formatCommunityPostDate(fortyOverFortyCommunityPost.publishedAt)}
                 </p>
                 <h2 className="font-serif text-xl font-semibold">
@@ -540,11 +543,11 @@ export default function MichaelNjoDDS({
                 id={irreplaceableCommunityPost.slug}
                 className={`${panel} scroll-mt-28 space-y-4`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                <p className={newsCardDateClass}>
                   {formatCommunityPostDate(irreplaceableCommunityPost.publishedAt)}
                 </p>
                 <h2 className="font-serif text-xl font-semibold">
-                  {irreplaceableCommunityPost.title}
+                  {withIrReplaceableTitle(irreplaceableCommunityPost.title)}
                 </h2>
                 {irreplaceableCommunityPost.image ? (
                   <Image
@@ -582,7 +585,7 @@ export default function MichaelNjoDDS({
               id="backstage-business-spotlight-michael-njo"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 September 21, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -622,7 +625,7 @@ export default function MichaelNjoDDS({
               id="diana-fat-board-of-regents"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 28, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -669,7 +672,7 @@ export default function MichaelNjoDDS({
               id="practice-blueprint-roseville-aug-2026"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 28, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -710,7 +713,7 @@ export default function MichaelNjoDDS({
               id="another-perfect-match"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 25, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -763,7 +766,7 @@ export default function MichaelNjoDDS({
               id="beyond-the-chair-anaheim"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 September 25, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -810,7 +813,7 @@ export default function MichaelNjoDDS({
               id="panel-of-experts-dinner"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 14, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -867,7 +870,7 @@ export default function MichaelNjoDDS({
               id="industry-leaders"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 13, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">

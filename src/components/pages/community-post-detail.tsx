@@ -23,11 +23,13 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
     <Container className="py-10 sm:py-14">
       <article className="mx-auto max-w-4xl space-y-8">
         <header className="space-y-5">
-          <Badge variant="secondary" className="uppercase tracking-wide">Community</Badge>
+          <Badge variant="secondary" className="text-[13px] uppercase tracking-wide">Community</Badge>
           <h1 className="text-balance font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            {post.title}
+            {withIrReplaceableTitle(post.title)}
           </h1>
-          <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground">{post.description}</p>
+          <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground">
+            {withIrReplaceableTitle(post.description)}
+          </p>
           <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
             <CalendarDays className="h-4 w-4" /> Published {formatDate(post.publishedAt)}
           </p>
@@ -103,12 +105,12 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         <Card className="border-border/80 bg-background">
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
             {post.body.map((paragraph) => (
-              <p key={paragraph} className="break-words [overflow-wrap:anywhere]">
+              <p key={paragraph} className="max-w-[68ch] break-words [overflow-wrap:anywhere]">
                 {withIrReplaceableTitle(paragraph)}
               </p>
             ))}
             {post.link ? (
-              <p className="break-words [overflow-wrap:anywhere]">
+              <p className="max-w-[68ch] break-words [overflow-wrap:anywhere]">
                 <a
                   href={post.link.href}
                   target="_blank"

@@ -2,8 +2,10 @@ import { Fragment, type ReactNode } from "react";
 
 export function IrReplaceableBookTitle() {
   return (
-    <em aria-label="IrReplaceable">
-      <s>Ir</s>Replaceable
+    <em>
+      <s aria-hidden="true">Ir</s>
+      <span className="sr-only">Ir</span>
+      Replaceable
     </em>
   );
 }

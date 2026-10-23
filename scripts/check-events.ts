@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import React, { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+
+Object.assign(globalThis, { React });
+import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
+import CommunityPostDetailPage from "@/components/pages/community-post-detail";
 import { communityPosts } from "@/data/community-posts";
 import {
   eventPrograms,
@@ -360,6 +366,10 @@ const communityPostDetailSource = readFileSync(
   path.join(process.cwd(), "src/components/pages/community-post-detail.tsx"),
   "utf8",
 );
+const profileNewsSource = readFileSync(
+  path.join(process.cwd(), "src/components/pages/michael-njo-dds.tsx"),
+  "utf8",
+);
 assert.ok(
   communityPostDetailSource.includes("break-words") && communityPostDetailSource.includes("overflow-wrap:anywhere"),
   "Community post body paragraphs must wrap long words on narrow viewports",
@@ -369,16 +379,8 @@ assert.ok(
   "Community posts must be able to render a labeled external link",
 );
 assert.ok(
-  communityPostDetailSource.includes('sm:grid-cols-2') &&
-    communityPostDetailSource.includes("sm:grid-cols-3") &&
-    communityPostDetailSource.includes('sizes="(max-width: 640px) 100vw, 30vw"'),
-  "Existing multi-image community posts must keep the original shared grid",
-);
-assert.ok(
-  communityPostDetailSource.includes('imageLayout === "stacked-hero"') &&
-    communityPostDetailSource.includes("w-[60%]") &&
-    communityPostDetailSource.includes("max-w-md"),
-  "The stacked hero layout is opt-in for 40 Over 40 and keeps the promo at ~60% width on mobile",
+  communityPostDetailSource.includes("max-w-[68ch]"),
+  "Community post body paragraphs must cap readable measure at 68ch",
 );
 assert.deepEqual(
   communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
@@ -398,20 +400,73 @@ for (const slug of [
   assert.notEqual(post?.imageLayout, "stacked-hero", `${slug} must keep the original multi-image grid`);
   assert.ok((post?.images?.length ?? 0) >= 2, `${slug} must still be a multi-image post`);
 }
+
+function renderCommunityPost(slug: string) {
+  const post = communityPosts.find((entry) => entry.slug === slug);
+  assert.ok(post, `${slug} must exist`);
+  return renderToStaticMarkup(createElement(CommunityPostDetailPage, { post }));
+}
+
+const fortyOverFortyHtml = renderCommunityPost("dental-lifestyles-40-over-40-2026");
 assert.ok(
-  communityPostDetailSource.includes("withIrReplaceableTitle"),
-  "Community post bodies must style IrReplaceable mentions from the shared helper",
+  fortyOverFortyHtml.includes("w-[60%]") && fortyOverFortyHtml.includes("max-w-md"),
+  "Rendered 40 Over 40 page must use the stacked hero with a 60% promo",
+);
+assert.equal(
+  /sm:grid-cols-[23]/.test(fortyOverFortyHtml),
+  false,
+  "Rendered 40 Over 40 page must not use the shared multi-image grid",
+);
+assert.ok(
+  fortyOverFortyHtml.includes("max-w-[68ch]"),
+  "Rendered 40 Over 40 body must use the 68ch measure",
+);
+assert.ok(
+  fortyOverFortyHtml.includes("text-[13px]"),
+  "Rendered community post tag pill must be 13px",
 );
 
-const irreplaceableTitleSource = readFileSync(
-  path.join(process.cwd(), "src/components/irreplaceable-book-title.tsx"),
-  "utf8",
+const dugoniHtml = renderCommunityPost("dugoni-business-club-highlights");
+assert.ok(
+  dugoniHtml.includes("sm:grid-cols-3"),
+  "Rendered Dugoni post must keep the original shared multi-image grid",
+);
+assert.equal(
+  dugoniHtml.includes("w-[60%]"),
+  false,
+  "Rendered Dugoni post must not receive the 40 Over 40 promo width",
+);
+
+const irreplaceableTitleMarkup =
+  '<em><s aria-hidden="true">Ir</s><span class="sr-only">Ir</span>Replaceable</em>';
+const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
+assert.ok(
+  irreplaceableHtml.includes(irreplaceableTitleMarkup),
+  "Rendered IrReplaceable post must use the accessible struck-Ir title markup",
+);
+assert.equal(
+  irreplaceableHtml.includes('aria-label="IrReplaceable"'),
+  false,
+  "IrReplaceable title markup must not use aria-label on em",
+);
+
+const irreplaceableNewsTitleHtml = renderToStaticMarkup(
+  createElement("h2", null, withIrReplaceableTitle(irreplaceablePost?.title ?? "")),
+);
+const irreplaceableNewsBodyHtml = renderToStaticMarkup(
+  createElement("p", null, withIrReplaceableTitle(irreplaceableSentCopy)),
 );
 assert.ok(
-  irreplaceableTitleSource.includes("<s>") &&
-    irreplaceableTitleSource.includes("Ir") &&
-    irreplaceableTitleSource.includes('aria-label="IrReplaceable"'),
-  "Book title styling must strike Ir and expose an accessible IrReplaceable label",
+  irreplaceableNewsTitleHtml.includes(irreplaceableTitleMarkup),
+  "IrReplaceable news card title must italicize the book title with the accessible markup",
+);
+assert.ok(
+  irreplaceableNewsBodyHtml.includes(irreplaceableTitleMarkup),
+  "IrReplaceable news card body must use the same accessible title markup",
+);
+assert.ok(
+  profileNewsSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)"),
+  "IrReplaceable news card title must render through the shared title helper",
 );
 
 const spotlightPost = communityPosts.find((post) => post.slug === "backstage-business-spotlight-michael-njo");
@@ -443,10 +498,6 @@ assert.equal(
   "Dinner recap must not advertise the completed Roseville dinner as upcoming",
 );
 
-const profileNewsSource = readFileSync(
-  path.join(process.cwd(), "src/components/pages/michael-njo-dds.tsx"),
-  "utf8",
-);
 assert.equal(
   /Looking forward to the next event in Roseville/i.test(profileNewsSource),
   false,
