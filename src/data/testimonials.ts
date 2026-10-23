@@ -102,6 +102,22 @@ const sortByNewest = (
 
 export const testimonials: Testimonial[] = [
   {
+    quote: `Michael Njo is truly a miracle worker!
+
+His dedication, connections, and incredible tenacity are what set him apart. He knows how to get things done, overcome obstacles, and guide his clients across the finish line, no matter how challenging the journey becomes.
+
+Throughout the entire process of selling my dental practice, Michael demonstrated extraordinary patience, wisdom, professionalism, and knowledge. He was always there to offer guidance, reassurance, and support, practically holding my hand every step of the way.
+
+What makes Michael truly special is that he genuinely cares about his clients and never gives up on them. His experience, determination, and ability to make things happen are simply remarkable.
+
+If you are looking for someone who will go above and beyond to get you to the finish line, Michael Njo is the person you want by your side. I cannot recommend him highly enough!`,
+    author: "Valentina Holina",
+    stars: 5,
+    source: "google",
+    // Google Business Profile notification date; Google gives no exact publication date.
+    receivedAt: "2026-10-19",
+  },
+  {
     quote: `Michael is professional, knowledgeable and responsive but most importantly he listened to what told him I was looking for in this transition from a practice owner to an associate. He was able to find an opportunity for me that is a great fit. The whole process was smooth and stress was kept to a minimum. Highly recommend.`,
     author: "Tanya Harris",
     stars: 5,

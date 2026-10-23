@@ -73,6 +73,8 @@ const EMAIL_NOTES: Record<string, string> = {
     "Emailed September 1, 2026 as PLEASE POST ASAP AND AGAIN IN 2 WEEKS.",
   "promotional-flyer-dental-strategies":
     "Flyer Dr. Njo shared for Beyond the Chair posting.",
+  "irreplaceable-leah-roling-dr-njo":
+    "Emailed October 21, 2026 as PLEASE POST ASAP.",
   "backstage-business-spotlight-michael-njo":
     "Emailed PLEASE POST: Backstage Business Spotlight featuring Michael Njo and Dental Strategies.",
   "dental-lifestyles-feature-p26":
@@ -80,6 +82,13 @@ const EMAIL_NOTES: Record<string, string> = {
 };
 
 const EXTRA_PHOTOS: ExtraPhoto[] = [
+  {
+    id: "irreplaceable-leah-roling-dr-njo",
+    src: "/media/irreplaceable-leah-roling-dr-njo.webp",
+    alt: "Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
+    featuredRoutes: ["profile:news"],
+    emailNote: EMAIL_NOTES["irreplaceable-leah-roling-dr-njo"] ?? null,
+  },
   {
     id: "backstage-business-spotlight-michael-njo",
     src: "/media/backstage-business-spotlight-michael-njo.webp",

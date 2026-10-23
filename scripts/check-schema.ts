@@ -127,6 +127,17 @@ assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April 
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
 
+const irreplaceablePath = buildCommunityPostPath("irreplaceable-leah-roling");
+const irreplaceableSchema = buildPageStructuredData(irreplaceablePath);
+assert.ok(irreplaceableSchema, "Expected structured data for the IrReplaceable community post");
+const irreplaceableGraph = irreplaceableSchema["@graph"] as Array<Record<string, unknown>>;
+const irreplaceableArticle = irreplaceableGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(irreplaceableArticle?.headline, "Dr. Njo recommends IrReplaceable by Leah Roling");
+assert.equal(irreplaceableArticle?.datePublished, "2026-10-23");
+assert.ok(!JSON.stringify(irreplaceableSchema).includes("sold-out"), "Do not claim sold-out for a book recommendation news post");
+assert.ok(!JSON.stringify(irreplaceableSchema).includes("Registration"), "Do not add registration claims for a book recommendation news post");
+assert.ok(!JSON.stringify(irreplaceableSchema).includes("Eventbrite"), "Do not invent Eventbrite language for a book recommendation news post");
+
 const spotlightPath = buildCommunityPostPath("backstage-business-spotlight-michael-njo");
 const spotlightSchema = buildPageStructuredData(spotlightPath);
 assert.ok(spotlightSchema, "Expected structured data for the Backstage Business Spotlight community post");

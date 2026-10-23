@@ -83,6 +83,11 @@ assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation mus
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
 assert.equal(
+  resolveProfileTab("", "#irreplaceable-leah-roling"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
+assert.equal(
   resolveProfileTab("", "#backstage-business-spotlight-michael-njo"),
   "news",
   "A direct news-section hash should open the news tab without requiring a query parameter",
@@ -234,6 +239,79 @@ assert.equal(
   "2027 calendar dates must not become news/community posts",
 );
 
+const irreplaceablePost = communityPosts.find((post) => post.slug === "irreplaceable-leah-roling");
+assert.ok(irreplaceablePost, "IrReplaceable news post must exist");
+assert.equal(irreplaceablePost?.publishedAt, "2026-10-23");
+assert.equal(irreplaceablePost?.title, "Dr. Njo recommends IrReplaceable by Leah Roling");
+assert.equal(irreplaceablePost?.image?.src, "/media/irreplaceable-leah-roling-dr-njo.webp");
+assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
+const irreplaceableSentCopy =
+  "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling’s IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge. Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.";
+assert.deepEqual(
+  irreplaceablePost?.body,
+  [irreplaceableSentCopy],
+  "IrReplaceable body must stay Dr. Njo's one sent paragraph, including the curly apostrophe",
+);
+assert.equal(irreplaceablePost?.body.length, 1);
+assert.ok(
+  irreplaceablePost?.body[0]?.includes("Roling’s"),
+  "IrReplaceable body must use the curly apostrophe in Roling’s",
+);
+const irreplaceableBody = irreplaceablePost?.body.join(" ") ?? "";
+assert.equal(
+  /\b(Mike|Michael)\b/.test(`${irreplaceablePost?.title} ${irreplaceablePost?.description} ${irreplaceableBody}`),
+  false,
+  "IrReplaceable post copy must refer to him as Dr. Njo, not Mike or Michael",
+);
+assert.equal(
+  /https?:\/\//.test(irreplaceableBody),
+  false,
+  "IrReplaceable post must not add an external book link",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "irreplaceable-leah-roling" && /eventbrite|registration/i.test(post.body.join(" "))),
+  false,
+  "IrReplaceable recommendation is news only and must not become an event listing",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "thank-you-valentina-holina"),
+  false,
+  "Do not ship an unrequested Valentina thank-you news post",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "dental-lifestyles-40-over-40-2026"),
+  false,
+  "Do not ship the embargoed 40 Over 40 post from this branch",
+);
+
+const communityPostDetailSource = readFileSync(
+  path.join(process.cwd(), "src/components/pages/community-post-detail.tsx"),
+  "utf8",
+);
+assert.ok(
+  communityPostDetailSource.includes("break-words") && communityPostDetailSource.includes("overflow-wrap:anywhere"),
+  "Community post body paragraphs must wrap long words on narrow viewports",
+);
+assert.ok(
+  communityPostDetailSource.includes("post.link") && communityPostDetailSource.includes('rel="noopener noreferrer"'),
+  "Community posts must be able to render a labeled external link",
+);
+assert.ok(
+  communityPostDetailSource.includes("withIrReplaceableTitle"),
+  "Community post bodies must style IrReplaceable mentions from the shared helper",
+);
+
+const irreplaceableTitleSource = readFileSync(
+  path.join(process.cwd(), "src/components/irreplaceable-book-title.tsx"),
+  "utf8",
+);
+assert.ok(
+  irreplaceableTitleSource.includes("<s>") &&
+    irreplaceableTitleSource.includes("Ir") &&
+    irreplaceableTitleSource.includes('aria-label="IrReplaceable"'),
+  "Book title styling must strike Ir and expose an accessible IrReplaceable label",
+);
+
 const spotlightPost = communityPosts.find((post) => post.slug === "backstage-business-spotlight-michael-njo");
 assert.ok(spotlightPost, "Backstage Business Spotlight news post must exist");
 assert.equal(spotlightPost?.publishedAt, "2026-09-21");
@@ -271,6 +349,15 @@ assert.equal(
   /Looking forward to the next event in Roseville/i.test(profileNewsSource),
   false,
   "Profile news copy must not treat the completed Roseville dinner as upcoming",
+);
+assert.ok(
+  profileNewsSource.includes("communityPosts") && profileNewsSource.includes("withIrReplaceableTitle"),
+  "IrReplaceable news card must render from community-posts data",
+);
+assert.equal(
+  profileNewsSource.includes("As a dentist and practice consultant"),
+  false,
+  "IrReplaceable news card must not hardcode Dr. Njo's sent copy",
 );
 
 console.log("Event date-state and profile-tab assertions passed.");

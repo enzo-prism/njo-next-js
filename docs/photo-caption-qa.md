@@ -20,7 +20,8 @@ bars, or `PhotoNameOverlay`. Keep accurate `alt` text.
 
 - every id in `allEditorialImages` (`src/data/media.ts`)
 - matching `public/media` extras he emailed to post that are not in that
-  array: `backstage-business-spotlight-michael-njo`,
+  array: `irreplaceable-leah-roling-dr-njo`,
+  `backstage-business-spotlight-michael-njo`,
   `dental-lifestyles-feature-p26`, `promotional-flyer-dental-strategies`,
   `sacramento-seminar-oct-2026`
 
