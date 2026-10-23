@@ -173,6 +173,7 @@ async function main() {
 
   const honoreeWebp = path.join(
     publicDirectory,
+    "media",
     "dental-lifestyles-40-over-40-honoree-2026.webp",
   );
   const honoreeMetadata = await sharp(honoreeWebp).metadata();
