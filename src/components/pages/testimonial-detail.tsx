@@ -105,7 +105,7 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
           <CardDescription>Primary quote and outcome</CardDescription>
         </CardHeader>
         <CardContent>
-          <blockquote className="font-serif text-lg leading-relaxed text-slate-700">{testimonial.quote}</blockquote>
+          <blockquote className="font-serif text-lg leading-relaxed whitespace-pre-line text-slate-700">{testimonial.quote}</blockquote>
           <StarCount count={testimonial.stars} />
           <p className="mt-4 flex items-center gap-1 text-sm text-muted-foreground">
             <CalendarDays className="h-4 w-4" />

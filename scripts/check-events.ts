@@ -83,6 +83,11 @@ assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation mus
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
 assert.equal(
+  resolveProfileTab("", "#irreplaceable-leah-roling"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
+assert.equal(
   resolveProfileTab("", "#backstage-business-spotlight-michael-njo"),
   "news",
   "A direct news-section hash should open the news tab without requiring a query parameter",
@@ -232,6 +237,52 @@ assert.equal(
   communityPosts.some((post) => /july 30, 2027|october 15, 2027/i.test(`${post.slug} ${post.title} ${post.body.join(" ")}`)),
   false,
   "2027 calendar dates must not become news/community posts",
+);
+
+const irreplaceablePost = communityPosts.find((post) => post.slug === "irreplaceable-leah-roling");
+assert.ok(irreplaceablePost, "IrReplaceable news post must exist");
+assert.equal(irreplaceablePost?.publishedAt, "2026-10-23");
+assert.equal(irreplaceablePost?.title, "Dr. Njo recommends IrReplaceable by Leah Roling");
+assert.equal(irreplaceablePost?.image?.src, "/media/irreplaceable-leah-roling-dr-njo.webp");
+assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
+const irreplaceableBody = irreplaceablePost?.body.join(" ") ?? "";
+assert.equal(
+  /\b(Mike|Michael)\b/.test(`${irreplaceablePost?.title} ${irreplaceablePost?.description} ${irreplaceableBody}`),
+  false,
+  "IrReplaceable post copy must refer to him as Dr. Njo, not Mike or Michael",
+);
+assert.equal(
+  /https?:\/\//.test(irreplaceableBody),
+  false,
+  "IrReplaceable post must not add an external book link",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "irreplaceable-leah-roling" && /eventbrite|registration/i.test(post.body.join(" "))),
+  false,
+  "IrReplaceable recommendation is news only and must not become an event listing",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "thank-you-valentina-holina"),
+  false,
+  "Do not ship an unrequested Valentina thank-you news post",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "dental-lifestyles-40-over-40-2026"),
+  false,
+  "Do not ship the embargoed 40 Over 40 post from this branch",
+);
+
+const communityPostDetailSource = readFileSync(
+  path.join(process.cwd(), "src/components/pages/community-post-detail.tsx"),
+  "utf8",
+);
+assert.ok(
+  communityPostDetailSource.includes("break-words") && communityPostDetailSource.includes("overflow-wrap:anywhere"),
+  "Community post body paragraphs must wrap long words on narrow viewports",
+);
+assert.ok(
+  communityPostDetailSource.includes("post.link") && communityPostDetailSource.includes('rel="noopener noreferrer"'),
+  "Community posts must be able to render a labeled external link",
 );
 
 const spotlightPost = communityPosts.find((post) => post.slug === "backstage-business-spotlight-michael-njo");

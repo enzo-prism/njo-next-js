@@ -80,7 +80,23 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
 
         <Card className="border-border/80 bg-background">
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
-            {post.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            {post.body.map((paragraph) => (
+              <p key={paragraph} className="break-words [overflow-wrap:anywhere]">
+                {paragraph}
+              </p>
+            ))}
+            {post.link ? (
+              <p className="break-words [overflow-wrap:anywhere]">
+                <a
+                  href={post.link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-brand underline underline-offset-4"
+                >
+                  {post.link.label}
+                </a>
+              </p>
+            ) : null}
           </CardContent>
         </Card>
 

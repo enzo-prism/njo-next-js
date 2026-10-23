@@ -476,6 +476,50 @@ export default function MichaelNjoDDS({
 
           <TabsContent value="news" className="space-y-6">
             <article
+              id="irreplaceable-leah-roling"
+              className={`${panel} scroll-mt-28 space-y-4`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                October 23, 2026
+              </p>
+              <h2 className="font-serif text-xl font-semibold">
+                Dr. Njo recommends IrReplaceable by Leah Roling
+              </h2>
+              <Image
+                src="/media/irreplaceable-leah-roling-dr-njo.webp"
+                alt="Dr. Njo holding a copy of IrReplaceable by Leah Roling."
+                width={1122}
+                height={1402}
+                className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 768px) 448px, 100vw"
+                priority
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                As a dentist and practice consultant, I see how easily business
+                owners become the person everyone depends on for every decision.
+                The focus of Leah Roling&apos;s IrReplaceable—building
+                accountable teams and growing without burnout—speaks directly to
+                that challenge.
+              </p>
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                Role clarity, ownership, and strong leadership are essential to
+                building a business that supports both its team and its owner.
+                These are meaningful topics for any practice owner who wants
+                sustainable growth and more freedom.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild size="sm">
+                  <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/blog/irreplaceable-leah-roling">
+                    Read the full story
+                  </Link>
+                </Button>
+              </div>
+            </article>
+
+            <article
               id="backstage-business-spotlight-michael-njo"
               className={`${panel} scroll-mt-28 space-y-4`}
             >

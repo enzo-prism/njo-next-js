@@ -15,10 +15,32 @@ export type CommunityPost = {
   images?: CommunityPostImage[];
   embedUrl?: string;
   embedTitle?: string;
+  link?: {
+    href: string;
+    label: string;
+  };
   body: string[];
 };
 
 export const communityPosts: CommunityPost[] = [
+  {
+    slug: "irreplaceable-leah-roling",
+    title: "Dr. Njo recommends IrReplaceable by Leah Roling",
+    description:
+      "Dr. Njo shares why Leah Roling's IrReplaceable, on building accountable teams and growing without burnout, matters for practice owners.",
+    publishedAt: "2026-10-23",
+    image: {
+      src: "/media/irreplaceable-leah-roling-dr-njo.webp",
+      width: 1122,
+      height: 1402,
+      alt: "Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
+      caption: "Dr. Njo with Leah Roling's IrReplaceable.",
+    },
+    body: [
+      "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling's IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge.",
+      "Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.",
+    ],
+  },
   {
     slug: "backstage-business-spotlight-michael-njo",
     title: "Backstage Business Spotlight: Michael Njo",

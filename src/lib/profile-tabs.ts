@@ -1,6 +1,7 @@
 export type ProfileTab = "overview" | "news";
 
 const newsSectionIds = new Set([
+  "irreplaceable-leah-roling",
   "backstage-business-spotlight-michael-njo",
   "diana-fat-board-of-regents",
   "practice-blueprint-roseville-aug-2026",
