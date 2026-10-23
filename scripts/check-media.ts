@@ -1,6 +1,17 @@
+import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+
+const IRREPLACEABLE_COVER_SHA256 =
+  "e30503f800b0b8786b69aa134069e10f60048f48362efb1d336f39640e0fb0de";
+const IRREPLACEABLE_OG_SHA256 =
+  "3986971a16ea4d5eee92459a17be5db5cdb844f0f7ea6b33a2ea8206638ba96f";
+const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
+
+function sha256Hex(bytes: Buffer) {
+  return createHash("sha256").update(bytes).digest("hex");
+}
 
 const mediaDirectory = path.join(process.cwd(), "src/assets/media");
 const publicDirectory = path.join(process.cwd(), "public");
@@ -205,7 +216,13 @@ async function main() {
   const irreplaceableCoverMetadata = await sharp(irreplaceableCover).metadata();
   if (irreplaceableCoverMetadata.width !== 1122 || irreplaceableCoverMetadata.height !== 1402) {
     errors.push(
-      "public/media/irreplaceable-leah-roling-dr-njo.webp must stay the unaltered 1122x1402 cover.",
+      "public/media/irreplaceable-leah-roling-dr-njo.webp must stay the pinned original 1122x1402 on-page cover.",
+    );
+  }
+  const irreplaceableCoverBytes = await readFile(irreplaceableCover);
+  if (sha256Hex(irreplaceableCoverBytes) !== IRREPLACEABLE_COVER_SHA256) {
+    errors.push(
+      "public/media/irreplaceable-leah-roling-dr-njo.webp bytes must stay the pinned original on-page cover.",
     );
   }
 
@@ -217,9 +234,31 @@ async function main() {
     );
   }
   const irreplaceableOgBytes = (await stat(irreplaceableOgJpg)).size;
-  if (irreplaceableOgBytes < 150_000 || irreplaceableOgBytes > 250_000) {
+  if (irreplaceableOgBytes < 30_000 || irreplaceableOgBytes > 300_000) {
     errors.push(
-      `public/media/irreplaceable-leah-roling-og.jpg must stay about 150-250 KB (got ${irreplaceableOgBytes}).`,
+      `public/media/irreplaceable-leah-roling-og.jpg must stay about 30-300 KB (got ${irreplaceableOgBytes}).`,
+    );
+  }
+  const irreplaceableOgFile = await readFile(irreplaceableOgJpg);
+  if (sha256Hex(irreplaceableOgFile) !== IRREPLACEABLE_OG_SHA256) {
+    errors.push(
+      "public/media/irreplaceable-leah-roling-og.jpg bytes must stay the pinned 1200x630 link-preview JPEG.",
+    );
+  }
+
+  const communityPostsSource = await readFile(
+    path.join(sourceDirectory, "data/community-posts.ts"),
+    "utf8",
+  );
+  const irreplaceableSocialImage = communityPostsSource.match(
+    /slug: "irreplaceable-leah-roling",[\s\S]*?socialImage:\s*\{([\s\S]*?)\n    \},/,
+  )?.[1];
+  if (
+    !irreplaceableSocialImage?.includes('src: "/media/irreplaceable-leah-roling-og.jpg"') ||
+    !irreplaceableSocialImage.includes(`alt: "${IRREPLACEABLE_OG_ALT}"`)
+  ) {
+    errors.push(
+      "IrReplaceable socialImage alt must stay Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
     );
   }
 

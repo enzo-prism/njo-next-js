@@ -13,8 +13,10 @@ function getRouteOpenGraphImage(
   communityPost?: ReturnType<typeof getCommunityPostByPath>,
 ) {
   if (communityPost?.socialImage) {
+    const src = communityPost.socialImage.src;
+    const cacheVersion = communityPost.socialImage.cacheVersion;
     return {
-      url: communityPost.socialImage.src,
+      url: cacheVersion ? `${buildCanonicalUrl(src)}?v=${cacheVersion}` : src,
       width: communityPost.socialImage.width,
       height: communityPost.socialImage.height,
       type: "image/jpeg",

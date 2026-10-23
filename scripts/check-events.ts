@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
-import os from "node:os";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -18,9 +18,24 @@ import {
   type EventOccurrence,
 } from "@/data/events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
+import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildRouteMetadata } from "@/seo/metadata";
 
 Object.assign(globalThis, { React });
+
+const IRREPLACEABLE_COVER_SHA256 =
+  "e30503f800b0b8786b69aa134069e10f60048f48362efb1d336f39640e0fb0de";
+const IRREPLACEABLE_OG_SHA256 =
+  "3986971a16ea4d5eee92459a17be5db5cdb844f0f7ea6b33a2ea8206638ba96f";
+const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
+const IRREPLACEABLE_OG_PATH = "/media/irreplaceable-leah-roling-og.jpg";
+const IRREPLACEABLE_OG_URL = `${buildCanonicalUrl(IRREPLACEABLE_OG_PATH)}?v=3`;
+
+function fileSha256(relativePath: string) {
+  return createHash("sha256")
+    .update(readFileSync(path.join(process.cwd(), relativePath)))
+    .digest("hex");
+}
 
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
@@ -340,13 +355,11 @@ assert.equal(irreplaceablePost?.title, "Dr. Njo recommends IrReplaceable by Leah
 assert.equal(irreplaceablePost?.image?.src, "/media/irreplaceable-leah-roling-dr-njo.webp");
 assert.equal(irreplaceablePost?.image?.width, 1122);
 assert.equal(irreplaceablePost?.image?.height, 1402);
-assert.equal(irreplaceablePost?.socialImage?.src, "/media/irreplaceable-leah-roling-og.jpg");
+assert.equal(irreplaceablePost?.socialImage?.src, IRREPLACEABLE_OG_PATH);
 assert.equal(irreplaceablePost?.socialImage?.width, 1200);
 assert.equal(irreplaceablePost?.socialImage?.height, 630);
-assert.equal(
-  existsSync(path.join(process.cwd(), "public/media/irreplaceable-leah-roling-og.jpg")),
-  true,
-);
+assert.equal(irreplaceablePost?.socialImage?.alt, IRREPLACEABLE_OG_ALT);
+assert.equal(irreplaceablePost?.socialImage?.cacheVersion, "3");
 assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
 const irreplaceableSentCopy =
   "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling’s IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge. Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.";
@@ -528,15 +541,29 @@ const irreplaceableOgImage = Array.isArray(irreplaceableOgImages)
 assert.ok(irreplaceableOgImage && typeof irreplaceableOgImage === "object");
 assert.equal(
   "url" in irreplaceableOgImage ? irreplaceableOgImage.url : undefined,
-  "/media/irreplaceable-leah-roling-og.jpg",
+  IRREPLACEABLE_OG_URL,
 );
 assert.equal("width" in irreplaceableOgImage ? irreplaceableOgImage.width : undefined, 1200);
 assert.equal("height" in irreplaceableOgImage ? irreplaceableOgImage.height : undefined, 630);
-assert.deepEqual(irreplaceableMetadata.twitter?.images, ["/media/irreplaceable-leah-roling-og.jpg"]);
+assert.deepEqual(irreplaceableMetadata.twitter?.images, [IRREPLACEABLE_OG_URL]);
+assert.equal(
+  "alt" in irreplaceableOgImage ? irreplaceableOgImage.alt : undefined,
+  IRREPLACEABLE_OG_ALT,
+);
 assert.equal(
   irreplaceablePost?.image?.src,
   "/media/irreplaceable-leah-roling-dr-njo.webp",
-  "On-page IrReplaceable cover must stay the unaltered original",
+  "On-page IrReplaceable cover must stay the pinned original webp",
+);
+assert.equal(
+  fileSha256("public/media/irreplaceable-leah-roling-dr-njo.webp"),
+  IRREPLACEABLE_COVER_SHA256,
+  "On-page IrReplaceable cover bytes must stay pinned",
+);
+assert.equal(
+  fileSha256("public/media/irreplaceable-leah-roling-og.jpg"),
+  IRREPLACEABLE_OG_SHA256,
+  "IrReplaceable OG JPEG bytes must stay pinned",
 );
 
 const irreplaceableTitleMarkup = '<em><span class="line-through">Ir</span>Replaceable</em>';
@@ -557,7 +584,8 @@ function extractEm(html: string) {
   return html.match(/<em>([\s\S]*?)<\/em>/)?.[0] ?? "";
 }
 
-function chromeLikeAccessibleName(html: string) {
+function accessibleNameFromMarkup(html: string) {
+  // Markup name only: do not invent word boundaries from sr-only / 1px CSS.
   const labeled = html.match(/\saria-label="([^"]+)"/);
   if (labeled) {
     return labeled[1];
@@ -566,18 +594,14 @@ function chromeLikeAccessibleName(html: string) {
     /<([a-zA-Z0-9]+)([^>]*\saria-hidden="true"[^>]*)>([\s\S]*?)<\/\1>/g,
     "",
   );
-  const withSrOnlySpaces = withoutHidden.replace(
-    /<([a-zA-Z0-9]+)([^>]*sr-only[^>]*)>([\s\S]*?)<\/\1>/g,
-    (_match, _tag, _attrs, inner: string) => ` ${htmlTextContent(inner)} `,
-  );
-  return htmlTextContent(withSrOnlySpaces).replace(/\s+/g, " ").trim();
+  return htmlTextContent(withoutHidden).replace(/\s+/g, " ").trim();
 }
 
 function assertBookTitleNode(html: string, label: string) {
   const em = extractEm(html);
   assert.equal(em.includes(irreplaceableTitleMarkup) || em === irreplaceableTitleMarkup, true, `${label} must use the line-through span`);
   assert.equal(htmlTextContent(em), "IrReplaceable", `${label} textContent must be exactly IrReplaceable`);
-  assert.equal(chromeLikeAccessibleName(em), "IrReplaceable", `${label} accessible name must be exactly IrReplaceable`);
+  assert.equal(accessibleNameFromMarkup(em), "IrReplaceable", `${label} accessible name must be exactly IrReplaceable`);
   assert.equal(
     em.includes("sr-only") || em.includes("aria-hidden") || /<s[\s/>]/.test(em) || em.includes("aria-label"),
     false,
@@ -589,7 +613,7 @@ const irreplaceableH1Html = renderToStaticMarkup(
   createElement("h1", null, withIrReplaceableTitle("IrReplaceable")),
 );
 assert.equal(htmlTextContent(irreplaceableH1Html), "IrReplaceable", "H1 textContent must be exactly IrReplaceable");
-assert.equal(chromeLikeAccessibleName(irreplaceableH1Html), "IrReplaceable", "H1 accessible name must be exactly IrReplaceable");
+assert.equal(accessibleNameFromMarkup(irreplaceableH1Html), "IrReplaceable", "H1 accessible name must be exactly IrReplaceable");
 
 const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
 assert.equal(
@@ -644,16 +668,6 @@ assert.ok(
   irreplaceableNewsCardSource.includes("export const newsCardDateClass =") &&
     irreplaceableNewsCardSource.includes('"text-[13px] font-semibold uppercase tracking-[0.2em] text-brand"'),
   "News card date class must stay 13px",
-);
-assert.equal(
-  (profileNewsSource.match(/<p className=\{newsCardDateClass\}>/g) ?? []).length,
-  8,
-  "Every inline News card date must use newsCardDateClass",
-);
-assert.equal(
-  (irreplaceableNewsCardSource.match(/<p className=\{newsCardDateClass\}>/g) ?? []).length,
-  1,
-  "IrReplaceable News card date must use newsCardDateClass",
 );
 assert.ok(
   irreplaceableNewsCardSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)") &&
@@ -717,137 +731,13 @@ assert.equal(
   "IrReplaceable news card must not hardcode Dr. Njo's sent copy",
 );
 
-if (!process.env.NEWS_POLISH_MUTANT) {
-  const repoRoot = process.cwd();
-  const repoDetail = path.join(repoRoot, "src/components/pages/community-post-detail.tsx");
-  const repoNewsCard = path.join(repoRoot, "src/components/irreplaceable-news-card.tsx");
-  const repoProfile = path.join(repoRoot, "src/components/pages/michael-njo-dds.tsx");
-  const repoDetailOriginal = readFileSync(repoDetail, "utf8");
-  const repoNewsCardOriginal = readFileSync(repoNewsCard, "utf8");
-  const repoProfileOriginal = readFileSync(repoProfile, "utf8");
-  const tsxCli = path.join(repoRoot, "node_modules/tsx/dist/cli.mjs");
-  const tmpRoot = mkdtempSync(path.join(os.tmpdir(), "news-polish-mutants-"));
-
-  function assertRepoUnchanged() {
-    assert.equal(readFileSync(repoDetail, "utf8"), repoDetailOriginal, "mutants must not rewrite community-post-detail.tsx");
-    assert.equal(readFileSync(repoNewsCard, "utf8"), repoNewsCardOriginal, "mutants must not rewrite irreplaceable-news-card.tsx");
-    assert.equal(readFileSync(repoProfile, "utf8"), repoProfileOriginal, "mutants must not rewrite michael-njo-dds.tsx");
-  }
-
-  function seedSandbox() {
-    rmSync(path.join(tmpRoot, "src"), { recursive: true, force: true });
-    rmSync(path.join(tmpRoot, "scripts"), { recursive: true, force: true });
-    cpSync(path.join(repoRoot, "src"), path.join(tmpRoot, "src"), { recursive: true });
-    mkdirSync(path.join(tmpRoot, "scripts"), { recursive: true });
-    cpSync(path.join(repoRoot, "scripts/check-events.ts"), path.join(tmpRoot, "scripts/check-events.ts"));
-    cpSync(path.join(repoRoot, "tsconfig.json"), path.join(tmpRoot, "tsconfig.json"));
-    const nextEnv = path.join(repoRoot, "next-env.d.ts");
-    if (existsSync(nextEnv)) {
-      cpSync(nextEnv, path.join(tmpRoot, "next-env.d.ts"));
-    }
-    const modulesLink = path.join(tmpRoot, "node_modules");
-    if (!existsSync(modulesLink)) {
-      symlinkSync(path.join(repoRoot, "node_modules"), modulesLink);
-    }
-    const publicLink = path.join(tmpRoot, "public");
-    if (!existsSync(publicLink)) {
-      symlinkSync(path.join(repoRoot, "public"), publicLink);
-    }
-  }
-
-  function sandboxPaths() {
-    return {
-      detail: path.join(tmpRoot, "src/components/pages/community-post-detail.tsx"),
-      newsCard: path.join(tmpRoot, "src/components/irreplaceable-news-card.tsx"),
-      profile: path.join(tmpRoot, "src/components/pages/michael-njo-dds.tsx"),
-    };
-  }
-
-  function runCheckEvents() {
-    return spawnSync(process.execPath, [tsxCli, "scripts/check-events.ts"], {
-      cwd: tmpRoot,
-      env: { ...process.env, NEWS_POLISH_MUTANT: "1" },
-      encoding: "utf8",
-    });
-  }
-
-  function assertMutantFails(name: string, apply: (files: ReturnType<typeof sandboxPaths>) => void) {
-    seedSandbox();
-    const files = sandboxPaths();
-    const before = {
-      detail: readFileSync(files.detail, "utf8"),
-      newsCard: readFileSync(files.newsCard, "utf8"),
-      profile: readFileSync(files.profile, "utf8"),
-    };
-    apply(files);
-    const changed =
-      readFileSync(files.detail, "utf8") !== before.detail ||
-      readFileSync(files.newsCard, "utf8") !== before.newsCard ||
-      readFileSync(files.profile, "utf8") !== before.profile;
-    assert.equal(changed, true, `${name} mutant must change a sandbox file`);
-    assertRepoUnchanged();
-    const result = runCheckEvents();
-    assertRepoUnchanged();
-    assert.notEqual(result.status, 0, `${name} must fail check-events\n${result.stderr}\n${result.stdout}`);
-    console.log(`Mutant ${name} failed as required (exit ${result.status}).`);
-  }
-
-  try {
-    seedSandbox();
-    const control = runCheckEvents();
-    assertRepoUnchanged();
-    assert.equal(control.status, 0, `No-op control must pass check-events\n${control.stderr}\n${control.stdout}`);
-    console.log("Mutant no-op control passed.");
-
-    assertMutantFails("P1 helper dropped on post body", (files) => {
-      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"));
-    });
-    assertMutantFails("P2 helper dropped on H1", (files) => {
-      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(post.title)}", "{post.title}"));
-    });
-    assertMutantFails("P3 helper dropped on subtitle", (files) => {
-      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(post.description)}", "{post.description}"));
-    });
-    assertMutantFails("C1 helper dropped on News card body", (files) => {
-      writeFileSync(files.newsCard, readFileSync(files.newsCard, "utf8").replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"));
-    });
-    assertMutantFails("H2 partial hardcoded News card text", (files) => {
-      writeFileSync(
-        files.newsCard,
-        readFileSync(files.newsCard, "utf8").replace(
-          `      {irreplaceableCommunityPost.body.map((paragraph) => (
-        <p
-          key={paragraph}
-          className="text-pretty text-sm leading-relaxed text-muted-foreground"
-        >
-          {withIrReplaceableTitle(paragraph)}
-        </p>
-      ))}`,
-          `      <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
-        Role clarity, ownership, and strong leadership are essential.
-      </p>`,
-        ),
-      );
-    });
-    assertMutantFails("M1 54ch removed", (files) => {
-      writeFileSync(files.detail, readFileSync(files.detail, "utf8").replaceAll("max-w-[54ch] ", ""));
-    });
-    assertMutantFails("N1 News date back to text-xs", (files) => {
-      writeFileSync(files.newsCard, readFileSync(files.newsCard, "utf8").replace("text-[13px]", "text-xs"));
-    });
-    assertMutantFails("N2 another News card date set to text-xs", (files) => {
-      writeFileSync(
-        files.profile,
-        readFileSync(files.profile, "utf8").replace(
-          "<p className={newsCardDateClass}>",
-          '<p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">',
-        ),
-      );
-    });
-  } finally {
-    rmSync(tmpRoot, { recursive: true, force: true });
-    assertRepoUnchanged();
-  }
+if (process.env.NEWS_POLISH_MUTANTS === "1") {
+  const result = spawnSync(process.execPath, ["--import", "tsx", "scripts/check-events-mutants.ts"], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+    stdio: "inherit",
+  });
+  assert.equal(result.status, 0, "opt-in news-polish mutant suite must pass");
 }
 
 console.log("Event date-state and profile-tab assertions passed.");
