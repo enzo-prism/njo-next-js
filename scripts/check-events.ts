@@ -615,11 +615,19 @@ function isNewsDateClassExpr(expr: string) {
   );
 }
 
+function nearestCardId(source: string, at: number) {
+  const before = source.slice(Math.max(0, at - 500), at);
+  const quoted = [...before.matchAll(/\bid="([^"]+)"/g)].at(-1)?.[1];
+  if (quoted) return quoted;
+  return [...before.matchAll(/\bid=\{([^}]+)\}/g)].at(-1)?.[1] ?? `date-${at}`;
+}
+
 function newsTabDateParagraphs(source: string) {
   return [...source.matchAll(/<p\s+className=(\{newsCardDateClass\}|"[^"]*")\s*>([\s\S]*?)<\/p>/g)]
     .filter((match) => isNewsDateClassExpr(match[1] ?? ""))
     .map((match, index) => ({
       index,
+      id: nearestCardId(source, match.index ?? 0),
       dateClass: match[1] ?? "",
       inner: match[2] ?? "",
     }));
@@ -632,12 +640,12 @@ function assertNewsCardDates(profileSource: string, newsCardSource: string) {
     assert.equal(
       date.dateClass,
       NEWS_CARD_DATE_CLASS_EXPR,
-      `News card date ${date.index + 1} must use newsCardDateClass`,
+      `News card ${date.id} must use newsCardDateClass`,
     );
     assert.equal(
       date.inner.includes("text-xs"),
       false,
-      `News card date ${date.index + 1} must not wrap the date in text-xs`,
+      `News card ${date.id} must not wrap the date in text-xs`,
     );
   }
   const irreplaceableDates = newsTabDateParagraphs(newsCardSource);

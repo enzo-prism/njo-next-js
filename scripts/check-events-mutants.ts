@@ -18,6 +18,7 @@ import path from "node:path";
 
 const MUTANT_PREFIX = "news-polish-mutants-";
 const OWNER_FILE = "owner.pid";
+const HOLD_ID_FILE = "hold.id";
 const STALE_AGE_MS = 30 * 60 * 1000;
 const CHILD_TIMEOUT_MS = 60_000;
 const HOLD_MS = 20_000;
@@ -43,6 +44,10 @@ function isPidAlive(pid: number) {
 
 function writeOwnerLock(dir: string, pid = process.pid) {
   writeFileSync(path.join(dir, OWNER_FILE), `${pid}\n`, "utf8");
+  const holdId = process.env.NEWS_POLISH_MUTANT_HOLD_ID;
+  if (holdId) {
+    writeFileSync(path.join(dir, HOLD_ID_FILE), `${holdId}\n`, "utf8");
+  }
 }
 
 function sweepStaleMutantSandboxes(keepDir?: string) {
@@ -156,9 +161,10 @@ function sandboxPaths() {
 
 function runCheckEvents(): Promise<CheckResult> {
   const childEnv = { ...process.env };
-  delete childEnv.NEWS_POLISH_MUTANTS;
-  delete childEnv.NEWS_POLISH_MUTANT_HOLD;
-  delete childEnv.NEWS_POLISH_MUTANT_PROOF;
+    delete childEnv.NEWS_POLISH_MUTANTS;
+    delete childEnv.NEWS_POLISH_MUTANT_HOLD;
+    delete childEnv.NEWS_POLISH_MUTANT_HOLD_ID;
+    delete childEnv.NEWS_POLISH_MUTANT_PROOF;
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [tsxCli, "scripts/check-events.ts"], {
       cwd: tmpRoot,
@@ -267,24 +273,28 @@ async function assertOverlapSweepKeepsLiveSandbox() {
   console.log("Overlap sweep kept a live sandbox and removed dead and age-stale sandboxes.");
 }
 
-function spawnHoldRun() {
-  return spawn(process.execPath, [tsxCli, "scripts/check-events-mutants.ts"], {
+function spawnHoldRun(holdId: string) {
+  return spawn("npm", ["run", "check:events-mutants"], {
     cwd: repoRoot,
-    env: { ...process.env, NEWS_POLISH_MUTANT_HOLD: "1" },
+    env: {
+      ...process.env,
+      NEWS_POLISH_MUTANT_HOLD: "1",
+      NEWS_POLISH_MUTANT_HOLD_ID: holdId,
+    },
     detached: true,
     stdio: "ignore",
   });
 }
 
-async function waitForHoldSandbox(child: ChildProcess) {
-  const deadline = Date.now() + 8000;
+async function waitForHoldSandbox(holdId: string) {
+  const deadline = Date.now() + 12_000;
   while (Date.now() < deadline) {
     const owned = readdirSync(os.tmpdir())
       .filter((name) => name.startsWith(MUTANT_PREFIX))
       .map((name) => path.join(os.tmpdir(), name))
       .filter((dir) => {
         try {
-          return Number(readFileSync(path.join(dir, OWNER_FILE), "utf8").trim()) === child.pid;
+          return readFileSync(path.join(dir, HOLD_ID_FILE), "utf8").trim() === holdId;
         } catch {
           return false;
         }
@@ -294,7 +304,11 @@ async function waitForHoldSandbox(child: ChildProcess) {
     }
     await wait(50);
   }
-  throw new Error(`hold run ${child.pid} did not create an owned sandbox`);
+  throw new Error(`hold run ${holdId} did not create an owned sandbox`);
+}
+
+function ownerPid(sandbox: string) {
+  return Number(readFileSync(path.join(sandbox, OWNER_FILE), "utf8").trim());
 }
 
 async function assertInterruptCleansSandbox() {
@@ -309,19 +323,29 @@ async function assertInterruptCleansSandbox() {
     { signal: "SIGTERM", delayMs: 1500, group: false },
   ];
   for (const testCase of cases) {
-    const child = spawnHoldRun();
+    const holdId = `${testCase.signal}-${testCase.group ? "group" : "parent"}-${testCase.delayMs}-${process.pid}`;
+    const child = spawnHoldRun(holdId);
     if (!child.pid) {
       throw new Error("hold run did not start");
     }
-    const sandbox = await waitForHoldSandbox(child);
+    const sandbox = await waitForHoldSandbox(holdId);
+    const scriptPid = ownerPid(sandbox);
     await wait(testCase.delayMs);
     if (testCase.group) {
       process.kill(-child.pid, testCase.signal);
     } else {
-      child.kill(testCase.signal);
+      process.kill(scriptPid, testCase.signal);
     }
-    await Promise.race([waitForExit(child), wait(3000)]);
+    await Promise.race([waitForExit(child), wait(4000)]);
+    if (existsSync(sandbox)) {
+      await wait(400);
+    }
     if (child.exitCode === null && !child.signalCode) {
+      try {
+        process.kill(scriptPid, "SIGKILL");
+      } catch {
+        // already gone
+      }
       child.kill("SIGKILL");
       await waitForExit(child);
     }
@@ -331,7 +355,7 @@ async function assertInterruptCleansSandbox() {
       `${testCase.signal} ${testCase.group ? "group" : "parent"} at ${testCase.delayMs}ms must remove ${sandbox}`,
     );
   }
-  console.log(`Interrupt cleanup removed the sandbox in ${cases.length} repeated SIGINT/SIGTERM runs.`);
+  console.log(`Interrupt cleanup removed the sandbox in ${cases.length} repeated SIGINT/SIGTERM runs through npm run check:events-mutants.`);
 }
 
 async function holdUntilInterrupted() {
