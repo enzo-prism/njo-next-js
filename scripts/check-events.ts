@@ -285,13 +285,21 @@ assert.equal(
   false,
   "40 Over 40 post copy must stay first-person and must not name him Mike or Michael",
 );
-assert.equal(
-  fortyOverFortyPost?.body[0],
-  "I am honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees!",
+assert.deepEqual(
+  fortyOverFortyPost?.body,
+  [
+    "I am honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees!",
+    "After more than 30 years in dentistry, I’m grateful for the opportunities to learn, grow, and support fellow dentists as they navigate the many stages of practice ownership and transition.",
+    "Thank you to Dental Lifestyles Magazine and the Nifty Thrifty Dentists community for this recognition. I’m proud to be part of a profession that continues to inspire me, and I look forward to helping more dentists build meaningful, successful futures.",
+  ],
+  "40 Over 40 body must stay the three approved paragraphs and must not add the pending issue sentence",
 );
-assert.match(fortyOverFortyBody, /more than 30 years in dentistry/);
-assert.match(fortyOverFortyBody, /Nifty Thrifty Dentists/);
-assert.match(fortyOverFortyBody, /Dental Lifestyles Magazine/);
+assert.equal(fortyOverFortyPost?.imageLayout, "stacked-hero");
+assert.equal(
+  fortyOverFortyBody.includes("Please check out the latest issue"),
+  false,
+  "Do not add the omitted Please check out the latest issue sentence",
+);
 assert.equal(
   /#\w|@Dental/.test(fortyOverFortyBody),
   false,
@@ -360,15 +368,36 @@ assert.ok(
   communityPostDetailSource.includes("post.link") && communityPostDetailSource.includes('rel="noopener noreferrer"'),
   "Community posts must be able to render a labeled external link",
 );
-assert.equal(
-  communityPostDetailSource.includes("sm:grid-cols-2"),
-  false,
-  "Community post images must not sit side by side from 640px up",
+assert.ok(
+  communityPostDetailSource.includes('sm:grid-cols-2') &&
+    communityPostDetailSource.includes("sm:grid-cols-3") &&
+    communityPostDetailSource.includes('sizes="(max-width: 640px) 100vw, 30vw"'),
+  "Existing multi-image community posts must keep the original shared grid",
 );
 assert.ok(
-  communityPostDetailSource.includes("index === 0") && communityPostDetailSource.includes("max-w-md"),
-  "The first community-post image is the full-width hero; later images stay smaller below it",
+  communityPostDetailSource.includes('imageLayout === "stacked-hero"') &&
+    communityPostDetailSource.includes("w-[60%]") &&
+    communityPostDetailSource.includes("max-w-md"),
+  "The stacked hero layout is opt-in for 40 Over 40 and keeps the promo at ~60% width on mobile",
 );
+assert.deepEqual(
+  communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
+  ["dental-lifestyles-40-over-40-2026"],
+  "Only the 40 Over 40 post may opt into the stacked hero layout",
+);
+for (const slug of [
+  "another-perfect-match",
+  "panel-of-experts-dinner-roseville",
+  "backstage-retreat-2026-orlando",
+  "dental-lifestyles-magazine-beyond-brokerage",
+  "san-francisco-seminar-july-2026",
+  "dugoni-business-club-highlights",
+] as const) {
+  const post = communityPosts.find((entry) => entry.slug === slug);
+  assert.ok(post, `${slug} must exist`);
+  assert.notEqual(post?.imageLayout, "stacked-hero", `${slug} must keep the original multi-image grid`);
+  assert.ok((post?.images?.length ?? 0) >= 2, `${slug} must still be a multi-image post`);
+}
 assert.ok(
   communityPostDetailSource.includes("withIrReplaceableTitle"),
   "Community post bodies must style IrReplaceable mentions from the shared helper",

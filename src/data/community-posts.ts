@@ -13,6 +13,7 @@ export type CommunityPost = {
   publishedAt: string;
   image?: CommunityPostImage;
   images?: CommunityPostImage[];
+  imageLayout?: "stacked-hero";
   embedUrl?: string;
   embedTitle?: string;
   link?: {
@@ -29,6 +30,7 @@ export const communityPosts: CommunityPost[] = [
     description:
       "Dr. Njo is honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees after more than 30 years in dentistry.",
     publishedAt: "2026-10-23",
+    imageLayout: "stacked-hero",
     image: {
       src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
       width: 1247,
