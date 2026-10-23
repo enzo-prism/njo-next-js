@@ -8,7 +8,29 @@ import { buildCanonicalUrl, normalizePathname } from "@/seo/canonical";
 
 const OG_IMAGE = SOCIAL_SHARE_IMAGE;
 
-function getRouteOpenGraphImage(resourceArticle: ReturnType<typeof getResourceArticleByPath>) {
+function getRouteOpenGraphImage(
+  resourceArticle: ReturnType<typeof getResourceArticleByPath>,
+  communityPost?: ReturnType<typeof getCommunityPostByPath>,
+) {
+  if (communityPost?.socialImage) {
+    return {
+      url: communityPost.socialImage.src,
+      width: communityPost.socialImage.width,
+      height: communityPost.socialImage.height,
+      type: "image/jpeg",
+      alt: communityPost.socialImage.alt,
+    } as const;
+  }
+
+  if (communityPost?.image) {
+    return {
+      url: communityPost.image.src,
+      width: communityPost.image.width,
+      height: communityPost.image.height,
+      alt: communityPost.image.alt,
+    } as const;
+  }
+
   if (!resourceArticle?.bookLaunch) return OG_IMAGE;
 
   return {
@@ -222,7 +244,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
   const canonical = buildCanonicalUrl(pathname);
   const ogType = buildOpenGraphType(pathname);
   const keywords = buildPageKeywords(pathname);
-  const ogImage = getRouteOpenGraphImage(resourceArticle);
+  const ogImage = getRouteOpenGraphImage(resourceArticle, communityPost);
   const shouldNoIndex =
     (NOINDEX_STATIC_SITE_PATHS as readonly string[]).includes(normalizedPath) ||
     normalizedPath.startsWith("/testimonials/");
@@ -241,12 +263,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
       title,
       description,
       url: canonical,
-      images: [communityPost?.image ? {
-        url: communityPost.image.src,
-        width: communityPost.image.width,
-        height: communityPost.image.height,
-        alt: communityPost.image.alt,
-      } : ogImage],
+      images: [ogImage],
       modifiedTime: resourceArticle?.updatedAt || resourceArticle?.publishedAt || communityPost?.publishedAt,
       authors: communityPost
         ? ["Michael Njo, DDS"]
@@ -261,7 +278,7 @@ export function buildRouteMetadata(pathname: string): Metadata {
       card: "summary_large_image",
       title,
       description,
-      images: [communityPost?.image ? communityPost.image.src : ogImage.url],
+      images: [ogImage.url],
     },
   };
 }

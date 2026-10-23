@@ -29,7 +29,7 @@ import {
   type EditorialMediaAsset,
 } from "@/data/media";
 import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
-import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
+import { IrreplaceableNewsCard, newsCardDateClass } from "@/components/irreplaceable-news-card";
 import { communityPosts } from "@/data/community-posts";
 import { getUpcomingEventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
@@ -52,10 +52,6 @@ const panel =
 
 const fortyOverFortyCommunityPost = communityPosts.find(
   (post) => post.slug === "dental-lifestyles-40-over-40-2026",
-);
-
-const irreplaceableCommunityPost = communityPosts.find(
-  (post) => post.slug === "irreplaceable-leah-roling",
 );
 
 function formatCommunityPostDate(value: string) {
@@ -499,7 +495,7 @@ export default function MichaelNjoDDS({
                 id={fortyOverFortyCommunityPost.slug}
                 className={`${panel} scroll-mt-28 space-y-4`}
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                <p className={newsCardDateClass}>
                   {formatCommunityPostDate(fortyOverFortyCommunityPost.publishedAt)}
                 </p>
                 <h2 className="font-serif text-xl font-semibold">
@@ -535,54 +531,13 @@ export default function MichaelNjoDDS({
               </article>
             ) : null}
 
-            {irreplaceableCommunityPost ? (
-              <article
-                id={irreplaceableCommunityPost.slug}
-                className={`${panel} scroll-mt-28 space-y-4`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-                  {formatCommunityPostDate(irreplaceableCommunityPost.publishedAt)}
-                </p>
-                <h2 className="font-serif text-xl font-semibold">
-                  {irreplaceableCommunityPost.title}
-                </h2>
-                {irreplaceableCommunityPost.image ? (
-                  <Image
-                    src={irreplaceableCommunityPost.image.src}
-                    alt={irreplaceableCommunityPost.image.alt}
-                    width={irreplaceableCommunityPost.image.width}
-                    height={irreplaceableCommunityPost.image.height}
-                    className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
-                    sizes="(min-width: 768px) 448px, 100vw"
-                    priority
-                  />
-                ) : null}
-                {irreplaceableCommunityPost.body.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="text-pretty text-sm leading-relaxed text-muted-foreground"
-                  >
-                    {withIrReplaceableTitle(paragraph)}
-                  </p>
-                ))}
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild size="sm">
-                    <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/blog/${irreplaceableCommunityPost.slug}`}>
-                      Read the full story
-                    </Link>
-                  </Button>
-                </div>
-              </article>
-            ) : null}
+            <IrreplaceableNewsCard />
 
             <article
               id="backstage-business-spotlight-michael-njo"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 September 21, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -622,7 +577,7 @@ export default function MichaelNjoDDS({
               id="diana-fat-board-of-regents"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 28, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -669,7 +624,7 @@ export default function MichaelNjoDDS({
               id="practice-blueprint-roseville-aug-2026"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 28, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -710,7 +665,7 @@ export default function MichaelNjoDDS({
               id="another-perfect-match"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 25, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -763,7 +718,7 @@ export default function MichaelNjoDDS({
               id="beyond-the-chair-anaheim"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 September 25, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -810,7 +765,7 @@ export default function MichaelNjoDDS({
               id="panel-of-experts-dinner"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 14, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">
@@ -867,7 +822,7 @@ export default function MichaelNjoDDS({
               id="industry-leaders"
               className={`${panel} scroll-mt-28 space-y-4`}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              <p className={newsCardDateClass}>
                 August 13, 2026
               </p>
               <h2 className="font-serif text-xl font-semibold">

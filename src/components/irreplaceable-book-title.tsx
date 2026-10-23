@@ -2,8 +2,9 @@ import { Fragment, type ReactNode } from "react";
 
 export function IrReplaceableBookTitle() {
   return (
-    <em aria-label="IrReplaceable">
-      <s>Ir</s>Replaceable
+    <em>
+      <span className="line-through">Ir</span>
+      Replaceable
     </em>
   );
 }

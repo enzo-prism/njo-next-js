@@ -18,16 +18,19 @@ function formatDate(value: string) {
 
 export default function CommunityPostDetailPage({ post }: { post: CommunityPost }) {
   const matchingEvent = eventPrograms.find((program) => program.slug === post.slug);
+  const bodyMeasureClass = post.bodyMeasure === "54ch" ? "max-w-[54ch] " : "";
 
   return (
     <Container className="py-10 sm:py-14">
       <article className="mx-auto max-w-4xl space-y-8">
         <header className="space-y-5">
-          <Badge variant="secondary" className="uppercase tracking-wide">Community</Badge>
+          <Badge variant="secondary" className="text-[13px] uppercase tracking-wide">Community</Badge>
           <h1 className="text-balance font-serif text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-            {post.title}
+            {withIrReplaceableTitle(post.title)}
           </h1>
-          <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground">{post.description}</p>
+          <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground">
+            {withIrReplaceableTitle(post.description)}
+          </p>
           <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
             <CalendarDays className="h-4 w-4" /> Published {formatDate(post.publishedAt)}
           </p>
@@ -39,7 +42,7 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
               <figure
                 key={image.src}
                 className={`overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm ${
-                  index === 0 ? "" : "mx-auto w-[60%] max-w-md"
+                  index === 0 ? "" : "mx-auto w-[80%] sm:w-[60%] max-w-[538px]"
                 }`}
               >
                 <Image
@@ -48,7 +51,11 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
                   width={image.width}
                   height={image.height}
                   priority={index === 0}
-                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 60vw, 448px"}
+                  sizes={
+                    index === 0
+                      ? "(max-width: 768px) 100vw, 896px"
+                      : "(max-width: 639px) 80vw, (max-width: 768px) 60vw, 538px"
+                  }
                   className="h-auto w-full object-contain"
                 />
               </figure>
@@ -103,12 +110,12 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         <Card className="border-border/80 bg-background">
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
             {post.body.map((paragraph) => (
-              <p key={paragraph} className="break-words [overflow-wrap:anywhere]">
+              <p key={paragraph} className={`${bodyMeasureClass}break-words [overflow-wrap:anywhere]`}>
                 {withIrReplaceableTitle(paragraph)}
               </p>
             ))}
             {post.link ? (
-              <p className="break-words [overflow-wrap:anywhere]">
+              <p className={`${bodyMeasureClass}break-words [overflow-wrap:anywhere]`}>
                 <a
                   href={post.link.href}
                   target="_blank"

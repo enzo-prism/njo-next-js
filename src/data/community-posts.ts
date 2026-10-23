@@ -14,6 +14,13 @@ export type CommunityPost = {
   image?: CommunityPostImage;
   images?: CommunityPostImage[];
   imageLayout?: "stacked-hero";
+  bodyMeasure?: "54ch";
+  socialImage?: {
+    src: string;
+    width: number;
+    height: number;
+    alt: string;
+  };
   embedUrl?: string;
   embedTitle?: string;
   link?: {
@@ -31,6 +38,13 @@ export const communityPosts: CommunityPost[] = [
       "Dr. Njo is honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees after more than 30 years in dentistry.",
     publishedAt: "2026-10-23",
     imageLayout: "stacked-hero",
+    bodyMeasure: "54ch",
+    socialImage: {
+      src: "/media/dental-lifestyles-40-over-40-og.jpg",
+      width: 1200,
+      height: 630,
+      alt: "Congratulations graphic for Dr. Michael Njo, 2026 Dental Lifestyles 40 Over 40 honoree, with his portrait and Dental Strategies and Practice Transitions Institute.",
+    },
     image: {
       src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
       width: 1247,
@@ -70,6 +84,7 @@ export const communityPosts: CommunityPost[] = [
     description:
       "Dr. Njo shares why Leah Roling’s IrReplaceable, on building accountable teams and growing without burnout, matters for practice owners.",
     publishedAt: "2026-10-23",
+    bodyMeasure: "54ch",
     image: {
       src: "/media/irreplaceable-leah-roling-dr-njo.webp",
       width: 1122,
