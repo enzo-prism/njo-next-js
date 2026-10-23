@@ -87,6 +87,13 @@ const EMAIL_NOTES: Record<string, string> = {
 
 const EXTRA_PHOTOS: ExtraPhoto[] = [
   {
+    id: "peninsula-dental-society-merger",
+    src: "/media/peninsula-dental-society-merger.webp",
+    alt: "Group gathered in front of The Peninsula Dental Society sign.",
+    featuredRoutes: ["profile:news", "/blog/peninsula-dental-society-merger"],
+    emailNote: "Shared by Dr. Njo on September 17, 2026 with his Peninsula Dental Society merger message.",
+  },
+  {
     id: "dental-lifestyles-40-over-40-honoree-2026",
     src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
     alt: "Congratulations graphic for Dr. Michael Njo, 2026 Dental Lifestyles 40 Over 40 honoree, with his portrait and Dental Strategies and Practice Transitions Institute.",

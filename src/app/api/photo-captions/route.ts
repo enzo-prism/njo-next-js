@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { checkCaptionAdminAuth } from "@/lib/caption-admin-auth";
 import {
   isKnownPhotoId,
   listWebsitePhotos,
@@ -46,18 +47,23 @@ function corsHeaders(request: Request) {
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET, PATCH, OPTIONS",
-    "Access-Control-Allow-Headers": "Accept, Content-Type",
+    "Access-Control-Allow-Headers": "Accept, Authorization, Content-Type",
     "Cache-Control": "no-store",
     Vary: "Origin",
   };
 }
 
-function errorResponse(request: Request, message: string, status: number) {
+function errorResponse(
+  request: Request,
+  message: string,
+  status: number,
+  extraHeaders: Record<string, string> = {},
+) {
   return NextResponse.json(
     { error: message },
     {
       status,
-      headers: corsHeaders(request),
+      headers: { ...corsHeaders(request), ...extraHeaders },
     },
   );
 }
@@ -89,6 +95,16 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const auth = checkCaptionAdminAuth(request.headers.get("authorization"));
+  if (auth === "unconfigured") {
+    return errorResponse(request, "Caption editing is not configured.", 503);
+  }
+  if (auth === "unauthorized") {
+    return errorResponse(request, "Caption editing requires a valid editor token.", 401, {
+      "WWW-Authenticate": 'Bearer realm="photo-captions"',
+    });
+  }
+
   let body: PatchBody;
   try {
     body = (await request.json()) as PatchBody;
@@ -96,8 +112,11 @@ export async function PATCH(request: Request) {
     return errorResponse(request, "Caption save requires a JSON body.", 400);
   }
 
-  const id = typeof body.id === "string" ? body.id.trim() : "";
-  const caption = typeof body.caption === "string" ? body.caption : "";
+  if (!body || typeof body !== "object" || typeof body.id !== "string" || typeof body.caption !== "string") {
+    return errorResponse(request, "Caption save requires string id and caption fields.", 400);
+  }
+  const id = body.id.trim();
+  const caption = body.caption;
 
   if (!id || !isKnownPhotoId(id)) {
     return errorResponse(request, "Unknown photo id.", 404);

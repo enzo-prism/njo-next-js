@@ -533,6 +533,26 @@ export default function MichaelNjoDDS({
 
             <IrreplaceableNewsCard />
 
+            <article id="peninsula-dental-society-merger" className={`${panel} scroll-mt-28 space-y-4`}>
+              <p className={newsCardDateClass}>October 23, 2026</p>
+              <h2 className="font-serif text-xl font-semibold">A stronger future for organized dentistry</h2>
+              <Image
+                src="/media/peninsula-dental-society-merger.webp"
+                alt="Group gathered in front of The Peninsula Dental Society sign."
+                width={1448}
+                height={1086}
+                className="h-auto w-full rounded-xl bg-slate-50 object-contain"
+                sizes="(min-width: 1024px) 768px, 100vw"
+              />
+              <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                The results of collaboration—making organized dentistry stronger through the merger of SMCDS and MPDS.
+              </p>
+              <p className="text-sm text-muted-foreground">Dr. Michael Njo</p>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/blog/peninsula-dental-society-merger">Read the full message</Link>
+              </Button>
+            </article>
+
             <article
               id="backstage-business-spotlight-michael-njo"
               className={`${panel} scroll-mt-28 space-y-4`}

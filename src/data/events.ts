@@ -31,8 +31,8 @@ export type EventOccurrence = {
 
 export type EventProgram = {
   slug: string;
-  category: "seminar" | "conference";
-  registrationStatus: "Registration Open";
+  category: "seminar" | "conference" | "dinner";
+  registrationStatus: "Registration Open" | "Details to follow";
   scheduleLabel?: string;
   title: string;
   nextDateLabel: string;
@@ -74,6 +74,13 @@ function getProgramOccurrences(program: EventProgram): EventOccurrence[] {
 }
 
 export function isEventOccurrenceUpcoming(occurrence: EventOccurrence, referenceDate: Date): boolean {
+  // A date-only event has no confirmed time; retain the whole Pacific calendar day.
+  if (!occurrence.endDateTime && /^\d{4}-\d{2}-\d{2}$/.test(occurrence.startDateTime)) {
+    const pacificDay = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit",
+    }).format(referenceDate);
+    return occurrence.startDateTime >= pacificDay;
+  }
   const eventEnd = occurrence.endDateTime || occurrence.startDateTime;
   return parseDateTime(eventEnd) >= referenceDate.getTime();
 }
@@ -217,7 +224,7 @@ export const eventPrograms: EventProgram[] = [
       {
         dateLabel: "July 30, 2027",
         timeLabel: "8am - 3pm",
-        location: "University of the Pacific (UOP) Arthur A. Dugoni School of Dentistry, San Francisco, CA",
+        location: "QUO, 1 Post Street, San Francisco, CA",
         startDateTime: "2027-07-30T08:00:00-07:00",
         endDateTime: "2027-07-30T15:00:00-07:00",
       },
@@ -281,5 +288,24 @@ export const eventPrograms: EventProgram[] = [
       },
     ],
     registrationUrl: "https://practicetransitionsinstitute.com/events",
+  },
+  {
+    slug: "panel-of-experts-sacramento-2027",
+    category: "dinner",
+    registrationStatus: "Details to follow",
+    title: "Panel of Experts Dinner",
+    nextDateLabel: "October 14, 2027",
+    nextDateTime: "2027-10-14",
+    timeLabel: "Time to be announced",
+    locationLabel: "Frank Fat's Restaurant, Sacramento, CA",
+    description: "Panel of Experts dinner at Frank Fat's Restaurant in Sacramento on October 14, 2027. Time and additional details will be announced.",
+    upcomingDates: [
+      {
+        dateLabel: "October 14, 2027",
+        timeLabel: "Time to be announced",
+        location: "Frank Fat's Restaurant, Sacramento, CA",
+        startDateTime: "2027-10-14",
+      },
+    ],
   },
 ];

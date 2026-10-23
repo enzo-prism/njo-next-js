@@ -122,6 +122,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 | `NEXT_PUBLIC_GA_ID`     | GA tracking ID                          | `G-6HWEE040EH`              |
 | `NEXT_PUBLIC_HOTJAR_ID` | Hotjar site ID                          | `6575522`                   |
 | `NEXT_PUBLIC_HOTJAR_SV` | Hotjar version                          | `6`                         |
+| `CAPTION_ADMIN_TOKEN`   | Server-only bearer token for caption `PATCH` (32+ chars) | none; caption editing returns `503` until set |
 
 ## Local Development
 
@@ -184,6 +185,7 @@ This runs:
 - Structured data assertions
 - Sitemap assertions
 - HTTP SEO smoke assertions
+- API security assertions (caption write auth, no wildcard Search Console verification)
 - Robots assertions
 - Redirect assertions
 
@@ -257,3 +259,7 @@ If your current network still resolves an older apex IP after DNS changes, verif
 - `docs/release-readiness.md` - initial release-readiness report plus post-rollout operational addendum
 - `.github/workflows/ci.yml` - CI parity gate for PR/push
 - `docs/source-reference/*` - source snapshots from the original site (`robots`, `sitemap`)
+
+## October 23 backlog reconciliation
+
+The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.

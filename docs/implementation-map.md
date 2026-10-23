@@ -28,7 +28,7 @@ Read this together with `AGENTS.md`. `AGENTS.md` defines invariants; this file e
 - Form model:
   - browser submits directly to Formspree
   - there are no internal API routes for lead capture
-  - `GET/PATCH /api/photo-captions` is a caption QA overlay, not a form backend
+  - `GET/PATCH /api/photo-captions` is a caption QA overlay, not a form backend; `PATCH` requires `Authorization: Bearer $CAPTION_ADMIN_TOKEN`
   - shared validation, privacy acknowledgment, honeypot, and repeat-submit safeguards live in `src/lib/lead-form-validation.ts`
 - Analytics model:
   - consent-gated Vercel Analytics, Google Analytics, and Hotjar are coordinated once from `src/app/layout.tsx`
@@ -212,7 +212,7 @@ hourly ISR so date state refreshes without requiring a deployment. Current regis
 fields such as `flyerImage`, speakers, guest labels, and date-gated pricing are allowed for a specific date only. The
 October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program at TDIC Headquarters
 and uses `/media/sacramento-seminar-oct-2026.webp`; do not duplicate that date or add a news/community post for it.
-The 2027 seminar calendar adds San Francisco on July 30, 2027 at UOP Dugoni and Sacramento on October 15, 2027 at
+The 2027 seminar calendar adds San Francisco on July 30, 2027 at QUO, 1 Post Street and Sacramento on October 15, 2027 at
 TDIC Headquarters as ordinary city-date occurrences; do not add news/community posts for those dates.
 News-tab copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
 completed dinners as upcoming.
@@ -467,6 +467,8 @@ Future changes should preserve the single-mount model. Do not add a second measu
   - validates indexable sitemap coverage and ensures campaign, testimonial-detail, and `/contact/success` URLs are excluded
 - `check:seo-http`
   - runs `next start`, fetches live `robots.txt` and `sitemap.xml`, and validates served SEO output
+- `check:api-security`
+  - runs `next start` with and without a test `CAPTION_ADMIN_TOKEN`; validates caption `PATCH` auth (401 without/with a wrong token, 503 when unconfigured), that `GET` stays public, and that only the real `google<token>.html` verification file is served
 - `check:robots`
   - validates robots rule shape and sitemap reference
 - `check:redirects`
@@ -530,3 +532,9 @@ For a featured book launch, also:
 - only `https://res.cloudinary.com/dhqpqfw6w/**` is whitelisted for remote `next/image` usage in `next.config.ts`
 - dynamic detail routes are static-only; unknown params should stay 404s
 - metadata and structured data are centralized on purpose; avoid per-page bespoke logic unless the route genuinely breaks the shared pattern
+
+October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento. Only date and venue are confirmed; preserve the date-only schema and "Details to follow" status until more details are approved.
+
+## October 23 backlog reconciliation
+
+The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
