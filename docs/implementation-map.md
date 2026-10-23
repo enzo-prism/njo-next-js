@@ -444,11 +444,11 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:testimonials`
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
-  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, that completed Roseville dinner copy stays in the past tense, and that each News card date uses `newsCardDateClass`
+  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense
 - `check:events-mutants` (opt-in; not part of `check:parity`; also a manual `workflow_dispatch` job)
-  - copies `src` into a temp sandbox with an `owner.pid` lock, proves news-polish mutants fail `check:events`, sweeps `/tmp/news-polish-mutants-*` dirs whose owner is dead or older than 30 minutes, and uses async spawn so SIGINT/SIGTERM can kill the check-events child and then remove the active sandbox
+  - copies `src` into a temp sandbox, writes `owner.pid` via temp+rename, and proves news-polish mutants fail `check-events` when spawned as `node --import tsx` (no tsx wrapper). A timeout, signal, null status, or exit `>= 128` is an error, never a required kill; stderr must include the expected assertion text. SIGINT/SIGTERM cleanup is best-effort (kill the child, then remove the active dir). Leftovers are swept on the next start: dead owners immediately; empty, garbled, EPERM/other-user, and ownerless dirs only after 30 minutes. `NEWS_POLISH_MUTANT_PROOF` is unused (the built-in interrupt self-test was removed). `NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS` overrides the 60s child cap.
 - `check:irreplaceable-ax`
-  - starts the production server and asks Chrome for the IrReplaceable H1 accessible name (`ubuntu-latest` ships Google Chrome)
+  - starts the production server and asks Chrome for the IrReplaceable `h1` accessible name, then asserts every News card date is a `13px` `<p>` (`ubuntu-latest` ships Google Chrome). Cleans up its `/tmp` profile.
 - `check:media`
   - validates EXIF display dimensions, unmanaged cover crops, no inventory captions or name bars on public surfaces, QA overlay wiring, that the caption store replaces memory from cache on load, and pinned sha256 bytes plus OG alt for the IrReplaceable cover and link-preview JPEG (30-300 KB). Regenerate that JPEG with `npm run generate:irreplaceable-og`.
 - `check:photo-captions`

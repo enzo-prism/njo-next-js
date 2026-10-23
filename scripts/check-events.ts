@@ -30,7 +30,6 @@ const IRREPLACEABLE_OG_SHA256 =
 const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
 const IRREPLACEABLE_OG_PATH = "/media/irreplaceable-leah-roling-og.jpg";
 const IRREPLACEABLE_OG_URL = `${buildCanonicalUrl(IRREPLACEABLE_OG_PATH)}?v=3`;
-const NEWS_CARD_DATE_CLASS_EXPR = "{newsCardDateClass}";
 
 function fileSha256(relativePath: string) {
   return createHash("sha256")
@@ -598,90 +597,6 @@ function accessibleNameFromMarkup(html: string) {
   return htmlTextContent(withoutHidden).replace(/\s+/g, " ").trim();
 }
 
-function newsTabCardsSource(profileSource: string) {
-  const newsStart = profileSource.indexOf('<TabsContent value="news"');
-  assert.ok(newsStart >= 0, "Profile must have a News tab");
-  const upcoming = profileSource.indexOf('id="upcoming-events"', newsStart);
-  assert.ok(upcoming > newsStart, "News tab must keep upcoming events after the news cards");
-  return profileSource.slice(newsStart, upcoming);
-}
-
-function isNewsDateClassExpr(expr: string) {
-  return (
-    expr === NEWS_CARD_DATE_CLASS_EXPR ||
-    /uppercase/.test(expr) ||
-    /text-xs/.test(expr) ||
-    /text-\[13px\]/.test(expr)
-  );
-}
-
-function nearestCardId(source: string, at: number) {
-  const before = source.slice(Math.max(0, at - 500), at);
-  const quoted = [...before.matchAll(/\bid="([^"]+)"/g)].at(-1)?.[1];
-  if (quoted) return quoted;
-  return [...before.matchAll(/\bid=\{([^}]+)\}/g)].at(-1)?.[1] ?? `date-${at}`;
-}
-
-function newsTabDateParagraphs(source: string) {
-  return [...source.matchAll(/<p\s+className=(\{newsCardDateClass\}|"[^"]*")\s*>([\s\S]*?)<\/p>/g)]
-    .filter((match) => isNewsDateClassExpr(match[1] ?? ""))
-    .map((match, index) => ({
-      index,
-      id: nearestCardId(source, match.index ?? 0),
-      dateClass: match[1] ?? "",
-      inner: match[2] ?? "",
-    }));
-}
-
-function assertNewsCardDates(profileSource: string, newsCardSource: string) {
-  const dates = newsTabDateParagraphs(newsTabCardsSource(profileSource));
-  assert.ok(dates.length > 0, "News tab must render at least one news card date");
-  for (const date of dates) {
-    assert.equal(
-      date.dateClass,
-      NEWS_CARD_DATE_CLASS_EXPR,
-      `News card ${date.id} must use newsCardDateClass`,
-    );
-    assert.equal(
-      date.inner.includes("text-xs"),
-      false,
-      `News card ${date.id} must not wrap the date in text-xs`,
-    );
-  }
-  const irreplaceableDates = newsTabDateParagraphs(newsCardSource);
-  assert.equal(irreplaceableDates.length, 1, "IrReplaceable News card must have one date");
-  assert.equal(
-    irreplaceableDates[0]?.dateClass,
-    NEWS_CARD_DATE_CLASS_EXPR,
-    "IrReplaceable News card date must use newsCardDateClass",
-  );
-  assert.equal(
-    irreplaceableDates[0]?.inner.includes("text-xs"),
-    false,
-    "IrReplaceable News card date must not wrap the date in text-xs",
-  );
-}
-
-function withSyntheticNewsCard(profileSource: string, dateClassAttr: string) {
-  const marker = `<div id="upcoming-events"`;
-  const at = profileSource.indexOf(marker);
-  assert.ok(at >= 0, "Profile News tab must include upcoming-events after the news cards");
-  const card = `            <article
-              id="synthetic-news-card"
-              className={\`\${panel} scroll-mt-28 space-y-4\`}
-            >
-              <p className=${dateClassAttr}>
-                October 23, 2026
-              </p>
-              <h2 className="font-serif text-xl font-semibold">
-                Synthetic news card
-              </h2>
-            </article>
-
-`;
-  return profileSource.slice(0, at) + card + profileSource.slice(at);
-}
-
 function assertBookTitleNode(html: string, label: string) {
   const em = extractEm(html);
   assert.equal(em.includes(irreplaceableTitleMarkup) || em === irreplaceableTitleMarkup, true, `${label} must use the line-through span`);
@@ -754,53 +669,6 @@ assert.ok(
     irreplaceableNewsCardSource.includes('"text-[13px] font-semibold uppercase tracking-[0.2em] text-brand"'),
   "News card date class must stay 13px",
 );
-assertNewsCardDates(profileNewsSource, irreplaceableNewsCardSource);
-{
-  const textXsCard = withSyntheticNewsCard(
-    profileNewsSource,
-    '"text-xs font-semibold uppercase tracking-[0.2em] text-brand"',
-  );
-  assert.ok(textXsCard.includes('id="synthetic-news-card"'));
-  assert.throws(
-    () => assertNewsCardDates(textXsCard, irreplaceableNewsCardSource),
-    /synthetic-news-card/,
-    "A new News card date using text-xs must fail",
-  );
-  const styledCard = withSyntheticNewsCard(profileNewsSource, NEWS_CARD_DATE_CLASS_EXPR);
-  assert.ok(styledCard.includes('id="synthetic-news-card"'));
-  assertNewsCardDates(styledCard, irreplaceableNewsCardSource);
-  const innerTextXs = profileNewsSource.replace(
-    /<p className=\{newsCardDateClass\}>(\s*)([^<{]+)/,
-    `<p className={newsCardDateClass}>$1<span className="text-xs">$2</span>`,
-  );
-  assert.ok(innerTextXs.includes('className="text-xs"'));
-  assert.throws(
-    () => assertNewsCardDates(innerTextXs, irreplaceableNewsCardSource),
-    /text-xs/,
-    "A text-xs span inside a News card date must fail",
-  );
-  const divCard = profileNewsSource.replace(
-    `            <div id="upcoming-events"`,
-    `            <div
-              id="synthetic-div-card"
-              className={\`\${panel} scroll-mt-28 space-y-4\`}
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-                October 23, 2026
-              </p>
-              <h2 className="font-serif text-xl font-semibold">
-                Synthetic div card
-              </h2>
-            </div>
-            <div id="upcoming-events"`,
-  );
-  assert.ok(divCard.includes('id="synthetic-div-card"'));
-  assert.throws(
-    () => assertNewsCardDates(divCard, irreplaceableNewsCardSource),
-    /newsCardDateClass/,
-    "A News card built as a div with a text-xs date must fail",
-  );
-}
 assert.ok(
   irreplaceableNewsCardSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)") &&
     irreplaceableNewsCardSource.includes("withIrReplaceableTitle(paragraph)"),
@@ -864,8 +732,7 @@ assert.equal(
 );
 
 if (process.env.NEWS_POLISH_MUTANTS === "1") {
-  const tsxCli = path.join(process.cwd(), "node_modules/tsx/dist/cli.mjs");
-  const result = spawnSync(process.execPath, [tsxCli, "scripts/check-events-mutants.ts"], {
+  const result = spawnSync(process.execPath, ["--import", "tsx", "scripts/check-events-mutants.ts"], {
     cwd: process.cwd(),
     encoding: "utf8",
     stdio: "inherit",

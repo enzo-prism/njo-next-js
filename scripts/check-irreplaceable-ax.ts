@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { spawn, type ChildProcess } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { buildCommunityPostPath } from "@/data/community-posts";
 
 const EXPECTED_H1_NAME = "Dr. Njo recommends IrReplaceable by Leah Roling";
+const NEWS_DATE_PX = "13px";
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
   "/usr/bin/google-chrome",
@@ -19,6 +20,17 @@ const CHROME_CANDIDATES = [
 type AxNode = {
   role?: { value?: string };
   name?: { value?: string };
+  properties?: Array<{ name?: string; value?: { value?: number | string } }>;
+};
+
+type EvaluateResult = {
+  result?: { value?: unknown };
+  exceptionDetails?: { text?: string; exception?: { description?: string } };
+};
+
+type NewsDateReport = {
+  control: string[];
+  mutants: Array<{ name: string; killed: boolean; issues: string[] }>;
 };
 
 async function getAvailablePort() {
@@ -51,6 +63,34 @@ function resolveChrome() {
     }
   }
   return CHROME_CANDIDATES.find((candidate) => !candidate.includes(path.sep)) ?? "google-chrome";
+}
+
+function wait(ms: number) {
+  return new Promise<void>((resolve) => {
+    const timer = setTimeout(resolve, ms);
+    timer.unref?.();
+  });
+}
+
+function waitForExit(child: ChildProcess, timeoutMs: number) {
+  return new Promise<void>((resolve) => {
+    if (child.exitCode !== null || child.signalCode) {
+      resolve();
+      return;
+    }
+    const timer = setTimeout(() => {
+      try {
+        child.kill("SIGKILL");
+      } catch {
+        // already gone
+      }
+      resolve();
+    }, timeoutMs);
+    child.once("close", () => {
+      clearTimeout(timer);
+      resolve();
+    });
+  });
 }
 
 function createSender(ws: WebSocket, sessionId?: string) {
@@ -94,26 +134,119 @@ async function waitForServer(baseUrl: string, child: ChildProcess) {
     } catch {
       // still starting
     }
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await wait(250);
   }
   throw new Error("Timed out waiting for next start to become ready.");
 }
 
-async function chromiumHeadingName(pageUrl: string) {
-  const userData = path.join(os.tmpdir(), `irreplaceable-ax-${process.pid}`);
-  const port = 9335 + (process.pid % 100);
+const NEWS_DATE_CHECK = `(() => {
+  const DATE_RE = /(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s+\\d{4}/;
+  const upcoming = document.querySelector("#upcoming-events");
+  if (!upcoming || !upcoming.parentElement) {
+    throw new Error("News tab must include #upcoming-events");
+  }
+  const root = upcoming.parentElement;
+  function cards() {
+    const found = [];
+    for (const child of root.children) {
+      if (child === upcoming || child.id === "upcoming-events") break;
+      if (child.matches("article, div")) found.push(child);
+    }
+    return found;
+  }
+  function dateIssues() {
+    const issues = [];
+    for (const card of cards()) {
+      const id = card.id || "anonymous-card";
+      const dateP = [...card.querySelectorAll(":scope > p")].find((p) => DATE_RE.test(p.textContent || ""));
+      if (!dateP) {
+        const other = [...card.querySelectorAll("span, time, p")].find((el) => DATE_RE.test(el.textContent || ""));
+        issues.push(other
+          ? id + " date must be a <p>, found <" + other.tagName.toLowerCase() + ">"
+          : id + " is missing a date");
+        continue;
+      }
+      const textEls = [dateP, ...dateP.querySelectorAll("*")].filter((el) => DATE_RE.test(el.textContent || ""));
+      for (const el of textEls) {
+        const size = getComputedStyle(el).fontSize;
+        if (size !== "${NEWS_DATE_PX}") {
+          issues.push(id + " date font-size is " + size + ", expected ${NEWS_DATE_PX}");
+        }
+      }
+    }
+    return issues;
+  }
+  function firstDateP() {
+    for (const card of cards()) {
+      const dateP = [...card.querySelectorAll(":scope > p")].find((p) => DATE_RE.test(p.textContent || ""));
+      if (dateP) return dateP;
+    }
+    throw new Error("News tab has no date paragraph to mutate");
+  }
+  function apply(name, mutate) {
+    const html = root.innerHTML;
+    try {
+      mutate();
+      const issues = dateIssues();
+      return { name, killed: issues.length > 0, issues };
+    } finally {
+      root.innerHTML = html;
+    }
+  }
+  const control = dateIssues();
+  const mutants = [
+    apply("N2cn", () => {
+      firstDateP().classList.add("text-xs");
+    }),
+    apply("N2cls", () => {
+      firstDateP().style.fontSize = "11px";
+    }),
+    apply("N2inner11", () => {
+      const dateP = firstDateP();
+      const span = document.createElement("span");
+      span.style.fontSize = "11px";
+      span.textContent = dateP.textContent;
+      dateP.textContent = "";
+      dateP.append(span);
+    }),
+    apply("N2span", () => {
+      const dateP = firstDateP();
+      const span = document.createElement("span");
+      span.className = dateP.className;
+      span.textContent = dateP.textContent;
+      dateP.replaceWith(span);
+    }),
+    apply("N2time", () => {
+      const dateP = firstDateP();
+      const time = document.createElement("time");
+      time.className = dateP.className;
+      time.textContent = dateP.textContent;
+      dateP.replaceWith(time);
+    }),
+    apply("N2drop", () => {
+      firstDateP().remove();
+    }),
+  ];
+  return { control, mutants };
+})()`;
+
+async function withChrome<T>(fn: (session: (method: string, params?: object) => Promise<unknown>) => Promise<T>) {
+  const userData = mkdtempSync(path.join(os.tmpdir(), "irreplaceable-ax-"));
+  const port = await getAvailablePort();
   const chrome = spawn(
     resolveChrome(),
     [
       "--headless=new",
       "--disable-gpu",
       "--no-sandbox",
+      "--remote-debugging-address=127.0.0.1",
       `--remote-debugging-port=${port}`,
       `--user-data-dir=${userData}`,
       "about:blank",
     ],
     { stdio: "ignore" },
   );
+  let browserWs: WebSocket | undefined;
   try {
     const deadline = Date.now() + 8000;
     let version: { webSocketDebuggerUrl?: string } | undefined;
@@ -124,16 +257,16 @@ async function chromiumHeadingName(pageUrl: string) {
         };
         break;
       } catch {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await wait(50);
       }
     }
     if (!version?.webSocketDebuggerUrl) {
       throw new Error("Chrome remote debugging did not start. ubuntu-latest provides /usr/bin/google-chrome.");
     }
-    const browserWs = new WebSocket(version.webSocketDebuggerUrl);
+    browserWs = new WebSocket(version.webSocketDebuggerUrl);
     await new Promise<void>((resolve, reject) => {
-      browserWs.addEventListener("open", () => resolve());
-      browserWs.addEventListener("error", () => reject(new Error("Chrome WebSocket failed")));
+      browserWs?.addEventListener("open", () => resolve());
+      browserWs?.addEventListener("error", () => reject(new Error("Chrome WebSocket failed")));
     });
     const send = createSender(browserWs);
     const created = (await send("Target.createTarget", { url: "about:blank" })) as { targetId: string };
@@ -142,35 +275,76 @@ async function chromiumHeadingName(pageUrl: string) {
       flatten: true,
     })) as { sessionId: string };
     const session = createSender(browserWs, attached.sessionId);
-    const loaded = new Promise<void>((resolve) => {
-      const onMessage = (event: MessageEvent) => {
-        const message = JSON.parse(String(event.data)) as { method?: string; sessionId?: string };
-        if (message.method === "Page.loadEventFired" && message.sessionId === attached.sessionId) {
-          browserWs.removeEventListener("message", onMessage);
-          resolve();
-        }
-      };
-      browserWs.addEventListener("message", onMessage);
-    });
     await session("Page.enable");
+    await session("DOM.enable");
+    await session("Runtime.enable");
     await session("Accessibility.enable");
-    await session("Page.navigate", { url: pageUrl });
-    await Promise.race([loaded, new Promise((resolve) => setTimeout(resolve, 4000))]);
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    const tree = (await session("Accessibility.getFullAXTree")) as { nodes: AxNode[] };
-    const heading = tree.nodes.find((node) => node.role?.value === "heading" && node.name?.value);
-    browserWs.close();
-    return heading?.name?.value ?? "";
+    return await fn(session);
   } finally {
+    browserWs?.close();
     chrome.kill("SIGTERM");
-    setTimeout(() => {
-      try {
-        chrome.kill("SIGKILL");
-      } catch {
-        // already gone
-      }
-    }, 300);
+    await waitForExit(chrome, 1000);
+    rmSync(userData, { recursive: true, force: true });
   }
+}
+
+async function waitForSelector(
+  session: (method: string, params?: object) => Promise<unknown>,
+  selector: string,
+  timeoutMs = 8000,
+) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const doc = (await session("DOM.getDocument", { depth: 0 })) as { root: { nodeId: number } };
+    const { nodeId } = (await session("DOM.querySelector", {
+      nodeId: doc.root.nodeId,
+      selector,
+    })) as { nodeId: number };
+    if (nodeId) return;
+    await wait(100);
+  }
+  throw new Error(`Timed out waiting for ${selector}`);
+}
+
+async function navigate(
+  session: (method: string, params?: object) => Promise<unknown>,
+  pageUrl: string,
+  selector: string,
+) {
+  await session("Page.navigate", { url: pageUrl });
+  await waitForSelector(session, selector);
+}
+
+async function headingNameFromH1(session: (method: string, params?: object) => Promise<unknown>) {
+  const doc = (await session("DOM.getDocument", { depth: 0 })) as { root: { nodeId: number } };
+  const { nodeId } = (await session("DOM.querySelector", {
+    nodeId: doc.root.nodeId,
+    selector: "h1",
+  })) as { nodeId: number };
+  assert.ok(nodeId, "IrReplaceable page must render an h1");
+  const partial = (await session("Accessibility.getPartialAXTree", {
+    nodeId,
+    fetchRelatives: false,
+  })) as { nodes: AxNode[] };
+  const heading =
+    partial.nodes.find((node) => node.role?.value === "heading" && node.name?.value) ??
+    partial.nodes.find((node) => node.name?.value);
+  return heading?.name?.value ?? "";
+}
+
+async function evaluateNewsDates(session: (method: string, params?: object) => Promise<unknown>) {
+  const evaluated = (await session("Runtime.evaluate", {
+    expression: NEWS_DATE_CHECK,
+    returnByValue: true,
+  })) as EvaluateResult;
+  if (evaluated.exceptionDetails) {
+    throw new Error(
+      evaluated.exceptionDetails.exception?.description ??
+        evaluated.exceptionDetails.text ??
+        "News date check threw",
+    );
+  }
+  return evaluated.result?.value as NewsDateReport;
 }
 
 async function main() {
@@ -187,11 +361,38 @@ async function main() {
   });
   try {
     await waitForServer(baseUrl, child);
-    const name = await chromiumHeadingName(`${baseUrl}${buildCommunityPostPath("irreplaceable-leah-roling")}`);
-    assert.equal(name, EXPECTED_H1_NAME, `Chromium H1 accessible name must stay ${EXPECTED_H1_NAME}`);
-    console.log(`Chromium H1 accessible name is ${JSON.stringify(name)}.`);
+    await withChrome(async (session) => {
+      await navigate(
+        session,
+        `${baseUrl}${buildCommunityPostPath("irreplaceable-leah-roling")}`,
+        "h1",
+      );
+      const name = await headingNameFromH1(session);
+      assert.equal(name, EXPECTED_H1_NAME, `Chromium H1 accessible name must stay ${EXPECTED_H1_NAME}`);
+      console.log(`Chromium H1 accessible name is ${JSON.stringify(name)}.`);
+
+      await navigate(session, `${baseUrl}/michael-njo-dds?tab=news`, "#upcoming-events");
+      const deadline = Date.now() + 8000;
+      let report: NewsDateReport | undefined;
+      while (Date.now() < deadline) {
+        try {
+          report = await evaluateNewsDates(session);
+          if (report.control) break;
+        } catch {
+          await wait(200);
+        }
+      }
+      assert.ok(report, "News tab date check did not run");
+      assert.deepEqual(report.control, [], `Live News card dates must be ${NEWS_DATE_PX} paragraphs\n${report.control.join("\n")}`);
+      console.log(`Chromium News card dates are ${NEWS_DATE_PX} on ${report.mutants.length} synthetic checks.`);
+      for (const mutant of report.mutants) {
+        assert.equal(mutant.killed, true, `${mutant.name} must fail the 13px News date check\n${mutant.issues.join("\n")}`);
+        console.log(`News date mutant ${mutant.name} failed as required.`);
+      }
+    });
   } finally {
     child.kill("SIGTERM");
+    await waitForExit(child, 2000);
   }
 }
 

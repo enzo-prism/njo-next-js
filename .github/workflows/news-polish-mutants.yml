@@ -3,6 +3,9 @@ name: News polish mutants
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   mutants:
     name: News polish mutants
