@@ -9,6 +9,8 @@ import { buildCommunityPostPath } from "@/data/community-posts";
 const EXPECTED_H1_NAME = "Dr. Njo recommends IrReplaceable by Leah Roling";
 const NEWS_DATE_PX = "13px";
 const RETRY_SLEEP_MS = 50;
+const CDP_TIMEOUT_MS = 8_000;
+const PROFILE_RM_TIMEOUT_MS = 3_000;
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
   "/usr/bin/google-chrome",
@@ -75,6 +77,20 @@ function wait(ms: number) {
   });
 }
 
+async function removeProfileDir(dir: string) {
+  const deadline = Date.now() + PROFILE_RM_TIMEOUT_MS;
+  while (Date.now() < deadline) {
+    try {
+      rmSync(dir, { recursive: true, force: true });
+      if (!existsSync(dir)) return;
+    } catch {
+      // Chrome may still hold files
+    }
+    await wait(100);
+  }
+  rmSync(dir, { recursive: true, force: true });
+}
+
 function waitForExit(child: ChildProcess, timeoutMs: number) {
   return new Promise<void>((resolve) => {
     if (child.exitCode !== null || child.signalCode) {
@@ -120,8 +136,27 @@ function createSender(ws: WebSocket, sessionId?: string) {
   return (method: string, params?: object) =>
     new Promise((resolve, reject) => {
       const nextId = ++id;
-      pending.set(nextId, { resolve, reject });
-      ws.send(JSON.stringify({ id: nextId, method, params, sessionId }));
+      const timer = setTimeout(() => {
+        pending.delete(nextId);
+        reject(new Error(`CDP ${method} timed out after ${CDP_TIMEOUT_MS}ms`));
+      }, CDP_TIMEOUT_MS);
+      pending.set(nextId, {
+        resolve: (value) => {
+          clearTimeout(timer);
+          resolve(value);
+        },
+        reject: (error) => {
+          clearTimeout(timer);
+          reject(error);
+        },
+      });
+      try {
+        ws.send(JSON.stringify({ id: nextId, method, params, sessionId }));
+      } catch (error) {
+        clearTimeout(timer);
+        pending.delete(nextId);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      }
     });
 }
 
@@ -160,12 +195,38 @@ const NEWS_DATE_CHECK = `(() => {
     }
     return found;
   }
-  function isVisibleBox(el) {
-    if (el.hasAttribute("hidden") || el.getAttribute("aria-hidden") === "true") return false;
+  function isTransparentColor(color) {
+    if (color === "transparent") return true;
+    const match = color.match(/^rgba?\\((.+)\\)$/);
+    if (!match) return false;
+    const parts = match[1].split(",").map((part) => parseFloat(part));
+    return parts.length >= 4 && parts[3] === 0;
+  }
+  function visibilityIssue(el) {
+    if (el.hasAttribute("hidden") || el.getAttribute("aria-hidden") === "true") {
+      return "date must be visible with a non-zero box";
+    }
     const style = getComputedStyle(el);
-    if (style.display === "none" || style.visibility === "hidden") return false;
+    if (style.display === "none" || style.visibility === "hidden") {
+      return "date must be visible with a non-zero box";
+    }
     const rect = el.getBoundingClientRect();
-    return rect.width > 1 && rect.height > 1;
+    if (rect.width <= 1 || rect.height <= 1) {
+      return "date must be visible with a non-zero box";
+    }
+    if (parseFloat(style.opacity) === 0) {
+      return "date opacity is 0";
+    }
+    if (isTransparentColor(style.color)) {
+      return "date color is transparent";
+    }
+    if (style.transform && style.transform !== "none") {
+      const matrix = new DOMMatrix(style.transform);
+      if (Math.abs(matrix.a) < 1 - 1e-6 || Math.abs(matrix.d) < 1 - 1e-6) {
+        return "date scale is less than 1";
+      }
+    }
+    return null;
   }
   function dateIssues() {
     const issues = [];
@@ -185,11 +246,10 @@ const NEWS_DATE_CHECK = `(() => {
         issues.push(id + " date must be a <p>, found <" + first.tagName.toLowerCase() + ">");
         continue;
       }
-      const measured = [first, ...first.querySelectorAll("*")].filter((el) => normalize(el.textContent) === text);
-      if (!measured.every(isVisibleBox)) {
-        issues.push(id + " date must be visible with a non-zero box");
-      }
+      const measured = [first, ...first.querySelectorAll("*")];
       for (const el of measured) {
+        const hidden = visibilityIssue(el);
+        if (hidden) issues.push(id + " " + hidden);
         const size = getComputedStyle(el).fontSize;
         if (size !== "${NEWS_DATE_PX}") {
           issues.push(id + " date font-size is " + size + ", expected ${NEWS_DATE_PX}");
@@ -267,6 +327,33 @@ const NEWS_DATE_CHECK = `(() => {
       section.id = "synthetic-section-card";
       section.innerHTML = '<p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand">October 23, 2026</p><h2>Synthetic section card</h2>';
       liveUpcoming.before(section);
+    }),
+    apply("N2opacity", () => {
+      firstDateP().style.opacity = "0";
+    }),
+    apply("N2transparent", () => {
+      firstDateP().style.color = "transparent";
+    }),
+    apply("N2scale", () => {
+      firstDateP().style.transform = "scale(0.75)";
+    }),
+    apply("N2tablet", () => {
+      const dateP = firstDateP();
+      dateP.classList.add("sm:max-lg:text-xs");
+      if (matchMedia("(min-width: 640px) and (max-width: 1023.98px)").matches) {
+        if (getComputedStyle(dateP).fontSize === "${NEWS_DATE_PX}") {
+          dateP.style.fontSize = "0.75rem";
+        }
+      }
+    }),
+    apply("N2partial11", () => {
+      const dateP = firstDateP();
+      const text = dateP.textContent || "";
+      const span = document.createElement("span");
+      span.style.fontSize = "11px";
+      span.textContent = text.slice(-4);
+      dateP.textContent = text.slice(0, -4);
+      dateP.append(span);
     }),
   ];
   return { control, mutants };
@@ -355,8 +442,12 @@ async function withChrome<T>(fn: (session: SessionSend) => Promise<T>) {
   } finally {
     browserWs?.close();
     chrome.kill("SIGTERM");
-    await waitForExit(chrome, 1000);
-    rmSync(userData, { recursive: true, force: true });
+    await waitForExit(chrome, 2000);
+    if (chrome.exitCode === null && !chrome.signalCode) {
+      chrome.kill("SIGKILL");
+      await waitForExit(chrome, 1000);
+    }
+    await removeProfileDir(userData);
   }
 }
 
@@ -409,7 +500,11 @@ async function assertNewsDatesAtViewport(session: SessionSend, width: number, mo
     [],
     `Live News card dates must be visible ${NEWS_DATE_PX} paragraphs at ${width}px\n${report.control.join("\n")}`,
   );
-  const required = report.mutants.filter((mutant) => width < 640 || mutant.name !== "N2responsive");
+  const required = report.mutants.filter((mutant) => {
+    if (mutant.name === "N2responsive") return width < 640;
+    if (mutant.name === "N2tablet") return width >= 640 && width < 1024;
+    return true;
+  });
   console.log(`Chromium News card dates are ${NEWS_DATE_PX} at ${width}px on ${required.length} synthetic checks.`);
   for (const mutant of required) {
     assert.equal(
@@ -447,6 +542,7 @@ async function main() {
 
       await navigate(session, `${baseUrl}/michael-njo-dds?tab=news`, "#upcoming-events");
       await assertNewsDatesAtViewport(session, 1280, false);
+      await assertNewsDatesAtViewport(session, 768, false);
       await assertNewsDatesAtViewport(session, 390, true);
     });
   } finally {

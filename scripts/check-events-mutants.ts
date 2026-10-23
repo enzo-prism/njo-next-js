@@ -186,8 +186,8 @@ function sandboxPaths() {
 
 function runCheckEvents(): Promise<CheckResult> {
   const childEnv = { ...process.env };
-    delete childEnv.NEWS_POLISH_MUTANTS;
-    delete childEnv.NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS;
+  delete childEnv.NEWS_POLISH_MUTANTS;
+  delete childEnv.NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS;
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "scripts/check-events.ts"], {
       cwd: tmpRoot,
