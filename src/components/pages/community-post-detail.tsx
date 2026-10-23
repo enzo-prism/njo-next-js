@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
+import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,7 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
             {post.body.map((paragraph) => (
               <p key={paragraph} className="break-words [overflow-wrap:anywhere]">
-                {paragraph}
+                {withIrReplaceableTitle(paragraph)}
               </p>
             ))}
             {post.link ? (
