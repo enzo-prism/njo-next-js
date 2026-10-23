@@ -85,12 +85,8 @@ function shouldSweepSandbox(dir: string, now: number) {
       return true;
     }
     return ageMs > STALE_AGE_MS;
-  } catch (error) {
-    const code = (error as NodeJS.ErrnoException).code;
-    if (code === "EPERM" || code === "EACCES") {
-      return false;
-    }
-    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -190,11 +186,8 @@ function sandboxPaths() {
 
 function runCheckEvents(): Promise<CheckResult> {
   const childEnv = { ...process.env };
-  delete childEnv.NEWS_POLISH_MUTANTS;
-  delete childEnv.NEWS_POLISH_MUTANT_HOLD;
-  delete childEnv.NEWS_POLISH_MUTANT_HOLD_ID;
-  delete childEnv.NEWS_POLISH_MUTANT_PROOF;
-  delete childEnv.NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS;
+    delete childEnv.NEWS_POLISH_MUTANTS;
+    delete childEnv.NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS;
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["--import", "tsx", "scripts/check-events.ts"], {
       cwd: tmpRoot,
