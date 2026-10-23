@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -180,6 +180,20 @@ async function main() {
   if (honoreeMetadata.width !== 1247 || honoreeMetadata.height !== 1261) {
     errors.push(
       "public/media/dental-lifestyles-40-over-40-honoree-2026.webp must stay Dr. Njo's unaltered 1247x1261 honoree graphic.",
+    );
+  }
+
+  const honoreeOgJpg = path.join(publicDirectory, "media", "dental-lifestyles-40-over-40-og.jpg");
+  const honoreeOgMetadata = await sharp(honoreeOgJpg).metadata();
+  if (honoreeOgMetadata.width !== 1200 || honoreeOgMetadata.height !== 630) {
+    errors.push(
+      "public/media/dental-lifestyles-40-over-40-og.jpg must be a 1200x630 link-preview JPEG.",
+    );
+  }
+  const honoreeOgBytes = (await stat(honoreeOgJpg)).size;
+  if (honoreeOgBytes < 150_000 || honoreeOgBytes > 250_000) {
+    errors.push(
+      `public/media/dental-lifestyles-40-over-40-og.jpg must stay about 150-250 KB (got ${honoreeOgBytes}).`,
     );
   }
 

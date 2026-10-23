@@ -3,11 +3,9 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-
-Object.assign(globalThis, { React });
 import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
 import CommunityPostDetailPage from "@/components/pages/community-post-detail";
-import { communityPosts } from "@/data/community-posts";
+import { buildCommunityPostPath, communityPosts } from "@/data/community-posts";
 import {
   eventPrograms,
   getOccurrenceRegistrationPrice,
@@ -17,6 +15,9 @@ import {
   type EventOccurrence,
 } from "@/data/events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
+import { buildRouteMetadata } from "@/seo/metadata";
+
+Object.assign(globalThis, { React });
 
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
@@ -272,6 +273,13 @@ assert.equal(fortyOverFortyPost?.image?.width, 1247);
 assert.equal(fortyOverFortyPost?.image?.height, 1261);
 assert.equal(fortyOverFortyPost?.images?.[0]?.width, 1247);
 assert.equal(fortyOverFortyPost?.images?.[0]?.height, 1261);
+assert.equal(fortyOverFortyPost?.socialImage?.src, "/media/dental-lifestyles-40-over-40-og.jpg");
+assert.equal(fortyOverFortyPost?.socialImage?.width, 1200);
+assert.equal(fortyOverFortyPost?.socialImage?.height, 630);
+assert.equal(
+  existsSync(path.join(process.cwd(), "public/media/dental-lifestyles-40-over-40-og.jpg")),
+  true,
+);
 assert.equal(
   existsSync(path.join(process.cwd(), "public/media/dental-lifestyles-40-over-40-honoree-2026.webp")),
   true,
@@ -409,8 +417,11 @@ function renderCommunityPost(slug: string) {
 
 const fortyOverFortyHtml = renderCommunityPost("dental-lifestyles-40-over-40-2026");
 assert.ok(
-  fortyOverFortyHtml.includes("w-[60%]") && fortyOverFortyHtml.includes("max-w-md"),
-  "Rendered 40 Over 40 page must use the stacked hero with a 60% promo",
+  fortyOverFortyHtml.includes("w-[80%]") &&
+    fortyOverFortyHtml.includes("sm:w-[60%]") &&
+    fortyOverFortyHtml.includes("max-w-[538px]") &&
+    fortyOverFortyHtml.includes("(max-width: 768px) 60vw, 538px"),
+  "Rendered 40 Over 40 promo must be 80% on small screens, 60% from sm, and cap at 538px",
 );
 assert.equal(
   /sm:grid-cols-[23]/.test(fortyOverFortyHtml),
@@ -432,9 +443,34 @@ assert.ok(
   "Rendered Dugoni post must keep the original shared multi-image grid",
 );
 assert.equal(
-  dugoniHtml.includes("w-[60%]"),
+  dugoniHtml.includes("w-[60%]") || dugoniHtml.includes("w-[80%]") || dugoniHtml.includes("max-w-[538px]"),
   false,
   "Rendered Dugoni post must not receive the 40 Over 40 promo width",
+);
+
+const fortyOverFortyMetadata = buildRouteMetadata(buildCommunityPostPath("dental-lifestyles-40-over-40-2026"));
+const fortyOverFortyOgImages = fortyOverFortyMetadata.openGraph?.images;
+const fortyOverFortyOgImage = Array.isArray(fortyOverFortyOgImages)
+  ? fortyOverFortyOgImages[0]
+  : fortyOverFortyOgImages;
+assert.ok(fortyOverFortyOgImage && typeof fortyOverFortyOgImage === "object");
+assert.equal(
+  "url" in fortyOverFortyOgImage ? fortyOverFortyOgImage.url : undefined,
+  "/media/dental-lifestyles-40-over-40-og.jpg",
+);
+assert.equal(
+  "width" in fortyOverFortyOgImage ? fortyOverFortyOgImage.width : undefined,
+  1200,
+);
+assert.equal(
+  "height" in fortyOverFortyOgImage ? fortyOverFortyOgImage.height : undefined,
+  630,
+);
+assert.deepEqual(fortyOverFortyMetadata.twitter?.images, ["/media/dental-lifestyles-40-over-40-og.jpg"]);
+assert.equal(
+  fortyOverFortyPost?.image?.src,
+  "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+  "On-page honoree graphic must stay the unaltered original",
 );
 
 const irreplaceableTitleMarkup =

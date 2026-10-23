@@ -41,7 +41,7 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
               <figure
                 key={image.src}
                 className={`overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm ${
-                  index === 0 ? "" : "mx-auto w-[60%] max-w-md"
+                  index === 0 ? "" : "mx-auto w-[80%] sm:w-[60%] max-w-[538px]"
                 }`}
               >
                 <Image
@@ -50,7 +50,7 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
                   width={image.width}
                   height={image.height}
                   priority={index === 0}
-                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 60vw, 448px"}
+                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 60vw, 538px"}
                   className="h-auto w-full object-contain"
                 />
               </figure>
