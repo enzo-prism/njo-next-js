@@ -50,6 +50,10 @@ import {
 const panel =
   "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
+const fortyOverFortyCommunityPost = communityPosts.find(
+  (post) => post.slug === "dental-lifestyles-40-over-40-2026",
+);
+
 const irreplaceableCommunityPost = communityPosts.find(
   (post) => post.slug === "irreplaceable-leah-roling",
 );
@@ -490,6 +494,47 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            {fortyOverFortyCommunityPost ? (
+              <article
+                id={fortyOverFortyCommunityPost.slug}
+                className={`${panel} scroll-mt-28 space-y-4`}
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                  {formatCommunityPostDate(fortyOverFortyCommunityPost.publishedAt)}
+                </p>
+                <h2 className="font-serif text-xl font-semibold">
+                  {fortyOverFortyCommunityPost.title}
+                </h2>
+                {fortyOverFortyCommunityPost.image ? (
+                  <Image
+                    src={fortyOverFortyCommunityPost.image.src}
+                    alt={fortyOverFortyCommunityPost.image.alt}
+                    width={fortyOverFortyCommunityPost.image.width}
+                    height={fortyOverFortyCommunityPost.image.height}
+                    className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
+                    sizes="(min-width: 768px) 448px, 100vw"
+                    priority
+                  />
+                ) : null}
+                <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                  {fortyOverFortyCommunityPost.body[0]}
+                </p>
+                <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                  {fortyOverFortyCommunityPost.body[1]}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button asChild size="sm">
+                    <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/blog/${fortyOverFortyCommunityPost.slug}`}>
+                      Read the full story
+                    </Link>
+                  </Button>
+                </div>
+              </article>
+            ) : null}
+
             {irreplaceableCommunityPost ? (
               <article
                 id={irreplaceableCommunityPost.slug}

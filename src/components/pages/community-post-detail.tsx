@@ -34,18 +34,21 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         </header>
 
         {post.images?.length ? (
-          <div
-            className={`grid items-start gap-4 ${post.images.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
-          >
+          <div className="space-y-5">
             {post.images.map((image, index) => (
-              <figure key={image.src} className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
+              <figure
+                key={image.src}
+                className={`overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm ${
+                  index === 0 ? "" : "mx-auto max-w-md"
+                }`}
+              >
                 <Image
                   src={image.src}
                   alt={image.alt}
                   width={image.width}
                   height={image.height}
                   priority={index === 0}
-                  sizes="(max-width: 640px) 100vw, 30vw"
+                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 100vw, 448px"}
                   className="h-auto w-full object-contain"
                 />
               </figure>

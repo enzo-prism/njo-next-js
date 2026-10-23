@@ -24,6 +24,45 @@ export type CommunityPost = {
 
 export const communityPosts: CommunityPost[] = [
   {
+    slug: "dental-lifestyles-40-over-40-2026",
+    title: "Dr. Njo Named a Dental Lifestyles 40 Over 40 Awardee for 2026",
+    description:
+      "Dr. Njo is honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees after more than 30 years in dentistry.",
+    publishedAt: "2026-10-23",
+    image: {
+      src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+      width: 1247,
+      height: 1261,
+      alt: "Congratulations graphic for Dr. Michael Njo, 2026 Dental Lifestyles 40 Over 40 honoree, with his portrait and Dental Strategies and Practice Transitions Institute.",
+      caption: "Congratulations, Dr. Michael Njo! 2026 Dental Lifestyles 40 Over 40 Honoree.",
+    },
+    images: [
+      {
+        src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+        width: 1247,
+        height: 1261,
+        alt: "Congratulations graphic for Dr. Michael Njo, 2026 Dental Lifestyles 40 Over 40 honoree, with his portrait and Dental Strategies and Practice Transitions Institute.",
+        caption: "Congratulations, Dr. Michael Njo! 2026 Dental Lifestyles 40 Over 40 Honoree.",
+      },
+      {
+        src: "/media/dental-lifestyles-magazine-16th-issue.webp",
+        width: 1024,
+        height: 567,
+        alt: "Promo for the October 2026 issue of Dental Lifestyles Magazine, showing the 16th-issue spread and cover with the 40 Over 40 awardees.",
+        caption: "Dental Lifestyles Magazine, 16th issue / October 2026.",
+      },
+    ],
+    link: {
+      href: "https://dentallifestylesmagazine.com/dental-lifestyles-magazine-16th-issue/",
+      label: "Read the issue",
+    },
+    body: [
+      "I am honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees!",
+      "After more than 30 years in dentistry, I’m grateful for the opportunities to learn, grow, and support fellow dentists as they navigate the many stages of practice ownership and transition.",
+      "Thank you to Dental Lifestyles Magazine and the Nifty Thrifty Dentists community for this recognition. I’m proud to be part of a profession that continues to inspire me, and I look forward to helping more dentists build meaningful, successful futures.",
+    ],
+  },
+  {
     slug: "irreplaceable-leah-roling",
     title: "Dr. Njo recommends IrReplaceable by Leah Roling",
     description:

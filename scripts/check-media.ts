@@ -171,6 +171,17 @@ async function main() {
     }
   }
 
+  const honoreeWebp = path.join(
+    publicDirectory,
+    "dental-lifestyles-40-over-40-honoree-2026.webp",
+  );
+  const honoreeMetadata = await sharp(honoreeWebp).metadata();
+  if (honoreeMetadata.width !== 1247 || honoreeMetadata.height !== 1261) {
+    errors.push(
+      "public/media/dental-lifestyles-40-over-40-honoree-2026.webp must stay Dr. Njo's unaltered 1247x1261 honoree graphic.",
+    );
+  }
+
   if (
     mosaicSource.includes("asset.caption") ||
     mosaicSource.includes("PhotoNameOverlay") ||
