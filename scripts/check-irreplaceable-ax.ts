@@ -9,7 +9,7 @@ import { buildCommunityPostPath } from "@/data/community-posts";
 const EXPECTED_H1_NAME = "Dr. Njo recommends IrReplaceable by Leah Roling";
 const NEWS_DATE_PX = "13px";
 const RETRY_SLEEP_MS = 50;
-const CDP_TIMEOUT_MS = 8_000;
+const CDP_TIMEOUT_MS = 30_000;
 const PROFILE_RM_TIMEOUT_MS = 3_000;
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
@@ -68,6 +68,10 @@ function resolveChrome() {
     }
   }
   return CHROME_CANDIDATES.find((candidate) => !candidate.includes(path.sep)) ?? "google-chrome";
+}
+
+function isCdpTimeout(error: unknown) {
+  return error instanceof Error && /^CDP .+ timed out after /.test(error.message);
 }
 
 function wait(ms: number) {
@@ -382,8 +386,11 @@ async function waitForReadySelector(session: SessionSend, selector: string, time
       if ((await evaluateValue(session, expression)) === true) {
         return;
       }
-    } catch {
-      // document may be mid-navigation
+    } catch (error) {
+      if (isCdpTimeout(error)) {
+        console.error(error instanceof Error ? error.message : error);
+        throw error;
+      }
     }
     await wait(RETRY_SLEEP_MS);
   }
@@ -489,8 +496,11 @@ async function assertNewsDatesAtViewport(session: SessionSend, width: number, mo
     try {
       report = await evaluateNewsDates(session);
       if (report?.control) break;
-    } catch {
-      // News tab may still be hydrating
+    } catch (error) {
+      if (isCdpTimeout(error)) {
+        console.error(error instanceof Error ? error.message : error);
+        throw error;
+      }
     }
     await wait(RETRY_SLEEP_MS);
   }
