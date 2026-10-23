@@ -19,6 +19,7 @@ export type CommunityPost = {
     width: number;
     height: number;
     alt: string;
+    cacheVersion?: string;
   };
   embedUrl?: string;
   embedTitle?: string;
@@ -87,6 +88,7 @@ export const communityPosts: CommunityPost[] = [
       width: 1200,
       height: 630,
       alt: "Dr. Njo holding a copy of IrReplaceable by Leah Roling.",
+      cacheVersion: "2",
     },
     image: {
       src: "/media/irreplaceable-leah-roling-dr-njo.webp",

@@ -18,6 +18,7 @@ import {
   type EventOccurrence,
 } from "@/data/events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
+import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildRouteMetadata } from "@/seo/metadata";
 
 Object.assign(globalThis, { React });
@@ -27,6 +28,8 @@ const IRREPLACEABLE_COVER_SHA256 =
 const IRREPLACEABLE_OG_SHA256 =
   "0cc47d17d0b77ed0c1d0a2b162697465a3e7e72c47e18565120404f1bd2c836c";
 const IRREPLACEABLE_OG_ALT = "Dr. Njo holding a copy of IrReplaceable by Leah Roling.";
+const IRREPLACEABLE_OG_PATH = "/media/irreplaceable-leah-roling-og.jpg";
+const IRREPLACEABLE_OG_URL = `${buildCanonicalUrl(IRREPLACEABLE_OG_PATH)}?v=2`;
 const NEWS_CARD_DATE_CLASS_EXPR = "{newsCardDateClass}";
 
 function fileSha256(relativePath: string) {
@@ -353,10 +356,11 @@ assert.equal(irreplaceablePost?.title, "Dr. Njo recommends IrReplaceable by Leah
 assert.equal(irreplaceablePost?.image?.src, "/media/irreplaceable-leah-roling-dr-njo.webp");
 assert.equal(irreplaceablePost?.image?.width, 1122);
 assert.equal(irreplaceablePost?.image?.height, 1402);
-assert.equal(irreplaceablePost?.socialImage?.src, "/media/irreplaceable-leah-roling-og.jpg");
+assert.equal(irreplaceablePost?.socialImage?.src, IRREPLACEABLE_OG_PATH);
 assert.equal(irreplaceablePost?.socialImage?.width, 1200);
 assert.equal(irreplaceablePost?.socialImage?.height, 630);
 assert.equal(irreplaceablePost?.socialImage?.alt, IRREPLACEABLE_OG_ALT);
+assert.equal(irreplaceablePost?.socialImage?.cacheVersion, "2");
 assert.equal(irreplaceablePost?.link, undefined, "IrReplaceable post must not add an external book link");
 const irreplaceableSentCopy =
   "As a dentist and practice consultant, I see how easily business owners become the person everyone depends on for every decision. The focus of Leah Roling’s IrReplaceable—building accountable teams and growing without burnout—speaks directly to that challenge. Role clarity, ownership, and strong leadership are essential to building a business that supports both its team and its owner. These are meaningful topics for any practice owner who wants sustainable growth and more freedom.";
@@ -538,11 +542,11 @@ const irreplaceableOgImage = Array.isArray(irreplaceableOgImages)
 assert.ok(irreplaceableOgImage && typeof irreplaceableOgImage === "object");
 assert.equal(
   "url" in irreplaceableOgImage ? irreplaceableOgImage.url : undefined,
-  "/media/irreplaceable-leah-roling-og.jpg",
+  IRREPLACEABLE_OG_URL,
 );
 assert.equal("width" in irreplaceableOgImage ? irreplaceableOgImage.width : undefined, 1200);
 assert.equal("height" in irreplaceableOgImage ? irreplaceableOgImage.height : undefined, 630);
-assert.deepEqual(irreplaceableMetadata.twitter?.images, ["/media/irreplaceable-leah-roling-og.jpg"]);
+assert.deepEqual(irreplaceableMetadata.twitter?.images, [IRREPLACEABLE_OG_URL]);
 assert.equal(
   "alt" in irreplaceableOgImage ? irreplaceableOgImage.alt : undefined,
   IRREPLACEABLE_OG_ALT,
