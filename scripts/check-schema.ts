@@ -127,6 +127,17 @@ assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April 
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
 
+const fortyOverFortyPath = buildCommunityPostPath("dental-lifestyles-40-over-40-2026");
+const fortyOverFortySchema = buildPageStructuredData(fortyOverFortyPath);
+assert.ok(fortyOverFortySchema, "Expected structured data for the Dental Lifestyles 40 Over 40 community post");
+const fortyOverFortyGraph = fortyOverFortySchema["@graph"] as Array<Record<string, unknown>>;
+const fortyOverFortyArticle = fortyOverFortyGraph.find((node) => node["@type"] === "BlogPosting");
+assert.equal(fortyOverFortyArticle?.headline, "Dr. Njo Named a Dental Lifestyles 40 Over 40 Awardee for 2026");
+assert.equal(fortyOverFortyArticle?.datePublished, "2026-10-23");
+assert.ok(!JSON.stringify(fortyOverFortySchema).includes("sold-out"), "Do not claim sold-out for a recognition news post");
+assert.ok(!JSON.stringify(fortyOverFortySchema).includes("Registration"), "Do not add registration claims for a recognition news post");
+assert.ok(!JSON.stringify(fortyOverFortySchema).includes("Eventbrite"), "Do not invent Eventbrite language for a recognition news post");
+
 const irreplaceablePath = buildCommunityPostPath("irreplaceable-leah-roling");
 const irreplaceableSchema = buildPageStructuredData(irreplaceablePath);
 assert.ok(irreplaceableSchema, "Expected structured data for the IrReplaceable community post");

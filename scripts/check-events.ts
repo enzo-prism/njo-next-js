@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { communityPosts } from "@/data/community-posts";
 import {
@@ -82,6 +82,11 @@ assert.equal(
 assert.equal(JSON.stringify(eventPrograms), sourceSnapshot, "Date derivation must not mutate editorial event data");
 
 assert.equal(resolveProfileTab("?tab=news", ""), "news", "The news query should open the news tab");
+assert.equal(
+  resolveProfileTab("", "#dental-lifestyles-40-over-40-2026"),
+  "news",
+  "A direct news-section hash should open the news tab without requiring a query parameter",
+);
 assert.equal(
   resolveProfileTab("", "#irreplaceable-leah-roling"),
   "news",
@@ -239,6 +244,78 @@ assert.equal(
   "2027 calendar dates must not become news/community posts",
 );
 
+const fortyOverFortyPost = communityPosts.find((post) => post.slug === "dental-lifestyles-40-over-40-2026");
+assert.ok(fortyOverFortyPost, "Dental Lifestyles 40 Over 40 news post must exist");
+assert.equal(fortyOverFortyPost?.publishedAt, "2026-10-23");
+const fortyOverFortyBody = fortyOverFortyPost?.body.join(" ") ?? "";
+assert.equal(fortyOverFortyPost?.link?.href, "https://dentallifestylesmagazine.com/dental-lifestyles-magazine-16th-issue/");
+assert.equal(fortyOverFortyPost?.link?.label, "Read the issue");
+assert.equal(
+  fortyOverFortyPost?.image?.src,
+  "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+);
+assert.equal(
+  fortyOverFortyPost?.images?.[0]?.src,
+  "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+);
+assert.equal(
+  fortyOverFortyPost?.images?.[1]?.src,
+  "/media/dental-lifestyles-magazine-16th-issue.webp",
+);
+assert.equal(fortyOverFortyPost?.image?.width, 1247);
+assert.equal(fortyOverFortyPost?.image?.height, 1261);
+assert.equal(fortyOverFortyPost?.images?.[0]?.width, 1247);
+assert.equal(fortyOverFortyPost?.images?.[0]?.height, 1261);
+assert.equal(
+  existsSync(path.join(process.cwd(), "public/media/dental-lifestyles-40-over-40-honoree-2026.webp")),
+  true,
+);
+assert.equal(
+  existsSync(path.join(process.cwd(), "public/media/dental-lifestyles-40-over-40-2026.webp")),
+  false,
+  "Unused publisher personalized graphic must be removed",
+);
+assert.equal(
+  /https?:\/\//.test(fortyOverFortyBody),
+  false,
+  "40 Over 40 body must use the labeled issue link, not a raw URL",
+);
+assert.equal(
+  /\b(Mike|Michael)\b/.test(fortyOverFortyBody),
+  false,
+  "40 Over 40 post copy must stay first-person and must not name him Mike or Michael",
+);
+assert.deepEqual(
+  fortyOverFortyPost?.body,
+  [
+    "I am honored to be named one of Dental Lifestyles Magazine’s 2026 40 Over 40 awardees!",
+    "After more than 30 years in dentistry, I’m grateful for the opportunities to learn, grow, and support fellow dentists as they navigate the many stages of practice ownership and transition.",
+    "Thank you to Dental Lifestyles Magazine and the Nifty Thrifty Dentists community for this recognition. I’m proud to be part of a profession that continues to inspire me, and I look forward to helping more dentists build meaningful, successful futures.",
+  ],
+  "40 Over 40 body must stay the three approved paragraphs and must not add the pending issue sentence",
+);
+assert.equal(fortyOverFortyPost?.imageLayout, "stacked-hero");
+assert.equal(
+  fortyOverFortyBody.includes("Please check out the latest issue"),
+  false,
+  "Do not add the omitted Please check out the latest issue sentence",
+);
+assert.equal(
+  /#\w|@Dental/.test(fortyOverFortyBody),
+  false,
+  "40 Over 40 body must not include hashtags or @-tags",
+);
+assert.equal(
+  communityPosts.some((post) => post.slug === "dental-lifestyles-40-over-40-2026" && /eventbrite|registration/i.test(post.body.join(" "))),
+  false,
+  "40 Over 40 honor is news only and must not become an event listing",
+);
+assert.deepEqual(
+  communityPosts.filter((post) => post.publishedAt === "2026-10-23").map((post) => post.slug),
+  ["dental-lifestyles-40-over-40-2026", "irreplaceable-leah-roling"],
+  "On the shared October 23 date, 40 Over 40 must render before IrReplaceable",
+);
+
 const irreplaceablePost = communityPosts.find((post) => post.slug === "irreplaceable-leah-roling");
 assert.ok(irreplaceablePost, "IrReplaceable news post must exist");
 assert.equal(irreplaceablePost?.publishedAt, "2026-10-23");
@@ -278,11 +355,6 @@ assert.equal(
   false,
   "Do not ship an unrequested Valentina thank-you news post",
 );
-assert.equal(
-  communityPosts.some((post) => post.slug === "dental-lifestyles-40-over-40-2026"),
-  false,
-  "Do not ship the embargoed 40 Over 40 post from this branch",
-);
 
 const communityPostDetailSource = readFileSync(
   path.join(process.cwd(), "src/components/pages/community-post-detail.tsx"),
@@ -296,6 +368,36 @@ assert.ok(
   communityPostDetailSource.includes("post.link") && communityPostDetailSource.includes('rel="noopener noreferrer"'),
   "Community posts must be able to render a labeled external link",
 );
+assert.ok(
+  communityPostDetailSource.includes('sm:grid-cols-2') &&
+    communityPostDetailSource.includes("sm:grid-cols-3") &&
+    communityPostDetailSource.includes('sizes="(max-width: 640px) 100vw, 30vw"'),
+  "Existing multi-image community posts must keep the original shared grid",
+);
+assert.ok(
+  communityPostDetailSource.includes('imageLayout === "stacked-hero"') &&
+    communityPostDetailSource.includes("w-[60%]") &&
+    communityPostDetailSource.includes("max-w-md"),
+  "The stacked hero layout is opt-in for 40 Over 40 and keeps the promo at ~60% width on mobile",
+);
+assert.deepEqual(
+  communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
+  ["dental-lifestyles-40-over-40-2026"],
+  "Only the 40 Over 40 post may opt into the stacked hero layout",
+);
+for (const slug of [
+  "another-perfect-match",
+  "panel-of-experts-dinner-roseville",
+  "backstage-retreat-2026-orlando",
+  "dental-lifestyles-magazine-beyond-brokerage",
+  "san-francisco-seminar-july-2026",
+  "dugoni-business-club-highlights",
+] as const) {
+  const post = communityPosts.find((entry) => entry.slug === slug);
+  assert.ok(post, `${slug} must exist`);
+  assert.notEqual(post?.imageLayout, "stacked-hero", `${slug} must keep the original multi-image grid`);
+  assert.ok((post?.images?.length ?? 0) >= 2, `${slug} must still be a multi-image post`);
+}
 assert.ok(
   communityPostDetailSource.includes("withIrReplaceableTitle"),
   "Community post bodies must style IrReplaceable mentions from the shared helper",

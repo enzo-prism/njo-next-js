@@ -33,7 +33,28 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
           </p>
         </header>
 
-        {post.images?.length ? (
+        {post.imageLayout === "stacked-hero" && post.images?.length ? (
+          <div className="space-y-5">
+            {post.images.map((image, index) => (
+              <figure
+                key={image.src}
+                className={`overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm ${
+                  index === 0 ? "" : "mx-auto w-[60%] max-w-md"
+                }`}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  priority={index === 0}
+                  sizes={index === 0 ? "(max-width: 768px) 100vw, 896px" : "(max-width: 768px) 60vw, 448px"}
+                  className="h-auto w-full object-contain"
+                />
+              </figure>
+            ))}
+          </div>
+        ) : post.images?.length ? (
           <div
             className={`grid items-start gap-4 ${post.images.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
           >

@@ -73,6 +73,10 @@ const EMAIL_NOTES: Record<string, string> = {
     "Emailed September 1, 2026 as PLEASE POST ASAP AND AGAIN IN 2 WEEKS.",
   "promotional-flyer-dental-strategies":
     "Flyer Dr. Njo shared for Beyond the Chair posting.",
+  "dental-lifestyles-40-over-40-honoree-2026":
+    "Shared for the Dental Lifestyles 40 Over 40 2026 news post: Congratulations, Dr. Michael Njo! honoree graphic.",
+  "dental-lifestyles-magazine-16th-issue":
+    "Shared with the Dental Lifestyles Magazine 16th-issue / 40 Over 40 promo.",
   "irreplaceable-leah-roling-dr-njo":
     "Emailed October 21, 2026 as PLEASE POST ASAP.",
   "backstage-business-spotlight-michael-njo":
@@ -82,6 +86,20 @@ const EMAIL_NOTES: Record<string, string> = {
 };
 
 const EXTRA_PHOTOS: ExtraPhoto[] = [
+  {
+    id: "dental-lifestyles-40-over-40-honoree-2026",
+    src: "/media/dental-lifestyles-40-over-40-honoree-2026.webp",
+    alt: "Congratulations graphic for Dr. Michael Njo, 2026 Dental Lifestyles 40 Over 40 honoree, with his portrait and Dental Strategies and Practice Transitions Institute.",
+    featuredRoutes: ["profile:news"],
+    emailNote: EMAIL_NOTES["dental-lifestyles-40-over-40-honoree-2026"] ?? null,
+  },
+  {
+    id: "dental-lifestyles-magazine-16th-issue",
+    src: "/media/dental-lifestyles-magazine-16th-issue.webp",
+    alt: "Promo for the October 2026 issue of Dental Lifestyles Magazine, showing the 16th-issue spread and cover with the 40 Over 40 awardees.",
+    featuredRoutes: ["profile:news"],
+    emailNote: EMAIL_NOTES["dental-lifestyles-magazine-16th-issue"] ?? null,
+  },
   {
     id: "irreplaceable-leah-roling-dr-njo",
     src: "/media/irreplaceable-leah-roling-dr-njo.webp",
