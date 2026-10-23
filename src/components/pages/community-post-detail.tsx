@@ -18,6 +18,7 @@ function formatDate(value: string) {
 
 export default function CommunityPostDetailPage({ post }: { post: CommunityPost }) {
   const matchingEvent = eventPrograms.find((program) => program.slug === post.slug);
+  const bodyMeasureClass = post.bodyMeasure === "54ch" ? "max-w-[54ch] " : "";
 
   return (
     <Container className="py-10 sm:py-14">
@@ -109,12 +110,12 @@ export default function CommunityPostDetailPage({ post }: { post: CommunityPost 
         <Card className="border-border/80 bg-background">
           <CardContent className="space-y-5 p-6 text-lg leading-relaxed text-slate-700 md:p-8">
             {post.body.map((paragraph) => (
-              <p key={paragraph} className="max-w-[54ch] break-words [overflow-wrap:anywhere]">
+              <p key={paragraph} className={`${bodyMeasureClass}break-words [overflow-wrap:anywhere]`}>
                 {withIrReplaceableTitle(paragraph)}
               </p>
             ))}
             {post.link ? (
-              <p className="max-w-[54ch] break-words [overflow-wrap:anywhere]">
+              <p className={`${bodyMeasureClass}break-words [overflow-wrap:anywhere]`}>
                 <a
                   href={post.link.href}
                   target="_blank"

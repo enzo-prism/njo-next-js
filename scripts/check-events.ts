@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
+import { IrreplaceableNewsCard } from "@/components/irreplaceable-news-card";
 import CommunityPostDetailPage from "@/components/pages/community-post-detail";
 import { buildCommunityPostPath, communityPosts } from "@/data/community-posts";
 import {
@@ -378,6 +380,10 @@ const profileNewsSource = readFileSync(
   path.join(process.cwd(), "src/components/pages/michael-njo-dds.tsx"),
   "utf8",
 );
+const irreplaceableNewsCardSource = readFileSync(
+  path.join(process.cwd(), "src/components/irreplaceable-news-card.tsx"),
+  "utf8",
+);
 assert.ok(
   communityPostDetailSource.includes("break-words") && communityPostDetailSource.includes("overflow-wrap:anywhere"),
   "Community post body paragraphs must wrap long words on narrow viewports",
@@ -387,14 +393,21 @@ assert.ok(
   "Community posts must be able to render a labeled external link",
 );
 assert.ok(
-  communityPostDetailSource.includes("max-w-[54ch]"),
-  "Community post body paragraphs must cap readable measure at 54ch",
+  communityPostDetailSource.includes('post.bodyMeasure === "54ch"') &&
+    communityPostDetailSource.includes("max-w-[54ch]"),
+  "54ch body measure must be opt-in per post",
 );
 assert.equal(
   communityPostDetailSource.includes("max-w-[68ch]"),
   false,
   "Community post body paragraphs must not keep the 68ch measure",
 );
+assert.deepEqual(
+  communityPosts.filter((post) => post.bodyMeasure === "54ch").map((post) => post.slug),
+  ["dental-lifestyles-40-over-40-2026", "irreplaceable-leah-roling"],
+  "Only 40 Over 40 and IrReplaceable may opt into the 54ch body measure",
+);
+assert.equal(communityPosts.length, 15, "Community post inventory must stay at 15 posts");
 assert.deepEqual(
   communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
   ["dental-lifestyles-40-over-40-2026"],
@@ -433,9 +446,10 @@ assert.equal(
   false,
   "Rendered 40 Over 40 page must not use the shared multi-image grid",
 );
-assert.ok(
-  fortyOverFortyHtml.includes("max-w-[54ch]"),
-  "Rendered 40 Over 40 body must use the 54ch measure",
+assert.equal(
+  fortyOverFortyHtml.split("max-w-[54ch]").length - 1,
+  4,
+  "Rendered 40 Over 40 body must put 54ch on all three paragraphs and the issue link",
 );
 assert.ok(
   fortyOverFortyHtml.includes("text-[13px]"),
@@ -451,6 +465,11 @@ assert.equal(
   dugoniHtml.includes("w-[60%]") || dugoniHtml.includes("w-[80%]") || dugoniHtml.includes("max-w-[538px]"),
   false,
   "Rendered Dugoni post must not receive the 40 Over 40 promo width",
+);
+assert.equal(
+  dugoniHtml.includes("max-w-[54ch]") || dugoniHtml.includes("max-w-[68ch]"),
+  false,
+  "Rendered Dugoni post must stay box-identical and not receive the 54ch measure",
 );
 
 const fortyOverFortyMetadata = buildRouteMetadata(buildCommunityPostPath("dental-lifestyles-40-over-40-2026"));
@@ -484,56 +503,114 @@ function htmlTextContent(html: string) {
   return html.replace(/<[^>]+>/g, "");
 }
 
+function countMarkup(html: string) {
+  return html.split(irreplaceableTitleMarkup).length - 1;
+}
+
+function extractTag(html: string, tag: string) {
+  return html.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`))?.[1] ?? "";
+}
+
+function extractEm(html: string) {
+  return html.match(/<em>([\s\S]*?)<\/em>/)?.[0] ?? "";
+}
+
+function chromeLikeAccessibleName(html: string) {
+  const labeled = html.match(/\saria-label="([^"]+)"/);
+  if (labeled) {
+    return labeled[1];
+  }
+  const withoutHidden = html.replace(
+    /<([a-zA-Z0-9]+)([^>]*\saria-hidden="true"[^>]*)>([\s\S]*?)<\/\1>/g,
+    "",
+  );
+  const withSrOnlySpaces = withoutHidden.replace(
+    /<([a-zA-Z0-9]+)([^>]*sr-only[^>]*)>([\s\S]*?)<\/\1>/g,
+    (_match, _tag, _attrs, inner: string) => ` ${htmlTextContent(inner)} `,
+  );
+  return htmlTextContent(withSrOnlySpaces).replace(/\s+/g, " ").trim();
+}
+
+function assertBookTitleNode(html: string, label: string) {
+  const em = extractEm(html);
+  assert.equal(em.includes(irreplaceableTitleMarkup) || em === irreplaceableTitleMarkup, true, `${label} must use the line-through span`);
+  assert.equal(htmlTextContent(em), "IrReplaceable", `${label} textContent must be exactly IrReplaceable`);
+  assert.equal(chromeLikeAccessibleName(em), "IrReplaceable", `${label} accessible name must be exactly IrReplaceable`);
+  assert.equal(
+    em.includes("sr-only") || em.includes("aria-hidden") || /<s[\s/>]/.test(em) || em.includes("aria-label"),
+    false,
+    `${label} must not use sr-only, aria-hidden, s, or aria-label`,
+  );
+}
+
 const irreplaceableH1Html = renderToStaticMarkup(
   createElement("h1", null, withIrReplaceableTitle("IrReplaceable")),
 );
-assert.equal(
-  htmlTextContent(irreplaceableH1Html),
-  "IrReplaceable",
-  "H1 textContent must be exactly IrReplaceable",
-);
+assert.equal(htmlTextContent(irreplaceableH1Html), "IrReplaceable", "H1 textContent must be exactly IrReplaceable");
+assert.equal(chromeLikeAccessibleName(irreplaceableH1Html), "IrReplaceable", "H1 accessible name must be exactly IrReplaceable");
 
 const irreplaceableHtml = renderCommunityPost("irreplaceable-leah-roling");
-const irreplaceablePageH1 = irreplaceableHtml.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "";
+assert.equal(
+  irreplaceableHtml.split("max-w-[54ch]").length - 1,
+  1,
+  "Rendered IrReplaceable body must use the 54ch measure once",
+);
+const irreplaceablePageH1 = extractTag(irreplaceableHtml, "h1");
+const irreplaceableSubtitle =
+  irreplaceableHtml.match(/<p class="max-w-3xl[^"]*"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "";
+const irreplaceableBodyHtml = irreplaceableHtml.split("</header>")[1] ?? "";
+assert.equal(countMarkup(irreplaceablePageH1), 1, "IrReplaceable H1 must contain the title markup once");
+assert.equal(countMarkup(irreplaceableSubtitle), 1, "IrReplaceable subtitle must contain the title markup once");
+assert.equal(countMarkup(irreplaceableBodyHtml), 1, "IrReplaceable body must contain the title markup once");
+assert.equal(countMarkup(irreplaceableHtml), 3, "IrReplaceable post must render the title markup exactly 3 times: H1, subtitle, body");
+assertBookTitleNode(irreplaceablePageH1, "H1");
+assertBookTitleNode(irreplaceableSubtitle, "subtitle");
+assertBookTitleNode(irreplaceableBodyHtml, "body");
 assert.equal(
   htmlTextContent(irreplaceablePageH1),
   "Dr. Njo recommends IrReplaceable by Leah Roling",
   "Rendered IrReplaceable H1 textContent must not double or split Ir",
 );
+
+const irreplaceableNewsCardHtml = renderToStaticMarkup(createElement(IrreplaceableNewsCard));
+const irreplaceableNewsH2 = extractTag(irreplaceableNewsCardHtml, "h2");
+const irreplaceableNewsBody =
+  irreplaceableNewsCardHtml.match(/<p class="text-pretty[^"]*"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? "";
+assert.equal(countMarkup(irreplaceableNewsH2), 1, "News card title must contain the title markup once");
+assert.equal(countMarkup(irreplaceableNewsBody), 1, "News card body must contain the title markup once");
+assert.equal(countMarkup(irreplaceableNewsCardHtml), 2, "News card must render the title markup in the H2 and body only");
+assertBookTitleNode(irreplaceableNewsH2, "News card title");
+assertBookTitleNode(irreplaceableNewsBody, "News card body");
 assert.ok(
-  irreplaceableHtml.includes(irreplaceableTitleMarkup),
-  "Rendered IrReplaceable post must strike Ir with a line-through span",
+  htmlTextContent(irreplaceableNewsCardHtml).includes(irreplaceableSentCopy),
+  "News card must render Dr. Njo's full sent paragraph",
+);
+assert.ok(
+  irreplaceableNewsCardHtml.includes("As a dentist and practice consultant"),
+  "Rendered News card must include the opening of Dr. Njo's sent paragraph",
+);
+assert.ok(
+  irreplaceableNewsCardHtml.includes("text-[13px]"),
+  "Rendered News card date must stay 13px",
 );
 assert.equal(
-  irreplaceableTitleMarkup.includes("sr-only") ||
-    irreplaceableTitleMarkup.includes("aria-hidden") ||
-    /<s[\s/>]/.test(irreplaceableTitleMarkup) ||
-    irreplaceableH1Html.includes("sr-only") ||
-    irreplaceableH1Html.includes("aria-hidden") ||
-    /<s[\s/>]/.test(irreplaceableH1Html) ||
-    irreplaceableH1Html.includes('aria-label="IrReplaceable"'),
+  /<p class="text-xs /.test(irreplaceableNewsCardHtml),
   false,
-  "IrReplaceable title markup must not use sr-only, aria-hidden, s, or aria-label",
-);
-
-const irreplaceableNewsTitleHtml = renderToStaticMarkup(
-  createElement("h2", null, withIrReplaceableTitle(irreplaceablePost?.title ?? "")),
-);
-const irreplaceableNewsBodyHtml = renderToStaticMarkup(
-  createElement("p", null, withIrReplaceableTitle(irreplaceableSentCopy)),
+  "Rendered News card date must not fall back to text-xs",
 );
 assert.ok(
-  irreplaceableNewsTitleHtml.includes(irreplaceableTitleMarkup),
-  "IrReplaceable news card title must italicize the book title with the line-through span",
+  irreplaceableNewsCardSource.includes("export const newsCardDateClass =") &&
+    irreplaceableNewsCardSource.includes('"text-[13px] font-semibold uppercase tracking-[0.2em] text-brand"'),
+  "News card date class must stay 13px",
 );
 assert.ok(
-  irreplaceableNewsBodyHtml.includes(irreplaceableTitleMarkup),
-  "IrReplaceable news card body must use the same line-through title markup",
+  irreplaceableNewsCardSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)") &&
+    irreplaceableNewsCardSource.includes("withIrReplaceableTitle(paragraph)"),
+  "IrReplaceable news card title and body must render through the shared title helper",
 );
-assert.equal(htmlTextContent(irreplaceableNewsTitleHtml), irreplaceablePost?.title);
 assert.ok(
-  profileNewsSource.includes("withIrReplaceableTitle(irreplaceableCommunityPost.title)"),
-  "IrReplaceable news card title must render through the shared title helper",
+  profileNewsSource.includes("<IrreplaceableNewsCard />"),
+  "Profile News tab must render the shared IrReplaceable news card",
 );
 
 const spotlightPost = communityPosts.find((post) => post.slug === "backstage-business-spotlight-michael-njo");
@@ -556,6 +633,12 @@ assert.equal(
   false,
   "Backstage spotlight is news only and must not become an event listing",
 );
+const spotlightHtml = renderCommunityPost("backstage-business-spotlight-michael-njo");
+assert.equal(
+  spotlightHtml.includes("max-w-[54ch]") || spotlightHtml.includes("max-w-[68ch]"),
+  false,
+  "Spotlight and the other unscoped posts must stay box-identical to main",
+);
 
 const dinnerPost = communityPosts.find((post) => post.slug === "panel-of-experts-dinner-roseville");
 assert.ok(dinnerPost, "Panel of Experts dinner recap must exist");
@@ -571,13 +654,108 @@ assert.equal(
   "Profile news copy must not treat the completed Roseville dinner as upcoming",
 );
 assert.ok(
-  profileNewsSource.includes("communityPosts") && profileNewsSource.includes("withIrReplaceableTitle"),
+  profileNewsSource.includes("communityPosts") &&
+    irreplaceableNewsCardSource.includes("communityPosts") &&
+    irreplaceableNewsCardSource.includes("withIrReplaceableTitle"),
   "IrReplaceable news card must render from community-posts data",
 );
 assert.equal(
-  profileNewsSource.includes("As a dentist and practice consultant"),
+  profileNewsSource.includes("As a dentist and practice consultant") ||
+    irreplaceableNewsCardSource.includes("As a dentist and practice consultant"),
   false,
   "IrReplaceable news card must not hardcode Dr. Njo's sent copy",
 );
+
+if (!process.env.NEWS_POLISH_MUTANT) {
+  const detailPath = path.join(process.cwd(), "src/components/pages/community-post-detail.tsx");
+  const newsCardPath = path.join(process.cwd(), "src/components/irreplaceable-news-card.tsx");
+  const detailOriginal = readFileSync(detailPath, "utf8");
+  const newsCardOriginal = readFileSync(newsCardPath, "utf8");
+  const tsxCli = path.join(process.cwd(), "node_modules/tsx/dist/cli.mjs");
+
+  function runCheckEvents() {
+    return spawnSync(process.execPath, [tsxCli, "scripts/check-events.ts"], {
+      cwd: process.cwd(),
+      env: { ...process.env, NEWS_POLISH_MUTANT: "1" },
+      encoding: "utf8",
+    });
+  }
+
+  function restoreSources() {
+    writeFileSync(detailPath, detailOriginal);
+    writeFileSync(newsCardPath, newsCardOriginal);
+  }
+
+  function assertMutantFails(name: string, apply: () => void) {
+    try {
+      apply();
+      const changed =
+        readFileSync(detailPath, "utf8") !== detailOriginal ||
+        readFileSync(newsCardPath, "utf8") !== newsCardOriginal;
+      assert.equal(changed, true, `${name} mutant must change a source file`);
+      const result = runCheckEvents();
+      assert.notEqual(result.status, 0, `${name} must fail check-events\n${result.stderr}\n${result.stdout}`);
+      console.log(`Mutant ${name} failed as required (exit ${result.status}).`);
+    } finally {
+      restoreSources();
+    }
+  }
+
+  const control = runCheckEvents();
+  assert.equal(control.status, 0, `No-op control must pass check-events\n${control.stderr}\n${control.stdout}`);
+  console.log("Mutant no-op control passed.");
+
+  assertMutantFails("P1 helper dropped on post body", () => {
+    writeFileSync(
+      detailPath,
+      detailOriginal.replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"),
+    );
+  });
+  assertMutantFails("P2 helper dropped on H1", () => {
+    writeFileSync(
+      detailPath,
+      detailOriginal.replace("{withIrReplaceableTitle(post.title)}", "{post.title}"),
+    );
+  });
+  assertMutantFails("P3 helper dropped on subtitle", () => {
+    writeFileSync(
+      detailPath,
+      detailOriginal.replace("{withIrReplaceableTitle(post.description)}", "{post.description}"),
+    );
+  });
+  assertMutantFails("C1 helper dropped on News card body", () => {
+    writeFileSync(
+      newsCardPath,
+      newsCardOriginal.replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"),
+    );
+  });
+  assertMutantFails("H2 partial hardcoded News card text", () => {
+    writeFileSync(
+      newsCardPath,
+      newsCardOriginal.replace(
+        `      {irreplaceableCommunityPost.body.map((paragraph) => (
+        <p
+          key={paragraph}
+          className="text-pretty text-sm leading-relaxed text-muted-foreground"
+        >
+          {withIrReplaceableTitle(paragraph)}
+        </p>
+      ))}`,
+        `      <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
+        Role clarity, ownership, and strong leadership are essential.
+      </p>`,
+      ),
+    );
+  });
+  assertMutantFails("M1 54ch removed", () => {
+    writeFileSync(
+      detailPath,
+      detailOriginal.replace('post.bodyMeasure === "54ch" ? "max-w-[54ch] " : ""', '""'),
+    );
+  });
+  assertMutantFails("N1 News date back to text-xs", () => {
+    writeFileSync(newsCardPath, newsCardOriginal.replace("text-[13px]", "text-xs"));
+  });
+}
 
 console.log("Event date-state and profile-tab assertions passed.");

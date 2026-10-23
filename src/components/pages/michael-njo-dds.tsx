@@ -29,7 +29,7 @@ import {
   type EditorialMediaAsset,
 } from "@/data/media";
 import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
-import { withIrReplaceableTitle } from "@/components/irreplaceable-book-title";
+import { IrreplaceableNewsCard, newsCardDateClass } from "@/components/irreplaceable-news-card";
 import { communityPosts } from "@/data/community-posts";
 import { getUpcomingEventPrograms } from "@/data/events";
 import { Badge } from "@/components/ui/badge";
@@ -50,15 +50,8 @@ import {
 const panel =
   "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
-const newsCardDateClass =
-  "text-[13px] font-semibold uppercase tracking-[0.2em] text-brand";
-
 const fortyOverFortyCommunityPost = communityPosts.find(
   (post) => post.slug === "dental-lifestyles-40-over-40-2026",
-);
-
-const irreplaceableCommunityPost = communityPosts.find(
-  (post) => post.slug === "irreplaceable-leah-roling",
 );
 
 function formatCommunityPostDate(value: string) {
@@ -538,48 +531,7 @@ export default function MichaelNjoDDS({
               </article>
             ) : null}
 
-            {irreplaceableCommunityPost ? (
-              <article
-                id={irreplaceableCommunityPost.slug}
-                className={`${panel} scroll-mt-28 space-y-4`}
-              >
-                <p className={newsCardDateClass}>
-                  {formatCommunityPostDate(irreplaceableCommunityPost.publishedAt)}
-                </p>
-                <h2 className="font-serif text-xl font-semibold">
-                  {withIrReplaceableTitle(irreplaceableCommunityPost.title)}
-                </h2>
-                {irreplaceableCommunityPost.image ? (
-                  <Image
-                    src={irreplaceableCommunityPost.image.src}
-                    alt={irreplaceableCommunityPost.image.alt}
-                    width={irreplaceableCommunityPost.image.width}
-                    height={irreplaceableCommunityPost.image.height}
-                    className="h-auto w-full max-w-md rounded-xl bg-slate-50 object-contain"
-                    sizes="(min-width: 768px) 448px, 100vw"
-                    priority
-                  />
-                ) : null}
-                {irreplaceableCommunityPost.body.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="text-pretty text-sm leading-relaxed text-muted-foreground"
-                  >
-                    {withIrReplaceableTitle(paragraph)}
-                  </p>
-                ))}
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild size="sm">
-                    <Link href={CONTACT_PATH}>Contact Dr. Njo</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/blog/${irreplaceableCommunityPost.slug}`}>
-                      Read the full story
-                    </Link>
-                  </Button>
-                </div>
-              </article>
-            ) : null}
+            <IrreplaceableNewsCard />
 
             <article
               id="backstage-business-spotlight-michael-njo"
