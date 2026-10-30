@@ -90,6 +90,21 @@ async function main() {
       }
     }
 
+    // The book campaign must lead to current prelaunch information, not an old-edition purchase CTA.
+    const secondBookResponse = await fetch(`${baseUrl}/resources/second-book`);
+    assert.equal(secondBookResponse.status, 200, "Second Edition page must render");
+    const secondBookHtml = await secondBookResponse.text();
+    assert.ok(secondBookHtml.includes("November 17, 2026"), "Second Edition page must show the confirmed launch date");
+    assert.ok(resourcesHtml.includes("Upcoming book · November 17, 2026"), "Resources feature must show the same launch date");
+    assert.ok(!secondBookHtml.includes("date has not been announced"), "Second Edition page must not retain the superseded release status");
+    assert.ok(secondBookHtml.includes("purchase link will be added here when the new listing is confirmed"), "Prelaunch page must not imply a verified purchase destination");
+    const amazonLinks = [...secondBookHtml.matchAll(/<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g)];
+    assert.ok(amazonLinks.length > 0, "Existing first-edition resource should remain explicitly available");
+    for (const [, href, label] of amazonLinks) {
+      assert.ok(href.includes("1627878718"), "Prelaunch must not invent a new Second Edition purchase destination");
+      assert.match(label, /first edition/i, "Earlier edition purchase link must remain clearly labeled");
+    }
+
     assert.match(
       robotsText,
       new RegExp(`Sitemap: ${buildCanonicalUrl("/sitemap.xml").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
