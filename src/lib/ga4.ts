@@ -1,5 +1,5 @@
 import { CALENDLY_MESSAGE_ORIGINS, PRODUCTION_HOSTNAME } from "@/config/site";
-import { getAnalyticsConsent, trackAnalyticsEvent } from "@/lib/analytics-events";
+import { getAnalyticsConsent, isGoogleAnalyticsAllowed, trackAnalyticsEvent } from "@/lib/analytics-events";
 
 export const generateLeadMethods = {
   form: "form",
@@ -95,7 +95,7 @@ function canTrackGenerateLead(): boolean {
   return (
     typeof window !== "undefined" &&
     window.location.hostname.toLowerCase() === PRODUCTION_HOSTNAME &&
-    getAnalyticsConsent() === "accepted"
+    isGoogleAnalyticsAllowed(getAnalyticsConsent())
   );
 }
 

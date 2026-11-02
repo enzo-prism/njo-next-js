@@ -19,6 +19,13 @@ export function getAnalyticsConsent(): AnalyticsConsent | null {
   }
 }
 
+// Google Analytics runs unless the visitor declines (Google Consent Mode keeps
+// EEA/UK/Swiss visitors cookieless until they allow it). Hotjar and Vercel Web
+// Analytics stay opt-in and require "accepted".
+export function isGoogleAnalyticsAllowed(consent: AnalyticsConsent | null) {
+  return consent !== "declined";
+}
+
 export function setAnalyticsConsent(value: AnalyticsConsent) {
   try {
     window.localStorage.setItem(ANALYTICS_CONSENT_STORAGE_KEY, value);
@@ -32,7 +39,7 @@ export function trackAnalyticsEvent(
   name: string,
   properties?: AnalyticsEventDetail["properties"],
 ) {
-  if (typeof window === "undefined" || getAnalyticsConsent() !== "accepted") return;
+  if (typeof window === "undefined" || !isGoogleAnalyticsAllowed(getAnalyticsConsent())) return;
   window.dispatchEvent(
     new CustomEvent<AnalyticsEventDetail>(ANALYTICS_TRACK_EVENT, {
       detail: { name, properties },

@@ -10,10 +10,20 @@ The site currently uses three analytics/behavior tools:
 - Google Analytics for broader traffic reporting
 - Hotjar for behavior/session insight
 
-All three are optional and consent-gated. No analytics provider is mounted or downloaded until a
-visitor selects **Allow analytics**. Declining does not remove site functionality. **Privacy choices**
-in the footer clears the saved choice and reloads the page so previously loaded analytics are removed
-before the visitor chooses again.
+Consent model (changed 2026-11-02; the opt-in-only model from 2026-08-17 cut GA4 sessions from
+~186/month to ~11, because most visitors never answer the banner):
+
+- **Google Analytics is opt-out.** It loads on first visit with Google Consent Mode v2:
+  `analytics_storage` defaults to `granted`, except for EEA/UK/CH visitors where Google applies a
+  region default of `denied` (cookieless pings) until they select **Allow analytics**. `ad_storage`,
+  `ad_user_data`, and `ad_personalization` are always denied. Selecting **Decline** sets
+  `ga-disable-<id>` so no further hits are sent, and GA is not loaded on later visits.
+- **Hotjar and Vercel Analytics are opt-in.** They load only after **Allow analytics**.
+
+The banner still appears until the visitor chooses. **Privacy choices** in the footer clears the
+saved choice and reloads the page so previously loaded analytics are removed before the visitor
+chooses again. A site this small does not qualify for GA4 behavioral modeling, so cookieless
+pings from EEA/UK/CH visitors who never answer do not appear in standard reports.
 
 ## Source of Truth in Code
 
@@ -25,9 +35,10 @@ All analytics wiring is centralized through `AnalyticsConsentManager`, mounted o
 Current responsibilities:
 
 - Read and update the versioned browser consent preference
-- Mount Vercel Analytics only after consent
-- Load Google Analytics and Hotjar only after consent
-- Keep all providers disabled outside the canonical production hostname
+- Load Google Analytics with Consent Mode defaults unless the visitor declined
+- Mount Vercel Analytics and load Hotjar only after **Allow analytics**
+- Keep all providers disabled outside the canonical production hostname, except GA on
+  `*.vercel.app` previews opened with `?analytics_test=1` (sent with `debug_mode`, visible in GA DebugView)
 - Forward approved conversion events to Vercel Analytics and Google Analytics
 
 This is intentional. Future changes should keep analytics mounted once at the root layout instead of duplicating instrumentation across routes.
@@ -70,12 +81,12 @@ Important details:
 
 ### Implementation
 
-GA and Hotjar are loaded from `src/components/analytics-consent.tsx` after consent.
+GA (unless declined) and Hotjar (after Allow analytics) are loaded from `src/components/analytics-consent.tsx`.
 
 The manager intentionally skips provider loading when:
 
-- the visitor has not allowed analytics
-- the hostname is not exactly `michaelnjodds.com`
+- the visitor declined (GA) or has not allowed analytics (Hotjar)
+- the hostname is not exactly `michaelnjodds.com` (GA alone may also run on a preview opened with `?analytics_test=1`)
 
 This prevents local, preview, and automated audit traffic from polluting production analytics.
 
@@ -141,11 +152,14 @@ npm run check:parity
 
 ### Preview validation
 
-1. Deploy a preview and confirm no analytics-provider requests load; previews are intentionally disabled.
-2. On production, clear the saved privacy choice and confirm no provider requests load before a choice.
-3. Select **Decline** and confirm provider requests remain absent.
-4. Reset through the footer, select **Allow analytics**, and confirm all enabled providers load.
-5. Trigger a booking click and a non-submitting form interaction, then confirm only non-sensitive event properties are emitted.
+1. Deploy a preview and confirm no analytics-provider requests load by default.
+2. Open the preview with `?analytics_test=1` and confirm `www.google-analytics.com/g/collect` fires on
+   first load with `gcs=G1..` / `ep.debug_mode=1` (or the event shows in GA DebugView), with no Hotjar or Vercel Analytics.
+3. On production, clear the saved privacy choice and confirm GA collect requests fire before a choice
+   while Hotjar and Vercel Analytics stay absent.
+4. Select **Decline** and confirm no further GA collect requests are sent, including after reload.
+5. Reset through the footer, select **Allow analytics**, and confirm all enabled providers load.
+6. Trigger a booking click and a non-submitting form interaction, then confirm only non-sensitive event properties are emitted.
 
 If the preview is protected, use the workflow in `docs/deployment-runbook.md` for CLI smoke checks, then validate browser-side analytics manually.
 

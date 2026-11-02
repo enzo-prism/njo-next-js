@@ -25,7 +25,9 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - there are no internal API routes for form submission
 - Preserve analytics behavior:
   - one consent manager is mounted in the root layout
-  - Google Analytics, Hotjar, and Vercel Analytics load only after consent on the canonical production host
+  - analytics run only on the canonical production host (plus `*.vercel.app` previews opened with `?analytics_test=1`, GA only, in debug mode)
+  - Google Analytics is opt-out: it loads unless the visitor declines, with Google Consent Mode v2 defaulting `analytics_storage` to denied for EEA/UK/CH and granted elsewhere; ad consent types are always denied
+  - Hotjar and Vercel Analytics load only after the visitor selects **Allow analytics**
   - conversion events must never include submitted form values or other personal data
 
 ## Runtime and Tooling
@@ -41,7 +43,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Root layout
   - Mounts the single global analytics consent manager
 - `src/components/analytics-consent.tsx`
-  - Consent-gated, production-host-only Vercel Analytics, Google Analytics, and Hotjar loading
+  - Opt-out Google Analytics (Consent Mode v2) and opt-in Vercel Analytics and Hotjar, production host only
 - `src/lib/analytics-events.ts`
   - Shared non-sensitive conversion-event interface
 - `src/config/site.ts`

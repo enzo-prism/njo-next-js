@@ -69,7 +69,7 @@ assert.ok(
   "Shared lead validation must normalize URLs and throttle immediate repeat submissions.",
 );
 assert.ok(
-  ga4Source.includes('getAnalyticsConsent() === "accepted"') &&
+  ga4Source.includes("isGoogleAnalyticsAllowed(getAnalyticsConsent())") &&
     ga4Source.includes("PRODUCTION_HOSTNAME") &&
     ga4Source.includes('trackAnalyticsEvent("generate_lead"'),
   "GA4 lead events must use the canonical-host, consent-gated analytics path.",

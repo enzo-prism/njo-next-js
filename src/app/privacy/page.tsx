@@ -12,7 +12,7 @@ const sections = [
     items: [
       "Contact details, including your name, email address, phone number, and practice location.",
       "Professional information, including your practice website, services of interest, goals, timeline, and the message you submit.",
-      "Basic technical and usage information, such as page path, referring page, campaign parameters, browser/device information, and interaction data, only when optional analytics are allowed.",
+      "Basic technical and usage information, such as page path, referring page, campaign parameters, browser/device information, and interaction data, collected through analytics unless you decline.",
     ],
   },
   {
@@ -20,7 +20,7 @@ const sections = [
     items: [
       "Respond to your request and provide the consultation, educational, or advisory information you asked for.",
       "Operate, secure, troubleshoot, and improve the website and its forms.",
-      "Measure site usage and conversions when you have allowed optional analytics.",
+      "Measure site usage and conversions, unless you have declined analytics.",
       "Comply with legal obligations, prevent abuse, and protect our rights and users.",
     ],
   },
@@ -32,9 +32,10 @@ const sections = [
     ],
   },
   {
-    title: "Optional analytics and session insights",
+    title: "Analytics and session insights",
     paragraphs: [
-      "Google Analytics, Vercel Web Analytics, and Hotjar load only after you select Allow analytics. These tools help us understand visits, conversions, and usability. Hotjar may capture interaction and session information, but form fields are not intended to be recorded. You can decline optional analytics and can reopen Privacy choices from the footer at any time.",
+      "Google Analytics helps us understand visits and conversions. It runs by default, and you can turn it off by selecting Decline in the analytics notice or under Privacy choices in the footer. Visitors in the European Economic Area, the United Kingdom, and Switzerland are measured without analytics cookies unless they select Allow analytics. We do not use Google Analytics for advertising or ad personalization.",
+      "Vercel Web Analytics and Hotjar load only after you select Allow analytics. Hotjar may capture interaction and session information, but form fields are not intended to be recorded. You can change your choice at any time under Privacy choices in the footer.",
     ],
   },
   {
@@ -47,7 +48,7 @@ const sections = [
   {
     title: "Your choices and rights",
     paragraphs: [
-      "You may ask to access, correct, or delete personal information we hold about you, subject to identity verification and applicable exceptions. Depending on where you live, additional privacy rights may apply. You may also decline optional analytics without affecting your ability to use the site or contact Dr. Njo.",
+      "You may ask to access, correct, or delete personal information we hold about you, subject to identity verification and applicable exceptions. Depending on where you live, additional privacy rights may apply. You may also decline analytics without affecting your ability to use the site or contact Dr. Njo.",
     ],
   },
   {
@@ -64,7 +65,7 @@ export default function PrivacyPage() {
       eyebrow="Legal"
       title="Privacy Policy"
       summary="This policy explains what Dental Strategies collects through michaelnjodds.com, why it is used, which providers help operate the site, and the choices available to you."
-      effectiveDate="August 17, 2026"
+      effectiveDate="November 2, 2026"
       sections={sections}
     />
   );
