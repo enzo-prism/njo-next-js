@@ -272,6 +272,81 @@ function buildResourcesCollectionStructuredData(): SchemaNode {
   };
 }
 
+function buildBooksCollectionStructuredData(): SchemaNode {
+  const pathname = "/books";
+  const pageUrl = buildCanonicalUrl(pathname);
+  const breadcrumbId = `${pageUrl}#breadcrumb`;
+  const itemListId = `${pageUrl}#item-list`;
+  const author = { "@type": "Person", "@id": PERSON_NODE_ID, name: "Michael A. Njo, DDS" };
+
+  const breadcrumb = buildBreadcrumb(
+    [
+      { name: "Home", item: buildCanonicalUrl("/") },
+      { name: "Books", item: pageUrl },
+    ],
+    breadcrumbId,
+  );
+
+  const books: SchemaNode[] = [
+    {
+      "@type": "Book",
+      "@id": `${pageUrl}#dental-practice-transitions-handbook`,
+      name: "Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates",
+      bookEdition: "First Edition",
+      author,
+      sameAs: ["https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718"],
+    },
+    {
+      "@type": "Book",
+      "@id": `${pageUrl}#dental-practice-transitions-handbook-second-edition`,
+      name: "Dental Practice Transitions Handbook, Second Edition",
+      bookEdition: "Second Edition",
+      author,
+      url: buildCanonicalUrl(buildResourceArticlePath("second-book")),
+    },
+    {
+      "@type": "Book",
+      "@id": `${pageUrl}#dental-exit-blueprint`,
+      name: "The Dental Exit Blueprint: The 13 EBITDA Levers That Drive Maximum Value",
+      datePublished: "2026-07-15",
+      author: { "@type": "Person", name: "Elijah Desmond" },
+      contributor: [author],
+      url: buildCanonicalUrl(buildResourceArticlePath("dental-exit-blueprint")),
+      sameAs: ["https://www.amazon.com/dp/B0H8WL3F6H"],
+    },
+  ];
+
+  const itemList: SchemaNode = {
+    "@type": "ItemList",
+    "@id": itemListId,
+    name: "Books by and with Dr. Michael Njo",
+    numberOfItems: books.length,
+    itemListElement: books.map((book, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: book,
+    })),
+  };
+
+  const page: SchemaNode = {
+    "@type": ["CollectionPage", "WebPage"],
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: buildPageTitle(pathname),
+    description: buildPageDescription(pathname),
+    inLanguage: "en",
+    isPartOf: { "@id": WEBSITE_NODE_ID },
+    about: { "@id": PERSON_NODE_ID },
+    breadcrumb: { "@id": breadcrumbId },
+    mainEntity: { "@id": itemListId },
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [page, breadcrumb, itemList],
+  };
+}
+
 function buildResourceArticleStructuredData(pathname: string): SchemaNode | null {
   const article = getResourceArticleByPath(pathname);
   if (!article) return null;
@@ -533,6 +608,10 @@ export function buildPageStructuredData(pathname: string): SchemaNode | null {
 
   if (normalizedPath === "/resources") {
     return buildResourcesCollectionStructuredData();
+  }
+
+  if (normalizedPath === "/books") {
+    return buildBooksCollectionStructuredData();
   }
 
   if (normalizedPath.startsWith("/resources/")) {

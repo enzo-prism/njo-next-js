@@ -47,6 +47,12 @@ const cases = [
     ogType: "website",
   },
   {
+    path: "/books",
+    title: "Books by Dr. Michael Njo | Author & Contributor",
+    descriptionIncludes: "Books by Dr. Michael Njo",
+    ogType: "website",
+  },
+  {
     path: "/contact",
     title: "Contact Michael Njo, DDS | Dental Strategies",
     descriptionIncludes: "Contact Michael Njo",

@@ -26,6 +26,7 @@ const paths = [
   "/dr-michael-njo-interview",
   "/navigating-dental-insurance-podcast",
   "/resources",
+  "/books",
   "/contact",
   "/contact/success",
   "/testimonials",

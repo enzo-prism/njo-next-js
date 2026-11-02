@@ -348,9 +348,14 @@ export default function MichaelNjoDDS({
                       </div>
                     ))}
                   </div>
-                  <Button asChild variant="outline">
-                    <Link href="/resources">Explore resources</Link>
-                  </Button>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button asChild>
+                      <Link href="/books">See Dr. Njo&apos;s books</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href="/resources">Explore resources</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

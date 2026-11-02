@@ -149,6 +149,8 @@ export function buildPageTitle(pathname: string): string {
       return "Testimonials for Michael Njo, DDS | Dental Strategies";
     case "/resources":
       return "Resources | Michael Njo, DDS";
+    case "/books":
+      return "Books by Dr. Michael Njo | Author & Contributor";
     case "/dentalflix":
       return "DentalFlix Referral Offer | Michael Njo, DDS";
     case "/contact":
@@ -202,6 +204,8 @@ export function buildPageDescription(pathname: string): string {
       return "Hear Dr. Michael Njo as a guest on The Navigating Dental Insurance Podcast with Ben Tuinei and Jordon Comstock. Episode: The Right Way to Go Out of Network, published July 24, 2026.";
     case "/testimonials":
       return "Read testimonials from dentists and healthcare professionals who have worked with Michael Njo, DDS through Dental Strategies and Practice Transitions Institute.";
+    case "/books":
+      return "Books by Dr. Michael Njo: Dental Practice Transitions Handbook, its Second Edition launching November 17, 2026, and The Dental Exit Blueprint.";
     case "/resources":
       return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and recommendations from Dr. Njo’s network to support your dental career and practice.";
     case "/phillips-event":

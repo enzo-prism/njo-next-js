@@ -119,6 +119,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - 2027 Mastering Your Dental Transition dates include San Francisco on July 30, 2027 (QUO, 1 Post Street) and Sacramento on October 15, 2027 (TDIC Headquarters); calendar only, no news posts
 - `src/lib/profile-tabs.ts`
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
+- `src/components/pages/books.tsx`
+  - `/books` author page for the email signature; confirmed books only, Amazon links limited to the first edition and The Dental Exit Blueprint, JSON-LD from `buildBooksCollectionStructuredData`
 - `src/components/book-launch-feature.tsx`
   - Reusable featured-book UI for the home page, resources hub, and book-launch detail pages
 - `src/components/network-resource-feature.tsx`
