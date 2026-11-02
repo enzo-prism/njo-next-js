@@ -13,13 +13,36 @@ const LAUNCH_SECTION_TITLE = "Launching November 17, 2026";
 const HUB_DATED_CTA = "Second edition launches Nov\u00a017,\u00a02026";
 const PRELAUNCH_AMAZON_BUY_LABEL_RE = /\b(?:second edition|new edition|kindle)\b/i;
 const ANCHOR_HREF_RE = /<a\b[^>]*\bhref\s*=\s*(["'])([^"']+)\1[^>]*>([\s\S]*?)<\/a>/gi;
-const AMAZON_ASIN_RE = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?#]|$)/i;
-const AMAZON_SHORT_HOSTS = new Set(["amzn.to", "a.co"]);
+const AMAZON_ASIN_RE = /\/(?:dp|gp\/product|gp\/aw\/d|exec\/obidos\/ASIN)\/([A-Z0-9]{10})(?:[/?#]|$)/i;
+const AMAZON_SHORT_HOSTS = new Set(["amzn.to", "amzn.eu", "amzn.asia", "a.co"]);
+const AMAZON_FAMILY_EXTRA_HOSTS = new Set(["amzn.com"]);
+const AMAZON_RETAIL_HOST_RE = /(?:^|\.)amazon(?:\.[a-z]+)+$/;
+const AWS_AMAZON_HOST_RE = /(?:^|\.)aws\.amazon(?:\.[a-z]+)+$/;
 const FAKE_AMAZON_VARIANTS = [
   { href: "https://amzn.to/3FAKE2N", name: "amzn.to short link" },
   { href: "https://a.co/d/fAKE2nd", name: "a.co short link" },
   { href: `https://www.amazon.co.uk/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "amazon.co.uk ASIN" },
   { href: `https://WWW.AMAZON.COM/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "uppercase amazon.com ASIN" },
+  { href: "//amzn.to/3FAKE2N", name: "protocol-relative amzn.to" },
+  { href: `//www.amazon.com/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "protocol-relative amazon.com ASIN" },
+  { href: `https://read.amazon.com/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "read.amazon.com ASIN" },
+  { href: `https://m.amazon.com/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "m.amazon.com ASIN" },
+  { href: "https://amzn.eu/d/fAKE2nd", name: "amzn.eu short link" },
+  { href: "https://amzn.asia/d/fAKE2nd", name: "amzn.asia short link" },
+  { href: "https://www.google.com/url?q=https%3A%2F%2Famzn.to%2F3FAKE2N", name: "Google /url?q= wrapper" },
+  { href: `https://l.example.com/r?u=https://www.amazon.com/dp/${FAKE_SECOND_EDITION_ASIN}`, name: "redirect ?u= wrapper" },
+] as const;
+const ALLOWLISTED_ASIN_PATH_FORMS = [
+  { href: `https://www.amazon.com/gp/aw/d/${FIRST_EDITION_ASIN}`, name: "/gp/aw/d/ first-edition ASIN" },
+  { href: `https://www.amazon.com/exec/obidos/ASIN/${FIRST_EDITION_ASIN}`, name: "/exec/obidos/ASIN/ first-edition ASIN" },
+] as const;
+const NON_AMAZON_FAMILY_HREFS = [
+  "https://aws.amazon.com/what-is-aws/",
+  "https://s3.amazonaws.com/bucket/key",
+  "https://data.com/",
+  "https://mexica.co/",
+  "https://example.com/amazon.com/dp/B0FAKE2ND0",
+  "https://example.org/a.co/d/fAKE2nd",
 ] as const;
 
 const HOME_AMAZON_ASINS = [FIRST_EDITION_ASIN, DENTAL_EXIT_BLUEPRINT_ASIN] as const;
@@ -84,25 +107,38 @@ function findFaqAnswer(html: string, questionPattern: RegExp) {
 }
 
 function normalizeAmazonHost(hostname: string) {
-  return hostname.toLowerCase().replace(/\.$/, "").replace(/^(www|smile)\./, "");
+  return hostname.toLowerCase().replace(/\.$/, "").replace(/^www\./, "");
 }
 
 function isAmazonFamilyHost(hostname: string) {
   const host = normalizeAmazonHost(hostname);
-  if (AMAZON_SHORT_HOSTS.has(host) || host === "amzn.com") return true;
-  return /^amazon(?:\.[a-z]+)+$/.test(host);
+  if (AMAZON_SHORT_HOSTS.has(host) || AMAZON_FAMILY_EXTRA_HOSTS.has(host)) return true;
+  if (AWS_AMAZON_HOST_RE.test(host)) return false;
+  return AMAZON_RETAIL_HOST_RE.test(host);
 }
 
 function isShortAmazonHost(hostname: string) {
   return AMAZON_SHORT_HOSTS.has(normalizeAmazonHost(hostname));
 }
 
-function parseHref(href: string) {
+function parseHref(href: string, baseUrl: string) {
   try {
-    return new URL(decodeHtmlEntities(href));
+    const url = new URL(decodeHtmlEntities(href), baseUrl);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return undefined;
+    return url;
   } catch {
     return undefined;
   }
+}
+
+function authorityLooksAmazonFamily(href: string) {
+  const match = href.trim().match(/^(?:[a-z][a-z0-9+.-]*:)?\/\/([^/?#]+)/i);
+  if (!match) return false;
+  const authority = match[1];
+  const host = authority.startsWith("[")
+    ? authority.slice(1, Math.max(authority.indexOf("]"), 1))
+    : authority.replace(/^.*@/, "").replace(/:\d+$/, "");
+  return isAmazonFamilyHost(host);
 }
 
 function extractAmazonAsin(href: string) {
@@ -111,30 +147,52 @@ function extractAmazonAsin(href: string) {
   return match?.[1]?.toUpperCase();
 }
 
-function collectAmazonLinks(html: string) {
+function embeddedHttpUrls(url: URL, baseUrl: string) {
+  const found: URL[] = [];
+  for (const value of url.searchParams.values()) {
+    const inner = parseHref(value, baseUrl);
+    if (inner) found.push(inner);
+  }
+  return found;
+}
+
+function collectAmazonLinks(html: string, pageLabel: string, baseUrl: string) {
   const anchorHrefRe = new RegExp(ANCHOR_HREF_RE.source, ANCHOR_HREF_RE.flags);
-  return [...html.matchAll(anchorHrefRe)].flatMap(([, , href, labelHtml]) => {
+  const links: Array<{ href: string; hostname: string; asin: string | undefined; label: string }> = [];
+
+  for (const [, , href, labelHtml] of html.matchAll(anchorHrefRe)) {
     const decodedHref = decodeHtmlEntities(href);
-    const url = parseHref(decodedHref);
-    if (!url || !isAmazonFamilyHost(url.hostname)) return [];
-    return [
-      {
+    const url = parseHref(decodedHref, baseUrl);
+    if (!url) {
+      assert.ok(
+        !authorityLooksAmazonFamily(decodedHref),
+        `${pageLabel} Amazon-looking href must parse as http(s): ${decodedHref}`,
+      );
+      continue;
+    }
+
+    for (const candidate of [url, ...embeddedHttpUrls(url, baseUrl)]) {
+      if (!isAmazonFamilyHost(candidate.hostname)) continue;
+      links.push({
         href: decodedHref,
-        hostname: url.hostname,
-        asin: extractAmazonAsin(decodedHref),
+        hostname: candidate.hostname,
+        asin: extractAmazonAsin(candidate.href),
         label: visibleLinkLabel(labelHtml),
-      },
-    ];
-  });
+      });
+    }
+  }
+
+  return links;
 }
 
 function assertAmazonLinksAllowed(
   html: string,
   pageLabel: string,
   allowedAsins: readonly string[],
+  baseUrl: string,
 ) {
   const allowed = new Set(allowedAsins.map((asin) => asin.toUpperCase()));
-  const amazonLinks = collectAmazonLinks(html);
+  const amazonLinks = collectAmazonLinks(html, pageLabel, baseUrl);
   assert.ok(amazonLinks.length > 0, `${pageLabel} must keep at least one Amazon destination`);
 
   for (const { href, hostname, asin, label } of amazonLinks) {
@@ -168,27 +226,32 @@ function assertAmazonLinksAllowed(
   }
 }
 
-function withFakeAmazonLink(html: string, href: string) {
-  const fakeLink = `<a href="${href}">Buy the new edition on Kindle</a>`;
+function withAmazonLink(html: string, href: string, label: string) {
+  const planted = `<a href="${href}">${label}</a>`;
   if (html.includes("</body>")) {
-    return html.replace("</body>", `${fakeLink}</body>`);
+    return html.replace("</body>", `${planted}</body>`);
   }
-  return `${html}${fakeLink}`;
+  return `${html}${planted}`;
+}
+
+function withFakeAmazonLink(html: string, href: string) {
+  return withAmazonLink(html, href, "Buy the new edition on Kindle");
 }
 
 function assertFakeAmazonVariantsAreRejected(
   html: string,
   pageLabel: string,
   allowedAsins: readonly string[],
+  baseUrl: string,
 ) {
   for (const variant of FAKE_AMAZON_VARIANTS) {
     assert.throws(
-      () => assertAmazonLinksAllowed(withFakeAmazonLink(html, variant.href), pageLabel, allowedAsins),
+      () => assertAmazonLinksAllowed(withFakeAmazonLink(html, variant.href), pageLabel, allowedAsins, baseUrl),
       (error: unknown) => {
         assert.ok(error instanceof assert.AssertionError, `${pageLabel} ${variant.name} mutant must throw AssertionError`);
         assert.match(
           error.message,
-          /short Amazon link|allowlisted ASIN|B0FAKE2ND0/i,
+          /short Amazon link|allowlisted ASIN|B0FAKE2ND0|must parse as http/i,
           `${pageLabel} ${variant.name} mutant must fail the Amazon-family allowlist (saw: ${error.message})`,
         );
         return true;
@@ -204,6 +267,7 @@ function assertFakeAmazonVariantsAreRejected(
         html.replace("Buy The Dental Exit Blueprint on Amazon", "Buy the Second Edition on Kindle"),
         pageLabel,
         allowedAsins,
+        baseUrl,
       ),
     (error: unknown) => {
       assert.ok(error instanceof assert.AssertionError, `${pageLabel} Blueprint buy-label mutant must throw AssertionError`);
@@ -216,6 +280,47 @@ function assertFakeAmazonVariantsAreRejected(
     },
     `${pageLabel} must reject relabeling the Blueprint Amazon CTA as a Second Edition Kindle purchase`,
   );
+}
+
+function assertAllowlistedAsinFormsPass(
+  html: string,
+  pageLabel: string,
+  allowedAsins: readonly string[],
+  baseUrl: string,
+) {
+  for (const form of ALLOWLISTED_ASIN_PATH_FORMS) {
+    try {
+      assertAmazonLinksAllowed(
+        withAmazonLink(html, form.href, "View the first edition on Amazon"),
+        pageLabel,
+        allowedAsins,
+        baseUrl,
+      );
+    } catch (error) {
+      assert.fail(
+        `${pageLabel} must accept allowlisted ASIN form ${form.name} (${form.href}): ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
+}
+
+function assertNonAmazonHrefsAreIgnored(
+  html: string,
+  pageLabel: string,
+  allowedAsins: readonly string[],
+  baseUrl: string,
+) {
+  for (const href of NON_AMAZON_FAMILY_HREFS) {
+    try {
+      assertAmazonLinksAllowed(withFakeAmazonLink(html, href), pageLabel, allowedAsins, baseUrl);
+    } catch (error) {
+      assert.fail(
+        `${pageLabel} must ignore non-Amazon href ${href}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
 }
 
 async function main() {
@@ -375,12 +480,17 @@ async function main() {
       "llms.txt must label the existing Amazon book as the first edition",
     );
 
-    assertAmazonLinksAllowed(homeHtml, "Home page", HOME_AMAZON_ASINS);
-    assertAmazonLinksAllowed(resourcesHtml, "Resources hub", RESOURCES_AMAZON_ASINS);
-    assertAmazonLinksAllowed(secondBookHtml, "Second Edition page", SECOND_BOOK_AMAZON_ASINS);
-    assertFakeAmazonVariantsAreRejected(homeHtml, "Home page", HOME_AMAZON_ASINS);
-    assertFakeAmazonVariantsAreRejected(resourcesHtml, "Resources hub", RESOURCES_AMAZON_ASINS);
-    assertFakeAmazonVariantsAreRejected(secondBookHtml, "Second Edition page", SECOND_BOOK_AMAZON_ASINS);
+    const prelaunchPages = [
+      { html: homeHtml, label: "Home page", asins: HOME_AMAZON_ASINS },
+      { html: resourcesHtml, label: "Resources hub", asins: RESOURCES_AMAZON_ASINS },
+      { html: secondBookHtml, label: "Second Edition page", asins: SECOND_BOOK_AMAZON_ASINS },
+    ] as const;
+    for (const page of prelaunchPages) {
+      assertAmazonLinksAllowed(page.html, page.label, page.asins, baseUrl);
+      assertFakeAmazonVariantsAreRejected(page.html, page.label, page.asins, baseUrl);
+      assertAllowlistedAsinFormsPass(page.html, page.label, page.asins, baseUrl);
+      assertNonAmazonHrefsAreIgnored(page.html, page.label, page.asins, baseUrl);
+    }
     console.log(
       `Rejected Amazon-family mutants ${FAKE_AMAZON_VARIANTS.map((variant) => variant.href).join(", ")} on home, resources, and second-book.`,
     );
