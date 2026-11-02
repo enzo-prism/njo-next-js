@@ -6,8 +6,18 @@ import { buildCanonicalUrl } from "@/seo/canonical";
 import { withNextServer } from "./lib/next-server";
 
 const FIRST_EDITION_ASIN = "1627878718";
+const DENTAL_EXIT_BLUEPRINT_ASIN = "B0H8WL3F6H";
+const FAKE_SECOND_EDITION_ASIN = "B0FAKE2ND0";
 const LAUNCH_DATE = "November 17, 2026";
+const LAUNCH_SECTION_TITLE = "Launching November 17, 2026";
+const HUB_DATED_CTA = "Second edition launches Nov\u00a017,\u00a02026";
+const FIRST_EDITION_BUY_LABEL_RE = /\b(?:second edition|new edition|kindle)\b/i;
 const AMAZON_LINK_RE = /<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g;
+const AMAZON_ASIN_RE = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?#]|$)/i;
+
+const HOME_AMAZON_ASINS = [FIRST_EDITION_ASIN, DENTAL_EXIT_BLUEPRINT_ASIN] as const;
+const RESOURCES_AMAZON_ASINS = [FIRST_EDITION_ASIN, DENTAL_EXIT_BLUEPRINT_ASIN] as const;
+const SECOND_BOOK_AMAZON_ASINS = [FIRST_EDITION_ASIN] as const;
 
 function parseSitemapLocs(xml: string) {
   return [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
@@ -66,29 +76,82 @@ function findFaqAnswer(html: string, questionPattern: RegExp) {
   return undefined;
 }
 
-function assertAmazonLinksStayFirstEdition(
+function extractAmazonAsin(href: string) {
+  const decoded = decodeHtmlEntities(href);
+  const match = decoded.match(AMAZON_ASIN_RE);
+  return match?.[1]?.toUpperCase();
+}
+
+function collectAmazonLinks(html: string) {
+  return [...html.matchAll(AMAZON_LINK_RE)].map(([, href, labelHtml]) => ({
+    href: decodeHtmlEntities(href),
+    asin: extractAmazonAsin(href),
+    label: visibleLinkLabel(labelHtml),
+  }));
+}
+
+function assertAmazonLinksAllowed(
   html: string,
   pageLabel: string,
+  allowedAsins: readonly string[],
 ) {
-  const amazonLinks = [...html.matchAll(AMAZON_LINK_RE)];
-  const handbookLinks = amazonLinks.filter(([, href]) => href.includes(FIRST_EDITION_ASIN));
-  assert.ok(handbookLinks.length > 0, `${pageLabel} must keep the first-edition Amazon destination`);
-  for (const [, href, labelHtml] of amazonLinks) {
-    const label = visibleLinkLabel(labelHtml);
-    assert.doesNotMatch(
-      label,
-      /second edition/i,
-      `${pageLabel} must not label an Amazon CTA as the Second Edition (saw "${label}" for ${href})`,
+  const allowed = new Set(allowedAsins.map((asin) => asin.toUpperCase()));
+  const amazonLinks = collectAmazonLinks(html);
+  assert.ok(amazonLinks.length > 0, `${pageLabel} must keep at least one Amazon destination`);
+
+  for (const { href, asin, label } of amazonLinks) {
+    assert.ok(asin, `${pageLabel} Amazon link must include a recognizable ASIN: ${href}`);
+    assert.ok(
+      allowed.has(asin),
+      `${pageLabel} Amazon link must use an allowlisted ASIN (saw ${asin} in ${href}; allowed: ${[...allowed].join(", ")})`,
     );
-  }
-  for (const [, , labelHtml] of handbookLinks) {
-    const label = visibleLinkLabel(labelHtml);
+    if (asin !== FIRST_EDITION_ASIN) continue;
     assert.match(
       label,
       /first edition/i,
       `${pageLabel} Amazon CTA for ASIN ${FIRST_EDITION_ASIN} must be labeled as the first edition (saw "${label}")`,
     );
+    assert.doesNotMatch(
+      label,
+      FIRST_EDITION_BUY_LABEL_RE,
+      `${pageLabel} first-edition Amazon CTA must not use a second-edition, new-edition, or Kindle buy label (saw "${label}")`,
+    );
   }
+
+  if (allowed.has(FIRST_EDITION_ASIN)) {
+    assert.ok(
+      amazonLinks.some((link) => link.asin === FIRST_EDITION_ASIN),
+      `${pageLabel} must keep the first-edition Amazon destination`,
+    );
+  }
+}
+
+function withFakeAmazonLink(html: string) {
+  const fakeLink = `<a href="https://www.amazon.com/dp/${FAKE_SECOND_EDITION_ASIN}">Buy the new edition on Kindle</a>`;
+  if (html.includes("</body>")) {
+    return html.replace("</body>", `${fakeLink}</body>`);
+  }
+  return `${html}${fakeLink}`;
+}
+
+function assertFakeAmazonLinkIsRejected(
+  html: string,
+  pageLabel: string,
+  allowedAsins: readonly string[],
+) {
+  assert.throws(
+    () => assertAmazonLinksAllowed(withFakeAmazonLink(html), pageLabel, allowedAsins),
+    (error: unknown) => {
+      assert.ok(error instanceof assert.AssertionError, `${pageLabel} fake-ASIN mutant must throw AssertionError`);
+      assert.match(
+        error.message,
+        new RegExp(`${FAKE_SECOND_EDITION_ASIN}|allowlisted ASIN`, "i"),
+        `${pageLabel} fake-ASIN mutant must fail the allowlist, not a different assertion`,
+      );
+      return true;
+    },
+    `${pageLabel} must reject an extra unlisted Amazon ASIN`,
+  );
 }
 
 async function main() {
@@ -184,9 +247,10 @@ async function main() {
       llmsResponse.text(),
     ]);
     assert.ok(resourcesHtml.includes("Upcoming book · November 17, 2026"), "Resources feature must show the same launch date");
+    const resourcesText = resourcesHtml.replace(/<!--[\s\S]*?-->/g, "");
     assert.ok(
-      resourcesHtml.includes("Second edition launches Nov 17, 2026"),
-      "Resources hub first-edition card must use the dated Second Edition CTA",
+      resourcesText.includes(HUB_DATED_CTA),
+      "Resources hub first-edition card must use the dated Second Edition CTA with non-breaking spaces",
     );
     assert.ok(
       !resourcesHtml.includes("Second edition (coming soon)"),
@@ -216,6 +280,20 @@ async function main() {
       new RegExp(LAUNCH_DATE),
       `Second Edition FAQ answer must include ${LAUNCH_DATE}`,
     );
+    const secondBookHeadings = [...secondBookHtml.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/g)].map(([, headingHtml]) =>
+      visibleLinkLabel(headingHtml),
+    );
+    assert.ok(
+      secondBookHeadings.includes(LAUNCH_SECTION_TITLE),
+      `Second Edition section title must be exactly "${LAUNCH_SECTION_TITLE}"`,
+    );
+    const secondBookArticle = resourceArticles.find((article) => article.slug === "second-book");
+    assert.ok(secondBookArticle, "Second Edition article must exist");
+    assert.match(secondBookArticle.excerpt, new RegExp(LAUNCH_DATE), "Second Edition excerpt must include the launch date");
+    assert.ok(
+      resourcesHtml.includes(secondBookArticle.excerpt),
+      "Resources hub must render the dated Second Edition excerpt",
+    );
 
     const secondBookLlmsLine = llmsText.split("\n").find((line) => line.includes("/resources/second-book"));
     assert.ok(secondBookLlmsLine, "llms.txt must describe /resources/second-book");
@@ -232,8 +310,15 @@ async function main() {
       "llms.txt must label the existing Amazon book as the first edition",
     );
 
-    assertAmazonLinksStayFirstEdition(secondBookHtml, "Second Edition page");
-    assertAmazonLinksStayFirstEdition(resourcesHtml, "Resources hub");
+    assertAmazonLinksAllowed(homeHtml, "Home page", HOME_AMAZON_ASINS);
+    assertAmazonLinksAllowed(resourcesHtml, "Resources hub", RESOURCES_AMAZON_ASINS);
+    assertAmazonLinksAllowed(secondBookHtml, "Second Edition page", SECOND_BOOK_AMAZON_ASINS);
+    assertFakeAmazonLinkIsRejected(homeHtml, "Home page", HOME_AMAZON_ASINS);
+    assertFakeAmazonLinkIsRejected(resourcesHtml, "Resources hub", RESOURCES_AMAZON_ASINS);
+    assertFakeAmazonLinkIsRejected(secondBookHtml, "Second Edition page", SECOND_BOOK_AMAZON_ASINS);
+    console.log(
+      `Rejected fake Amazon ASIN ${FAKE_SECOND_EDITION_ASIN} on home, resources, and second-book.`,
+    );
 
     const handbookBookNode = parseJsonLdGraphs(homeHtml).find(
       (node) => node["@type"] === "Book" && node.isbn === FIRST_EDITION_ASIN,
