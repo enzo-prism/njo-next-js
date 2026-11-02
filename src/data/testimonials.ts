@@ -102,6 +102,14 @@ const sortByNewest = (
 
 export const testimonials: Testimonial[] = [
   {
+    quote: `I decided to bring Michael on board because, from the very beginning, he gave me a sense of confidence, reassurance, and genuine support as I prepared for one of the biggest transitions of my career becoming a dental practice owner. Although you were initially recommended by the previous practice owner, someone whose judgment I deeply respect, it was through our personal interactions that I developed my own trust and appreciation for your character and expertise. What stood out most was your willingness to listen, offer guidance, and make yourself available even before we established a formal working relationship. Every conversation left me feeling that I had someone in my corner who genuinely wanted to see me succeed. I quickly realized that, for you, business is about more than numbers; it is about relationships, trust, and building a strong foundation for lasting success. My journey has taught me the importance of surrounding myself with people who believe in my vision, and I am grateful that our paths crossed. I look forward to learning from you, growing together, and building something meaningful as an owner. Here's to a successful future and a lasting relationship built on trust, respect, and shared success!`,
+    author: "John Senat",
+    stars: 5,
+    source: "google",
+    // Google Business Profile notification date; Google gives no exact publication date.
+    receivedAt: "2026-10-31",
+  },
+  {
     quote: `Michael Njo is truly a miracle worker!
 
 His dedication, connections, and incredible tenacity are what set him apart. He knows how to get things done, overcome obstacles, and guide his clients across the finish line, no matter how challenging the journey becomes.
