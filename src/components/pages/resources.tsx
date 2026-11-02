@@ -97,7 +97,7 @@ export default function ResourcesPage() {
             <div className="space-y-5 p-6">
               <CardHeader className="space-y-3 px-0 pt-0">
                 <Badge variant="secondary" className="w-fit uppercase tracking-wide">
-                  Upcoming book · Coming soon
+                  Upcoming book · November 17, 2026
                 </Badge>
                 <CardTitle className="text-2xl">{secondBookArticle.title}</CardTitle>
                 <CardDescription className="max-w-2xl text-sm leading-relaxed">

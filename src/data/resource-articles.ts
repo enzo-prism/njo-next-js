@@ -249,15 +249,15 @@ export const resourceArticles: ResourceArticle[] = [
   },
   {
     slug: "second-book",
-    title: "Dental Practice Transitions Handbook, Second Edition (Coming Soon)",
+    title: "Dental Practice Transitions Handbook, Second Edition",
     metaTitle: "Dental Practice Transitions Handbook, Second Edition | Michael A. Njo, DDS",
     description:
-      "Coming soon: the expanded second edition of Dr. Michael Njo's Dental Practice Transitions Handbook, with a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
+      "Launching November 17, 2026: Dr. Michael Njo's expanded Dental Practice Transitions Handbook, Second Edition, with a foreword by Dr. Glenn Vo.",
     excerpt:
-      "Dr. Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: a new foreword by Dr. Glenn Vo, new advisor material, and new appendices. Coming soon.",
+      "The expanded Second Edition launches November 17, 2026, with a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
     category: "Upcoming book",
     publishedAt: "2026-09-01T00:00:00Z",
-    updatedAt: "2026-09-02T00:00:00Z",
+    updatedAt: "2026-10-29T00:00:00Z",
     heroImage: {
       src: "/media/handbook-second-edition-coming-soon.webp",
       alt: "Coming soon announcement for the second edition of Dental Practice Transitions Handbook by Michael A. Njo, DDS, Founder of Practice Transitions Institute, with a foreword by Dr. Glenn Vo",
@@ -276,10 +276,10 @@ export const resourceArticles: ResourceArticle[] = [
     keyTakeaways: [
       "Dr. Michael Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates.",
       "The second edition adds a new foreword by Dr. Glenn Vo, new advisor material, and new appendices in a larger 6 x 9 format.",
-      "A release date has not been announced. The published first edition remains the current resource.",
+      "The Second Edition launches November 17, 2026. The Kindle purchase link will be added here when the new listing is confirmed.",
     ],
     intro: [
-      "Dr. Michael Njo is completing a substantially expanded and rewritten second edition of the Dental Practice Transitions Handbook. The title and subtitle stay the same; the content grows.",
+      "Launching November 17, 2026, Dr. Michael Njo's substantially expanded and rewritten second edition of the Dental Practice Transitions Handbook keeps the same title and subtitle while adding new material.",
     ],
     sections: [
       {
@@ -296,9 +296,9 @@ export const resourceArticles: ResourceArticle[] = [
       },
       {
         id: "until-release",
-        title: "Until the release",
+        title: "Launching November 17, 2026",
         paragraphs: [
-          "A release date has not been announced. Until then, start with the published first edition of Dental Practice Transitions Handbook, the same book Dr. Njo signs at Panel of Experts dinners and hands to General Practice Residency residents.",
+          "The Second Edition launches November 17, 2026. Purchase details will be added to this page when the new listing is confirmed.",
         ],
       },
     ],
@@ -311,11 +311,11 @@ export const resourceArticles: ResourceArticle[] = [
       {
         question: "When will the second edition be published?",
         answer:
-          "A publication date has not been announced. This page will be updated when pre-order or release details are ready.",
+          "The Second Edition launches November 17, 2026. The Kindle purchase link will be added here when the new listing is confirmed.",
       },
     ],
     closing: [
-      "If you want to be notified when the second edition is available, contact Dr. Njo. In the meantime, the first edition remains the resource to start with.",
+      "For questions about the Second Edition before its November 17 launch, contact Dr. Njo. The first-edition Amazon link below is for the earlier edition.",
     ],
     relatedLinks: [
       {

@@ -62,7 +62,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/resources/[slug]` (generated from resource article data)
   - `/resources/dental-exit-blueprint` (featured book-launch resource)
   - `/resources/the-unlocked-practice` (network recommendation with Dr. Njo’s comments and book link)
-  - `/resources/second-book` (upcoming expanded second edition of *Dental Practice Transitions Handbook*; foreword by Dr. Glenn Vo; no release date published)
+  - `/resources/second-book` (upcoming expanded second edition of *Dental Practice Transitions Handbook*; foreword by Dr. Glenn Vo; launching November 17, 2026; Second Edition purchase link pending)
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`
