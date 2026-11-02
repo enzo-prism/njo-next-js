@@ -230,6 +230,7 @@ Check these hotspots first when your work touches:
 - Do not change canonical host/protocol logic casually; multiple docs and checks depend on it.
 - Do not switch package managers unless the repo is intentionally migrated end-to-end.
 - Do not change testimonial author names casually without checking whether the generated slug changes.
+- When an author already has an entry, give the new one a fixed `slug` so the existing indexed slug does not move (Craig S. Yarborough's letter of recommendation uses `craig-yarborough-letter-of-recommendation`; his thank-you card keeps `craig-s-yarborough-dds-mba`). Letters keep their full text from the salutation through the closing, are dated by their own date in `publishedAt`, and leave the writer's personal contact details off the site.
 - Testimonial freshness uses `publishedAt` or a verified `receivedAt`; never infer an exact Google publication date from a relative edited-date label. Google and Alignable source badges identify supplied public reviews.
 - Do not add a new static public route without checking whether `src/config/routes.ts` should be updated too.
 

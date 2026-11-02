@@ -9,6 +9,11 @@ export type Testimonial = {
   receivedAt?: string;
   organization?: string;
   source?: TestimonialSource;
+  /**
+   * Fixed URL slug, for an author who already has an entry whose generated
+   * slug must not move (Craig S. Yarborough's thank-you card keeps its own).
+   */
+  slug?: string;
 };
 
 export type TestimonialPortrait = {
@@ -101,6 +106,36 @@ const sortByNewest = (
 };
 
 export const testimonials: Testimonial[] = [
+  {
+    quote: `To Whom It May Concern;
+
+This letter is in support of the abilities and contributions that Dr. Michael Njo voluntarily brought to University of the Pacific, Arthur A. Dugoni School of Dentistry and, in particular, the Dugoni Business Club.
+
+I am Dr. Craig Yarborough, former executive associate dean, associate dean for admissions, development and alumni relations, and director of the Center for Success at the Dugoni School which overlooked Dr. Njo's oversight with the Dugoni Business Club (DBC). Our relationship began in 2019 when former dean, Dr. Nader Nadershahi, brought him in as an asset and resource. I was fortunate to sit down with him early on to see what he could do with our fledgling but energetic and foundationally skilled DBC. The student members were educated in business and passionate but lacked focus, governance and direction. Dr. Njo immediately assessed the situation, implementing a strategic plan and the governance to sustain the consistent turnover of members that naturally occurred with graduation.
+
+His contributions were notable and impressive, organizing and creating infrastructure for success, implementing:
+- Bylaws
+- Creating roles and officers
+- Governing body - running the meeting like a "real" board...providing life experiences so that they are prepared to go right into leadership in their offices, communities and organized dentistry!
+- Succession plan
+- Standard Operating Procedures, SOP's, for events
+- Calendar of events
+
+This required broad communications among members and the communities they collaborated with, one of many strengths of Dr. Njo. Membership in the DBC increased six-fold, a tribute to his organizational skills, charisma, inspiration, motivation and passion for students, alumni, stakeholders and the profession.
+
+One of Michael's many strengths is his ability to collaborate and bring people together. This was represented by him establishing events and protocols such as inaugurating Dugoni Mixers at our Annual Alumni meeting, drawing initially 25 attendees in independent activity to 180 students, alumni and business entities and now sponsored by our Alumni Association. Additionally, he instituted an Annual Symposium, a kickoff for membership drive and fund raising from industry vendors to sponsor and support the club. With the increased in membership fees, speaker and sponsor contributions and other fund-raising, he encouraged and accomplished philanthropy among its members. This created a surplus of $15K, reducing membership fees and allowing the Club to adopt the habit of giving back. This started with a first-time gift of $1K to the Arthur Dugoni Scholarship with intent to make this an annual commitment.
+
+If you are looking for someone to engage your stakeholders, assess the organization's strengths and weaknesses, form a strategic plan and successfully implement it, Dr. Michael Njo is your man. I am happy to provide any additional comments upon request.
+
+Respectfully,`,
+    author: "Craig S. Yarborough, DDS, MBA",
+    stars: 5,
+    organization:
+      "Former Associate Dean and Director, Center for Success, University of the Pacific, Arthur A. Dugoni School of Dentistry",
+    // Letter of recommendation dated 6 January 2026, sent by Dr. Njo.
+    publishedAt: "2026-01-06",
+    slug: "craig-yarborough-letter-of-recommendation",
+  },
   {
     quote: `Michael Njo is truly a miracle worker!
 
@@ -770,7 +805,7 @@ export const testimonialPages: TestimonialPage[] = (() => {
       organization: entry.organization,
       source: entry.source,
     };
-    const base = slugify(testimonial.author || "testimonial");
+    const base = entry.slug ?? slugify(testimonial.author || "testimonial");
     const nextCount = (seen.get(base) || 0) + 1;
     seen.set(base, nextCount);
     const slug = nextCount === 1 ? base : `${base}-${nextCount}`;
