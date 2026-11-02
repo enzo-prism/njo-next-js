@@ -165,13 +165,13 @@ export default function ResourcesPage() {
                   </div>
                 </figure>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex flex-col gap-3">
                   <Button
                     asChild
-                    className="inline-flex w-full justify-center sm:w-auto"
+                    className="h-auto w-full whitespace-normal text-center"
                   >
                     <a href={book.url} target="_blank" rel="noopener noreferrer">
-                      View on Amazon
+                      View the first edition on Amazon
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </a>
                   </Button>
@@ -179,10 +179,10 @@ export default function ResourcesPage() {
                     <Button
                       asChild
                       variant="outline"
-                      className="inline-flex w-full justify-center sm:w-auto"
+                      className="h-auto w-full whitespace-normal text-center"
                     >
                       <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
-                        Second edition (coming soon)
+                        Second edition launches Nov 17, 2026
                       </Link>
                     </Button>
                   ) : null}

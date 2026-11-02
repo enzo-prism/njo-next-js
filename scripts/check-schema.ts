@@ -45,6 +45,26 @@ for (const path of paths) {
   });
 }
 
+const homeSchema = buildPageStructuredData("/");
+assert.ok(homeSchema, "Expected structured data for the home page");
+const homeGraph = homeSchema["@graph"] as Array<Record<string, unknown>>;
+const handbookBook = homeGraph.find((node) => node["@type"] === "Book" && node.isbn === "1627878718");
+assert.ok(handbookBook, "Home schema must include the published handbook Book node");
+assert.equal(
+  handbookBook.url,
+  "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
+);
+assert.match(
+  String(handbookBook.bookEdition || ""),
+  /first edition/i,
+  "Published Amazon handbook Book schema must label bookEdition as the first edition",
+);
+assert.match(
+  String(handbookBook.name || ""),
+  /first edition/i,
+  "Published Amazon handbook Book schema name must label the existing Amazon book as the first edition",
+);
+
 const dentalExitBlueprintPath = buildResourceArticlePath("dental-exit-blueprint");
 const dentalExitBlueprintSchema = buildPageStructuredData(dentalExitBlueprintPath);
 assert.ok(dentalExitBlueprintSchema, "Expected structured data for the Dental Exit Blueprint launch");

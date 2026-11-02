@@ -262,9 +262,10 @@ const getResourceNodes = (): SchemaNode[] =>
       const bookNode: SchemaNode = {
         "@type": "Book",
         "@id": bookId,
-        name: resource.name,
+        name: `${resource.name}, First Edition`,
         description: resource.description,
         isbn: "1627878718",
+        bookEdition: "First Edition",
         url: resource.url,
         author: {
           "@id": personProfile.id,

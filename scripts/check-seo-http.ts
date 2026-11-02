@@ -5,8 +5,90 @@ import { testimonialPages } from "@/data/testimonials";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { withNextServer } from "./lib/next-server";
 
+const FIRST_EDITION_ASIN = "1627878718";
+const LAUNCH_DATE = "November 17, 2026";
+const AMAZON_LINK_RE = /<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g;
+
 function parseSitemapLocs(xml: string) {
   return [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1]);
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function visibleLinkLabel(html: string) {
+  return decodeHtmlEntities(html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
+}
+
+function parseJsonLdGraphs(html: string): Array<Record<string, unknown>> {
+  const nodes: Array<Record<string, unknown>> = [];
+  for (const [, json] of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    const data = JSON.parse(json) as Record<string, unknown>;
+    const graph = data["@graph"];
+    if (Array.isArray(graph)) {
+      nodes.push(...(graph as Array<Record<string, unknown>>));
+    } else {
+      nodes.push(data);
+    }
+  }
+  return nodes;
+}
+
+function readMetaDescription(html: string) {
+  const encoded = html.match(/<meta name="description" content="([^"]*)"/)?.[1];
+  assert.ok(encoded, "Page must expose a meta description");
+  return decodeHtmlEntities(encoded);
+}
+
+function findFaqAnswer(html: string, questionPattern: RegExp) {
+  for (const node of parseJsonLdGraphs(html)) {
+    if (node["@type"] !== "FAQPage") continue;
+    const entities = node.mainEntity;
+    if (!Array.isArray(entities)) continue;
+    for (const entity of entities) {
+      if (!entity || typeof entity !== "object") continue;
+      const question = entity as Record<string, unknown>;
+      if (typeof question.name !== "string" || !questionPattern.test(question.name)) continue;
+      const accepted = question.acceptedAnswer;
+      if (!accepted || typeof accepted !== "object") continue;
+      const text = (accepted as Record<string, unknown>).text;
+      if (typeof text === "string") return text;
+    }
+  }
+  return undefined;
+}
+
+function assertAmazonLinksStayFirstEdition(
+  html: string,
+  pageLabel: string,
+) {
+  const amazonLinks = [...html.matchAll(AMAZON_LINK_RE)];
+  const handbookLinks = amazonLinks.filter(([, href]) => href.includes(FIRST_EDITION_ASIN));
+  assert.ok(handbookLinks.length > 0, `${pageLabel} must keep the first-edition Amazon destination`);
+  for (const [, href, labelHtml] of amazonLinks) {
+    const label = visibleLinkLabel(labelHtml);
+    assert.doesNotMatch(
+      label,
+      /second edition/i,
+      `${pageLabel} must not label an Amazon CTA as the Second Edition (saw "${label}" for ${href})`,
+    );
+  }
+  for (const [, , labelHtml] of handbookLinks) {
+    const label = visibleLinkLabel(labelHtml);
+    assert.match(
+      label,
+      /first edition/i,
+      `${pageLabel} Amazon CTA for ASIN ${FIRST_EDITION_ASIN} must be labeled as the first edition (saw "${label}")`,
+    );
+  }
 }
 
 async function main() {
@@ -91,19 +173,77 @@ async function main() {
     }
 
     // The book campaign must lead to current prelaunch information, not an old-edition purchase CTA.
-    const secondBookResponse = await fetch(`${baseUrl}/resources/second-book`);
+    const [secondBookResponse, llmsResponse] = await Promise.all([
+      fetch(`${baseUrl}/resources/second-book`),
+      fetch(`${baseUrl}/llms.txt`),
+    ]);
     assert.equal(secondBookResponse.status, 200, "Second Edition page must render");
-    const secondBookHtml = await secondBookResponse.text();
-    assert.ok(secondBookHtml.includes("November 17, 2026"), "Second Edition page must show the confirmed launch date");
+    assert.equal(llmsResponse.status, 200, "llms.txt must remain accessible");
+    const [secondBookHtml, llmsText] = await Promise.all([
+      secondBookResponse.text(),
+      llmsResponse.text(),
+    ]);
     assert.ok(resourcesHtml.includes("Upcoming book · November 17, 2026"), "Resources feature must show the same launch date");
+    assert.ok(
+      resourcesHtml.includes("Second edition launches Nov 17, 2026"),
+      "Resources hub first-edition card must use the dated Second Edition CTA",
+    );
+    assert.ok(
+      !resourcesHtml.includes("Second edition (coming soon)"),
+      "Resources hub must not keep the undated coming-soon CTA beside the first-edition Amazon button",
+    );
     assert.ok(!secondBookHtml.includes("date has not been announced"), "Second Edition page must not retain the superseded release status");
     assert.ok(secondBookHtml.includes("purchase link will be added here when the new listing is confirmed"), "Prelaunch page must not imply a verified purchase destination");
-    const amazonLinks = [...secondBookHtml.matchAll(/<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g)];
-    assert.ok(amazonLinks.length > 0, "Existing first-edition resource should remain explicitly available");
-    for (const [, href, label] of amazonLinks) {
-      assert.ok(href.includes("1627878718"), "Prelaunch must not invent a new Second Edition purchase destination");
-      assert.match(label, /first edition/i, "Earlier edition purchase link must remain clearly labeled");
-    }
+    assert.ok(
+      !secondBookHtml.includes("Amazon link below"),
+      "First-edition Amazon link must not be described as below the article",
+    );
+    assert.ok(
+      secondBookHtml.includes("first-edition Amazon link is for the earlier edition"),
+      "Second Edition closing must still point readers to the first-edition Amazon link",
+    );
+
+    const secondBookMeta = readMetaDescription(secondBookHtml);
+    assert.match(
+      secondBookMeta,
+      new RegExp(LAUNCH_DATE),
+      `Second Edition meta description must include ${LAUNCH_DATE}`,
+    );
+    const publicationFaq = findFaqAnswer(secondBookHtml, /when will the second edition/i);
+    assert.ok(publicationFaq, "Second Edition FAQ must include the publication-date question");
+    assert.match(
+      publicationFaq,
+      new RegExp(LAUNCH_DATE),
+      `Second Edition FAQ answer must include ${LAUNCH_DATE}`,
+    );
+
+    const secondBookLlmsLine = llmsText.split("\n").find((line) => line.includes("/resources/second-book"));
+    assert.ok(secondBookLlmsLine, "llms.txt must describe /resources/second-book");
+    assert.match(
+      secondBookLlmsLine,
+      new RegExp(LAUNCH_DATE),
+      `llms.txt second-book line must include ${LAUNCH_DATE}`,
+    );
+    const firstEditionLlmsLine = llmsText.split("\n").find((line) => line.includes(FIRST_EDITION_ASIN));
+    assert.ok(firstEditionLlmsLine, "llms.txt must keep the existing first-edition Amazon destination");
+    assert.match(
+      firstEditionLlmsLine,
+      /first edition/i,
+      "llms.txt must label the existing Amazon book as the first edition",
+    );
+
+    assertAmazonLinksStayFirstEdition(secondBookHtml, "Second Edition page");
+    assertAmazonLinksStayFirstEdition(resourcesHtml, "Resources hub");
+
+    const handbookBookNode = parseJsonLdGraphs(homeHtml).find(
+      (node) => node["@type"] === "Book" && node.isbn === FIRST_EDITION_ASIN,
+    );
+    assert.ok(handbookBookNode, "Home JSON-LD must include the published handbook Book node");
+    assert.match(
+      String(handbookBookNode.bookEdition || handbookBookNode.name || ""),
+      /first edition/i,
+      "Home Book structured data must label the existing Amazon book as the first edition",
+    );
 
     assert.match(
       robotsText,
