@@ -19,6 +19,7 @@ export const STATIC_SITE_PATHS = [
   "/navigating-dental-insurance-podcast",
   "/testimonials",
   "/resources",
+  "/books",
   "/dentalflix",
   "/phillips-event",
   "/contact",
