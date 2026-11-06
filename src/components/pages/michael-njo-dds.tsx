@@ -33,6 +33,7 @@ import { EventOccurrenceDetails } from "@/components/events/event-occurrence-det
 import { IrreplaceableNewsCard, newsCardDateClass } from "@/components/irreplaceable-news-card";
 import { communityPosts } from "@/data/community-posts";
 import { getUpcomingEventPrograms } from "@/data/events";
+import { getPastEventYears } from "@/data/past-events";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
@@ -98,6 +99,7 @@ export default function MichaelNjoDDS({
   const upcomingEventPrograms = getUpcomingEventPrograms(
     new Date(referenceDateIso),
   );
+  const pastEventYears = getPastEventYears(new Date(referenceDateIso));
   const [activeTab, setActiveTab] = useState<ProfileTab>(initialTab);
   const [selectedImage, setSelectedImage] =
     useState<EditorialMediaAsset | null>(null);
@@ -1076,6 +1078,63 @@ export default function MichaelNjoDDS({
                   </a>
                 </Button>
               </div>
+            ) : null}
+
+            {pastEventYears.length > 0 ? (
+              <section
+                id="past-events"
+                aria-labelledby="past-events-heading"
+                className={`${panel} scroll-mt-28 space-y-6`}
+              >
+                <div className="space-y-1">
+                  <h3
+                    id="past-events-heading"
+                    className="font-serif text-xl font-semibold"
+                  >
+                    Past events
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    A look back at recent seminars, dinners, and workshops.
+                  </p>
+                </div>
+                {pastEventYears.map(({ year, events }) => (
+                  <div key={year} className="space-y-3">
+                    <h4 className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
+                      {year} events
+                    </h4>
+                    <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                      {events.map((event) => (
+                        <li
+                          key={event.id}
+                          className="relative overflow-hidden rounded-lg border border-border/70 bg-surface p-4 pt-5"
+                        >
+                          {event.soldOut ? (
+                            <span className="absolute right-0 top-0 rounded-bl-lg bg-red-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+                              Sold out
+                            </span>
+                          ) : (
+                            <span className="absolute right-0 top-0 rounded-bl-lg bg-muted px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                              Completed
+                            </span>
+                          )}
+                          <p className="text-xs font-semibold capitalize text-brand">
+                            {event.category}
+                          </p>
+                          <p className="mt-1 pr-16 text-sm font-medium leading-snug">
+                            {event.title}
+                          </p>
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            {event.dateLabel}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {event.city}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </section>
             ) : null}
 
             <div className={`${panel} space-y-3`}>
