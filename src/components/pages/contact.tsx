@@ -20,7 +20,7 @@ import { serviceInterestOptions } from "@/data/service-interest-options";
 import { FORMSPREE_ENDPOINTS } from "@/config/form-backends";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/config/site";
 import { appendFormspreeOpsMetadata } from "@/lib/formspree-ops";
-import { CONTACT_FORM_LEAD_PARAMS, recordFormLead } from "@/lib/ga4";
+import { CONTACT_FORM_LEAD_PARAMS, markContactSubmissionSuccess, recordFormLead } from "@/lib/ga4";
 import {
   isLeadFormRateLimited,
   LEAD_FORM_LIMITS,
@@ -106,6 +106,7 @@ export default function Contact() {
       }
       markLeadFormSubmitted("contact");
       trackAnalyticsEvent("form_success", { form: "contact", path: window.location.pathname });
+      markContactSubmissionSuccess();
       recordFormLead(CONTACT_FORM_LEAD_PARAMS);
       router.push("/contact/success");
     } catch (err) {

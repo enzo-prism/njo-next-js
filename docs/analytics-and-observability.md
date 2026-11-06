@@ -10,8 +10,7 @@ The site currently uses three analytics/behavior tools:
 - Google Analytics for broader traffic reporting
 - Hotjar for behavior/session insight
 
-Consent model (changed 2026-11-02; the opt-in-only model from 2026-08-17 cut GA4 sessions from
-~186/month to ~11, because most visitors never answer the banner):
+Consent model (implemented in the November 6, 2026 production release; the August 17 opt-in change coincided with GA4 sessions falling from 186 in August to 11 in September. GSC clicks increased from 31 to 51, so GA4 alone cannot establish a real traffic collapse):
 
 - **Google Analytics is opt-out.** It loads on first visit with Google Consent Mode v2:
   `analytics_storage` defaults to `granted`, except for EEA/UK/CH visitors where Google applies a
@@ -114,12 +113,12 @@ Allowlisted lead events live in `src/lib/ga4.ts`. They send only sanitized param
 | Source | When it fires | Params |
 | --- | --- | --- |
 | Contact Formspree form | After `res.ok` in `src/components/pages/contact.tsx`, before the `/contact/success` redirect | `form_id=contact`, `form_name=contact`, `lead_source=website_contact_form`, `location=contact`, `method=form`, `contact_method=form` |
-| `/contact/success` safety net | Once per dedupe window via `ContactSuccessLeadTracker` | Same `form_id=contact` params as the form |
+| `/contact/success` safety net | Only after a recent confirmed submission, once per dedupe window via `ContactSuccessLeadTracker` | Same `form_id=contact` params as the form |
 | Calendly popup | Only on `calendly.event_scheduled` postMessage, never on "Book a call" click | `form_id=calendly`, `form_name=calendly`, `lead_source=website_calendly`, `location` from the current pathname slug, `method=calendly`, `contact_method=calendly` |
 
 Booking CTAs still render `<a href={BOOKING_URL}>` / `<a href={DSO_PRICING_BOOKING_URL}>` for no-JS and for `check:contact-ctas`. `CalendlyLeadTracker` (mounted once from the root layout) warms the official popup widget only after pointer, keyboard, or touch intent on a booking link, and intercepts a primary click only when `window.Calendly` is already available. If the widget is missing or blocked, the native new-tab link proceeds. New-tab bookings do not fire `generate_lead` because the scheduled-event message never reaches this page. Widget script/CSS URLs and postMessage origins live in `src/config/site.ts`. The global Content Security Policy must allow `CALENDLY_ASSETS_ORIGIN` (scripts, styles, fonts, images, connect) and `CALENDLY_MESSAGE_ORIGINS` (frames and connect) or the popup is blocked and every booking click opens a new tab.
 
-`recordFormLead` checks canonical production host and accepted analytics consent before setting its dedupe marker or dispatching. The event then uses the same consent-gated event path as other analytics events, so a pre-consent form submission cannot queue a lead for later transmission.
+`recordFormLead` checks the canonical production host and GA eligibility (unless declined) before setting its dedupe marker or dispatching. Regional Consent Mode controls analytics storage. Declined submissions cannot queue a lead for later transmission. The thank-you safety net additionally requires a successful Formspree submission marker from the preceding 10 minutes; opening the URL directly cannot create a lead.
 
 Phillips event form, click-to-call, and email links do not fire `generate_lead`.
 

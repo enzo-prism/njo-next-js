@@ -263,3 +263,5 @@ If your current network still resolves an older apex IP after DNS changes, verif
 ## October 23 backlog reconciliation
 
 The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).

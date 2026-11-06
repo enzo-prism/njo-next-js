@@ -1,3 +1,4 @@
+import { markContactSubmissionSuccess, hasRecentContactSubmissionSuccess } from "@/lib/ga4";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -141,3 +142,14 @@ checkLeadFormResolver().then(() => {
   console.error(error);
   process.exitCode = 1;
 });
+
+
+const memory = new Map<string, string>();
+const originalWindow = globalThis.window;
+Object.defineProperty(globalThis, "window", { configurable: true, value: { location: { hostname: "michaelnjodds.com" }, localStorage: { getItem: () => "accepted" }, sessionStorage: { getItem: (key: string) => memory.get(key) ?? null, setItem: (key: string, value: string) => memory.set(key, value) } } });
+assert.equal(hasRecentContactSubmissionSuccess(), false, "Direct visits to the thank-you URL must not create a lead");
+markContactSubmissionSuccess();
+assert.equal(hasRecentContactSubmissionSuccess(), true, "An accepted form submission enables the safety net");
+memory.set("njo_confirmed_contact_submission", String(Date.now() - 11 * 60 * 1000));
+assert.equal(hasRecentContactSubmissionSuccess(), false, "Expired submission markers must not create leads");
+Object.defineProperty(globalThis, "window", { configurable: true, value: originalWindow });

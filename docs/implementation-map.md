@@ -427,7 +427,7 @@ The env helper intentionally trims whitespace. Do not remove that behavior witho
 - `CalendlyLeadTracker` (booking popup + `event_scheduled` lead events)
 
 `src/lib/ga4.ts` owns allowlisted `generate_lead` params, canonical-host/consent checks, and
-sessionStorage dedupe. Contact Formspree success and the `/contact/success` safety net share
+sessionStorage dedupe. The thank-you safety net requires a successful Formspree marker less than 10 minutes old; direct visits do not count. Contact Formspree success and the `/contact/success` safety net share
 `form_id=contact`. Calendly fires only on `event_scheduled`, and its widget assets warm only after
 booking intent.
 
@@ -538,3 +538,5 @@ October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento.
 ## October 23 backlog reconciliation
 
 The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](seo-aeo-release-2026-11-06.md).

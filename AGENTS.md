@@ -246,3 +246,5 @@ Update these together when behavior changes:
 - the specific runbook in `docs/`
 
 October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento. Only date and venue are confirmed; preserve the date-only schema and "Details to follow" status until more details are approved.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).

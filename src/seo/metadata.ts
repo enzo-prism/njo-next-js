@@ -150,7 +150,7 @@ export function buildPageTitle(pathname: string): string {
     case "/resources":
       return "Resources | Michael Njo, DDS";
     case "/books":
-      return "Books by Michael Njo, DDS | Dental Practice Transitions Handbook";
+      return "Dental Practice Transitions Handbook & Books | Michael Njo, DDS";
     case "/dentalflix":
       return "DentalFlix Referral Offer | Michael Njo, DDS";
     case "/contact":

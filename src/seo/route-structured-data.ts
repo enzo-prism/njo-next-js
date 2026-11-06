@@ -12,6 +12,7 @@ import {
   getContactStructuredData,
   getContactSuccessStructuredData,
   getHomeStructuredData,
+  getBooksStructuredData,
   getMichaelNjoInterviewStructuredData,
   getMichaelNjoStructuredData,
   getPodcastEpisodeStructuredData,
@@ -354,7 +355,9 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
     articleNode.articleBody = networkResource.recommendation.paragraphs.join("\n\n");
   }
 
-  const bookNode: SchemaNode | null = launch
+  const bookNode: SchemaNode | null = article.slug === "second-book"
+    ? { "@type": "Book", "@id": bookId, name: article.title, bookEdition: "Second edition", url: detailUrl, author: { "@id": PERSON_NODE_ID } }
+    : launch
     ? {
         "@type": "Book",
         "@id": bookId,
@@ -530,6 +533,8 @@ export function buildPageStructuredData(pathname: string): SchemaNode | null {
   if (normalizedPath === "/navigating-dental-insurance-podcast") {
     return getPodcastEpisodeStructuredData();
   }
+
+  if (normalizedPath === "/books") return getBooksStructuredData();
 
   if (normalizedPath === "/resources") {
     return buildResourcesCollectionStructuredData();

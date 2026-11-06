@@ -12,6 +12,8 @@ export type ServiceDetail = {
   name: string;
   description: string;
   audience: string;
+  href?: string;
+  linkLabel?: string;
 };
 
 export type ResourceHighlight = {
@@ -39,8 +41,7 @@ export const siteMetadata = {
   description:
     "Dr. Michael Njo mentors dentists, physicians, and entrepreneurs through Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute.",
   sameAs: [
-    "https://practicetransitionsinstitute.com/",
-    "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
+    "https://practicetransitionsinstitute.com/drnjo",
   ],
   logo: SOCIAL_SHARE_IMAGE.url,
 };
@@ -89,6 +90,8 @@ export const faqItems: FAQItem[] = [
 export const services: ServiceDetail[] = [
   {
     name: "Practice launches and acquisitions",
+    href: "https://practicetransitionsinstitute.com/services/buying",
+    linkLabel: "Explore acquisition guidance at PTI",
     description:
       "Coaching for dentists planning a start-up or purchase, including diligence, deal structure, and operational onboarding.",
     audience: "Dentists planning a new practice or expanding to a second location",
@@ -101,6 +104,8 @@ export const services: ServiceDetail[] = [
   },
   {
     name: "Practice valuations and transitions",
+    href: "https://practicetransitionsinstitute.com/services/value",
+    linkLabel: "Explore practice valuation at PTI",
     description:
       "Comprehensive valuations, partnership design, retirement roadmaps, and seller/buyer alignment to protect legacy and staff.",
     audience: "Doctors preparing for retirement, partnership changes, or chart sales",
@@ -269,9 +274,7 @@ const getResourceNodes = (): SchemaNode[] =>
         author: {
           "@id": personProfile.id,
         },
-        publisher: {
-          "@id": organizationProfile.id,
-        },
+        bookEdition: "First edition",
       };
       return bookNode;
     }
@@ -304,7 +307,6 @@ const getCoreGraphNodes = (): SchemaNode[] => {
     legalName: organizationProfile.legalName,
     url: organizationProfile.url,
     logo: organizationProfile.logo,
-    sameAs: siteMetadata.sameAs,
     contactPoint,
     founder: {
       "@id": personProfile.id,
@@ -321,6 +323,7 @@ const getCoreGraphNodes = (): SchemaNode[] => {
     url: siteMetadata.siteUrl,
     image: heroImage.url,
     sameAs: siteMetadata.sameAs,
+    affiliation: { "@type": "Organization", "@id": "https://practicetransitionsinstitute.com/#business", name: "Practice Transitions Institute", url: "https://practicetransitionsinstitute.com/" },
     worksFor: {
       "@id": organizationProfile.id,
     },
@@ -337,7 +340,7 @@ const getCoreGraphNodes = (): SchemaNode[] => {
 
   const webSite = {
     "@type": "WebSite",
-    "@id": `${siteMetadata.siteUrl}#website`,
+    "@id": `${siteMetadata.siteUrl}/#website`,
     url: siteMetadata.siteUrl,
     name: siteMetadata.name,
     alternateName: siteMetadata.alternateName,
@@ -390,7 +393,7 @@ const buildWebPage = ({
   description,
   inLanguage: "en",
   isPartOf: {
-    "@id": `${siteMetadata.siteUrl}#website`,
+    "@id": `${siteMetadata.siteUrl}/#website`,
   },
   breadcrumb: {
     "@id": breadcrumbId,
@@ -529,7 +532,7 @@ export const getHomeStructuredData = () => {
       url: siteMetadata.siteUrl,
       breadcrumbId: breadcrumb["@id"] as string,
     }),
-    "@type": ["WebPage", "ProfilePage"],
+    "@type": "WebPage",
     mainEntity: {
       "@id": personProfile.id,
     },
@@ -644,3 +647,10 @@ export const getContactSuccessStructuredData = () => {
     "@graph": graph,
   };
 };
+
+export function getBooksStructuredData() {
+  const url = `${siteMetadata.siteUrl}/books`;
+  const first = { "@type": "Book", "@id": `${url}#first-edition`, name: "Dental Practice Transitions Handbook", bookEdition: "First edition", isbn: "1627878718", url: resources[0].url, author: { "@id": personProfile.id } };
+  const second = { "@type": "Book", "@id": `${siteMetadata.siteUrl}/resources/second-book#book`, name: "Dental Practice Transitions Handbook, Second Edition", bookEdition: "Second edition", url: `${siteMetadata.siteUrl}/resources/second-book`, author: { "@id": personProfile.id } };
+  return { "@context": "https://schema.org", "@graph": [...getCoreGraphNodes(), first, second, { "@type": "CollectionPage", "@id": `${url}#webpage`, url, name: "Books by Dr. Michael Njo", mainEntity: { "@type": "ItemList", itemListElement: [first, second].map((book, i) => ({ "@type": "ListItem", position: i + 1, item: { "@id": book["@id"] } })) } }] };
+}

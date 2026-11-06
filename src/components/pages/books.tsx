@@ -1,3 +1,4 @@
+import { AuthorityResources } from "@/components/authority-resources";
 import { ArrowRight, BookOpen, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,8 +38,8 @@ export default function BooksPage() {
         <SectionHeading
           as="h1"
           eyebrow="Books"
-          title="Books by Dr. Michael Njo"
-          description="Dr. Michael A. Njo, DDS is the author of the Dental Practice Transitions Handbook, the guide dentists use to plan, buy, sell, and structure practice transitions, and a contributing author to The Dental Exit Blueprint. His writing turns more than three decades of transition experience into clear, practical guidance for every stage of practice ownership."
+          title="Dental Practice Transitions Handbook & Books by Dr. Njo"
+          description="Dr. Michael A. Njo, DDS is the author of the Dental Practice Transitions Handbook, the guide dentists use to plan, buy, sell, and structure practice transitions, and a contributing author to The Dental Exit Blueprint. His writing turns more than two decades of advising practice owners into clear, practical guidance for every stage of practice ownership."
         />
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild variant="outline">
@@ -286,6 +287,7 @@ export default function BooksPage() {
           </div>
         </div>
       </Section>
+    <AuthorityResources />
     </>
   );
 }
