@@ -140,8 +140,21 @@ assert.equal(valentina.publishedAt, undefined, "Do not turn a Google Business Pr
 assert.equal(valentina.receivedAt, "2026-10-19");
 assert.equal(valentina.photo, undefined, "Valentina Holina must stay quote-only with no initials avatar.");
 assert.equal(valentina.quote, valentinaQuote, "Keep the client-supplied review source-exact, including paragraph breaks.");
-assert.equal(testimonialPages[0].slug, valentina.slug, "The newly received review should appear first.");
-assert.equal(getLatestFiveStarTestimonial()?.slug, valentina.slug, "The homepage should surface the newly received five-star review.");
+assert.equal(testimonialPages[1].slug, valentina.slug, "Valentina's review should follow the newer John Senat review.");
+
+const johnSenatQuote = "I decided to bring Michael on board because, from the very beginning, he gave me a sense of confidence, reassurance, and genuine support as I prepared for one of the biggest transitions of my career becoming a dental practice owner. Although you were initially recommended by the previous practice owner, someone whose judgment I deeply respect, it was through our personal interactions that I developed my own trust and appreciation for your character and expertise. What stood out most was your willingness to listen, offer guidance, and make yourself available even before we established a formal working relationship. Every conversation left me feeling that I had someone in my corner who genuinely wanted to see me succeed. I quickly realized that, for you, business is about more than numbers; it is about relationships, trust, and building a strong foundation for lasting success. My journey has taught me the importance of surrounding myself with people who believe in my vision, and I am grateful that our paths crossed. I look forward to learning from you, growing together, and building something meaningful as an owner. Here's to a successful future and a lasting relationship built on trust, respect, and shared success!";
+
+const johnSenat = testimonialPages.find((testimonial) => testimonial.author === "John Senat");
+assert.ok(johnSenat, "John Senat's supplied Google review must be included.");
+assert.equal(johnSenat.source, "google");
+assert.equal(johnSenat.stars, 5);
+assert.equal(johnSenat.slug, "john-senat");
+assert.equal(johnSenat.publishedAt, undefined, "Do not turn a Google Business Profile notification into a publication date.");
+assert.equal(johnSenat.receivedAt, "2026-10-31");
+assert.equal(johnSenat.photo, undefined, "John Senat must stay quote-only with no initials avatar.");
+assert.equal(johnSenat.quote, johnSenatQuote, "Keep the client-supplied review source-exact.");
+assert.equal(testimonialPages[0].slug, johnSenat.slug, "The newly received review should appear first.");
+assert.equal(getLatestFiveStarTestimonial()?.slug, johnSenat.slug, "The homepage should surface the newly received five-star review.");
 
 const tanya = testimonialPages.find((testimonial) => testimonial.author === "Tanya Harris");
 assert.ok(tanya, "Tanya Harris's supplied Google review must be included.");
