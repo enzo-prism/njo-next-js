@@ -51,7 +51,7 @@ assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
 assert.equal(
   augustView[0].nextOccurrence.location,
-  "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+  "1201 K St, 14th Floor, Sacramento, CA",
 );
 assert.equal(augustView[0].upcomingDates.length, 4);
 assert.equal(augustView[0].completedOccurrences.length, 2);
@@ -80,7 +80,7 @@ assert.equal(afterSanFrancisco.length, 2, "Sacramento October 15, 2027 should re
 assert.equal(afterSanFrancisco[0].nextDateLabel, "October 15, 2027");
 assert.equal(
   afterSanFrancisco[0].nextOccurrence.location,
-  "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+  "1201 K St, 14th Floor, Sacramento, CA",
 );
 
 const afterFinal = getUpcomingEventPrograms(new Date("2027-10-16T00:00:00-07:00"));
@@ -199,16 +199,16 @@ assert.equal(
 );
 const sacramento = seminar?.upcomingDates?.find((occurrence) => occurrence.id === "sacramento-seminar-oct-2026");
 assert.ok(sacramento, "Sacramento October 2 occurrence must keep a stable calendar id");
-assert.equal(sacramento?.location, "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento?.location, "1201 K St, 14th Floor, Sacramento, CA");
 assert.equal(sacramento?.timeLabel, "8am - 3pm");
 assert.equal(sacramento?.startDateTime, "2026-10-02T08:00:00-07:00");
 assert.equal(sacramento?.endDateTime, "2026-10-02T15:00:00-07:00");
 assert.equal(sacramento?.flyerImage, "/media/sacramento-seminar-oct-2026.webp");
 assert.equal(
   sacramento?.flyerImageAlt,
-  "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 at TDIC Headquarters.",
+  "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 in Sacramento.",
 );
-assert.equal(sacramento?.guestLabel, "Special Sacramento guest: TDIC");
+assert.equal(sacramento?.guestLabel, undefined, "Do not name a specific firm as the Sacramento guest");
 assert.deepEqual(
   sacramento?.speakers?.map((speaker) => speaker.name),
   ["Liz Armato", "Dr. Michael Njo"],
@@ -248,7 +248,7 @@ const sacramento2027 = seminar?.upcomingDates?.find((occurrence) =>
 assert.ok(sacramento2027, "Sacramento October 15, 2027 must be on the seminar calendar");
 assert.equal(sacramento2027?.dateLabel, "October 15, 2027");
 assert.equal(sacramento2027?.timeLabel, "8am - 3pm");
-assert.equal(sacramento2027?.location, "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento2027?.location, "1201 K St, 14th Floor, Sacramento, CA");
 assert.equal(sacramento2027?.endDateTime, "2027-10-15T15:00:00-07:00");
 assert.equal(sacramento2027?.flyerImage, undefined, "Do not reuse the 2026 Sacramento flyer on the 2027 date");
 

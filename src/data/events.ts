@@ -145,6 +145,38 @@ export function getUpcomingEventPrograms(
   });
 }
 
+export type PreviousEventProgram = EventProgram & {
+  completedOccurrences: EventOccurrence[];
+};
+
+/**
+ * Builds the Previous Events grouping: every completed occurrence from the
+ * editorial programs, including programs with no upcoming dates left (which
+ * `getUpcomingEventPrograms` drops entirely). Occurrences sort newest first
+ * inside each program, and programs sort by their most recent completed date.
+ * Like `getUpcomingEventPrograms`, this never mutates the editorial source.
+ */
+export function getPreviousEventPrograms(
+  referenceDate: Date,
+  programs: readonly EventProgram[] = eventPrograms,
+): PreviousEventProgram[] {
+  return programs
+    .map((program) => {
+      const completedOccurrences = getProgramOccurrences(program)
+        .filter((occurrence) => !isEventOccurrenceUpcoming(occurrence, referenceDate))
+        .sort(
+          (left, right) => parseDateTime(right.startDateTime) - parseDateTime(left.startDateTime),
+        );
+      return { ...program, completedOccurrences };
+    })
+    .filter((program) => program.completedOccurrences.length > 0)
+    .sort(
+      (left, right) =>
+        parseDateTime(right.completedOccurrences[0].startDateTime) -
+        parseDateTime(left.completedOccurrences[0].startDateTime),
+    );
+}
+
 export const eventPrograms: EventProgram[] = [
   {
     slug: "mastering-your-dental-transition",
@@ -185,14 +217,13 @@ export const eventPrograms: EventProgram[] = [
         id: "sacramento-seminar-oct-2026",
         dateLabel: "October 2, 2026",
         timeLabel: "8am - 3pm",
-        location: "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+        location: "1201 K St, 14th Floor, Sacramento, CA",
         startDateTime: "2026-10-02T08:00:00-07:00",
         endDateTime: "2026-10-02T15:00:00-07:00",
         flyerImage: "/media/sacramento-seminar-oct-2026.webp",
         flyerImageAlt:
-          "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 at TDIC Headquarters.",
+          "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 in Sacramento.",
         headline: "Before you buy, expand, partner, or sell / Know your options",
-        guestLabel: "Special Sacramento guest: TDIC",
         speakers: [
           { name: "Liz Armato", title: "COO" },
           { name: "Dr. Michael Njo", title: "Founder & Lead Transition Consultant" },
@@ -231,7 +262,7 @@ export const eventPrograms: EventProgram[] = [
       {
         dateLabel: "October 15, 2027",
         timeLabel: "8am - 3pm",
-        location: "TDIC Headquarters, 1201 K St, 14th Floor, Sacramento, CA",
+        location: "1201 K St, 14th Floor, Sacramento, CA",
         startDateTime: "2027-10-15T08:00:00-07:00",
         endDateTime: "2027-10-15T15:00:00-07:00",
       },

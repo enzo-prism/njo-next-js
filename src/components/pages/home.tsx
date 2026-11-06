@@ -49,7 +49,8 @@ import {
   gprResidencyPresentationImage,
 } from "@/data/media";
 import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
-import { getUpcomingEventPrograms } from "@/data/events";
+import { PreviousEventsList } from "@/components/events/previous-events";
+import { getPreviousEventPrograms, getUpcomingEventPrograms } from "@/data/events";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
 
@@ -154,6 +155,7 @@ export default function Home({
   const shortReview =
     bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
   const upcomingEventPrograms = getUpcomingEventPrograms(referenceDate);
+  const previousEventPrograms = getPreviousEventPrograms(referenceDate);
 
   return (
     <>
@@ -532,6 +534,18 @@ export default function Home({
               </div>
             ))}
           </div>
+        </Section>
+      ) : null}
+
+      {/* Previous events */}
+      {previousEventPrograms.length > 0 ? (
+        <Section tone="surface" id="previous-events">
+          <SectionHeading
+            eyebrow="Previous events"
+            title="Previous events"
+            description="Completed seminar dates and programs from Dr. Njo's current speaking series."
+          />
+          <PreviousEventsList programs={previousEventPrograms} />
         </Section>
       ) : null}
 

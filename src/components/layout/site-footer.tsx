@@ -12,6 +12,7 @@ const footerLinks = [
   { href: "/dr-michael-njo-interview", label: "Interview" },
   { href: "/navigating-dental-insurance-podcast", label: "Podcast" },
   { href: "/testimonials", label: "Testimonials" },
+  { href: "/books", label: "Books" },
   { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },
 ];
