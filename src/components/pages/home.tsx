@@ -402,7 +402,9 @@ export default function Home({
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2"
                   >
-                    View on Amazon
+                    {book.url.includes("1627878718")
+                      ? "View the first edition on Amazon"
+                      : "View on Amazon"}
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 </Button>

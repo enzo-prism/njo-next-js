@@ -321,7 +321,7 @@ export const resourceArticles: ResourceArticle[] = [
       },
     ],
     closing: [
-      "For questions about the Second Edition before its November 17 launch, contact Dr. Njo. The first-edition Amazon link below is for the earlier edition.",
+      "For questions about the Second Edition before its November 17 launch, contact Dr. Njo. The first-edition Amazon link is for the earlier edition.",
     ],
     relatedLinks: [
       {
