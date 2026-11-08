@@ -114,8 +114,8 @@ for (const key of ["isbn", "publisher", "datePublished", "image", "aggregateRati
 const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
 assert.equal(
   augustEventNodes.length,
-  6,
-  "October 2026, March 2027, July 2027, October 2027, September 25 Anaheim, and the October 14 dinner occurrences should be upcoming in August",
+  9,
+  "October 2026, March 2027, July 2027, October 2027, September 25 Anaheim, the three 2027 Panel of Experts dinners, and the October 14 dinner occurrences should be upcoming in August",
 );
 assert.equal(augustEventNodes[0].startDate, "2026-10-02T08:00:00-07:00");
 assert.equal(augustEventNodes[1].startDate, "2027-03-12T08:00:00-08:00");
@@ -123,12 +123,27 @@ assert.equal(augustEventNodes[2].startDate, "2027-07-30T08:00:00-07:00");
 assert.equal(augustEventNodes[3].startDate, "2027-10-15T08:00:00-07:00");
 assert.equal(augustEventNodes[4].startDate, "2026-09-25T08:30:00-07:00");
 assert.equal(augustEventNodes[4].name, "The Dental Practice Beyond the Chair");
-assert.equal(augustEventNodes[5].startDate, "2027-10-14");
-assert.equal(augustEventNodes[5]["@type"], "Event");
-assert.equal(augustEventNodes[5].endDate, undefined);
-assert.equal(augustEventNodes[5].performer, undefined, "No unconfirmed dinner speakers");
-assert.equal(augustEventNodes[5].organizer, undefined, "No unconfirmed dinner organizer");
-assert.equal((augustEventNodes[5].location as Record<string, unknown>).name, "Frank Fat's Restaurant, Sacramento, CA");
+assert.deepEqual(
+  augustEventNodes.slice(5, 8).map((node) => [node.startDate, (node.location as Record<string, unknown>).name]),
+  [
+    ["2027-01-21", "Los Angeles, CA"],
+    ["2027-05-20", "Los Angeles, CA"],
+    ["2027-10-21", "Bakersfield, CA"],
+  ],
+  "2027 Panel of Experts dinners list cities only with calendar dates",
+);
+for (const node of augustEventNodes.slice(5, 8)) {
+  assert.equal(node["@type"], "Event");
+  assert.equal(node.endDate, undefined);
+  assert.equal(node.performer, undefined, "No unconfirmed dinner speakers");
+  assert.equal(node.organizer, undefined, "No unconfirmed dinner organizer");
+}
+assert.equal(augustEventNodes[8].startDate, "2027-10-14");
+assert.equal(augustEventNodes[8]["@type"], "Event");
+assert.equal(augustEventNodes[8].endDate, undefined);
+assert.equal(augustEventNodes[8].performer, undefined, "No unconfirmed dinner speakers");
+assert.equal(augustEventNodes[8].organizer, undefined, "No unconfirmed dinner organizer");
+assert.equal((augustEventNodes[8].location as Record<string, unknown>).name, "Frank Fat's Restaurant, Sacramento, CA");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");
