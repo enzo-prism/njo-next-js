@@ -17,6 +17,7 @@ import {
   isOccurrenceEarlyBirdAvailable,
   type EventOccurrence,
 } from "@/data/events";
+import { getPastEventYears, pastEvents } from "@/data/past-events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
 import { buildCanonicalUrl } from "@/seo/canonical";
 import { buildRouteMetadata } from "@/seo/metadata";
@@ -751,3 +752,32 @@ assert.equal(dinner.registrationUrl, undefined, "Do not invent a registration pa
 assert.equal(dinner.upcomingDates?.[0].speakers, undefined);
 assert.equal(isEventOccurrenceUpcoming(dinner.upcomingDates![0], new Date("2027-10-14T23:59:00-07:00")), true);
 assert.equal(isEventOccurrenceUpcoming(dinner.upcomingDates![0], new Date("2027-10-15T00:00:00-07:00")), false);
+
+// Past events archive (Dr. Njo, Nov 2 2026): mirrored from PTI, cities only.
+const archiveNov2 = getPastEventYears(new Date("2026-11-02T12:00:00-08:00"));
+assert.deepEqual(archiveNov2.map((year) => year.year), [2026, 2025], "Archive groups by year, newest first");
+assert.deepEqual(
+  archiveNov2[1].events.map((event) => event.dateLabel),
+  ["August 27, 2025", "July 11, 2025", "March 28, 2025"],
+  "2025 events section lists every 2025 event, newest first",
+);
+assert.equal(archiveNov2[0].events[0].id, "sacramento-seminar-oct-2026");
+for (const event of pastEvents) {
+  assert.doesNotMatch(
+    event.city,
+    /TDIC|Kohan|Phillips|Dugoni|Crown|QUO|Fat|Group|Headquarters|University/i,
+    `Archive shows cities only: ${event.id}`,
+  );
+}
+assert.deepEqual(
+  pastEvents.filter((event) => !event.soldOut).map((event) => event.id),
+  ["leadership-retreat-savannah-2026", "financial-insights-webinar-aug-2025"],
+  "Only the partner retreat and the online webinar go without a sold out banner",
+);
+const archiveIds = (date: string) =>
+  getPastEventYears(new Date(date)).flatMap((year) => year.events.map((event) => event.id));
+assert.ok(!archiveIds("2026-10-02T20:00:00-07:00").includes("sacramento-seminar-oct-2026"), "Event day is not past yet");
+assert.ok(archiveIds("2026-10-03T00:00:00-07:00").includes("sacramento-seminar-oct-2026"), "Archived the next Pacific day");
+assert.ok(!archiveIds("2026-06-05T12:00:00-07:00").includes("leadership-retreat-savannah-2026"), "Multi-day event stays out until its last day passes");
+
+console.log("Past events archive assertions passed.");
