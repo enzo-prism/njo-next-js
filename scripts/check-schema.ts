@@ -202,3 +202,14 @@ assert.ok(!JSON.stringify(blueprintSchema).includes("Registration"), "Do not add
 assert.ok(!JSON.stringify(blueprintSchema).includes("panel-of-experts-dinner-roseville"), "Do not reuse the August 14 dinner slug");
 
 console.log(`Validated structured data for ${paths.length} routes.`);
+
+const booksGraph = buildPageStructuredData("/books")?.["@graph"] as Record<string, unknown>[];
+const editions = booksGraph.filter((node) => node["@type"] === "Book");
+assert.equal(editions.length, 2, "The books hub must distinguish the two verified editions");
+const secondEdition = editions.find((node) => node.bookEdition === "Second edition")!;
+assert.ok(!("isbn" in secondEdition) && !("offers" in secondEdition), "Do not invent a second-edition ISBN or purchase offer");
+const homeGraph = buildPageStructuredData("/")?.["@graph"] as Record<string, unknown>[];
+const homepage = homeGraph.find((node) => String(node["@id"]).endsWith("#home"))!;
+assert.equal(homepage["@type"], "WebPage", "A multi-purpose marketing homepage is not a single-person ProfilePage");
+const person = homeGraph.find((node) => node["@type"] === "Person")!;
+assert.ok(!(person.sameAs as string[]).some((url) => url.includes("amazon.com") || url.endsWith("institute.com/")), "Identity links must identify the person, not a book or employer");

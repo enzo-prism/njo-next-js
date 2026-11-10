@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthorityResources } from "@/components/authority-resources";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -1180,6 +1181,7 @@ export default function MichaelNjoDDS({
           </div>
         </div>
       </Section>
+    <AuthorityResources />
     </>
   );
 }

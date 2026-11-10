@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, ArrowLeft, ArrowRight, Home, Star } from "lucide-react";
+import { CalendarDays, ArrowLeft, ArrowRight, CheckCircle2, FileText, Home, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SourceBadge, TestimonialListCard } from "@/components/testimonials/testimonial-card";
@@ -117,6 +117,44 @@ export default function TestimonialDetailPage({ slug: requestedSlug }: Testimoni
           </p>
         </CardContent>
       </Card>
+
+      {testimonial.feature ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-serif text-2xl">Featured recommendation</CardTitle>
+            <CardDescription>{testimonial.feature.role}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            {testimonial.feature.summary.map((paragraph) => (
+              <p key={paragraph.slice(0, 32)} className="leading-relaxed text-slate-700">
+                {paragraph}
+              </p>
+            ))}
+            <div className="space-y-2">
+              <p className="text-sm font-semibold">Highlights from the letter</p>
+              <ul className="space-y-2">
+                {testimonial.feature.highlights.map((highlight) => (
+                  <li key={highlight} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <Button asChild>
+              <a
+                href={testimonial.feature.letterUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                {testimonial.feature.letterLabel}
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">

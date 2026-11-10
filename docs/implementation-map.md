@@ -205,15 +205,15 @@ This means author edits can change slugs. If you rename an author on an already-
 
 `src/data/events.ts` drives the event/news content on the Michael Njo profile page and also feeds event-related structured data through `src/seo/structured-data.ts`.
 
-`getUpcomingEventPrograms(referenceDate)` is the single date-state helper. It derives the next occurrence, removes
+`getUpcomingEventPrograms(referenceDate)` is the upcoming date-state helper, and `getPreviousEventPrograms(referenceDate)` builds the home page Previous Events grouping (completed occurrences by program, each past date badged Sold Out). It derives the next occurrence, removes
 completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
 hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI via
 `registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). Occurrence-level
 fields such as `flyerImage`, speakers, guest labels, and date-gated pricing are allowed for a specific date only. The
-October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program at TDIC Headquarters
+October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program in Sacramento
 and uses `/media/sacramento-seminar-oct-2026.webp`; do not duplicate that date or add a news/community post for it.
 The 2027 seminar calendar adds San Francisco on July 30, 2027 at QUO, 1 Post Street and Sacramento on October 15, 2027 at
-TDIC Headquarters as ordinary city-date occurrences; do not add news/community posts for those dates.
+1201 K St, Sacramento as ordinary city-date occurrences; event locations name cities (San Francisco, Sacramento), not specific firms; do not add news/community posts for those dates.
 News-tab copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
 completed dinners as upcoming.
 `src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
@@ -427,7 +427,7 @@ The env helper intentionally trims whitespace. Do not remove that behavior witho
 - `CalendlyLeadTracker` (booking popup + `event_scheduled` lead events)
 
 `src/lib/ga4.ts` owns allowlisted `generate_lead` params, canonical-host/consent checks, and
-sessionStorage dedupe. Contact Formspree success and the `/contact/success` safety net share
+sessionStorage dedupe. The thank-you safety net requires a successful Formspree marker less than 10 minutes old; direct visits do not count. Contact Formspree success and the `/contact/success` safety net share
 `form_id=contact`. Calendly fires only on `event_scheduled`, and its widget assets warm only after
 booking intent.
 
@@ -538,3 +538,5 @@ October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento.
 ## October 23 backlog reconciliation
 
 The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](seo-aeo-release-2026-11-06.md).

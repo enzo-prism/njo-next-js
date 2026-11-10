@@ -144,7 +144,7 @@ If custom domain cutover has not been completed yet:
    - Redirects
    - Forms
    - SEO endpoints
-   - Analytics consent behavior: absent before choice, absent after decline, present only after allow
+   - Analytics consent behavior: GA loads unless declined with regional storage defaults; Hotjar/Vercel load only after allow
    - Footer privacy-preference reset
 
 ### Current DNS Baseline (Squarespace + Vercel)
@@ -216,7 +216,7 @@ dscacheutil -q host -a name michaelnjodds.com
 - Vercel Analytics will not show useful data until the deployed site receives real visits.
 - After shipping analytics changes:
   - visit the deployed canonical site in a normal browser
-  - confirm provider scripts are absent before consent
+  - confirm GA regional consent defaults precede configuration, Hotjar/Vercel stay absent before acceptance, and declining disables providers
   - decline and confirm they remain absent
   - reset privacy choices in the footer, allow analytics, then navigate across a few pages
   - wait 30 to 60 seconds before judging dashboard freshness
