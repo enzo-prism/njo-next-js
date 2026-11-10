@@ -40,13 +40,13 @@ function fileSha256(relativePath: string) {
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
-assert.equal(beforeSeason.length, 4, "All published programs should be upcoming at the start of the year");
+assert.equal(beforeSeason.length, 5, "All published programs should be upcoming at the start of the year");
 assert.equal(beforeSeason[0].upcomingDates.length, 6, "All seminar dates should initially be upcoming");
 assert.equal(beforeSeason[2].slug, "beyond-the-chair-anaheim");
 assert.equal(beforeSeason[2].upcomingDates.length, 1);
 
 const augustView = getUpcomingEventPrograms(new Date("2026-08-17T12:00:00-07:00"));
-assert.equal(augustView.length, 3, "Completed programs must not render as upcoming");
+assert.equal(augustView.length, 4, "Completed programs must not render as upcoming");
 assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
 assert.equal(
@@ -62,12 +62,12 @@ assert.equal(augustView[1].nextDateLabel, "September 25, 2026");
 assert.equal(augustView[1].locationLabel, "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA");
 
 const afterSeason = getUpcomingEventPrograms(new Date("2026-10-03T00:00:00-07:00"));
-assert.equal(afterSeason.length, 2, "The 2027 Anaheim seminar should remain available after the 2026 dates");
+assert.equal(afterSeason.length, 3, "The 2027 Anaheim seminar should remain available after the 2026 dates");
 assert.equal(afterSeason[0].nextDateLabel, "March 12, 2027");
 assert.equal(afterSeason[0].upcomingDates.length, 3);
 
 const afterAnaheim = getUpcomingEventPrograms(new Date("2027-03-13T00:00:00-08:00"));
-assert.equal(afterAnaheim.length, 2, "2027 San Francisco and Sacramento seminar dates remain after Anaheim");
+assert.equal(afterAnaheim.length, 3, "2027 San Francisco and Sacramento seminar dates remain after Anaheim");
 assert.equal(afterAnaheim[0].nextDateLabel, "July 30, 2027");
 assert.equal(
   afterAnaheim[0].nextOccurrence.location,
@@ -76,7 +76,7 @@ assert.equal(
 assert.equal(afterAnaheim[0].upcomingDates.length, 2);
 
 const afterSanFrancisco = getUpcomingEventPrograms(new Date("2027-07-31T00:00:00-07:00"));
-assert.equal(afterSanFrancisco.length, 2, "Sacramento October 15, 2027 should remain after San Francisco");
+assert.equal(afterSanFrancisco.length, 3, "Sacramento October 15, 2027 should remain after San Francisco");
 assert.equal(afterSanFrancisco[0].nextDateLabel, "October 15, 2027");
 assert.equal(
   afterSanFrancisco[0].nextOccurrence.location,
@@ -84,7 +84,29 @@ assert.equal(
 );
 
 const afterFinal = getUpcomingEventPrograms(new Date("2027-10-16T00:00:00-07:00"));
-assert.deepEqual(afterFinal, [], "No seminar should remain open after the final occurrence");
+assert.deepEqual(
+  afterFinal.map((program) => program.slug),
+  ["panel-of-experts-2027"],
+  "No seminar should remain open after the final occurrence; only the October 21 Bakersfield dinner remains",
+);
+assert.deepEqual(afterFinal[0].upcomingDates.map((occurrence) => occurrence.dateLabel), ["October 21, 2027"]);
+assert.equal(getUpcomingEventPrograms(new Date("2027-10-22T00:00:00-07:00")).length, 0);
+
+// 2027 Panel of Experts dinners (Dr. Njo, Nov 7 2026): cities only, no invented times or registration.
+const panel2027 = getUpcomingEventPrograms(new Date("2026-11-08T12:00:00-08:00")).find(
+  (program) => program.slug === "panel-of-experts-2027",
+);
+assert.ok(panel2027, "2027 Panel of Experts dinners must be listed");
+assert.deepEqual(
+  panel2027.upcomingDates.map((occurrence) => [occurrence.dateLabel, occurrence.location, occurrence.startDateTime]),
+  [
+    ["January 21, 2027", "Los Angeles, CA", "2027-01-21"],
+    ["May 20, 2027", "Los Angeles, CA", "2027-05-20"],
+    ["October 21, 2027", "Bakersfield, CA", "2027-10-21"],
+  ],
+);
+assert.equal(panel2027.registrationUrl, undefined, "Do not invent a registration path");
+assert.equal(panel2027.registrationStatus, "Details to follow");
 
 const inProgressOccurrence: EventOccurrence = {
   dateLabel: "Test",

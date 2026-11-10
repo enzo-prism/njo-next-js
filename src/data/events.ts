@@ -321,6 +321,38 @@ export const eventPrograms: EventProgram[] = [
     registrationUrl: "https://practicetransitionsinstitute.com/events",
   },
   {
+    slug: "panel-of-experts-2027",
+    category: "dinner",
+    registrationStatus: "Details to follow",
+    title: "Panel of Experts Dinner",
+    nextDateLabel: "January 21, 2027",
+    nextDateTime: "2027-01-21",
+    timeLabel: "Time to be announced",
+    locationLabel: "Los Angeles, CA",
+    description:
+      "Panel of Experts dinners in Los Angeles and Bakersfield in 2027. Time and additional details will be announced.",
+    upcomingDates: [
+      {
+        dateLabel: "January 21, 2027",
+        timeLabel: "Time to be announced",
+        location: "Los Angeles, CA",
+        startDateTime: "2027-01-21",
+      },
+      {
+        dateLabel: "May 20, 2027",
+        timeLabel: "Time to be announced",
+        location: "Los Angeles, CA",
+        startDateTime: "2027-05-20",
+      },
+      {
+        dateLabel: "October 21, 2027",
+        timeLabel: "Time to be announced",
+        location: "Bakersfield, CA",
+        startDateTime: "2027-10-21",
+      },
+    ],
+  },
+  {
     slug: "panel-of-experts-sacramento-2027",
     category: "dinner",
     registrationStatus: "Details to follow",
