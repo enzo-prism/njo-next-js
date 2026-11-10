@@ -118,7 +118,9 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
   - Current programs that PTI hosts (including Beyond the Chair) set `registrationUrl` so home, news, and community posts hand off to PTI instead of a generic contact CTA
   - The October 2, 2026 Sacramento date stays on Mastering Your Dental Transition (no duplicate date, no news post); occurrence-only flyer, venue, speakers, and date-gated early-bird pricing live on that date; event locations name cities (San Francisco, Sacramento), not specific firms
+  - Upcoming programs sort by nextDateTime, not source order
   - 2027 Mastering Your Dental Transition dates include San Francisco on July 30, 2027 (QUO, 1 Post Street) and Sacramento on October 15, 2027 (1201 K St); calendar only, no news posts
+  - 2027 Panel of Experts dinners: January 21 and May 20 in Los Angeles, October 21 in Bakersfield (cities only, time/details to be announced, no registration URL). October 14, 2027 remains a separate Sacramento dinner at Frank Fat's Restaurant; only that date and venue are confirmed. Preserve date-only schema and "Details to follow" until more details are approved.
 - `src/lib/profile-tabs.ts`
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
@@ -245,6 +247,6 @@ Update these together when behavior changes:
 - `docs/photo-caption-qa.md` when caption catalog, persistence, or Photos-tab save behavior changes
 - the specific runbook in `docs/`
 
-October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento. Only date and venue are confirmed; preserve the date-only schema and "Details to follow" status until more details are approved.
+2027 Panel of Experts dinners: January 21 and May 20 in Los Angeles, October 21 in Bakersfield (cities only; time and details to be announced; no registration URL). October 14, 2027 remains a separate Sacramento dinner at Frank Fat's Restaurant; only that date and venue are confirmed. Preserve date-only schema and "Details to follow" until more details are approved.
 
 SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).

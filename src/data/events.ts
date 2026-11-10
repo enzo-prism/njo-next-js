@@ -111,38 +111,40 @@ export function getUpcomingEventPrograms(
   referenceDate: Date,
   programs: readonly EventProgram[] = eventPrograms,
 ): UpcomingEventProgram[] {
-  return programs.flatMap((program) => {
-    const occurrences = getProgramOccurrences(program).sort(
-      (left, right) => parseDateTime(left.startDateTime) - parseDateTime(right.startDateTime),
-    );
-    const upcomingDates = occurrences.filter((occurrence) => isEventOccurrenceUpcoming(occurrence, referenceDate));
+  return programs
+    .flatMap((program) => {
+      const occurrences = getProgramOccurrences(program).sort(
+        (left, right) => parseDateTime(left.startDateTime) - parseDateTime(right.startDateTime),
+      );
+      const upcomingDates = occurrences.filter((occurrence) => isEventOccurrenceUpcoming(occurrence, referenceDate));
 
-    if (upcomingDates.length === 0) return [];
+      if (upcomingDates.length === 0) return [];
 
-    const nextOccurrence = upcomingDates[0];
-    const completedOccurrences = occurrences.filter(
-      (occurrence) => !isEventOccurrenceUpcoming(occurrence, referenceDate),
-    );
+      const nextOccurrence = upcomingDates[0];
+      const completedOccurrences = occurrences.filter(
+        (occurrence) => !isEventOccurrenceUpcoming(occurrence, referenceDate),
+      );
 
-    return [
-      {
-        ...program,
-        nextOccurrence,
-        nextDateLabel: nextOccurrence.dateLabel,
-        nextDateTime: nextOccurrence.startDateTime,
-        timeLabel: nextOccurrence.timeLabel,
-        locationLabel:
-          upcomingDates.length === 1 ? nextOccurrence.location : `${upcomingDates.length} locations available`,
-        upcomingDates,
-        completedOccurrences,
-        completedEventsLabel:
-          completedOccurrences.length > 0
-            ? `${completedOccurrences.length} completed ${completedOccurrences.length === 1 ? "date" : "dates"}`
-            : undefined,
-        scheduleLabel: `${upcomingDates.length} ${upcomingDates.length === 1 ? "date" : "dates"}`,
-      },
-    ];
-  });
+      return [
+        {
+          ...program,
+          nextOccurrence,
+          nextDateLabel: nextOccurrence.dateLabel,
+          nextDateTime: nextOccurrence.startDateTime,
+          timeLabel: nextOccurrence.timeLabel,
+          locationLabel:
+            upcomingDates.length === 1 ? nextOccurrence.location : `${upcomingDates.length} locations available`,
+          upcomingDates,
+          completedOccurrences,
+          completedEventsLabel:
+            completedOccurrences.length > 0
+              ? `${completedOccurrences.length} completed ${completedOccurrences.length === 1 ? "date" : "dates"}`
+              : undefined,
+          scheduleLabel: `${upcomingDates.length} ${upcomingDates.length === 1 ? "date" : "dates"}`,
+        },
+      ];
+    })
+    .sort((left, right) => parseDateTime(left.nextDateTime) - parseDateTime(right.nextDateTime));
 }
 
 export type PreviousEventProgram = EventProgram & {
@@ -330,7 +332,7 @@ export const eventPrograms: EventProgram[] = [
     timeLabel: "Time to be announced",
     locationLabel: "Los Angeles, CA",
     description:
-      "Panel of Experts dinners in Los Angeles and Bakersfield in 2027. Time and additional details will be announced.",
+      "Panel of Experts dinners for dental practice owners. Time and additional details will be announced.",
     upcomingDates: [
       {
         dateLabel: "January 21, 2027",

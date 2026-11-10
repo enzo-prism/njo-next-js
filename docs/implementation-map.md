@@ -205,7 +205,7 @@ This means author edits can change slugs. If you rename an author on an already-
 
 `src/data/events.ts` drives the event/news content on the Michael Njo profile page and also feeds event-related structured data through `src/seo/structured-data.ts`.
 
-`getUpcomingEventPrograms(referenceDate)` is the upcoming date-state helper, and `getPreviousEventPrograms(referenceDate)` builds the home page Previous Events grouping (completed occurrences by program, each past date badged Sold Out). It derives the next occurrence, removes
+`getUpcomingEventPrograms(referenceDate)` is the upcoming date-state helper, and `getPreviousEventPrograms(referenceDate)` builds the home page Previous Events grouping (completed occurrences by program, each past date badged Sold Out). It derives the next occurrence, sorts remaining programs by `nextDateTime`, removes
 completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
 hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI via
 `registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). Occurrence-level
@@ -533,7 +533,7 @@ For a featured book launch, also:
 - dynamic detail routes are static-only; unknown params should stay 404s
 - metadata and structured data are centralized on purpose; avoid per-page bespoke logic unless the route genuinely breaks the shared pattern
 
-October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento. Only date and venue are confirmed; preserve the date-only schema and "Details to follow" status until more details are approved.
+2027 Panel of Experts dinners: January 21 and May 20 in Los Angeles, October 21 in Bakersfield (cities only; time and details to be announced; no registration URL). October 14, 2027 remains a separate Sacramento dinner at Frank Fat's Restaurant; only that date and venue are confirmed. Preserve date-only schema and "Details to follow" until more details are approved.
 
 ## October 23 backlog reconciliation
 
