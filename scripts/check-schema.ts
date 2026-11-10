@@ -117,12 +117,12 @@ assert.equal(
   9,
   "October 2026, March 2027, July 2027, October 2027, September 25 Anaheim, the three 2027 Panel of Experts dinners, and the October 14 dinner occurrences should be upcoming in August",
 );
-assert.equal(augustEventNodes[0].startDate, "2026-10-02T08:00:00-07:00");
-assert.equal(augustEventNodes[1].startDate, "2027-03-12T08:00:00-08:00");
-assert.equal(augustEventNodes[2].startDate, "2027-07-30T08:00:00-07:00");
-assert.equal(augustEventNodes[3].startDate, "2027-10-15T08:00:00-07:00");
-assert.equal(augustEventNodes[4].startDate, "2026-09-25T08:30:00-07:00");
-assert.equal(augustEventNodes[4].name, "The Dental Practice Beyond the Chair");
+assert.equal(augustEventNodes[0].startDate, "2026-09-25T08:30:00-07:00");
+assert.equal(augustEventNodes[0].name, "The Dental Practice Beyond the Chair");
+assert.equal(augustEventNodes[1].startDate, "2026-10-02T08:00:00-07:00");
+assert.equal(augustEventNodes[2].startDate, "2027-03-12T08:00:00-08:00");
+assert.equal(augustEventNodes[3].startDate, "2027-07-30T08:00:00-07:00");
+assert.equal(augustEventNodes[4].startDate, "2027-10-15T08:00:00-07:00");
 assert.deepEqual(
   augustEventNodes.slice(5, 8).map((node) => [node.startDate, (node.location as Record<string, unknown>).name]),
   [

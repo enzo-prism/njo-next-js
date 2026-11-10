@@ -16,6 +16,7 @@ import {
   isEventOccurrenceUpcoming,
   isOccurrenceEarlyBirdAvailable,
   type EventOccurrence,
+  type EventProgram,
 } from "@/data/events";
 import { buildProfileTabPath, resolveProfileTab } from "@/lib/profile-tabs";
 import { buildCanonicalUrl } from "@/seo/canonical";
@@ -39,47 +40,115 @@ function fileSha256(relativePath: string) {
 
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
+function fixtureProgram(slug: string, startDateTime: string, dateLabel: string): EventProgram {
+  return {
+    slug,
+    category: "dinner",
+    registrationStatus: "Details to follow",
+    title: slug,
+    nextDateLabel: dateLabel,
+    nextDateTime: startDateTime,
+    timeLabel: "Time to be announced",
+    locationLabel: "Test City, CA",
+    description: "Fixture program for sort-order coverage.",
+    upcomingDates: [
+      {
+        dateLabel,
+        timeLabel: "Time to be announced",
+        location: "Test City, CA",
+        startDateTime,
+      },
+    ],
+  };
+}
+
+assert.deepEqual(
+  getUpcomingEventPrograms(new Date("2026-11-08T12:00:00-08:00"), [
+    fixtureProgram("later-program", "2027-05-20", "May 20, 2027"),
+    fixtureProgram("sooner-program", "2027-01-21", "January 21, 2027"),
+  ]).map((program) => program.slug),
+  ["sooner-program", "later-program"],
+  "Upcoming programs sort by nextDateTime, not source order",
+);
+
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
-assert.equal(beforeSeason.length, 5, "All published programs should be upcoming at the start of the year");
+assert.deepEqual(
+  beforeSeason.map((program) => program.slug),
+  [
+    "mastering-your-dental-transition",
+    "leadership-retreat-2026",
+    "beyond-the-chair-anaheim",
+    "panel-of-experts-2027",
+    "panel-of-experts-sacramento-2027",
+  ],
+  "All published programs should be upcoming at the start of the year, ordered by next date",
+);
 assert.equal(beforeSeason[0].upcomingDates.length, 6, "All seminar dates should initially be upcoming");
-assert.equal(beforeSeason[2].slug, "beyond-the-chair-anaheim");
 assert.equal(beforeSeason[2].upcomingDates.length, 1);
 
 const augustView = getUpcomingEventPrograms(new Date("2026-08-17T12:00:00-07:00"));
-assert.equal(augustView.length, 4, "Completed programs must not render as upcoming");
-assert.equal(augustView[0].slug, "mastering-your-dental-transition");
-assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
+assert.deepEqual(
+  augustView.map((program) => [program.slug, program.nextDateLabel]),
+  [
+    ["beyond-the-chair-anaheim", "September 25, 2026"],
+    ["mastering-your-dental-transition", "October 2, 2026"],
+    ["panel-of-experts-2027", "January 21, 2027"],
+    ["panel-of-experts-sacramento-2027", "October 14, 2027"],
+  ],
+  "Completed programs must not render as upcoming; remaining programs sort by next date",
+);
+const augustSeminar = augustView.find((program) => program.slug === "mastering-your-dental-transition");
+assert.ok(augustSeminar);
 assert.equal(
-  augustView[0].nextOccurrence.location,
+  augustSeminar.nextOccurrence.location,
   "1201 K St, 14th Floor, Sacramento, CA",
 );
-assert.equal(augustView[0].upcomingDates.length, 4);
-assert.equal(augustView[0].completedOccurrences.length, 2);
-assert.equal(augustView[0].scheduleLabel, "4 dates");
-assert.equal(augustView[0].completedEventsLabel, "2 completed dates");
-assert.equal(augustView[1].slug, "beyond-the-chair-anaheim");
-assert.equal(augustView[1].nextDateLabel, "September 25, 2026");
-assert.equal(augustView[1].locationLabel, "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA");
+assert.equal(augustSeminar.upcomingDates.length, 4);
+assert.equal(augustSeminar.completedOccurrences.length, 2);
+assert.equal(augustSeminar.scheduleLabel, "4 dates");
+assert.equal(augustSeminar.completedEventsLabel, "2 completed dates");
+assert.equal(augustView[0].locationLabel, "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA");
 
 const afterSeason = getUpcomingEventPrograms(new Date("2026-10-03T00:00:00-07:00"));
-assert.equal(afterSeason.length, 3, "The 2027 Anaheim seminar should remain available after the 2026 dates");
-assert.equal(afterSeason[0].nextDateLabel, "March 12, 2027");
-assert.equal(afterSeason[0].upcomingDates.length, 3);
+assert.deepEqual(
+  afterSeason.map((program) => [program.slug, program.nextDateLabel]),
+  [
+    ["panel-of-experts-2027", "January 21, 2027"],
+    ["mastering-your-dental-transition", "March 12, 2027"],
+    ["panel-of-experts-sacramento-2027", "October 14, 2027"],
+  ],
+  "The 2027 Anaheim seminar should remain available after the 2026 dates",
+);
+assert.equal(afterSeason[1].upcomingDates.length, 3);
 
 const afterAnaheim = getUpcomingEventPrograms(new Date("2027-03-13T00:00:00-08:00"));
-assert.equal(afterAnaheim.length, 3, "2027 San Francisco and Sacramento seminar dates remain after Anaheim");
-assert.equal(afterAnaheim[0].nextDateLabel, "July 30, 2027");
+assert.deepEqual(
+  afterAnaheim.map((program) => [program.slug, program.nextDateLabel]),
+  [
+    ["panel-of-experts-2027", "May 20, 2027"],
+    ["mastering-your-dental-transition", "July 30, 2027"],
+    ["panel-of-experts-sacramento-2027", "October 14, 2027"],
+  ],
+  "2027 San Francisco and Sacramento seminar dates remain after Anaheim",
+);
 assert.equal(
-  afterAnaheim[0].nextOccurrence.location,
+  afterAnaheim[1].nextOccurrence.location,
   "QUO, 1 Post Street, San Francisco, CA",
 );
-assert.equal(afterAnaheim[0].upcomingDates.length, 2);
+assert.equal(afterAnaheim[1].upcomingDates.length, 2);
 
 const afterSanFrancisco = getUpcomingEventPrograms(new Date("2027-07-31T00:00:00-07:00"));
-assert.equal(afterSanFrancisco.length, 3, "Sacramento October 15, 2027 should remain after San Francisco");
-assert.equal(afterSanFrancisco[0].nextDateLabel, "October 15, 2027");
+assert.deepEqual(
+  afterSanFrancisco.map((program) => [program.slug, program.nextDateLabel]),
+  [
+    ["panel-of-experts-sacramento-2027", "October 14, 2027"],
+    ["mastering-your-dental-transition", "October 15, 2027"],
+    ["panel-of-experts-2027", "October 21, 2027"],
+  ],
+  "Sacramento October 15, 2027 should remain after San Francisco",
+);
 assert.equal(
-  afterSanFrancisco[0].nextOccurrence.location,
+  afterSanFrancisco[1].nextOccurrence.location,
   "1201 K St, 14th Floor, Sacramento, CA",
 );
 
@@ -107,6 +176,11 @@ assert.deepEqual(
 );
 assert.equal(panel2027.registrationUrl, undefined, "Do not invent a registration path");
 assert.equal(panel2027.registrationStatus, "Details to follow");
+assert.equal(
+  /Los Angeles|Bakersfield|\b2027\b/.test(panel2027.description),
+  false,
+  "Program description must stay city- and date-neutral",
+);
 
 const inProgressOccurrence: EventOccurrence = {
   dateLabel: "Test",
