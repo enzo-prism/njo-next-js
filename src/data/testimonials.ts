@@ -1,5 +1,18 @@
 export type TestimonialSource = "alignable" | "google";
 
+export type TestimonialFeature = {
+  /** Role or credential line shown with the featured recommendation. */
+  role: string;
+  /** Short paragraphs that frame the featured recommendation. */
+  summary: string[];
+  /** Documented highlights drawn from the featured recommendation. */
+  highlights: string[];
+  /** Public path to the full recommendation document. */
+  letterUrl: string;
+  /** Link label for the full recommendation document. */
+  letterLabel: string;
+};
+
 export type Testimonial = {
   quote: string;
   author: string;
@@ -9,6 +22,8 @@ export type Testimonial = {
   receivedAt?: string;
   organization?: string;
   source?: TestimonialSource;
+  /** Optional long-form feature rendered on the testimonial detail page. */
+  feature?: TestimonialFeature;
   /**
    * Fixed URL slug, for an author who already has an entry whose generated
    * slug must not move (Craig S. Yarborough's thank-you card keeps its own).
@@ -162,6 +177,11 @@ If you are looking for someone who will go above and beyond to get you to the fi
     receivedAt: "2026-09-27",
   },
   {
+    quote: `I decided to bring Michael on board because, from the very beginning, he gave me a sense of confidence, reassurance, and genuine support as I prepared for one of the biggest transitions of my career becoming a dental practice owner. Although you were initially recommended by the previous practice owner, someone whose judgment I deeply respect, it was through our personal interactions that I developed my own trust and appreciation for your character and expertise. What stood out most was your willingness to listen, offer guidance, and make yourself available even before we established a formal working relationship. Every conversation left me feeling that I had someone in my corner who genuinely wanted to see me succeed. I quickly realized that, for you, business is about more than numbers; it is about relationships, trust, and building a strong foundation for lasting success. My journey has taught me the importance of surrounding myself with people who believe in my vision, and I am grateful that our paths crossed. I look forward to learning from you, growing together, and building something meaningful as an owner. Here's to a successful future and a lasting relationship built on trust, respect, and shared success!`,
+    author: "John Senat",
+    stars: 5,
+  },
+  {
     quote: `I've had the privilege of knowing Michael for the past five years. We first met in dental school when he was mentoring our business club, and since then he's been there through every major milestone.
 
 He helped me land my first associate position, where I learned so much about the business side of dentistry, and more recently he helped guide me through becoming a practice owner. Throughout it all, he's been a trusted mentor, advisor, and friend.
@@ -214,6 +234,24 @@ Thank you, Dr. Njo, for always being there. Your guidance has been invaluable, a
     quote: `Michael - many thanks for your magnanimous gifts of Pride Cabernet Sauvignon and your book on Dental Practice Transitions. I sincerely appreciate the passion, wisdom, and experience you offer our students as well as our personal friendship. Best of season's greetings to you and your family.`,
     author: "Craig S. Yarborough, DDS, MBA",
     stars: 5,
+    organization: "University of the Pacific, Arthur A. Dugoni School of Dentistry",
+    feature: {
+      role: "Former executive associate dean, University of the Pacific, Arthur A. Dugoni School of Dentistry",
+      summary: [
+        "In a January 6, 2026 letter of recommendation, Dr. Craig S. Yarborough, former executive associate dean at the University of the Pacific, Arthur A. Dugoni School of Dentistry, documents the work Dr. Michael Njo contributed to the school and, in particular, the Dugoni Business Club.",
+        "Dr. Njo began working with the club in 2019, when former dean Dr. Nader Nadershahi brought him in as a resource for a fledgling but energetic student organization. Dr. Yarborough writes that Dr. Njo immediately assessed the situation and implemented a strategic plan and the governance to sustain the club through the constant turnover of graduating members.",
+        "\u201CIf you are looking for someone to engage your stakeholders, assess the organization's strengths and weaknesses, form a strategic plan and successfully implement it, Dr. Michael Njo is your man.\u201D",
+      ],
+      highlights: [
+        "Rebuilt the Dugoni Business Club from 2019, growing membership sixfold",
+        "Implemented bylaws, officer roles, a governing body run like a real board, a succession plan, standard operating procedures for events, and a calendar of events",
+        "Founded the Dugoni Mixers at the Annual Alumni meeting, growing them from 25 attendees to 180 students, alumni, and business entities, now sponsored by the Alumni Association",
+        "Instituted an Annual Symposium as a kickoff for the membership drive and vendor fundraising",
+        "Helped build a $15,000 club surplus that reduced membership fees and funded a first-time $1,000 gift to the Arthur Dugoni Scholarship",
+      ],
+      letterUrl: "/media/craig-yarborough-letter-of-recommendation.pdf",
+      letterLabel: "Read Dr. Yarborough's full letter of recommendation (PDF)",
+    },
   },
   {
     quote: `Dr Michael has become not only a colleague, but a trusted friend who has helped navigate the challenging landscape of a multi state, multi-practice operation. His availability is his best ability. His efficient, calm leadership really made our transition smooth. Providing healthcare for patients becomes harder every day. Dr Michael makes it easier.`,
@@ -804,6 +842,7 @@ export const testimonialPages: TestimonialPage[] = (() => {
       receivedAt: entry.receivedAt,
       organization: entry.organization,
       source: entry.source,
+      feature: entry.feature,
     };
     const base = entry.slug ?? slugify(testimonial.author || "testimonial");
     const nextCount = (seen.get(base) || 0) + 1;

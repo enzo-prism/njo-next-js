@@ -25,7 +25,9 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - there are no internal API routes for form submission
 - Preserve analytics behavior:
   - one consent manager is mounted in the root layout
-  - Google Analytics, Hotjar, and Vercel Analytics load only after consent on the canonical production host
+  - analytics run only on the canonical production host (plus `*.vercel.app` previews opened with `?analytics_test=1`, GA only, in debug mode)
+  - Google Analytics is opt-out: it loads unless the visitor declines, with Google Consent Mode v2 defaulting `analytics_storage` to denied for EEA/UK/CH and granted elsewhere; ad consent types are always denied
+  - Hotjar and Vercel Analytics load only after the visitor selects **Allow analytics**
   - conversion events must never include submitted form values or other personal data
 
 ## Runtime and Tooling
@@ -41,7 +43,7 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Root layout
   - Mounts the single global analytics consent manager
 - `src/components/analytics-consent.tsx`
-  - Consent-gated, production-host-only Vercel Analytics, Google Analytics, and Hotjar loading
+  - Opt-out Google Analytics (Consent Mode v2) and opt-in Vercel Analytics and Hotjar, production host only
 - `src/lib/analytics-events.ts`
   - Shared non-sensitive conversion-event interface
 - `src/config/site.ts`
@@ -115,8 +117,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - Editorial event records plus date-aware upcoming/current derivation
   - Home/profile routes refresh event state hourly and completed events are excluded from current Event schema
   - Current programs that PTI hosts (including Beyond the Chair) set `registrationUrl` so home, news, and community posts hand off to PTI instead of a generic contact CTA
-  - The October 2, 2026 Sacramento date stays on Mastering Your Dental Transition (no duplicate date, no news post); occurrence-only flyer, TDIC venue, speakers, and date-gated early-bird pricing live on that date
-  - 2027 Mastering Your Dental Transition dates include San Francisco on July 30, 2027 (QUO, 1 Post Street) and Sacramento on October 15, 2027 (TDIC Headquarters); calendar only, no news posts
+  - The October 2, 2026 Sacramento date stays on Mastering Your Dental Transition (no duplicate date, no news post); occurrence-only flyer, venue, speakers, and date-gated early-bird pricing live on that date; event locations name cities (San Francisco, Sacramento), not specific firms
+  - 2027 Mastering Your Dental Transition dates include San Francisco on July 30, 2027 (QUO, 1 Post Street) and Sacramento on October 15, 2027 (1201 K St); calendar only, no news posts
 - `src/lib/profile-tabs.ts`
   - Keeps profile tabs, `?tab=news`, news hashes, browser history, and campaign parameters synchronized
 - `src/components/book-launch-feature.tsx`
@@ -245,3 +247,5 @@ Update these together when behavior changes:
 - the specific runbook in `docs/`
 
 October 14, 2027: Panel of Experts Dinner at Frank Fat's Restaurant, Sacramento. Only date and venue are confirmed; preserve the date-only schema and "Details to follow" status until more details are approved.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).

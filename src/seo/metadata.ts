@@ -149,6 +149,8 @@ export function buildPageTitle(pathname: string): string {
       return "Testimonials for Michael Njo, DDS | Dental Strategies";
     case "/resources":
       return "Resources | Michael Njo, DDS";
+    case "/books":
+      return "Dental Practice Transitions Handbook & Books | Michael Njo, DDS";
     case "/dentalflix":
       return "DentalFlix Referral Offer | Michael Njo, DDS";
     case "/contact":
@@ -204,6 +206,8 @@ export function buildPageDescription(pathname: string): string {
       return "Read testimonials from dentists and healthcare professionals who have worked with Michael Njo, DDS through Dental Strategies and Practice Transitions Institute.";
     case "/resources":
       return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and recommendations from Dr. Njo’s network to support your dental career and practice.";
+    case "/books":
+      return "Books by Dr. Michael Njo: the Dental Practice Transitions Handbook Second Edition, launching November 17, 2026, the first edition, and his contributing and recommended titles for practice owners.";
     case "/phillips-event":
       return "Continue the conversation after a Phillips-supported presentation with Michael Njo, DDS about dental practice growth, valuation, and transitions.";
     case "/dentalflix":

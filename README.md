@@ -108,7 +108,7 @@ See `docs/forms-and-backends.md` for implementation and QA details.
 - `sitemap.xml` via `src/app/sitemap.ts`
 - `llms.txt` served from `public/llms.txt`
 - One analytics consent manager mounted in `src/app/layout.tsx`
-- Vercel Analytics, Google Analytics, and Hotjar loaded only after consent by `src/components/analytics-consent.tsx`
+- Google Analytics (opt-out, Google Consent Mode v2 with EEA/UK/CH opt-in) plus opt-in Vercel Analytics and Hotjar, all loaded by `src/components/analytics-consent.tsx`
 - Non-sensitive conversion events centralized in `src/lib/analytics-events.ts`
 - Consent-gated GA4 `generate_lead` on contact Formspree success (plus `/contact/success` safety net) and Calendly `event_scheduled`
 
@@ -263,3 +263,5 @@ If your current network still resolves an older apex IP after DNS changes, verif
 ## October 23 backlog reconciliation
 
 The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
+
+SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).

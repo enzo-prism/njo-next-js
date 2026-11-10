@@ -1,5 +1,5 @@
 import { CALENDLY_MESSAGE_ORIGINS, PRODUCTION_HOSTNAME } from "@/config/site";
-import { getAnalyticsConsent, trackAnalyticsEvent } from "@/lib/analytics-events";
+import { getAnalyticsConsent, isGoogleAnalyticsAllowed, trackAnalyticsEvent } from "@/lib/analytics-events";
 
 export const generateLeadMethods = {
   form: "form",
@@ -95,7 +95,7 @@ function canTrackGenerateLead(): boolean {
   return (
     typeof window !== "undefined" &&
     window.location.hostname.toLowerCase() === PRODUCTION_HOSTNAME &&
-    getAnalyticsConsent() === "accepted"
+    isGoogleAnalyticsAllowed(getAnalyticsConsent())
   );
 }
 
@@ -138,4 +138,20 @@ export function recordFormLead(params: GenerateLeadParams): void {
   }
 
   trackGenerateLead(params);
+}
+
+const CONTACT_SUCCESS_KEY = "njo_confirmed_contact_submission";
+/** Only call after Formspree has accepted the submission; stores no form data. */
+export function markContactSubmissionSuccess(): void {
+  if (!canTrackGenerateLead()) return;
+  try { window.sessionStorage.setItem(CONTACT_SUCCESS_KEY, String(Date.now())); } catch { /* The immediate success event still works without storage. */ }
+}
+export function hasRecentContactSubmissionSuccess(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const value = window.sessionStorage.getItem(CONTACT_SUCCESS_KEY);
+    if (!value) return false;
+    const age = Date.now() - Number(value);
+    return Number.isFinite(age) && age >= 0 && age < FORM_LEAD_DEDUP_TTL_MS;
+  } catch { return false; }
 }

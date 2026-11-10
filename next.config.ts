@@ -77,6 +77,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      ...["dental-strategies.com", "www.dental-strategies.com"].map((host) => ({
+        source: "/:path*",
+        has: [{ type: "host" as const, value: host }],
+        destination: "https://michaelnjodds.com/:path*",
+        permanent: true,
+      })),
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.michaelnjodds.com" }],

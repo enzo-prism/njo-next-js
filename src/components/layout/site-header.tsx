@@ -22,6 +22,11 @@ const navItems: NavItem[] = [
   { href: "/michael-njo-dds", label: "About" },
   { href: "/testimonials", label: "Testimonials" },
   {
+    href: "/books",
+    label: "Books",
+    description: "The Dental Practice Transitions Handbook and more.",
+  },
+  {
     href: "/resources",
     label: "Resources",
     description: "Books, articles, and education for owners.",

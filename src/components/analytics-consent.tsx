@@ -9,6 +9,7 @@ import {
   ANALYTICS_CONSENT_CHANGE_EVENT,
   ANALYTICS_TRACK_EVENT,
   getAnalyticsConsent,
+  isGoogleAnalyticsAllowed,
   setAnalyticsConsent,
   type AnalyticsConsent,
   type AnalyticsEventDetail,
@@ -20,14 +21,44 @@ declare global {
     gtag?: (...args: unknown[]) => void;
     hj?: ((...args: unknown[]) => void) & { q?: unknown[] };
     _hjSettings?: { hjid: number; hjsv: number };
+    [gaDisableKey: `ga-disable-${string}`]: boolean | undefined;
   }
 }
 
 const GA_SCRIPT_ID = "dental-strategies-google-analytics";
 const HOTJAR_SCRIPT_ID = "dental-strategies-hotjar";
+const ANALYTICS_TEST_PARAM = "analytics_test";
+const ANALYTICS_TEST_STORAGE_KEY = "dental-strategies-analytics-test";
+const PREVIEW_HOSTNAME_SUFFIX = ".vercel.app";
+
+// EEA, UK, and Switzerland: Google Consent Mode keeps Analytics cookieless here
+// until the visitor selects Allow analytics. Everywhere else it is opt-out.
+const CONSENT_REQUIRED_REGIONS = [
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT",
+  "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH",
+];
 
 function isProductionBrowser() {
   return typeof window !== "undefined" && window.location.hostname.toLowerCase() === PRODUCTION_HOSTNAME;
+}
+
+// Preview deployments stay analytics-free unless opened with ?analytics_test=1, which
+// loads Google Analytics in debug mode (visible in GA DebugView) for that browser tab.
+function isAnalyticsTestBrowser() {
+  if (typeof window === "undefined" || !window.location.hostname.toLowerCase().endsWith(PREVIEW_HOSTNAME_SUFFIX)) {
+    return false;
+  }
+  const requested = new URLSearchParams(window.location.search).get(ANALYTICS_TEST_PARAM) === "1";
+  try {
+    if (requested) window.sessionStorage.setItem(ANALYTICS_TEST_STORAGE_KEY, "1");
+    return window.sessionStorage.getItem(ANALYTICS_TEST_STORAGE_KEY) === "1";
+  } catch {
+    return requested;
+  }
+}
+
+function canRunGoogleAnalytics() {
+  return isProductionBrowser() || isAnalyticsTestBrowser();
 }
 
 function getOrCreateGtag() {
@@ -42,8 +73,20 @@ function getOrCreateGtag() {
   return window.gtag;
 }
 
-function loadGoogleAnalytics() {
-  if (!siteRuntime.gaId || document.getElementById(GA_SCRIPT_ID)) return;
+function loadGoogleAnalytics(consent: AnalyticsConsent | null) {
+  if (!siteRuntime.gaId) return;
+
+  const gtag = getOrCreateGtag();
+  window[`ga-disable-${siteRuntime.gaId}`] = false;
+  if (document.getElementById(GA_SCRIPT_ID)) {
+    if (consent === "accepted") gtag("consent", "update", { analytics_storage: "granted" });
+    return;
+  }
+
+  const adsDenied = { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied" };
+  gtag("consent", "default", { ...adsDenied, analytics_storage: "denied", region: CONSENT_REQUIRED_REGIONS });
+  gtag("consent", "default", { ...adsDenied, analytics_storage: "granted" });
+  if (consent === "accepted") gtag("consent", "update", { analytics_storage: "granted" });
 
   const script = document.createElement("script");
   script.id = GA_SCRIPT_ID;
@@ -51,10 +94,15 @@ function loadGoogleAnalytics() {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(siteRuntime.gaId)}`;
   document.head.appendChild(script);
 
-  const gtag = getOrCreateGtag();
   gtag("js", new Date());
-  gtag("consent", "update", { analytics_storage: "granted" });
-  gtag("config", siteRuntime.gaId, { anonymize_ip: true });
+  gtag("config", siteRuntime.gaId, isProductionBrowser() ? { anonymize_ip: true } : { anonymize_ip: true, debug_mode: true });
+}
+
+function disableGoogleAnalytics() {
+  if (!siteRuntime.gaId) return;
+  // Stops any already-loaded gtag from sending further hits on this page.
+  window[`ga-disable-${siteRuntime.gaId}`] = true;
+  window.gtag?.("consent", "update", { analytics_storage: "denied" });
 }
 
 function loadHotjar() {
@@ -76,9 +124,10 @@ function loadHotjar() {
 }
 
 function sendAnalyticsEvent({ name, properties }: AnalyticsEventDetail) {
-  if (!isProductionBrowser() || getAnalyticsConsent() !== "accepted") return;
+  const consent = getAnalyticsConsent();
+  if (!canRunGoogleAnalytics() || !isGoogleAnalyticsAllowed(consent)) return;
 
-  track(name, properties);
+  if (consent === "accepted" && isProductionBrowser()) track(name, properties);
   if (siteRuntime.gaId && window.gtag) {
     window.gtag("event", name, properties ?? {});
   }
@@ -100,10 +149,14 @@ export function AnalyticsConsentManager() {
   }, []);
 
   useEffect(() => {
-    if (consent !== "accepted" || !isProductionBrowser()) return;
-    loadGoogleAnalytics();
-    loadHotjar();
-  }, [consent]);
+    if (!hasLoadedPreference || !canRunGoogleAnalytics()) return;
+    if (isGoogleAnalyticsAllowed(consent)) {
+      loadGoogleAnalytics(consent);
+    } else {
+      disableGoogleAnalytics();
+    }
+    if (consent === "accepted" && isProductionBrowser()) loadHotjar();
+  }, [consent, hasLoadedPreference]);
 
   const isBannerOpen = hasLoadedPreference && consent === null;
 
@@ -162,8 +215,8 @@ export function AnalyticsConsentManager() {
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-              We use optional analytics to understand site usage and improve the experience. Hotjar session
-              insights and Google Analytics load only if you allow them. Read our{" "}
+              We use Google Analytics to understand how visitors use this site. Hotjar session insights load
+              only if you allow them, and you can decline analytics here or later under Privacy choices. Read our{" "}
               <Link href="/privacy" className="font-medium text-foreground underline underline-offset-4">
                 Privacy Policy
               </Link>

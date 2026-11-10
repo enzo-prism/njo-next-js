@@ -257,7 +257,7 @@ export const resourceArticles: ResourceArticle[] = [
       "The expanded Second Edition launches November 17, 2026, with a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
     category: "Upcoming book",
     publishedAt: "2026-09-01T00:00:00Z",
-    updatedAt: "2026-10-29T00:00:00Z",
+    updatedAt: "2026-11-06T00:00:00Z",
     heroImage: {
       src: "/media/handbook-second-edition-coming-soon.webp",
       alt: "Coming soon announcement for the second edition of Dental Practice Transitions Handbook by Michael A. Njo, DDS, Founder of Practice Transitions Institute, with a foreword by Dr. Glenn Vo",
@@ -282,6 +282,12 @@ export const resourceArticles: ResourceArticle[] = [
       "Launching November 17, 2026, Dr. Michael Njo's substantially expanded and rewritten second edition of the Dental Practice Transitions Handbook keeps the same title and subtitle while adding new material.",
     ],
     sections: [
+      {
+        id: "reading-path",
+        title: "Use the handbook to prepare your next conversation",
+        paragraphs: ["Start with the ownership decision in front of you: buying, selling, or bringing a partner into the practice. Write down your goals, the records you have, and the assumptions you still need to test. Bring those questions to your transition advisor and independent legal and tax advisors."],
+        bullets: ["Buyers: identify the opportunity, financing questions, diligence records, and the responsibilities of ownership.", "Sellers: organize financial records, clarify your preferred timeline, and consider continuity for patients and staff.", "Prospective partners: compare valuation assumptions, decision rights, compensation, and exit expectations before committing."],
+      },
       {
         id: "whats-new",
         title: "What the second edition adds",

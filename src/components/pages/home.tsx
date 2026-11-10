@@ -49,7 +49,8 @@ import {
   gprResidencyPresentationImage,
 } from "@/data/media";
 import { EventOccurrenceDetails } from "@/components/events/event-occurrence-details";
-import { getUpcomingEventPrograms } from "@/data/events";
+import { PreviousEventsList } from "@/components/events/previous-events";
+import { getPreviousEventPrograms, getUpcomingEventPrograms } from "@/data/events";
 import { buildResourceArticlePath, resourceArticles } from "@/data/resource-articles";
 import { CONTACT_PATH } from "@/config/site";
 
@@ -154,6 +155,7 @@ export default function Home({
   const shortReview =
     bookReviews.find((review) => review.body.length < 220) ?? bookReviews[0];
   const upcomingEventPrograms = getUpcomingEventPrograms(referenceDate);
+  const previousEventPrograms = getPreviousEventPrograms(referenceDate);
 
   return (
     <>
@@ -197,9 +199,9 @@ export default function Home({
 
             <p className="text-sm text-muted-foreground">
               Author of the{" "}
-              <span className="font-medium text-foreground">
+              <Link href="/books" className="font-medium text-foreground underline underline-offset-4">
                 Dental Practice Transitions Handbook
-              </span>{" "}
+              </Link>{" "}
               · University of the Pacific Dugoni faculty · Founder, Practice
               Transitions Institute
             </p>
@@ -286,6 +288,7 @@ export default function Home({
                 <p className="mt-auto pt-1 text-xs font-medium uppercase tracking-wide text-brand/80">
                   For {service.audience}
                 </p>
+                {service.href ? <a href={service.href} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand underline-offset-4 hover:underline">{service.linkLabel}<ArrowRight className="h-4 w-4" aria-hidden="true" /></a> : null}
               </div>
             );
           })}
@@ -404,7 +407,7 @@ export default function Home({
                   </a>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/resources">Explore resources</Link>
+                  <Link href="/books">Explore the handbook and editions</Link>
                 </Button>
               </div>
             </div>
@@ -451,7 +454,7 @@ export default function Home({
                 <Link href="/michael-njo-dds">See full profile</Link>
               </Button>
               <Button asChild variant="ghost">
-                <Link href="/resources">Explore resources</Link>
+                <Link href="/books">Explore the handbook and editions</Link>
               </Button>
             </div>
           </div>
@@ -532,6 +535,18 @@ export default function Home({
               </div>
             ))}
           </div>
+        </Section>
+      ) : null}
+
+      {/* Previous events */}
+      {previousEventPrograms.length > 0 ? (
+        <Section tone="surface" id="previous-events">
+          <SectionHeading
+            eyebrow="Previous events"
+            title="Previous events"
+            description="Completed seminar dates and programs from Dr. Njo's current speaking series."
+          />
+          <PreviousEventsList programs={previousEventPrograms} />
         </Section>
       ) : null}
 
