@@ -3,7 +3,7 @@ import { buildResourceArticlePath, resourceArticles } from "@/data/resource-arti
 import { buildCommunityPostPath } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { buildPageStructuredData } from "@/seo/route-structured-data";
-import { buildUpcomingEventNodes } from "@/seo/structured-data";
+import { buildEventPostalAddress, buildUpcomingEventNodes } from "@/seo/structured-data";
 
 const forbiddenTypes = new Set(["Review", "AggregateRating", "Rating"]);
 
@@ -111,6 +111,38 @@ for (const key of ["isbn", "publisher", "datePublished", "image", "aggregateRati
   assert.ok(!(key in (recommendedBook || {})), `Do not invent recommended-book ${key}`);
 }
 
+const expectedEventCities: Record<string, [string, string]> = {
+  "Sacramento, CA": ["Sacramento", "CA"],
+  "Orange County, CA": ["Orange County", "CA"],
+  "San Francisco, CA": ["San Francisco", "CA"],
+  "Anaheim, CA": ["Anaheim", "CA"],
+  "Los Angeles, CA": ["Los Angeles", "CA"],
+  "Savannah, GA": ["Savannah", "GA"],
+  "Bakersfield, CA": ["Bakersfield", "CA"],
+  "Frank Fat's Restaurant, Sacramento, CA": ["Sacramento", "CA"],
+  "The Phillips Group, 2300 E. Katella Ave, Suite 405, Anaheim, CA": ["Anaheim", "CA"],
+};
+// Start before the season so completed workshops/retreats are also covered.
+const allEventNodes = buildUpcomingEventNodes(new Date("2026-01-01T00:00:00-08:00"));
+assert.equal(allEventNodes.length, 12);
+for (const node of [...allEventNodes, ...buildUpcomingEventNodes()]) {
+  const place = node.location as Record<string, unknown>;
+  assert.equal(place["@type"], "Place");
+  const expectedCity = expectedEventCities[place.name as string];
+  assert.ok(expectedCity, `Add a verified city/state expectation for ${place.name}`);
+  assert.deepEqual(place.address, {
+    "@type": "PostalAddress",
+    addressLocality: expectedCity[0],
+    addressRegion: expectedCity[1],
+    addressCountry: "US",
+  }, `${place.name} must have only a city/state/country PostalAddress, without streetAddress`);
+  assert.equal(node["@type"], node.name === "Leadership Retreat" || node.name === "Panel of Experts Dinner"
+    ? "Event" : "EducationEvent");
+}
+for (const invalidLocation of ["Sacramento", "Sacramento, California", "1201 K St, CA", "Suite 405, CA"]) {
+  assert.throws(() => buildEventPostalAddress(invalidLocation), /Event location must end with a city and state/);
+}
+
 const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
 assert.equal(
   augustEventNodes.length,
@@ -123,6 +155,7 @@ assert.equal(augustEventNodes[2].startDate, "2027-07-30T08:00:00-07:00");
 assert.equal(augustEventNodes[3].startDate, "2027-10-15T08:00:00-07:00");
 assert.equal(augustEventNodes[4].startDate, "2026-09-25T08:30:00-07:00");
 assert.equal(augustEventNodes[4].name, "The Dental Practice Beyond the Chair");
+assert.equal(augustEventNodes[4]["@type"], "EducationEvent", "Beyond the Chair workshop remains an EducationEvent");
 assert.deepEqual(
   augustEventNodes.slice(5, 8).map((node) => [node.startDate, (node.location as Record<string, unknown>).name]),
   [

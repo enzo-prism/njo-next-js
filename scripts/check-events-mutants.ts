@@ -115,6 +115,8 @@ const repoProfile = path.join(repoRoot, "src/components/pages/michael-njo-dds.ts
 const repoDetailOriginal = readFileSync(repoDetail, "utf8");
 const repoNewsCardOriginal = readFileSync(repoNewsCard, "utf8");
 const repoProfileOriginal = readFileSync(repoProfile, "utf8");
+const repoEvents = path.join(repoRoot, "src/data/events.ts");
+const repoEventsOriginal = readFileSync(repoEvents, "utf8");
 
 sweepStaleMutantSandboxes();
 
@@ -149,6 +151,7 @@ process.on("unhandledRejection", (reason) => {
 });
 
 function assertRepoUnchanged() {
+  assert.equal(readFileSync(repoEvents, "utf8"), repoEventsOriginal, "mutants must not rewrite events.ts");
   assert.equal(readFileSync(repoDetail, "utf8"), repoDetailOriginal, "mutants must not rewrite community-post-detail.tsx");
   assert.equal(readFileSync(repoNewsCard, "utf8"), repoNewsCardOriginal, "mutants must not rewrite irreplaceable-news-card.tsx");
   assert.equal(readFileSync(repoProfile, "utf8"), repoProfileOriginal, "mutants must not rewrite michael-njo-dds.tsx");
@@ -181,6 +184,7 @@ function sandboxPaths() {
     detail: path.join(tmpRoot, "src/components/pages/community-post-detail.tsx"),
     newsCard: path.join(tmpRoot, "src/components/irreplaceable-news-card.tsx"),
     profile: path.join(tmpRoot, "src/components/pages/michael-njo-dds.tsx"),
+    events: path.join(tmpRoot, "src/data/events.ts"),
   };
 }
 
@@ -251,9 +255,9 @@ function assertRequiredFailure(name: string, result: CheckResult, expectedText: 
   console.log(`Mutant ${name} failed as required (exit ${result.status}).`);
 }
 
-async function assertMutantFails(
+async function assertMutant(
   name: string,
-  expectedText: string,
+  expectedText: string | undefined,
   apply: (files: ReturnType<typeof sandboxPaths>) => void,
 ) {
   seedSandbox();
@@ -262,17 +266,94 @@ async function assertMutantFails(
     detail: readFileSync(files.detail, "utf8"),
     newsCard: readFileSync(files.newsCard, "utf8"),
     profile: readFileSync(files.profile, "utf8"),
+    events: readFileSync(files.events, "utf8"),
   };
   apply(files);
   const changed =
     readFileSync(files.detail, "utf8") !== before.detail ||
     readFileSync(files.newsCard, "utf8") !== before.newsCard ||
-    readFileSync(files.profile, "utf8") !== before.profile;
+    readFileSync(files.profile, "utf8") !== before.profile ||
+    readFileSync(files.events, "utf8") !== before.events;
   assert.equal(changed, true, `${name} mutant must change a sandbox file`);
   assertRepoUnchanged();
   const result = await runCheckEvents();
   assertRepoUnchanged();
-  assertRequiredFailure(name, result, expectedText);
+  if (expectedText !== undefined) {
+    assertRequiredFailure(name, result, expectedText);
+  } else {
+    const abnormal = describeAbnormalExit(name, result);
+    assert.equal(abnormal, null, `${abnormal}\n${result.stderr}\n${result.stdout}`);
+    assert.equal(result.status, 0, `${name} must pass check-events\n${result.stderr}\n${result.stdout}`);
+    console.log(`Mutant ${name} passed as required.`);
+  }
+}
+
+function assertMutantFails(name: string, expectedText: string, apply: (files: ReturnType<typeof sandboxPaths>) => void) {
+  return assertMutant(name, expectedText, apply);
+}
+
+function assertMutantPasses(name: string, apply: (files: ReturnType<typeof sandboxPaths>) => void) {
+  return assertMutant(name, undefined, apply);
+}
+
+function replaceEventText(files: ReturnType<typeof sandboxPaths>, before: string, after: string) {
+  const source = readFileSync(files.events, "utf8");
+  assert.ok(source.includes(before), `Missing event mutation target: ${before}`);
+  writeFileSync(files.events, source.replace(before, after));
+}
+
+async function assertSeminarMutants() {
+  const venueCases = [
+    ["lowercase", "tdic headquarters"],
+    ["mixed case", "The pHiLlIpS Group"],
+    ["zero width", "T\u200bD\u200cI\u200dC\ufeff Headquarters"],
+    ["other format characters", "T\u2060D\u00adIC Headquarters"],
+    ["fullwidth", "ＴＤＩＣ Headquarters"],
+    ["NBSP", "1201 K\u00a0St"],
+    ["Unicode space", "1201 K\u2002Street"],
+    ["dotted street", "1201 K. St."],
+    ["double space", "1 Post  Street"],
+    ["unlisted street venue", "Hyatt Regency, 1107 Jamboree Rd"],
+    ["spelled out firm", "The Dentists Insurance Company"],
+    ["Post Street without number", "Post Street"],
+    ["K Street without number", "K Street"],
+  ];
+  // Put every evasion into both prose fields: the city-format allowlist alone
+  // cannot catch these, so each mutation proves normalized venue matching runs.
+  for (const [name, value] of venueCases) {
+    for (const field of ["description", "locationLabel"] as const) {
+      await assertMutantFails(`MYDT ${field}: ${name}`, `MYDT ${field} must not name a venue, street, or host firm`, (files) => {
+        if (field === "description") {
+          replaceEventText(files, '      "Whether entering,', `      "${JSON.stringify(value).slice(1, -1)}. Whether entering,`);
+        } else {
+          replaceEventText(files, '    locationLabel: "6 locations available",', `    locationLabel: ${JSON.stringify(value)},`);
+        }
+      });
+    }
+    await assertMutantFails(`MYDT occurrence: ${name}`, "MYDT location must not name a venue, street, or host firm", (files) => {
+      replaceEventText(files, '        location: "Orange County, CA",', `        location: ${JSON.stringify(`${value}, Orange County, CA`)},`);
+    });
+  }
+  await assertMutantFails("MYDT city allowlist rejects unknown venue", "MYDT occurrence location must be city and state only", (files) => {
+    replaceEventText(files, '        location: "Orange County, CA",', '        location: "Hyatt Regency, Orange County, CA",');
+  });
+  await assertMutantFails("MYDT non-Sacramento firm guest", "MYDT guestLabel must not name a venue, street, or host firm", (files) => {
+    replaceEventText(files, '        dateLabel: "April 10, 2026",', '        dateLabel: "April 10, 2026",\n        guestLabel: "The Phillips Group",');
+  });
+  await assertMutantFails("MYDT guestLabel must be absent on every date", "MYDT occurrences must not have guestLabel", (files) => {
+    replaceEventText(files, '        dateLabel: "April 10, 2026",', '        dateLabel: "April 10, 2026",\n        guestLabel: "Special guest",');
+  });
+  for (const field of ["flyerImage", "flyerImageAlt"]) {
+    await assertMutantFails(`Sacramento ${field} reintroduced`, `Sacramento must have no public flyer${field === "flyerImageAlt" ? " alt" : ""} field`, (files) => {
+      replaceEventText(files, '        id: "sacramento-seminar-oct-2026",', `        id: "sacramento-seminar-oct-2026",\n        ${field}: "unapproved flyer",`);
+    });
+  }
+  await assertMutantPasses("MYDT speaker Dr. Anna Phillips", (files) => {
+    replaceEventText(files, '        dateLabel: "April 10, 2026",', '        dateLabel: "April 10, 2026",\n        speakers: [{ name: "Dr. Anna Phillips", title: "Speaker" }],');
+  });
+  await assertMutantPasses("MYDT highlight Q&A for Dugoni alumni", (files) => {
+    replaceEventText(files, '        dateLabel: "April 10, 2026",', '        dateLabel: "April 10, 2026",\n        highlights: ["Q&A for Dugoni alumni"],');
+  });
 }
 
 function wait(ms: number) {
@@ -354,6 +435,8 @@ async function main() {
     assert.equal(control.status, 0, `No-op control must pass check-events\n${control.stderr}\n${control.stdout}`);
     console.log("Mutant no-op control passed.");
 
+    await assertSeminarMutants();
+
     await assertMutantFails("P1 helper dropped on post body", "IrReplaceable body must contain the title markup once", (files) => {
       writeFileSync(files.detail, readFileSync(files.detail, "utf8").replace("{withIrReplaceableTitle(paragraph)}", "{paragraph}"));
     });
@@ -395,7 +478,7 @@ async function main() {
     assertRepoUnchanged();
   }
 
-  console.log("News polish mutant assertions passed.");
+  console.log("News polish and city-only seminar mutant assertions passed.");
 }
 
 void main();

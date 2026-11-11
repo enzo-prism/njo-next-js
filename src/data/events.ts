@@ -31,7 +31,7 @@ export type EventOccurrence = {
 
 export type EventProgram = {
   slug: string;
-  category: "seminar" | "conference" | "dinner";
+  category: "seminar" | "workshop" | "conference" | "dinner";
   registrationStatus: "Registration Open" | "Details to follow";
   scheduleLabel?: string;
   title: string;
@@ -182,7 +182,6 @@ export const eventPrograms: EventProgram[] = [
     slug: "mastering-your-dental-transition",
     category: "seminar",
     registrationStatus: "Registration Open",
-    scheduleLabel: "6 dates",
     title: "Mastering Your Dental Transition Into and Out of Practice",
     nextDateLabel: "April 10, 2026",
     nextDateTime: "2026-04-10T08:00:00-07:00",
@@ -220,9 +219,6 @@ export const eventPrograms: EventProgram[] = [
         location: "Sacramento, CA",
         startDateTime: "2026-10-02T08:00:00-07:00",
         endDateTime: "2026-10-02T15:00:00-07:00",
-        flyerImage: "/media/sacramento-seminar-oct-2026.webp",
-        flyerImageAlt:
-          "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 in Sacramento.",
         headline: "Before you buy, expand, partner, or sell / Know your options",
         speakers: [
           { name: "Liz Armato", title: "COO" },
@@ -267,7 +263,6 @@ export const eventPrograms: EventProgram[] = [
         endDateTime: "2027-10-15T15:00:00-07:00",
       },
     ],
-    completedEventsLabel: "View 2 completed events",
     registrationUrl: "https://practicetransitionsinstitute.com/events/practice-transition-seminar",
   },
   {
@@ -294,7 +289,7 @@ export const eventPrograms: EventProgram[] = [
   },
   {
     slug: "beyond-the-chair-anaheim",
-    category: "seminar",
+    category: "workshop",
     registrationStatus: "Registration Open",
     title: "The Dental Practice Beyond the Chair",
     nextDateLabel: "September 25, 2026",
