@@ -51,7 +51,7 @@ assert.equal(augustView[0].slug, "mastering-your-dental-transition");
 assert.equal(augustView[0].nextDateLabel, "October 2, 2026");
 assert.equal(
   augustView[0].nextOccurrence.location,
-  "1201 K St, 14th Floor, Sacramento, CA",
+  "Sacramento, CA",
 );
 assert.equal(augustView[0].upcomingDates.length, 4);
 assert.equal(augustView[0].completedOccurrences.length, 2);
@@ -71,7 +71,7 @@ assert.equal(afterAnaheim.length, 3, "2027 San Francisco and Sacramento seminar 
 assert.equal(afterAnaheim[0].nextDateLabel, "July 30, 2027");
 assert.equal(
   afterAnaheim[0].nextOccurrence.location,
-  "QUO, 1 Post Street, San Francisco, CA",
+  "San Francisco, CA",
 );
 assert.equal(afterAnaheim[0].upcomingDates.length, 2);
 
@@ -80,7 +80,7 @@ assert.equal(afterSanFrancisco.length, 3, "Sacramento October 15, 2027 should re
 assert.equal(afterSanFrancisco[0].nextDateLabel, "October 15, 2027");
 assert.equal(
   afterSanFrancisco[0].nextOccurrence.location,
-  "1201 K St, 14th Floor, Sacramento, CA",
+  "Sacramento, CA",
 );
 
 const afterFinal = getUpcomingEventPrograms(new Date("2027-10-16T00:00:00-07:00"));
@@ -221,7 +221,7 @@ assert.equal(
 );
 const sacramento = seminar?.upcomingDates?.find((occurrence) => occurrence.id === "sacramento-seminar-oct-2026");
 assert.ok(sacramento, "Sacramento October 2 occurrence must keep a stable calendar id");
-assert.equal(sacramento?.location, "1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento?.location, "Sacramento, CA");
 assert.equal(sacramento?.timeLabel, "8am - 3pm");
 assert.equal(sacramento?.startDateTime, "2026-10-02T08:00:00-07:00");
 assert.equal(sacramento?.endDateTime, "2026-10-02T15:00:00-07:00");
@@ -230,7 +230,15 @@ assert.equal(
   sacramento?.flyerImageAlt,
   "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 in Sacramento.",
 );
-assert.equal(sacramento?.guestLabel, undefined, "Do not name a specific firm as the Sacramento guest");
+assert.equal(sacramento?.guestLabel, undefined, "Seminar dates must not name a host firm");
+// Dr. Njo, Nov 2 2026: seminar dates list the city only, never a venue or host firm.
+for (const occurrence of seminar?.upcomingDates ?? []) {
+  assert.doesNotMatch(
+    JSON.stringify({ ...occurrence, flyerImage: undefined }),
+    /TDIC|Kohan|Phillips|QUO|Post St|K St|Katella|Dugoni/,
+    `${occurrence.dateLabel} seminar must list its city only`,
+  );
+}
 assert.deepEqual(
   sacramento?.speakers?.map((speaker) => speaker.name),
   ["Liz Armato", "Dr. Michael Njo"],
@@ -270,7 +278,7 @@ const sacramento2027 = seminar?.upcomingDates?.find((occurrence) =>
 assert.ok(sacramento2027, "Sacramento October 15, 2027 must be on the seminar calendar");
 assert.equal(sacramento2027?.dateLabel, "October 15, 2027");
 assert.equal(sacramento2027?.timeLabel, "8am - 3pm");
-assert.equal(sacramento2027?.location, "1201 K St, 14th Floor, Sacramento, CA");
+assert.equal(sacramento2027?.location, "Sacramento, CA");
 assert.equal(sacramento2027?.endDateTime, "2027-10-15T15:00:00-07:00");
 assert.equal(sacramento2027?.flyerImage, undefined, "Do not reuse the 2026 Sacramento flyer on the 2027 date");
 
@@ -282,7 +290,7 @@ assert.equal(sanFrancisco2027?.dateLabel, "July 30, 2027");
 assert.equal(sanFrancisco2027?.timeLabel, "8am - 3pm");
 assert.equal(
   sanFrancisco2027?.location,
-  "QUO, 1 Post Street, San Francisco, CA",
+  "San Francisco, CA",
 );
 assert.equal(sanFrancisco2027?.endDateTime, "2027-07-30T15:00:00-07:00");
 assert.equal(
