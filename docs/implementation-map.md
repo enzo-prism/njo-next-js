@@ -209,12 +209,17 @@ This means author edits can change slugs. If you rename an author on an already-
 completed programs from current-event UI/schema, and does not mutate editorial data. The home and profile routes use
 hourly ISR so date state refreshes without requiring a deployment. Current registration details hand off to PTI via
 `registrationUrl` (seminar detail pages, or the PTI events hub when a program has no dedicated PTI route). Occurrence-level
-fields such as `flyerImage`, speakers, guest labels, and date-gated pricing are allowed for a specific date only. The
+fields such as speakers and date-gated pricing belong to a specific date. The
 October 2, 2026 Sacramento seminar stays on the existing Mastering Your Dental Transition program
-and uses `/media/sacramento-seminar-oct-2026.webp`; do not duplicate that date or add a news/community post for it.
+with its speakers and pricing but no public flyer; do not duplicate that date or add a news/community post for it.
 The 2027 seminar calendar adds San Francisco on July 30, 2027 and Sacramento on October 15, 2027
-as ordinary city-date occurrences. Seminar locations are city and state only, never a venue or host firm
-(Dr. Njo, Nov 2 2026); do not add news/community posts for those dates.
+as ordinary city-date occurrences. Mastering Your Dental Transition seminar locations are city and state only,
+with no venue or host firm in public program/occurrence prose (including titles, headlines, labels, and flyer alt text) and no occurrence `guestLabel`
+(Dr. Njo, Nov 2 2026); do not add news/community posts for those dates. Beyond the Chair is a `workshop`:
+it retains The Phillips Group venue/address and its visible workshop badge. Seminars and workshops both emit
+`EducationEvent`. Dinners and the Leadership Retreat may also name venues. Every Event `Place` includes a
+city-only `PostalAddress` derived from the final city/state pair in its location, never a street or suite;
+the builder throws if that pair cannot be parsed. Place names retain their published location wording.
 News-tab copy in `src/components/pages/michael-njo-dds.tsx` and recaps in `src/data/community-posts.ts` must not advertise
 completed dinners as upcoming.
 `src/lib/profile-tabs.ts` keeps `?tab=news`, direct news-section hashes, browser history, and unrelated campaign query
@@ -445,9 +450,9 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:testimonials`
   - validates that testimonial content does not include known off-topic Fred/Heppner or Liz Armato reviews
 - `check:events`
-  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense
-- `check:events-mutants` (opt-in; not part of `check:parity`; also a manual `workflow_dispatch` job)
-  - copies `src` into a temp sandbox, writes `owner.pid` via temp+rename, and proves news-polish mutants fail `check-events` when spawned as `node --import tsx` (no tsx wrapper). A timeout, signal, null status, or exit `>= 128` is an error, never a required kill; stderr must include the expected assertion text. SIGINT/SIGTERM cleanup is best-effort (kill the child, then remove the active dir). Leftovers are swept on the next start: dead owners immediately; empty, garbled, EPERM/other-user, and ownerless dirs only after 30 minutes. Dirs that throw an unknown sweep error are kept, not swept. `NEWS_POLISH_MUTANT_PROOF` is unused (the built-in interrupt self-test was removed). `NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS` overrides the 60s child cap.
+  - validates date-aware event filtering at injected reference dates, multi-day event boundaries, source immutability, PTI registration handoff for Beyond the Chair, and that completed Roseville dinner copy stays in the past tense. The MYDT city-only guard allowlists occurrence city/state format, prohibits guest labels, and scans program `title`, `description`, `locationLabel`, fallback `nextDateLabel`/`timeLabel`, and occurrence `location`, `guestLabel`, `headline`, `flyerImageAlt`, `dateLabel`, `timeLabel`, and `pricing.earlyBirdDeadlineLabel` for venues, firms, and streets after NFKC, format-character removal, Unicode-space/punctuation normalization, whitespace collapse, and lowercasing. Only leading `st` (Saint) and trailing `ct` (Connecticut) tokens in city/state text are exempt from ambiguous street-suffix checks; explicit street/firm matches still fail, including city-shaped `Katella Ave, CA`. Speaker names/titles and both program/occurrence highlights are excluded because people/alumni mentions are not venues. Date/time ISO values, phones, URLs, asset paths, and IDs are not prose; category/status are enums, while schedule/completed-event labels are computed.
+- `check:events-mutants` (included in `check:parity`; also a manual `workflow_dispatch` job)
+  - copies `src` into a temp sandbox, writes `owner.pid` via temp+rename, and proves news-polish and seminar venue-evasion mutants fail `check-events`, while an MYDT speaker named Dr. Anna Phillips and a Dugoni-alumni highlight still pass. It mutates sandbox `events.ts` as well as React files, re-seeds between cases, and verifies the repository originals are unchanged. The full suite took about 77 seconds locally, below the two-minute parity threshold. Checks are spawned as `node --import tsx` (no tsx wrapper). A timeout, signal, null status, or exit `>= 128` is an error, never a required kill; stderr must include the expected assertion text. SIGINT/SIGTERM cleanup is best-effort (kill the child, then remove the active dir). Leftovers are swept on the next start: dead owners immediately; empty, garbled, EPERM/other-user, and ownerless dirs only after 30 minutes. Dirs that throw an unknown sweep error are kept, not swept. `NEWS_POLISH_MUTANT_PROOF` is unused (the built-in interrupt self-test was removed). `NEWS_POLISH_MUTANT_CHILD_TIMEOUT_MS` overrides the 60s child cap.
 - `check:irreplaceable-ax`
   - starts the production server, waits for `document.readyState === "complete"` plus the target selector via `Runtime.evaluate`, then asks Chrome for the IrReplaceable `h1` accessible name. Asserts every News card date before `#upcoming-events` is a visible `13px` `<p>` at 1280, 768 and 390px, including opacity, color, scale and nested elements (`ubuntu-latest` ships Google Chrome). Cleans up its `/tmp` profile.
 - `check:media`
@@ -463,7 +468,7 @@ Future changes should preserve the single-mount model. Do not add a second measu
 - `check:route-head-snapshots`
   - validates important route titles, descriptions, canonical URLs, and OG types
 - `check:schema`
-  - validates JSON-LD exists on expected routes and blocks forbidden review/rating types
+  - validates JSON-LD exists on expected routes and blocks forbidden review/rating types; checks every event Place has an exact city/state/country PostalAddress without streetAddress, including Anaheim for Beyond the Chair and Sacramento for Frank Fat's, and preserves workshop EducationEvent typing
 - `check:sitemap`
   - validates indexable sitemap coverage and ensures campaign, testimonial-detail, and `/contact/success` URLs are excluded
 - `check:seo-http`

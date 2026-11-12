@@ -39,6 +39,59 @@ function fileSha256(relativePath: string) {
 
 const sourceSnapshot = JSON.stringify(eventPrograms);
 
+function normalizeVenueText(value: string): string {
+  return value.normalize("NFKC")
+    .replace(/\p{Cf}/gu, "")
+    .replace(/\p{Zs}/gu, " ")
+    .replace(/\p{P}/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+// MYDT locations are cities only. Speaker names/titles and program/occurrence
+// highlights stay excluded: people names and alumni mentions are not venues.
+const seminar = eventPrograms.find((program) => program.slug === "mastering-your-dental-transition");
+assert.ok(seminar, "Mastering Your Dental Transition program must exist");
+const cityStateOnly = /^[A-Z][A-Za-z .'-]+, [A-Z]{2}$/;
+const venueOrStreet = /\b(?:tdic|kohan|phillips|quo|katella|dugoni)\b|\bthe dentists? insurance company\b|\b(?:post|k) (?:st|street)\b|\b(?:street|road|rd|avenue|ave|boulevard|blvd|lane|ln|court|suite|ste|floor)\b|\b\d+ (?:[a-z]+ ){0,8}(?:drive|dr|way)\b/;
+function assertCityOnlyProse(value: string, field: string) {
+  const normalized = normalizeVenueText(value);
+  const message = `MYDT ${field} must not name a venue, street, or host firm`;
+  assert.doesNotMatch(normalized, venueOrStreet, message);
+  const words = normalized.split(" ");
+  const isCityState = cityStateOnly.test(value);
+  // Only exempt a leading Saint abbreviation or a trailing Connecticut state
+  // code in city/state text. Other st/ct tokens (including numbered streets) fail.
+  assert.ok(words.every((word, index) => {
+    if (word === "st") return isCityState && index === 0;
+    if (word === "ct") return isCityState && index === words.length - 1;
+    return true;
+  }), message);
+}
+
+for (const city of ["St. Louis, MO", "St. Paul, MN", "Hartford, CT"]) {
+  assert.doesNotThrow(() => assertCityOnlyProse(city, "guard fixture"));
+  assert.match(city, cityStateOnly, "Valid cities must pass the location format guard");
+}
+for (const street of ["1 Post Street", "123 Main St", "Main St", "Katella Ave", "Katella Ave, CA", "123 Main Ct", "Main Ct, CT"]) {
+  assert.throws(() => assertCityOnlyProse(street, "guard fixture"),
+    /MYDT guard fixture must not name a venue, street, or host firm/);
+}
+
+// Scan public prose, including fallback date/time labels and flyer alt text.
+for (const field of ["title", "description", "locationLabel", "nextDateLabel", "timeLabel"] as const) {
+  assertCityOnlyProse(seminar[field], field);
+}
+for (const occurrence of seminar.upcomingDates ?? []) {
+  for (const field of ["location", "guestLabel", "headline", "flyerImageAlt", "dateLabel", "timeLabel"] as const) {
+    assertCityOnlyProse(occurrence[field] ?? "", field);
+  }
+  assertCityOnlyProse(occurrence.pricing?.earlyBirdDeadlineLabel ?? "", "pricing.earlyBirdDeadlineLabel");
+  assert.match(occurrence.location, cityStateOnly, "MYDT occurrence location must be city and state only");
+  assert.equal(occurrence.guestLabel, undefined, "MYDT occurrences must not have guestLabel");
+}
+
 const beforeSeason = getUpcomingEventPrograms(new Date("2026-01-01T00:00:00-08:00"));
 assert.equal(beforeSeason.length, 5, "All published programs should be upcoming at the start of the year");
 assert.equal(beforeSeason[0].upcomingDates.length, 6, "All seminar dates should initially be upcoming");
@@ -207,13 +260,12 @@ assert.equal(
 );
 
 const beyondTheChair = eventPrograms.find((program) => program.slug === "beyond-the-chair-anaheim");
+assert.equal(beyondTheChair?.category, "workshop", "Beyond the Chair keeps its venue as a workshop");
 assert.ok(
   beyondTheChair?.registrationUrl?.startsWith("https://practicetransitionsinstitute.com/"),
   "Beyond the Chair must hand current registration intent to PTI",
 );
 
-const seminar = eventPrograms.find((program) => program.slug === "mastering-your-dental-transition");
-assert.ok(seminar, "Mastering Your Dental Transition program must exist");
 assert.equal(
   seminar?.upcomingDates?.filter((occurrence) => occurrence.startDateTime.startsWith("2026-10-02")).length,
   1,
@@ -225,20 +277,8 @@ assert.equal(sacramento?.location, "Sacramento, CA");
 assert.equal(sacramento?.timeLabel, "8am - 3pm");
 assert.equal(sacramento?.startDateTime, "2026-10-02T08:00:00-07:00");
 assert.equal(sacramento?.endDateTime, "2026-10-02T15:00:00-07:00");
-assert.equal(sacramento?.flyerImage, "/media/sacramento-seminar-oct-2026.webp");
-assert.equal(
-  sacramento?.flyerImageAlt,
-  "Practice Transitions Institute Sacramento seminar flyer, October 2 2026 in Sacramento.",
-);
-assert.equal(sacramento?.guestLabel, undefined, "Seminar dates must not name a host firm");
-// Dr. Njo, Nov 2 2026: seminar dates list the city only, never a venue or host firm.
-for (const occurrence of seminar?.upcomingDates ?? []) {
-  assert.doesNotMatch(
-    JSON.stringify({ ...occurrence, flyerImage: undefined }),
-    /TDIC|Kohan|Phillips|QUO|Post St|K St|Katella|Dugoni/,
-    `${occurrence.dateLabel} seminar must list its city only`,
-  );
-}
+assert.equal("flyerImage" in sacramento, false, "Sacramento must have no public flyer field");
+assert.equal("flyerImageAlt" in sacramento, false, "Sacramento must have no public flyer alt field");
 assert.deepEqual(
   sacramento?.speakers?.map((speaker) => speaker.name),
   ["Liz Armato", "Dr. Michael Njo"],

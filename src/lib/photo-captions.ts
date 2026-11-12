@@ -69,8 +69,6 @@ const EMAIL_NOTES: Record<string, string> = {
     "Shared by Dr. Njo from the Los Angeles Panel of Experts dinner.",
   "diana-fat-board-of-regents":
     "Emailed PLEASE POST: Dr. Diana Fat Board of Regents congratulations.",
-  "sacramento-seminar-oct-2026":
-    "Emailed September 1, 2026 as PLEASE POST ASAP AND AGAIN IN 2 WEEKS.",
   "promotional-flyer-dental-strategies":
     "Flyer Dr. Njo shared for Beyond the Chair posting.",
   "dental-lifestyles-40-over-40-honoree-2026":
@@ -134,13 +132,6 @@ const EXTRA_PHOTOS: ExtraPhoto[] = [
     alt: "Dental Strategies Beyond the Chair promotional flyer.",
     featuredRoutes: ["profile:news"],
     emailNote: EMAIL_NOTES["promotional-flyer-dental-strategies"] ?? null,
-  },
-  {
-    id: "sacramento-seminar-oct-2026",
-    src: "/media/sacramento-seminar-oct-2026.webp",
-    alt: "Mastering Your Dental Transition seminar flyer for October 2, 2026 in Sacramento.",
-    featuredRoutes: ["profile:news"],
-    emailNote: EMAIL_NOTES["sacramento-seminar-oct-2026"] ?? null,
   },
 ];
 

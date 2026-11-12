@@ -227,9 +227,23 @@ const getFAQEntity = (): SchemaNode => ({
   })),
 });
 
+export function buildEventPostalAddress(location: string) {
+  // Read only the final city/state pair, even when the Place names a venue and street.
+  const cityState = location.trim().match(/(?:^|,\s*)([A-Z][A-Za-z .'-]+),\s*([A-Z]{2})$/);
+  if (!cityState) {
+    throw new Error(`Event location must end with a city and state: ${location}`);
+  }
+  return {
+    "@type": "PostalAddress",
+    addressLocality: cityState[1].trim(),
+    addressRegion: cityState[2],
+    addressCountry: "US",
+  };
+}
+
 export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[] =>
   getUpcomingEventPrograms(referenceDate).flatMap((program) => {
-    const eventType = program.category === "seminar" ? "EducationEvent" : "Event";
+    const eventType = program.category === "seminar" || program.category === "workshop" ? "EducationEvent" : "Event";
     const pageUrl = `${siteMetadata.siteUrl}/michael-njo-dds?tab=news`;
     const occurrences = program.upcomingDates?.length
       ? program.upcomingDates
@@ -247,6 +261,7 @@ export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[
       location: {
         "@type": "Place",
         name: occurrence.location,
+        address: buildEventPostalAddress(occurrence.location),
       },
       organizer: program.category === "dinner" ? undefined : {
         "@id": `${siteMetadata.siteUrl}#pti`,

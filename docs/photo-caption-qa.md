@@ -24,8 +24,7 @@ bars, or `PhotoNameOverlay`. Keep accurate `alt` text.
   `dental-lifestyles-magazine-16th-issue`,
   `irreplaceable-leah-roling-dr-njo`,
   `backstage-business-spotlight-michael-njo`,
-  `dental-lifestyles-feature-p26`, `promotional-flyer-dental-strategies`,
-  `sacramento-seminar-oct-2026`
+  `dental-lifestyles-feature-p26`, `promotional-flyer-dental-strategies`
 
 Unpublished email attachments, signature PNGs, PDFs, Calendly screenshots, and
 unrelated practice photos are not in this catalog. PTI (`enzo-prism/pti`)
