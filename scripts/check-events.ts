@@ -49,21 +49,45 @@ function normalizeVenueText(value: string): string {
     .toLowerCase();
 }
 
-// Dr. Njo, Nov 2 2026: MYDT locations are cities only. People and highlights
-// are deliberately excluded: e.g. Dr. Anna Phillips and Dugoni alumni are not venues.
+// MYDT locations are cities only. Speaker names/titles and program/occurrence
+// highlights stay excluded: people names and alumni mentions are not venues.
 const seminar = eventPrograms.find((program) => program.slug === "mastering-your-dental-transition");
 assert.ok(seminar, "Mastering Your Dental Transition program must exist");
 const cityStateOnly = /^[A-Z][A-Za-z .'-]+, [A-Z]{2}$/;
-const venueOrStreet = /\b(?:tdic|kohan|phillips|quo|katella|dugoni)\b|\bthe dentists? insurance company\b|\b(?:post|k) (?:st|street)\b|\b(?:street|st|road|rd|avenue|ave|boulevard|blvd|lane|ln|court|ct|suite|ste|floor)\b|\b\d+ (?:[a-z]+ ){0,8}(?:drive|dr|way)\b/;
+const venueOrStreet = /\b(?:tdic|kohan|phillips|quo|katella|dugoni)\b|\bthe dentists? insurance company\b|\b(?:post|k) (?:st|street)\b|\b(?:street|road|rd|avenue|ave|boulevard|blvd|lane|ln|court|suite|ste|floor)\b|\b\d+ (?:[a-z]+ ){0,8}(?:drive|dr|way)\b/;
 function assertCityOnlyProse(value: string, field: string) {
-  assert.doesNotMatch(normalizeVenueText(value), venueOrStreet,
-    `MYDT ${field} must not name a venue, street, or host firm`);
+  const normalized = normalizeVenueText(value);
+  const message = `MYDT ${field} must not name a venue, street, or host firm`;
+  assert.doesNotMatch(normalized, venueOrStreet, message);
+  const words = normalized.split(" ");
+  const isCityState = cityStateOnly.test(value);
+  // Only exempt a leading Saint abbreviation or a trailing Connecticut state
+  // code in city/state text. Other st/ct tokens (including numbered streets) fail.
+  assert.ok(words.every((word, index) => {
+    if (word === "st") return isCityState && index === 0;
+    if (word === "ct") return isCityState && index === words.length - 1;
+    return true;
+  }), message);
 }
-assertCityOnlyProse(seminar.description, "description");
-assertCityOnlyProse(seminar.locationLabel, "locationLabel");
+
+for (const city of ["St. Louis, MO", "St. Paul, MN", "Hartford, CT"]) {
+  assert.doesNotThrow(() => assertCityOnlyProse(city, "guard fixture"));
+  assert.match(city, cityStateOnly, "Valid cities must pass the location format guard");
+}
+for (const street of ["1 Post Street", "123 Main St", "Main St", "Katella Ave", "Katella Ave, CA", "123 Main Ct", "Main Ct, CT"]) {
+  assert.throws(() => assertCityOnlyProse(street, "guard fixture"),
+    /MYDT guard fixture must not name a venue, street, or host firm/);
+}
+
+// Scan public prose, including fallback date/time labels and flyer alt text.
+for (const field of ["title", "description", "locationLabel", "nextDateLabel", "timeLabel"] as const) {
+  assertCityOnlyProse(seminar[field], field);
+}
 for (const occurrence of seminar.upcomingDates ?? []) {
-  assertCityOnlyProse(occurrence.location, "location");
-  assertCityOnlyProse(occurrence.guestLabel ?? "", "guestLabel");
+  for (const field of ["location", "guestLabel", "headline", "flyerImageAlt", "dateLabel", "timeLabel"] as const) {
+    assertCityOnlyProse(occurrence[field] ?? "", field);
+  }
+  assertCityOnlyProse(occurrence.pricing?.earlyBirdDeadlineLabel ?? "", "pricing.earlyBirdDeadlineLabel");
   assert.match(occurrence.location, cityStateOnly, "MYDT occurrence location must be city and state only");
   assert.equal(occurrence.guestLabel, undefined, "MYDT occurrences must not have guestLabel");
 }

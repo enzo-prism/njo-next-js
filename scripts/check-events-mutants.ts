@@ -313,6 +313,13 @@ async function assertSeminarMutants() {
     ["Unicode space", "1201 K\u2002Street"],
     ["dotted street", "1201 K. St."],
     ["double space", "1 Post  Street"],
+    ["numbered Post Street", "1 Post Street"],
+    ["numbered abbreviated street", "123 Main St"],
+    ["unnumbered abbreviated street", "Main St"],
+    ["avenue", "Katella Ave"],
+    ["avenue in city/state format", "Katella Ave, CA"],
+    ["numbered abbreviated court", "123 Main Ct"],
+    ["court before state", "Main Ct, CT"],
     ["unlisted street venue", "Hyatt Regency, 1107 Jamboree Rd"],
     ["spelled out firm", "The Dentists Insurance Company"],
     ["Post Street without number", "Post Street"],
@@ -332,6 +339,34 @@ async function assertSeminarMutants() {
     }
     await assertMutantFails(`MYDT occurrence: ${name}`, "MYDT location must not name a venue, street, or host firm", (files) => {
       replaceEventText(files, '        location: "Orange County, CA",', `        location: ${JSON.stringify(`${value}, Orange County, CA`)},`);
+    });
+  }
+  for (const field of ["title", "nextDateLabel", "timeLabel"] as const) {
+    await assertMutantFails(`MYDT program ${field}: host firm`, `MYDT ${field} must not name a venue, street, or host firm`, (files) => {
+      const original = {
+        title: "Mastering Your Dental Transition Into and Out of Practice",
+        nextDateLabel: "April 10, 2026",
+        timeLabel: "8am - 3pm",
+      }[field];
+      replaceEventText(files, `    ${field}: ${JSON.stringify(original)},`, `    ${field}: "TDIC Headquarters",`);
+    });
+  }
+  for (const field of ["headline", "flyerImageAlt", "dateLabel", "timeLabel"] as const) {
+    await assertMutantFails(`MYDT occurrence ${field}: host firm`, `MYDT ${field} must not name a venue, street, or host firm`, (files) => {
+      if (field === "dateLabel" || field === "timeLabel") {
+        const original = field === "dateLabel" ? "April 10, 2026" : "8am - 3pm";
+        replaceEventText(files, `        ${field}: ${JSON.stringify(original)},`, `        ${field}: "TDIC Headquarters",`);
+      } else {
+        replaceEventText(files, '        dateLabel: "April 10, 2026",', `        dateLabel: "April 10, 2026",\n        ${field}: "TDIC Headquarters",`);
+      }
+    });
+  }
+  await assertMutantFails("MYDT pricing deadline label: host firm", "MYDT pricing.earlyBirdDeadlineLabel must not name a venue, street, or host firm", (files) => {
+    replaceEventText(files, '          earlyBirdDeadlineLabel: "September 2, 2026",', '          earlyBirdDeadlineLabel: "TDIC Headquarters",');
+  });
+  for (const city of ["St. Louis, MO", "St. Paul, MN", "Hartford, CT"]) {
+    await assertMutantPasses(`MYDT city location: ${city}`, (files) => {
+      replaceEventText(files, '        location: "Orange County, CA",', `        location: ${JSON.stringify(city)},`);
     });
   }
   await assertMutantFails("MYDT city allowlist rejects unknown venue", "MYDT occurrence location must be city and state only", (files) => {
