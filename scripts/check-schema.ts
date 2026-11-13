@@ -117,6 +117,8 @@ const expectedEventCities: Record<string, [string, string]> = {
   "San Francisco, CA": ["San Francisco", "CA"],
   "Anaheim, CA": ["Anaheim", "CA"],
   "Los Angeles, CA": ["Los Angeles", "CA"],
+  "Thousand Oaks, CA": ["Thousand Oaks", "CA"],
+  "Pasadena, CA": ["Pasadena", "CA"],
   "Savannah, GA": ["Savannah", "GA"],
   "Bakersfield, CA": ["Bakersfield", "CA"],
   "Frank Fat's Restaurant, Sacramento, CA": ["Sacramento", "CA"],
@@ -124,7 +126,7 @@ const expectedEventCities: Record<string, [string, string]> = {
 };
 // Start before the season so completed workshops/retreats are also covered.
 const allEventNodes = buildUpcomingEventNodes(new Date("2026-01-01T00:00:00-08:00"));
-assert.equal(allEventNodes.length, 12);
+assert.equal(allEventNodes.length, 13);
 for (const node of [...allEventNodes, ...buildUpcomingEventNodes()]) {
   const place = node.location as Record<string, unknown>;
   assert.equal(place["@type"], "Place");
@@ -146,8 +148,8 @@ for (const invalidLocation of ["Sacramento", "Sacramento, California", "1201 K S
 const augustEventNodes = buildUpcomingEventNodes(new Date("2026-08-17T12:00:00-07:00"));
 assert.equal(
   augustEventNodes.length,
-  9,
-  "October 2026, March 2027, July 2027, October 2027, September 25 Anaheim, the three 2027 Panel of Experts dinners, and the October 14 dinner occurrences should be upcoming in August",
+  10,
+  "October 2026, March 2027, July 2027, October 2027, September 25 Anaheim, the four 2027 Panel of Experts dinners, and the October 14 dinner occurrences should be upcoming in August",
 );
 assert.equal(augustEventNodes[0].startDate, "2026-10-02T08:00:00-07:00");
 assert.equal(augustEventNodes[1].startDate, "2027-03-12T08:00:00-08:00");
@@ -157,26 +159,27 @@ assert.equal(augustEventNodes[4].startDate, "2026-09-25T08:30:00-07:00");
 assert.equal(augustEventNodes[4].name, "The Dental Practice Beyond the Chair");
 assert.equal(augustEventNodes[4]["@type"], "EducationEvent", "Beyond the Chair workshop remains an EducationEvent");
 assert.deepEqual(
-  augustEventNodes.slice(5, 8).map((node) => [node.startDate, (node.location as Record<string, unknown>).name]),
+  augustEventNodes.slice(5, 9).map((node) => [node.startDate, (node.location as Record<string, unknown>).name]),
   [
-    ["2027-01-21", "Los Angeles, CA"],
-    ["2027-05-20", "Los Angeles, CA"],
+    ["2027-01-21", "Orange County, CA"],
+    ["2027-05-20", "Thousand Oaks, CA"],
+    ["2027-07-15", "Pasadena, CA"],
     ["2027-10-21", "Bakersfield, CA"],
   ],
   "2027 Panel of Experts dinners list cities only with calendar dates",
 );
-for (const node of augustEventNodes.slice(5, 8)) {
+for (const node of augustEventNodes.slice(5, 9)) {
   assert.equal(node["@type"], "Event");
   assert.equal(node.endDate, undefined);
   assert.equal(node.performer, undefined, "No unconfirmed dinner speakers");
   assert.equal(node.organizer, undefined, "No unconfirmed dinner organizer");
 }
-assert.equal(augustEventNodes[8].startDate, "2027-10-14");
-assert.equal(augustEventNodes[8]["@type"], "Event");
-assert.equal(augustEventNodes[8].endDate, undefined);
-assert.equal(augustEventNodes[8].performer, undefined, "No unconfirmed dinner speakers");
-assert.equal(augustEventNodes[8].organizer, undefined, "No unconfirmed dinner organizer");
-assert.equal((augustEventNodes[8].location as Record<string, unknown>).name, "Frank Fat's Restaurant, Sacramento, CA");
+assert.equal(augustEventNodes[9].startDate, "2027-10-14");
+assert.equal(augustEventNodes[9]["@type"], "Event");
+assert.equal(augustEventNodes[9].endDate, undefined);
+assert.equal(augustEventNodes[9].performer, undefined, "No unconfirmed dinner speakers");
+assert.equal(augustEventNodes[9].organizer, undefined, "No unconfirmed dinner organizer");
+assert.equal((augustEventNodes[9].location as Record<string, unknown>).name, "Frank Fat's Restaurant, Sacramento, CA");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-04-10"), "Past April event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("2026-07-17"), "Past July event must not remain in schema");
 assert.ok(!JSON.stringify(augustEventNodes).includes("leadership-retreat"), "Past retreat must not remain in schema");

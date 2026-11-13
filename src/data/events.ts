@@ -323,23 +323,33 @@ export const eventPrograms: EventProgram[] = [
     nextDateLabel: "January 21, 2027",
     nextDateTime: "2027-01-21",
     timeLabel: "Time to be announced",
-    locationLabel: "Los Angeles, CA",
+    locationLabel: "Orange County, CA",
     description:
-      "Panel of Experts dinners in Los Angeles and Bakersfield in 2027. Time and additional details will be announced.",
+      "Panel of Experts dinners in Orange County, Thousand Oaks, Pasadena, and Bakersfield in 2027. Time and additional details will be announced.",
     upcomingDates: [
       {
+        id: "orange-county-jan-2027",
         dateLabel: "January 21, 2027",
         timeLabel: "Time to be announced",
-        location: "Los Angeles, CA",
+        location: "Orange County, CA",
         startDateTime: "2027-01-21",
       },
       {
+        id: "thousand-oaks-may-2027",
         dateLabel: "May 20, 2027",
         timeLabel: "Time to be announced",
-        location: "Los Angeles, CA",
+        location: "Thousand Oaks, CA",
         startDateTime: "2027-05-20",
       },
       {
+        id: "pasadena-jul-2027",
+        dateLabel: "July 15, 2027",
+        timeLabel: "Time to be announced",
+        location: "Pasadena, CA",
+        startDateTime: "2027-07-15",
+      },
+      {
+        id: "bakersfield-oct-2027",
         dateLabel: "October 21, 2027",
         timeLabel: "Time to be announced",
         location: "Bakersfield, CA",
