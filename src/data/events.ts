@@ -325,7 +325,7 @@ export const eventPrograms: EventProgram[] = [
     timeLabel: "Time to be announced",
     locationLabel: "Orange County, CA",
     description:
-      "Panel of Experts dinners in Orange County, Thousand Oaks, Pasadena, and Bakersfield in 2027. Time and additional details will be announced.",
+      "Panel of Experts dinners in Orange County, Thousand Oaks, El Segundo, and Bakersfield in 2027. Time and additional details will be announced.",
     upcomingDates: [
       {
         id: "orange-county-jan-2027",
@@ -342,10 +342,10 @@ export const eventPrograms: EventProgram[] = [
         startDateTime: "2027-05-20",
       },
       {
-        id: "pasadena-jul-2027",
+        id: "el-segundo-jul-2027",
         dateLabel: "July 15, 2027",
         timeLabel: "Time to be announced",
-        location: "Pasadena, CA",
+        location: "El Segundo, CA",
         startDateTime: "2027-07-15",
       },
       {

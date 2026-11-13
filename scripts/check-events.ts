@@ -160,7 +160,7 @@ assert.deepEqual(
   [
     ["orange-county-jan-2027", "January 21, 2027", "Orange County, CA", "2027-01-21"],
     ["thousand-oaks-may-2027", "May 20, 2027", "Thousand Oaks, CA", "2027-05-20"],
-    ["pasadena-jul-2027", "July 15, 2027", "Pasadena, CA", "2027-07-15"],
+    ["el-segundo-jul-2027", "July 15, 2027", "El Segundo, CA", "2027-07-15"],
     ["bakersfield-oct-2027", "October 21, 2027", "Bakersfield, CA", "2027-10-21"],
   ],
 );
