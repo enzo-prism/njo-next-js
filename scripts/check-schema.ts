@@ -118,7 +118,7 @@ const expectedEventCities: Record<string, [string, string]> = {
   "Anaheim, CA": ["Anaheim", "CA"],
   "Los Angeles, CA": ["Los Angeles", "CA"],
   "Thousand Oaks, CA": ["Thousand Oaks", "CA"],
-  "Pasadena, CA": ["Pasadena", "CA"],
+  "El Segundo, CA": ["El Segundo", "CA"],
   "Savannah, GA": ["Savannah", "GA"],
   "Bakersfield, CA": ["Bakersfield", "CA"],
   "Frank Fat's Restaurant, Sacramento, CA": ["Sacramento", "CA"],
@@ -163,7 +163,7 @@ assert.deepEqual(
   [
     ["2027-01-21", "Orange County, CA"],
     ["2027-05-20", "Thousand Oaks, CA"],
-    ["2027-07-15", "Pasadena, CA"],
+    ["2027-07-15", "El Segundo, CA"],
     ["2027-10-21", "Bakersfield, CA"],
   ],
   "2027 Panel of Experts dinners list cities only with calendar dates",
