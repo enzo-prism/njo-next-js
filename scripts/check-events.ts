@@ -145,17 +145,23 @@ assert.deepEqual(
 assert.deepEqual(afterFinal[0].upcomingDates.map((occurrence) => occurrence.dateLabel), ["October 21, 2027"]);
 assert.equal(getUpcomingEventPrograms(new Date("2027-10-22T00:00:00-07:00")).length, 0);
 
-// 2027 Panel of Experts dinners (Dr. Njo, Nov 7 2026): cities only, no invented times or registration.
-const panel2027 = getUpcomingEventPrograms(new Date("2026-11-08T12:00:00-08:00")).find(
+// 2027 Panel of Experts dinners (Dr. Njo, Nov 12 2026): cities only, no invented times or registration.
+const panel2027 = getUpcomingEventPrograms(new Date("2026-11-13T12:00:00-08:00")).find(
   (program) => program.slug === "panel-of-experts-2027",
 );
 assert.ok(panel2027, "2027 Panel of Experts dinners must be listed");
 assert.deepEqual(
-  panel2027.upcomingDates.map((occurrence) => [occurrence.dateLabel, occurrence.location, occurrence.startDateTime]),
+  panel2027.upcomingDates.map((occurrence) => [
+    occurrence.id,
+    occurrence.dateLabel,
+    occurrence.location,
+    occurrence.startDateTime,
+  ]),
   [
-    ["January 21, 2027", "Los Angeles, CA", "2027-01-21"],
-    ["May 20, 2027", "Los Angeles, CA", "2027-05-20"],
-    ["October 21, 2027", "Bakersfield, CA", "2027-10-21"],
+    ["orange-county-jan-2027", "January 21, 2027", "Orange County, CA", "2027-01-21"],
+    ["thousand-oaks-may-2027", "May 20, 2027", "Thousand Oaks, CA", "2027-05-20"],
+    ["pasadena-jul-2027", "July 15, 2027", "Pasadena, CA", "2027-07-15"],
+    ["bakersfield-oct-2027", "October 21, 2027", "Bakersfield, CA", "2027-10-21"],
   ],
 );
 assert.equal(panel2027.registrationUrl, undefined, "Do not invent a registration path");
