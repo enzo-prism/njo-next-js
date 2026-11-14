@@ -17,11 +17,9 @@ const FIRST_EDITION_AMAZON_URL =
 const EXIT_BLUEPRINT_AMAZON_URL = "https://www.amazon.com/dp/B0H8WL3F6H";
 const UNLOCKED_PRACTICE_AMAZON_URL = "https://www.amazon.com/dp/B0HMM29ZMX";
 
-// TODO(Second Edition Kindle link): the Second Edition purchase URL is not
-// yet confirmed. When the live listing is confirmed, set this to the Second
-// Edition Kindle URL so the purchase button renders. Do not substitute the
-// first-edition Amazon URL above. Wording matches /resources/second-book.
-const SECOND_EDITION_KINDLE_URL: string | null = null;
+// Second Edition Kindle pre-order listing, sent by Dr. Njo on Nov 14, 2026.
+// Do not substitute the first-edition Amazon URL above.
+const SECOND_EDITION_KINDLE_URL: string | null = "https://www.amazon.com/dp/B0HRL1C1LZ";
 
 const secondEditionHighlights = [
   "A new foreword by Dr. Glenn Vo, founder of Nifty Thrifty Dentists and Editor-in-Chief of Dental Lifestyles Magazine.",
@@ -110,7 +108,7 @@ export default function BooksPage() {
               </ul>
 
               <p className="max-w-xl text-pretty leading-relaxed text-white/75">
-                The Kindle edition will be available for $2.99 at launch.
+                The Kindle edition is available to pre-order for $2.99.
               </p>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -120,7 +118,7 @@ export default function BooksPage() {
                     className="h-auto w-full whitespace-normal bg-amber-300 py-2.5 text-center leading-snug text-ink hover:bg-amber-200 sm:w-auto"
                   >
                     <a href={SECOND_EDITION_KINDLE_URL} target="_blank" rel="noopener noreferrer">
-                      Get the Second Edition on Kindle
+                      Pre-order the Second Edition on Kindle
                       <ExternalLink className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </Button>
