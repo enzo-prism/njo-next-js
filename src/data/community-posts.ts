@@ -47,7 +47,7 @@ export const communityPosts: CommunityPost[] = [
       caption: "Amazon’s #1 Best Seller badge in Dentistry, highlighted in Dr. Njo’s screenshot.",
     },
     link: {
-      href: "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
+      href: "https://www.amazon.com/dp/B0HRL1C1LZ",
       label: "Dental Practice Transitions Handbook, Second Edition, on Amazon",
     },
     body: [
