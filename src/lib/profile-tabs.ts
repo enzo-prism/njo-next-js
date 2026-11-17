@@ -1,6 +1,7 @@
 export type ProfileTab = "overview" | "news";
 
 const newsSectionIds = new Set([
+  "dental-practice-transitions-handbook-second-edition-bestseller",
   "dental-lifestyles-40-over-40-2026",
   "irreplaceable-leah-roling",
   "backstage-business-spotlight-michael-njo",

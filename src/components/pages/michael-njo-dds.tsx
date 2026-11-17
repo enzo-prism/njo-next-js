@@ -51,6 +51,10 @@ import {
 const panel =
   "rounded-2xl border border-border/70 bg-card p-6 shadow-sm md:p-7";
 
+const bestsellerCommunityPost = communityPosts.find(
+  (post) => post.slug === "dental-practice-transitions-handbook-second-edition-bestseller",
+);
+
 const fortyOverFortyCommunityPost = communityPosts.find(
   (post) => post.slug === "dental-lifestyles-40-over-40-2026",
 );
@@ -491,6 +495,47 @@ export default function MichaelNjoDDS({
           </TabsContent>
 
           <TabsContent value="news" className="space-y-6">
+            {bestsellerCommunityPost ? (
+              <article
+                id={bestsellerCommunityPost.slug}
+                className={`${panel} scroll-mt-28 space-y-4`}
+              >
+                <p className={newsCardDateClass}>
+                  {formatCommunityPostDate(bestsellerCommunityPost.publishedAt)}
+                </p>
+                <h2 className="font-serif text-xl font-semibold">
+                  {bestsellerCommunityPost.title}
+                </h2>
+                {bestsellerCommunityPost.image ? (
+                  <Image
+                    src={bestsellerCommunityPost.image.src}
+                    alt={bestsellerCommunityPost.image.alt}
+                    width={bestsellerCommunityPost.image.width}
+                    height={bestsellerCommunityPost.image.height}
+                    className="h-auto w-full rounded-xl bg-slate-50 object-contain"
+                    sizes="(min-width: 1024px) 768px, 100vw"
+                  />
+                ) : null}
+                {bestsellerCommunityPost.body.map((paragraph) => (
+                  <p key={paragraph} className="text-pretty text-sm leading-relaxed text-muted-foreground">
+                    {paragraph}
+                  </p>
+                ))}
+                <div className="flex flex-wrap gap-3">
+                  {bestsellerCommunityPost.link ? (
+                    <Button asChild size="sm">
+                      <a href={bestsellerCommunityPost.link.href} target="_blank" rel="noopener noreferrer">
+                        View the book on Amazon
+                      </a>
+                    </Button>
+                  ) : null}
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/blog/${bestsellerCommunityPost.slug}`}>Read the full story</Link>
+                  </Button>
+                </div>
+              </article>
+            ) : null}
+
             {fortyOverFortyCommunityPost ? (
               <article
                 id={fortyOverFortyCommunityPost.slug}

@@ -31,6 +31,30 @@ export type CommunityPost = {
 };
 
 export const communityPosts: CommunityPost[] = [
+  // Publish by merging on November 18, 2026 (America/Los_Angeles), never earlier.
+  // publishedAt is display/schema metadata; community posts have no date gate.
+  {
+    slug: "dental-practice-transitions-handbook-second-edition-bestseller",
+    title: "Dental Practice Transitions Handbook, Second Edition, Hits #1 Best Seller",
+    description:
+      "A thank-you from Dr. Njo as the Second Edition reaches Amazon’s #1 Best Seller spot in Dentistry.",
+    publishedAt: "2026-11-18",
+    image: {
+      src: "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
+      width: 2072,
+      height: 936,
+      alt: "Amazon listing for Dr. Michael Njo’s Dental Practice Transitions Handbook, Second Edition, with the #1 Best Seller badge in Dentistry circled in red.",
+      caption: "Amazon’s #1 Best Seller badge in Dentistry, highlighted in Dr. Njo’s screenshot.",
+    },
+    link: {
+      href: "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
+      label: "Dental Practice Transitions Handbook, Second Edition, on Amazon",
+    },
+    body: [
+      "My dear friend and colleague, Nancy Coy, shared that my new book, Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates, Second Edition, reached #1 Best Seller in Dentistry.",
+      "Thank you to my colleagues, friends, clients, and future clients for ordering my book. Happy reading and learning!",
+    ],
+  },
   {
     slug: "dental-lifestyles-40-over-40-2026",
     title: "Dr. Njo Named a Dental Lifestyles 40 Over 40 Awardee for 2026",
