@@ -508,9 +508,16 @@ assert.equal(
 assert.equal(communityPosts.length, 17, "Community post inventory includes the approved November 18 bestseller news");
 assert.deepEqual(
   communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
-  ["dental-lifestyles-40-over-40-2026"],
-  "Only the 40 Over 40 post may opt into the stacked hero layout",
+  ["dental-practice-transitions-handbook-second-edition-bestseller", "dental-lifestyles-40-over-40-2026"],
+  "The bestseller and 40 Over 40 posts use the stacked hero layout",
 );
+const bestsellerPost = communityPosts.find((post) => post.slug === "dental-practice-transitions-handbook-second-edition-bestseller");
+assert.deepEqual(bestsellerPost?.images?.map((image) => image.src), [
+  "/media/handbook-bestseller-circled-close-up.jpg",
+  "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
+], "Show the circled badge first and Nancy Coy’s call underneath");
+assert.equal(bestsellerPost?.image, bestsellerPost?.images?.[0]);
+assert.equal(bestsellerPost?.socialImage?.src, "/media/handbook-bestseller-social.jpg");
 for (const slug of [
   "another-perfect-match",
   "panel-of-experts-dinner-roseville",

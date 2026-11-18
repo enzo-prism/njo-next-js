@@ -30,6 +30,14 @@ export type CommunityPost = {
   body: string[];
 };
 
+const bestsellerCloseUp: CommunityPostImage = {
+  src: "/media/handbook-bestseller-circled-close-up.jpg",
+  width: 420,
+  height: 80,
+  alt: "Amazon’s #1 Best Seller badge circled in red, followed by the category “in Dentistry.”",
+  caption: "The Second Edition reached #1 Best Seller in Dentistry on Amazon.",
+};
+
 export const communityPosts: CommunityPost[] = [
   // Publish by merging on November 18, 2026 (America/Los_Angeles), never earlier.
   // publishedAt is display/schema metadata; community posts have no date gate.
@@ -39,13 +47,24 @@ export const communityPosts: CommunityPost[] = [
     description:
       "A thank-you from Dr. Njo as the Second Edition reaches Amazon’s #1 Best Seller spot in Dentistry.",
     publishedAt: "2026-11-18",
-    image: {
-      src: "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
-      width: 2000,
-      height: 1065,
-      alt: "Video call in which Nancy Coy shares the Amazon listing for Dr. Michael Njo’s Dental Practice Transitions Handbook, Second Edition, showing the #1 Best Seller badge in Dentistry, with Dr. Njo on the call.",
-      caption: "Nancy Coy shares the Second Edition’s #1 Best Seller listing in Dentistry with Dr. Njo.",
+    socialImage: {
+      src: "/media/handbook-bestseller-social.jpg",
+      width: 1200,
+      height: 639,
+      alt: "Nancy Coy and Dr. Michael Njo on a video call with the handbook’s Amazon bestseller listing on screen.",
     },
+    image: bestsellerCloseUp,
+    imageLayout: "stacked-hero",
+    images: [
+      bestsellerCloseUp,
+      {
+        src: "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
+        width: 2000,
+        height: 1065,
+        alt: "Video call in which Nancy Coy shares the Amazon listing for Dr. Michael Njo’s Dental Practice Transitions Handbook, Second Edition, showing the #1 Best Seller badge in Dentistry, with Dr. Njo on the call.",
+        caption: "Nancy Coy shares the Second Edition’s #1 Best Seller listing in Dentistry with Dr. Njo.",
+      },
+    ],
     link: {
       href: "https://www.amazon.com/dp/B0HRL1C1LZ",
       label: "Dental Practice Transitions Handbook, Second Edition, on Amazon",
