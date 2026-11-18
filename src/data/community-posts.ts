@@ -47,6 +47,12 @@ export const communityPosts: CommunityPost[] = [
     description:
       "A thank-you from Dr. Njo as the Second Edition reaches Amazon’s #1 Best Seller spot in Dentistry.",
     publishedAt: "2026-11-18",
+    socialImage: {
+      src: "/media/handbook-bestseller-social.jpg",
+      width: 1200,
+      height: 639,
+      alt: "Nancy Coy and Dr. Michael Njo on a video call with the handbook’s Amazon bestseller listing on screen.",
+    },
     image: bestsellerCloseUp,
     imageLayout: "stacked-hero",
     images: [

@@ -517,6 +517,7 @@ assert.deepEqual(bestsellerPost?.images?.map((image) => image.src), [
   "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
 ], "Show the circled badge first and Nancy Coy’s call underneath");
 assert.equal(bestsellerPost?.image, bestsellerPost?.images?.[0]);
+assert.equal(bestsellerPost?.socialImage?.src, "/media/handbook-bestseller-social.jpg");
 for (const slug of [
   "another-perfect-match",
   "panel-of-experts-dinner-roseville",
