@@ -41,10 +41,10 @@ export const communityPosts: CommunityPost[] = [
     publishedAt: "2026-11-18",
     image: {
       src: "/media/dental-practice-transitions-handbook-second-edition-bestseller.webp",
-      width: 2072,
-      height: 936,
-      alt: "Amazon listing for Dr. Michael Njo’s Dental Practice Transitions Handbook, Second Edition, with the #1 Best Seller badge in Dentistry circled in red.",
-      caption: "Amazon’s #1 Best Seller badge in Dentistry, highlighted in Dr. Njo’s screenshot.",
+      width: 2000,
+      height: 1065,
+      alt: "Video call in which Nancy Coy shares the Amazon listing for Dr. Michael Njo’s Dental Practice Transitions Handbook, Second Edition, showing the #1 Best Seller badge in Dentistry, with Dr. Njo on the call.",
+      caption: "Nancy Coy shares the Second Edition’s #1 Best Seller listing in Dentistry with Dr. Njo.",
     },
     link: {
       href: "https://www.amazon.com/dp/B0HRL1C1LZ",

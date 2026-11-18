@@ -397,6 +397,8 @@ async function waitForReadySelector(session: SessionSend, selector: string, time
   throw new Error(`Timed out waiting for document.readyState complete and ${selector}`);
 }
 
+const CHROME_STARTUP_TIMEOUT_MS = 30_000;
+
 async function withChrome<T>(fn: (session: SessionSend) => Promise<T>) {
   const userData = mkdtempSync(path.join(os.tmpdir(), "irreplaceable-ax-"));
   const port = await getAvailablePort();
@@ -415,7 +417,8 @@ async function withChrome<T>(fn: (session: SessionSend) => Promise<T>) {
   );
   let browserWs: WebSocket | undefined;
   try {
-    const deadline = Date.now() + 8000;
+    // Cold GitHub runners can take longer than 8s to expose the DevTools endpoint (run 44339493662).
+    const deadline = Date.now() + CHROME_STARTUP_TIMEOUT_MS;
     let version: { webSocketDebuggerUrl?: string } | undefined;
     while (Date.now() < deadline) {
       try {
