@@ -98,6 +98,20 @@ Use these checks on the preview deployment and repeat the read-only checks on th
 
 ## 4. Production Deployment
 
+### November 18, 2026 bestseller news release
+
+The Second Edition bestseller post is dated `2026-11-18` and must be merged on
+Wednesday, November 18, 2026 (America/Los_Angeles), never before. Leave its PR
+unmerged until then. Community posts have no publish-date gate: `publishedAt`
+controls the displayed and structured-data date, and merging to `main` publishes
+the article, News card, and sitemap entry immediately. Preview deployments may
+show the post for review before that date.
+
+After release, verify
+`/blog/dental-practice-transitions-handbook-second-edition-bestseller` and the
+profile News card, including the red ellipse around the screenshot’s **#1 Best
+Seller** badge, the **in Dentistry** context, and the supplied Amazon link.
+
 Production can be triggered either:
 
 1. By pushing `main` (recommended), or

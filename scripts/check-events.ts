@@ -505,7 +505,7 @@ assert.equal(
   false,
   "Community posts must not carry a bodyMeasure opt-in",
 );
-assert.equal(communityPosts.length, 16, "Community post inventory includes the approved merger message");
+assert.equal(communityPosts.length, 17, "Community post inventory includes the approved November 18 bestseller news");
 assert.deepEqual(
   communityPosts.filter((post) => post.imageLayout === "stacked-hero").map((post) => post.slug),
   ["dental-lifestyles-40-over-40-2026"],
