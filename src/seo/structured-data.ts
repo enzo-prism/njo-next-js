@@ -1,6 +1,7 @@
 import { getUpcomingEventPrograms } from "@/data/events";
 import { interviewVideo as interviewVideoAssets } from "@/data/interview-video";
 import { boomCloudPodcastEpisode, PODCAST_PATH } from "@/data/podcast-episode";
+import { buildFirstEditionBookNode, buildSecondEditionBookNode } from "@/data/books";
 import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_URL, SITE_URL, SOCIAL_SHARE_IMAGE } from "@/config/site";
 
 export type FAQItem = {
@@ -59,7 +60,7 @@ export const personProfile = {
   alternateName: "Michael Njo DDS",
   jobTitle: "Founder & Strategy Consultant",
   description:
-    "Dr. Michael Njo leads Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute to mentor healthcare owners through practice launches, growth, transitions, and dental career development. He is also the author of Dental Practice Transitions Handbook and a guest lecturer for dental residency programs.",
+    "Dr. Michael Njo leads Dental Strategies, HealthcareStrategiesMD, Business Strategies, and Practice Transitions Institute to mentor healthcare owners through practice launches, growth, transitions, and dental career development. He is the author of Dental Practice Transitions Handbook, whose Second Edition (November 2026) reached #1 Best Seller in Dentistry on Amazon, and a guest lecturer for dental residency programs.",
 };
 
 export const organizationProfile = {
@@ -80,6 +81,11 @@ export const faqItems: FAQItem[] = [
     question: "What services does Michael Njo, DDS provide?",
     answer:
       "Michael Njo, DDS delivers bespoke consulting across practice startups, acquisitions, valuations, transitions, leadership development, and team training. His playbooks combine clinical experience with business strategy to elevate growth while protecting patient care standards.",
+  },
+  {
+    question: "What is the Dental Practice Transitions Handbook?",
+    answer:
+      "Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates is Dr. Njo's guide to buying, selling, and structuring dental practice transitions. The expanded Second Edition, with a foreword by Dr. Glenn Vo, was published on Kindle on November 17, 2026 and reached #1 Best Seller in Dentistry on Amazon. Compare the editions at https://michaelnjodds.com/books.",
   },
   {
     question: "How can I work with Dr. Michael Njo?",
@@ -275,35 +281,26 @@ export const buildUpcomingEventNodes = (referenceDate = new Date()): SchemaNode[
   });
 
 const getResourceNodes = (): SchemaNode[] =>
-  resources.map((resource) => {
+  resources.flatMap((resource): SchemaNode[] => {
     if (resource.type === "Book") {
-      const bookId = `${siteMetadata.siteUrl}#book`;
-
-      const bookNode: SchemaNode = {
-        "@type": "Book",
-        "@id": bookId,
-        name: resource.name,
-        description: resource.description,
-        isbn: "1627878718",
-        url: resource.url,
-        author: {
-          "@id": personProfile.id,
-        },
-        bookEdition: "First edition",
-      };
-      return bookNode;
+      return [
+        buildFirstEditionBookNode(personProfile.id, { description: resource.description }),
+        buildSecondEditionBookNode(personProfile.id),
+      ];
     }
 
-    return {
-      "@type": "EducationalOrganization",
-      "@id": `${siteMetadata.siteUrl}#pti`,
-      name: resource.name,
-      description: resource.description,
-      url: resource.url,
-      founder: {
-        "@id": personProfile.id,
+    return [
+      {
+        "@type": "EducationalOrganization",
+        "@id": `${siteMetadata.siteUrl}#pti`,
+        name: resource.name,
+        description: resource.description,
+        url: resource.url,
+        founder: {
+          "@id": personProfile.id,
+        },
       },
-    };
+    ];
   });
 
 const getCoreGraphNodes = (): SchemaNode[] => {
@@ -665,7 +662,7 @@ export const getContactSuccessStructuredData = () => {
 
 export function getBooksStructuredData() {
   const url = `${siteMetadata.siteUrl}/books`;
-  const first = { "@type": "Book", "@id": `${url}#first-edition`, name: "Dental Practice Transitions Handbook", bookEdition: "First edition", isbn: "1627878718", url: resources[0].url, author: { "@id": personProfile.id } };
-  const second = { "@type": "Book", "@id": `${siteMetadata.siteUrl}/resources/second-book#book`, name: "Dental Practice Transitions Handbook, Second Edition", bookEdition: "Second edition", url: `${siteMetadata.siteUrl}/resources/second-book`, author: { "@id": personProfile.id } };
+  const first = buildFirstEditionBookNode(personProfile.id);
+  const second = buildSecondEditionBookNode(personProfile.id);
   return { "@context": "https://schema.org", "@graph": [...getCoreGraphNodes(), first, second, { "@type": "CollectionPage", "@id": `${url}#webpage`, url, name: "Books by Dr. Michael Njo", mainEntity: { "@type": "ItemList", itemListElement: [first, second].map((book, i) => ({ "@type": "ListItem", position: i + 1, item: { "@id": book["@id"] } })) } }] };
 }

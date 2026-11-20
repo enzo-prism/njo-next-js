@@ -97,7 +97,7 @@ export default function ResourcesPage() {
             <div className="space-y-5 p-6">
               <CardHeader className="space-y-3 px-0 pt-0">
                 <Badge variant="secondary" className="w-fit uppercase tracking-wide">
-                  Upcoming book · November 17, 2026
+                  Out now · #1 Best Seller in Dentistry
                 </Badge>
                 <CardTitle className="text-2xl">{secondBookArticle.title}</CardTitle>
                 <CardDescription className="max-w-2xl text-sm leading-relaxed">
@@ -106,7 +106,7 @@ export default function ResourcesPage() {
               </CardHeader>
               <Button asChild variant="outline">
                 <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
-                  Preview the second edition
+                  About the Second Edition
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -182,7 +182,7 @@ export default function ResourcesPage() {
                       className="inline-flex w-full justify-center sm:w-auto"
                     >
                       <Link href={buildResourceArticlePath(secondBookArticle.slug)}>
-                        Second edition (coming soon)
+                        Second edition (out now)
                       </Link>
                     </Button>
                   ) : null}
