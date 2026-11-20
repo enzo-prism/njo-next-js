@@ -133,7 +133,7 @@ export function buildPageTitle(pathname: string): string {
 
   switch (normalizedPath) {
     case "/":
-      return "Michael Njo DDS | Dental Strategies Consulting";
+      return "Michael Njo, DDS | Dental Practice Transition Consulting";
     case "/about":
     case "/michael-njo-dds":
       return "Michael Njo DDS | Practice Transitions Consultant";
@@ -148,7 +148,7 @@ export function buildPageTitle(pathname: string): string {
     case "/testimonials":
       return "Testimonials for Michael Njo, DDS | Dental Strategies";
     case "/resources":
-      return "Resources | Michael Njo, DDS";
+      return "Dental Practice Transition Resources | Michael Njo, DDS";
     case "/books":
       return "Dental Practice Transitions Handbook & Books | Michael Njo, DDS";
     case "/dentalflix":
@@ -192,7 +192,7 @@ export function buildPageDescription(pathname: string): string {
 
   switch (normalizedPath) {
     case "/":
-      return "Michael Njo DDS leads Dental Strategies Consulting, guiding dentists and healthcare owners through practice launches, growth, valuations, and transitions.";
+      return "Dr. Michael Njo of Dental Strategies guides dentists through practice transitions, valuations and ownership. Author of the Dental Practice Transitions Handbook.";
     case "/contact":
       return "Contact Michael Njo, DDS for consulting, coaching, or speaking inquiries. Send a message to Dental Strategies and receive a personal response.";
     case "/about":
@@ -207,7 +207,7 @@ export function buildPageDescription(pathname: string): string {
     case "/resources":
       return "Access Dental Practice Transitions Handbook, Practice Transitions Institute, and recommendations from Dr. Njo’s network to support your dental career and practice.";
     case "/books":
-      return "Books by Dr. Michael Njo: the Dental Practice Transitions Handbook Second Edition, launching November 17, 2026, the first edition, and his contributing and recommended titles for practice owners.";
+      return "Dr. Michael Njo's Dental Practice Transitions Handbook, Second Edition: out now on Kindle and a #1 Best Seller in Dentistry. Compare both editions.";
     case "/phillips-event":
       return "Continue the conversation after a Phillips-supported presentation with Michael Njo, DDS about dental practice growth, valuation, and transitions.";
     case "/dentalflix":

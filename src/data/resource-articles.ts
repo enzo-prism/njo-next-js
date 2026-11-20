@@ -252,12 +252,12 @@ export const resourceArticles: ResourceArticle[] = [
     title: "Dental Practice Transitions Handbook, Second Edition",
     metaTitle: "Dental Practice Transitions Handbook, Second Edition | Michael A. Njo, DDS",
     description:
-      "Launching November 17, 2026: Dr. Michael Njo's expanded Dental Practice Transitions Handbook, Second Edition, with a foreword by Dr. Glenn Vo.",
+      "Dr. Michael Njo's expanded Dental Practice Transitions Handbook, Second Edition, is out on Kindle and reached #1 Best Seller in Dentistry on Amazon.",
     excerpt:
-      "The expanded Second Edition launches November 17, 2026, with a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
-    category: "Upcoming book",
+      "Published November 17, 2026 on Kindle, the expanded Second Edition adds a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
+    category: "Book",
     publishedAt: "2026-09-01T00:00:00Z",
-    updatedAt: "2026-11-06T00:00:00Z",
+    updatedAt: "2026-11-20T00:00:00Z",
     heroImage: {
       src: "/media/handbook-second-edition-coming-soon.webp",
       alt: "Coming soon announcement for the second edition of Dental Practice Transitions Handbook by Michael A. Njo, DDS, Founder of Practice Transitions Institute, with a foreword by Dr. Glenn Vo",
@@ -276,10 +276,11 @@ export const resourceArticles: ResourceArticle[] = [
     keyTakeaways: [
       "Dr. Michael Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates.",
       "The second edition adds a new foreword by Dr. Glenn Vo, new advisor material, and new appendices in a larger 6 x 9 format.",
-      "The Second Edition launches November 17, 2026. The Kindle purchase link will be added here when the new listing is confirmed.",
+      "Published November 17, 2026, the Kindle edition reached #1 Best Seller in Dentistry on Amazon shortly after launch.",
     ],
     intro: [
-      "Launching November 17, 2026, Dr. Michael Njo's substantially expanded and rewritten second edition of the Dental Practice Transitions Handbook keeps the same title and subtitle while adding new material.",
+      "Dental Practice Transitions Handbook, Second Edition, is Dr. Michael Njo's substantially expanded and rewritten guide to buying, selling, and structuring dental practice transitions. It keeps the same title and subtitle as the first edition and adds a foreword by Dr. Glenn Vo, new advisor material, and new appendices.",
+      "The Kindle edition was published on November 17, 2026 (273 pages, edited by Catrise Austin) and reached #1 Best Seller in Dentistry on Amazon shortly after launch.",
     ],
     sections: [
       {
@@ -301,10 +302,11 @@ export const resourceArticles: ResourceArticle[] = [
         ],
       },
       {
-        id: "until-release",
-        title: "Launching November 17, 2026",
+        id: "where-to-buy",
+        title: "Where to get the Second Edition",
         paragraphs: [
-          "The Second Edition launches November 17, 2026. Purchase details will be added to this page when the new listing is confirmed.",
+          "The Second Edition is available now as a Kindle eBook on Amazon. It can be read on a Kindle device or in the free Kindle app on a phone, tablet, or computer.",
+          "The first-edition Amazon listing is the earlier edition. Choose the Second Edition listing for the expanded content described on this page.",
         ],
       },
     ],
@@ -315,15 +317,40 @@ export const resourceArticles: ResourceArticle[] = [
           "No. It is the second edition of the Dental Practice Transitions Handbook, substantially expanded and rewritten, with a new foreword, new advisor material, and new appendices.",
       },
       {
-        question: "When will the second edition be published?",
+        question: "When was the second edition published?",
         answer:
-          "The Second Edition launches November 17, 2026. The Kindle purchase link will be added here when the new listing is confirmed.",
+          "The Kindle edition of Dental Practice Transitions Handbook, Second Edition, was published on Amazon on November 17, 2026.",
+      },
+      {
+        question: "Where can I buy Dental Practice Transitions Handbook, Second Edition?",
+        answer:
+          "The Second Edition is available as a Kindle eBook on Amazon. The older Amazon listing with ISBN 1627878718 is the first edition.",
+      },
+      {
+        question: "Was the second edition a best seller?",
+        answer:
+          "Yes. Shortly after its November 17, 2026 launch, the Kindle edition reached #1 Best Seller in Dentistry on Amazon. Rankings change over time.",
+      },
+      {
+        question: "Who wrote the foreword?",
+        answer:
+          "Dr. Glenn Vo, founder of Nifty Thrifty Dentists and Editor-in-Chief of Dental Lifestyles Magazine, wrote the foreword. The book was edited by Catrise Austin.",
       },
     ],
     closing: [
-      "For questions about the Second Edition before its November 17 launch, contact Dr. Njo. The first-edition Amazon link below is for the earlier edition.",
+      "For questions about the handbook or a transition you are planning, contact Dr. Njo. The first-edition Amazon link below is for the earlier edition.",
     ],
     relatedLinks: [
+      {
+        href: "https://www.amazon.com/dp/B0HRL1C1LZ",
+        label: "Get the Second Edition on Kindle",
+        description: "The Kindle edition of Dental Practice Transitions Handbook, Second Edition, on Amazon.",
+      },
+      {
+        href: "/blog/dental-practice-transitions-handbook-second-edition-bestseller",
+        label: "Read about the #1 Best Seller milestone",
+        description: "Dr. Njo's thank-you note as the Second Edition reached #1 Best Seller in Dentistry.",
+      },
       {
         href: "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718",
         label: "Read the first edition on Amazon",

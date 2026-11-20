@@ -62,7 +62,7 @@ For future Codex sessions, start with `AGENTS.md` for the repo guardrails and `d
 - `/resources/[slug]` (generated from resource article data)
   - `/resources/dental-exit-blueprint` (featured book-launch resource)
   - `/resources/the-unlocked-practice` (network recommendation with Dr. Njo’s comments and book link)
-  - `/resources/second-book` (upcoming expanded second edition of *Dental Practice Transitions Handbook*; foreword by Dr. Glenn Vo; launching November 17, 2026; Second Edition purchase link pending)
+  - `/resources/second-book` (expanded second edition of *Dental Practice Transitions Handbook*; foreword by Dr. Glenn Vo; published on Kindle November 17, 2026; reached #1 Best Seller in Dentistry on Amazon; edition facts live in `src/data/books.ts`)
 - `/dentalflix`
 - `/phillips-event`
 - `/contact`
@@ -265,3 +265,7 @@ If your current network still resolves an older apex IP after DNS changes, verif
 The Peninsula Dental Society merger message uses the actual TPDS photo and Dr. Njo's September 17 supplied copy at `/blog/peninsula-dental-society-merger` and the profile News tab. The October 23 article date is the publication/preparation date, not a merger date. No attendee names or merger date are inferred.
 
 SEO/AEO release details and verification: [`docs/seo-aeo-release-2026-11-06.md`](docs/seo-aeo-release-2026-11-06.md).
+
+## IndexNow
+
+After a production deploy that changes content, run `npm run indexnow` (every sitemap URL) or `npm run indexnow -- /books /resources/second-book` (selected paths) to notify Bing and other IndexNow engines; Bing results also feed Copilot and ChatGPT search. The key file `public/cf81343d2483d591bcc4d1c4b4d9ce64.txt` must stay deployed, and the script refuses to submit until it is live.

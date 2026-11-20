@@ -14,9 +14,9 @@ function parseLastModified(value?: string): Date | undefined {
 export function buildSitemapEntries(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = INDEXABLE_STATIC_SITE_PATHS.map((path) => ({
     url: buildCanonicalUrl(path),
-    ...(path === "/books"
-      ? { lastModified: new Date("2026-11-14T00:00:00Z") }
-      : ["/", "/resources", "/michael-njo-dds"].includes(path)
+    ...(["/", "/books", "/resources"].includes(path)
+      ? { lastModified: new Date("2026-11-20T00:00:00Z") }
+      : path === "/michael-njo-dds"
         ? { lastModified: new Date("2026-11-06T00:00:00Z") }
         : {}),
     changeFrequency: path === "/" ? "weekly" : "monthly",

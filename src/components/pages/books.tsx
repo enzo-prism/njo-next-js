@@ -11,15 +11,23 @@ import { Button } from "@/components/ui/button";
 import { CONTACT_PATH } from "@/config/site";
 import { secondEditionAnnouncementImage } from "@/data/media";
 import { buildResourceArticlePath } from "@/data/resource-articles";
+import { FIRST_EDITION, SECOND_EDITION } from "@/data/books";
 
-const FIRST_EDITION_AMAZON_URL =
-  "https://www.amazon.com/Dental-Practice-Transitions-Handbook-Healthcare/dp/1627878718";
+const FIRST_EDITION_AMAZON_URL = FIRST_EDITION.amazonUrl;
 const EXIT_BLUEPRINT_AMAZON_URL = "https://www.amazon.com/dp/B0H8WL3F6H";
 const UNLOCKED_PRACTICE_AMAZON_URL = "https://www.amazon.com/dp/B0HMM29ZMX";
 
-// Second Edition Kindle pre-order listing, sent by Dr. Njo on Nov 14, 2026.
+// Second Edition Kindle listing (live since the Nov 17, 2026 launch).
 // Do not substitute the first-edition Amazon URL above.
-const SECOND_EDITION_KINDLE_URL: string | null = "https://www.amazon.com/dp/B0HRL1C1LZ";
+const SECOND_EDITION_KINDLE_URL = SECOND_EDITION.kindleUrl;
+
+const secondEditionFacts = [
+  { label: "Format", value: "Kindle eBook" },
+  { label: "Published", value: SECOND_EDITION.datePublishedDisplay },
+  { label: "Length", value: `${SECOND_EDITION.pages} pages` },
+  { label: "Foreword", value: SECOND_EDITION.forewordBy },
+  { label: "Editor", value: SECOND_EDITION.editor },
+];
 
 const secondEditionHighlights = [
   "A new foreword by Dr. Glenn Vo, founder of Nifty Thrifty Dentists and Editor-in-Chief of Dental Lifestyles Magazine.",
@@ -37,7 +45,7 @@ export default function BooksPage() {
           as="h1"
           eyebrow="Books"
           title="Dental Practice Transitions Handbook & Books by Dr. Njo"
-          description="Dr. Michael A. Njo, DDS is the author of the Dental Practice Transitions Handbook, the guide dentists use to plan, buy, sell, and structure practice transitions, and a contributing author to The Dental Exit Blueprint. His writing turns more than two decades of advising practice owners into clear, practical guidance for every stage of practice ownership."
+          description="Dr. Michael A. Njo, DDS is the author of the Dental Practice Transitions Handbook, the guide dentists use to plan, buy, sell, and structure practice transitions, now in an expanded Second Edition that reached #1 Best Seller in Dentistry on Amazon. He is also a contributing author to The Dental Exit Blueprint. His writing turns more than two decades of advising practice owners into clear, practical guidance for every stage of practice ownership."
         />
         <div className="mt-6 flex flex-wrap gap-3">
           <Button asChild variant="outline">
@@ -77,7 +85,7 @@ export default function BooksPage() {
             <div className="min-w-0 space-y-5 px-6 pb-8 sm:px-10 sm:pb-10 lg:px-8 lg:py-12 lg:pr-12">
               <div className="inline-flex max-w-full items-center gap-2 whitespace-normal rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1.5 text-xs font-semibold uppercase leading-snug tracking-[0.16em] text-amber-200">
                 <BookOpen className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                Second Edition · Launching November 17, 2026
+                Second Edition · {SECOND_EDITION.bestsellerMilestone}
               </div>
 
               <div className="space-y-3">
@@ -96,7 +104,26 @@ export default function BooksPage() {
               <p className="max-w-xl text-pretty leading-relaxed text-white/75">
                 The expanded Second Edition keeps the same title and subtitle while substantially
                 growing the content dentists already rely on to plan transitions with confidence.
+                Published on Kindle on {SECOND_EDITION.datePublishedDisplay}, it reached{" "}
+                <Link
+                  href={SECOND_EDITION.bestsellerPostPath}
+                  className="font-semibold text-amber-100 underline underline-offset-4 hover:text-white"
+                >
+                  {SECOND_EDITION.bestsellerMilestone}
+                </Link>{" "}
+                shortly after launch.
               </p>
+
+              <dl className="grid max-w-xl grid-cols-2 gap-x-6 gap-y-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm sm:grid-cols-3">
+                {secondEditionFacts.map((fact) => (
+                  <div key={fact.label} className="min-w-0">
+                    <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-200/80">
+                      {fact.label}
+                    </dt>
+                    <dd className="mt-1 text-white/85">{fact.value}</dd>
+                  </div>
+                ))}
+              </dl>
 
               <ul className="max-w-xl space-y-2 text-sm leading-relaxed text-white/75">
                 {secondEditionHighlights.map((highlight) => (
@@ -108,25 +135,19 @@ export default function BooksPage() {
               </ul>
 
               <p className="max-w-xl text-pretty leading-relaxed text-white/75">
-                The Kindle edition is available to pre-order for $2.99.
+                The Kindle edition is available now on Amazon for {SECOND_EDITION.kindlePrice}.
               </p>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                {SECOND_EDITION_KINDLE_URL ? (
-                  <Button
+                <Button
                     asChild
                     className="h-auto w-full whitespace-normal bg-amber-300 py-2.5 text-center leading-snug text-ink hover:bg-amber-200 sm:w-auto"
                   >
                     <a href={SECOND_EDITION_KINDLE_URL} target="_blank" rel="noopener noreferrer">
-                      Pre-order the Second Edition on Kindle
+                      Get the Second Edition on Kindle
                       <ExternalLink className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </Button>
-                ) : (
-                  <p className="max-w-xl rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm leading-relaxed text-white/75">
-                    The Kindle purchase link will be added here when the new listing is confirmed.
-                  </p>
-                )}
                 <Button
                   asChild
                   variant="outline"

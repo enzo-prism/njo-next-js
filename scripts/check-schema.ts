@@ -258,7 +258,16 @@ const booksGraph = buildPageStructuredData("/books")?.["@graph"] as Record<strin
 const editions = booksGraph.filter((node) => node["@type"] === "Book");
 assert.equal(editions.length, 2, "The books hub must distinguish the two verified editions");
 const secondEdition = editions.find((node) => node.bookEdition === "Second edition")!;
-assert.ok(!("isbn" in secondEdition) && !("offers" in secondEdition), "Do not invent a second-edition ISBN or purchase offer");
+assert.ok(!("isbn" in secondEdition) && !("offers" in secondEdition) && !("publisher" in secondEdition), "Do not invent a second-edition ISBN, publisher or purchase offer");
+assert.equal(secondEdition.datePublished, "2026-11-17", "Second Edition was published on Kindle on November 17, 2026");
+assert.equal(secondEdition.bookFormat, "https://schema.org/EBook", "Only the Kindle edition is verified");
+assert.deepEqual(secondEdition.identifier, { "@type": "PropertyValue", propertyID: "ASIN", value: "B0HRL1C1LZ" });
+assert.ok(String(secondEdition.award).startsWith("#1 Best Seller in Dentistry"), "The verified bestseller milestone belongs on the Book");
+const firstEdition = editions.find((node) => node.bookEdition === "First edition")!;
+const secondBookGraph = buildPageStructuredData("/resources/second-book")?.["@graph"] as Record<string, unknown>[];
+const homeBookIds = (buildPageStructuredData("/")?.["@graph"] as Record<string, unknown>[]).filter((node) => node["@type"] === "Book").map((node) => node["@id"]);
+assert.ok(secondBookGraph.some((node) => node["@type"] === "Book" && node["@id"] === secondEdition["@id"]), "Second Edition must use one @id across pages");
+assert.deepEqual(homeBookIds.sort(), [firstEdition["@id"], secondEdition["@id"]].sort(), "Homepage must reuse the same edition @ids as the books hub");
 const homeGraph = buildPageStructuredData("/")?.["@graph"] as Record<string, unknown>[];
 const homepage = homeGraph.find((node) => String(node["@id"]).endsWith("#home"))!;
 assert.equal(homepage["@type"], "WebPage", "A multi-purpose marketing homepage is not a single-person ProfilePage");

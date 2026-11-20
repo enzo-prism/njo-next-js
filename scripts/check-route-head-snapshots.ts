@@ -6,8 +6,8 @@ import { buildRouteMetadata } from "@/seo/metadata";
 const cases = [
   {
     path: "/",
-    title: "Michael Njo DDS | Dental Strategies Consulting",
-    descriptionIncludes: "Dental Strategies Consulting",
+    title: "Michael Njo, DDS | Dental Practice Transition Consulting",
+    descriptionIncludes: "Dental Strategies",
     ogType: "website",
   },
   {
@@ -42,7 +42,7 @@ const cases = [
   },
   {
     path: "/resources",
-    title: "Resources | Michael Njo, DDS",
+    title: "Dental Practice Transition Resources | Michael Njo, DDS",
     descriptionIncludes: "Access Dental Practice Transitions Handbook",
     ogType: "website",
   },

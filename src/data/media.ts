@@ -336,7 +336,7 @@ export const secondEditionAnnouncementImage = createRemoteAsset({
   layoutVariant: "portrait",
   sizes: "(max-width: 768px) 100vw, 420px",
   alt: "Coming soon announcement for the second edition of Dental Practice Transitions Handbook by Michael A. Njo, DDS, Founder of Practice Transitions Institute, with a foreword by Dr. Glenn Vo",
-  caption: "Coming soon: the expanded second edition of the Dental Practice Transitions Handbook, with a foreword by Dr. Glenn Vo.",
+  caption: "Launch artwork for the expanded second edition of the Dental Practice Transitions Handbook, with a foreword by Dr. Glenn Vo.",
   featuredRoutes: ["resources:book", "profile:gallery"],
   objectFit: "contain",
   names: ["Dr. Michael Njo"],

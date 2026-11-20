@@ -90,19 +90,24 @@ async function main() {
       }
     }
 
-    // The book campaign must lead to current prelaunch information, not an old-edition purchase CTA.
+    // The Second Edition is published: its page must lead to the Second Edition Kindle listing,
+    // and any first-edition purchase link must stay clearly labeled as the earlier edition.
     const secondBookResponse = await fetch(`${baseUrl}/resources/second-book`);
     assert.equal(secondBookResponse.status, 200, "Second Edition page must render");
     const secondBookHtml = await secondBookResponse.text();
-    assert.ok(secondBookHtml.includes("November 17, 2026"), "Second Edition page must show the confirmed launch date");
-    assert.ok(resourcesHtml.includes("Upcoming book · November 17, 2026"), "Resources feature must show the same launch date");
-    assert.ok(!secondBookHtml.includes("date has not been announced"), "Second Edition page must not retain the superseded release status");
-    assert.ok(secondBookHtml.includes("purchase link will be added here when the new listing is confirmed"), "Prelaunch page must not imply a verified purchase destination");
+    assert.ok(secondBookHtml.includes("November 17, 2026"), "Second Edition page must show the publication date");
+    assert.ok(resourcesHtml.includes("Out now · #1 Best Seller in Dentistry"), "Resources feature must show the launched status");
+    for (const stale of ["date has not been announced", "purchase link will be added", "Launching November 17", "pre-order", "Pre-order"]) {
+      assert.ok(!secondBookHtml.includes(stale), `Second Edition page must not retain prelaunch wording: ${stale}`);
+    }
     const amazonLinks = [...secondBookHtml.matchAll(/<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g)];
-    assert.ok(amazonLinks.length > 0, "Existing first-edition resource should remain explicitly available");
+    assert.ok(amazonLinks.some(([, href]) => href.includes("B0HRL1C1LZ")), "Second Edition page must link to the Second Edition Kindle listing");
     for (const [, href, label] of amazonLinks) {
-      assert.ok(href.includes("1627878718"), "Prelaunch must not invent a new Second Edition purchase destination");
-      assert.match(label, /first edition/i, "Earlier edition purchase link must remain clearly labeled");
+      if (href.includes("1627878718")) {
+        assert.match(label, /first edition/i, "Earlier edition purchase link must remain clearly labeled");
+      } else {
+        assert.ok(href.includes("B0HRL1C1LZ"), `Unexpected Amazon destination on the Second Edition page: ${href}`);
+      }
     }
 
     assert.match(

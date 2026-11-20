@@ -1,4 +1,5 @@
 import { buildResourceArticlePath, getResourceArticleByPath, resourceArticles } from "@/data/resource-articles";
+import { buildSecondEditionBookNode } from "@/data/books";
 import { getCommunityPostByPath } from "@/data/community-posts";
 import { testimonialPages } from "@/data/testimonials";
 import { LEGACY_TESTIMONIAL_SLUGS } from "@/config/routes";
@@ -356,7 +357,7 @@ function buildResourceArticleStructuredData(pathname: string): SchemaNode | null
   }
 
   const bookNode: SchemaNode | null = article.slug === "second-book"
-    ? { "@type": "Book", "@id": bookId, name: article.title, bookEdition: "Second edition", url: detailUrl, author: { "@id": PERSON_NODE_ID } }
+    ? buildSecondEditionBookNode(PERSON_NODE_ID, { "@id": bookId, subjectOf: { "@id": articleId } })
     : launch
     ? {
         "@type": "Book",
