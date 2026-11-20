@@ -97,7 +97,7 @@ async function main() {
     const secondBookHtml = await secondBookResponse.text();
     assert.ok(secondBookHtml.includes("November 17, 2026"), "Second Edition page must show the publication date");
     assert.ok(resourcesHtml.includes("Out now · #1 Best Seller in Dentistry"), "Resources feature must show the launched status");
-    for (const stale of ["date has not been announced", "purchase link will be added", "Launching November 17", "pre-order", "Pre-order"]) {
+    for (const stale of ["date has not been announced", "purchase link will be added", "Launching November 17", "pre-order", "Pre-order", "next book"]) {
       assert.ok(!secondBookHtml.includes(stale), `Second Edition page must not retain prelaunch wording: ${stale}`);
     }
     const amazonLinks = [...secondBookHtml.matchAll(/<a\b[^>]*href="([^"]*amazon\.com[^"]*)"[^>]*>([\s\S]*?)<\/a>/g)];

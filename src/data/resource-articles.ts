@@ -274,7 +274,7 @@ export const resourceArticles: ResourceArticle[] = [
       "Dr. Glenn Vo foreword",
     ],
     keyTakeaways: [
-      "Dr. Michael Njo's next book is an expanded second edition of the Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates.",
+      "The Second Edition is Dr. Michael Njo's expanded, rewritten edition of the Dental Practice Transitions Handbook: A Blueprint for Buying and Selling Healthcare Practices in Different Economic Climates.",
       "The second edition adds a new foreword by Dr. Glenn Vo, new advisor material, and new appendices in a larger 6 x 9 format.",
       "Published November 17, 2026, the Kindle edition reached #1 Best Seller in Dentistry on Amazon shortly after launch.",
     ],
