@@ -106,6 +106,8 @@ For implementation workflow details, also read `docs/implementation-map.md`. `AG
   - do not show caption or eyebrow copy under the image; slide controls stay in a slim bar so faces stay uncovered
 - `src/data/interview-video.ts`
   - Cloudinary playback and poster URLs for `/dr-michael-njo-interview`
+- `src/data/book-trailer.ts`
+  - Local MP4 and poster paths for the Dental Practice Transitions Handbook trailer on `/books`
 - `src/data/podcast-episode.ts`
   - Official Apple Podcasts embed and listings for `/navigating-dental-insurance-podcast`
 - `src/data/resource-articles.ts`

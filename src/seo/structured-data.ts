@@ -1,4 +1,5 @@
 import { getUpcomingEventPrograms } from "@/data/events";
+import { bookTrailer } from "@/data/book-trailer";
 import { interviewVideo as interviewVideoAssets } from "@/data/interview-video";
 import { boomCloudPodcastEpisode, PODCAST_PATH } from "@/data/podcast-episode";
 import { buildFirstEditionBookNode, buildSecondEditionBookNode } from "@/data/books";
@@ -664,5 +665,37 @@ export function getBooksStructuredData() {
   const url = `${siteMetadata.siteUrl}/books`;
   const first = buildFirstEditionBookNode(personProfile.id);
   const second = buildSecondEditionBookNode(personProfile.id);
-  return { "@context": "https://schema.org", "@graph": [...getCoreGraphNodes(), first, second, { "@type": "CollectionPage", "@id": `${url}#webpage`, url, name: "Books by Dr. Michael Njo", mainEntity: { "@type": "ItemList", itemListElement: [first, second].map((book, i) => ({ "@type": "ListItem", position: i + 1, item: { "@id": book["@id"] } })) } }] };
+  const trailer: SchemaNode = {
+    "@type": "VideoObject",
+    "@id": `${url}#book-trailer`,
+    name: bookTrailer.name,
+    description: bookTrailer.description,
+    thumbnailUrl: `${siteMetadata.siteUrl}${bookTrailer.posterPath}`,
+    uploadDate: bookTrailer.uploadDate,
+    duration: bookTrailer.duration,
+    contentUrl: `${siteMetadata.siteUrl}${bookTrailer.playbackPath}`,
+  };
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      ...getCoreGraphNodes(),
+      first,
+      second,
+      trailer,
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: "Books by Dr. Michael Njo",
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: [first, second].map((book, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: { "@id": book["@id"] },
+          })),
+        },
+      },
+    ],
+  };
 }

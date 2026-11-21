@@ -263,6 +263,19 @@ assert.equal(secondEdition.datePublished, "2026-11-17", "Second Edition was publ
 assert.equal(secondEdition.bookFormat, "https://schema.org/EBook", "Only the Kindle edition is verified");
 assert.deepEqual(secondEdition.identifier, { "@type": "PropertyValue", propertyID: "ASIN", value: "B0HRL1C1LZ" });
 assert.ok(String(secondEdition.award).startsWith("#1 Best Seller in Dentistry"), "The verified bestseller milestone belongs on the Book");
+const trailer = booksGraph.find((node) => node["@type"] === "VideoObject");
+assert.ok(trailer, "The books hub must include the handbook trailer VideoObject");
+assert.equal(trailer.name, "Dental Practice Transitions Handbook book trailer");
+assert.equal(trailer.duration, "PT31S");
+assert.equal(trailer.uploadDate, "2026-11-20");
+assert.equal(
+  trailer.contentUrl,
+  "https://michaelnjodds.com/videos/dental-practice-transitions-handbook-trailer.mp4",
+);
+assert.equal(
+  trailer.thumbnailUrl,
+  "https://michaelnjodds.com/videos/dental-practice-transitions-handbook-trailer-poster.webp",
+);
 const firstEdition = editions.find((node) => node.bookEdition === "First edition")!;
 const secondBookGraph = buildPageStructuredData("/resources/second-book")?.["@graph"] as Record<string, unknown>[];
 const homeBookIds = (buildPageStructuredData("/")?.["@graph"] as Record<string, unknown>[]).filter((node) => node["@type"] === "Book").map((node) => node["@id"]);
