@@ -9,9 +9,10 @@ import { SectionHeading } from "@/components/layout/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CONTACT_PATH } from "@/config/site";
+import { bookTrailer } from "@/data/book-trailer";
+import { FIRST_EDITION, SECOND_EDITION } from "@/data/books";
 import { secondEditionAnnouncementImage } from "@/data/media";
 import { buildResourceArticlePath } from "@/data/resource-articles";
-import { FIRST_EDITION, SECOND_EDITION } from "@/data/books";
 
 const FIRST_EDITION_AMAZON_URL = FIRST_EDITION.amazonUrl;
 const EXIT_BLUEPRINT_AMAZON_URL = "https://www.amazon.com/dp/B0H8WL3F6H";
@@ -159,6 +160,24 @@ export default function BooksPage() {
                   </Link>
                 </Button>
               </div>
+            </div>
+          </div>
+
+          <div className="min-w-0 px-5 pb-5 sm:px-7 sm:pb-7 lg:px-9 lg:pb-9">
+            <div className="aspect-video overflow-hidden rounded-2xl border border-white/15 bg-black shadow-2xl shadow-black/30">
+              <video
+                id="book-trailer"
+                controls
+                playsInline
+                preload="metadata"
+                poster={bookTrailer.posterPath}
+                title={bookTrailer.name}
+                aria-label={bookTrailer.name}
+                className="h-full w-full bg-black"
+              >
+                <source src={bookTrailer.playbackPath} type="video/mp4" />
+                Your browser does not support embedded video.
+              </video>
             </div>
           </div>
         </section>
